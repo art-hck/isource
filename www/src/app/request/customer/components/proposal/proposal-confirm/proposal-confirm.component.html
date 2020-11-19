@@ -43,7 +43,7 @@
         </div>
 
         <h3 class="app-col app-col-auto app-font-normal">
-          <span class="app-ghost-color">Сумма по поставщику: </span>
+          <span class="app-ghost-color">Сумма по поставщику без НДС: </span>
           <span class="app-bold">{{ getSelectedProposalsSumBySupplier(proposalPositionsBlock.toApprove) | number: "1.0-2" }}
             <span class="app-ghost-color">{{ getCurrencySymbol('RUB', 'narrow') }}</span>
           </span>
@@ -54,7 +54,7 @@
         <div class="to-approve">
           <ng-container *ngFor="let toApproveProposalPosition of proposalPositionsBlock.toApprove">
             <div class="app-row select-list-item" *ngIf="!positionIsFiltered(toApproveProposalPosition)">
-              <div class="app-col app-bold select-list-item-title">{{ toApproveProposalPosition.manufacturingName }}</div>
+              <div class="app-col app-bold select-list-item-title">{{ toApproveProposalPosition?.manufacturingName || getPosition(toApproveProposalPosition).name }}</div>
 
               <div class="app-col app-col-auto select-list-item-quantity">
                 <span>{{ toApproveProposalPosition.quantity }} </span>
@@ -98,7 +98,7 @@
       <div class="to-send-to-edit">
         <ng-container *ngFor="let toSendToEditProposalPosition of getSelectedToSendToEditPositions(approvalModalData.selectedProposals); let i = index">
           <div class="app-row select-list-item" *ngIf="!positionIsFiltered(toSendToEditProposalPosition)">
-            <div class="app-col app-bold select-list-item-title">{{ toSendToEditProposalPosition.manufacturingName }}</div>
+            <div class="app-col app-bold select-list-item-title">{{ toSendToEditProposalPosition?.manufacturingName || getPosition(toSendToEditProposalPosition).name }}</div>
 
             <div class="app-col select-list-item-supplier-name">
               <span class="app-ghost-color">На доработку</span>
@@ -120,7 +120,7 @@
 <div class="app-row select-list-item-footer app-uppercase app-ghost-color app-bold">
   <div class="app-col app-bold select-list-item-title"></div>
   <div class="app-col app-bold app-col-auto select-list-item-quantity">Кол-во</div>
-  <div class="app-col app-col-auto select-list-item-total-price">Сумма</div>
+  <div class="app-col app-col-auto select-list-item-total-price">Сумма без НДС</div>
   <div class="app-col select-list-item-supplier-name">Победитель/статус</div>
 </div>
 
@@ -129,7 +129,7 @@
 <div class="app-row app-justify-content-end">
   <div class="app-col">
     <h2>
-      <span class="app-ghost-color app-font-normal">Общая сумма:</span> {{ getSelectedProposalsTotalSum(approvalModalData.selectedProposals) | number: "1.0-2" }}
+      <span class="app-ghost-color app-font-normal">Общая сумма без НДС:</span> {{ getSelectedProposalsTotalSum(approvalModalData.selectedProposals) | number: "1.0-2" }}
       <span class="app-ghost-color">{{ getCurrencySymbol('RUB', 'narrow') }}</span>
     </h2>
   </div>

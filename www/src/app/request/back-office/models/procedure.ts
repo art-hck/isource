@@ -1,5 +1,5 @@
 import { Uuid } from "../../../cart/models/uuid";
-import { ProcedureSource } from "../enum/procedure-source";
+import { ProposalSource } from "../enum/proposal-source";
 import { RequestDocument } from "../../common/models/request-document";
 import { ContragentShortInfo } from "../../../contragent/models/contragent-short-info";
 import { RequestPosition } from "../../common/models/request-position";
@@ -50,6 +50,6 @@ export class Procedure {
   procedureDocuments: RequestDocument[];
   privateAccessContragents: ContragentShortInfo[];
   getTPFilesOnImport: boolean;
-  source: ProcedureSource;
+  source: ProposalSource;
   requestTechnicalCommercialProposalGroupId?: Uuid;
 }

@@ -11,7 +11,7 @@ import { FormArray, FormBuilder, FormGroup } from "@angular/forms";
 import { animate, style, transition, trigger } from "@angular/animations";
 import { getCurrencySymbol } from "@angular/common";
 import { StateStatus } from "../../../../common/models/state-status";
-import { ProcedureSource } from "../../../enum/procedure-source";
+import { ProposalSource } from "../../../enum/proposal-source";
 import { Procedure } from "../../../models/procedure";
 import { ProcedureAction } from "../../../models/procedure-action";
 import { ProposalsView } from "../../../../../shared/models/proposals-view";
@@ -44,10 +44,9 @@ export class ProposalViewComponent implements OnDestroy, AfterViewInit, OnChange
   @Input() request: Request;
   @Input() requestStatus: StateStatus;
   @Input() groupId: Uuid;
-  @Input() procedureSource: ProcedureSource;
+  @Input() source: ProposalSource;
   @Input() contragentsWithTp: ContragentShortInfo[];
   @Input() canRollback: (position: RequestPosition, rollbackDuration: number) => boolean;
-  @Input() source: string;
 
   @Output() downloadTemplate = new EventEmitter();
   @Output() uploadTemplate = new EventEmitter<File[]>();

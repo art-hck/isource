@@ -14,7 +14,7 @@ import { RequestState } from "../../../../states/request.state";
 import { RequestActions } from "../../../../actions/request.actions";
 import { animate, style, transition, trigger } from "@angular/animations";
 import { StateStatus } from "../../../../../common/models/state-status";
-import { ProcedureSource } from "../../../../enum/procedure-source";
+import { ProposalSource } from "../../../../enum/proposal-source";
 import { Procedure } from "../../../../models/procedure";
 import { Title } from "@angular/platform-browser";
 import { CommonProposal, CommonProposalByPosition, CommonProposalItem } from "../../../../../common/models/common-proposal";
@@ -55,7 +55,7 @@ export class TechnicalCommercialProposalViewComponent implements OnInit, OnDestr
   groupId: Uuid;
 
   readonly destroy$ = new Subject();
-  readonly procedureSource = ProcedureSource.TECHNICAL_COMMERCIAL_PROPOSAL;
+  readonly procedureSource = ProposalSource.TECHNICAL_COMMERCIAL_PROPOSAL;
   readonly downloadTemplate = (requestId: Uuid, groupId: Uuid) => new DownloadTemplate(requestId, groupId);
   readonly uploadTemplate = (requestId: Uuid, groupId: Uuid, files: File[]) => new UploadTemplate(requestId, files, groupId);
   readonly downloadAnalyticalReport = (requestId: Uuid, groupId: Uuid) => new DownloadAnalyticalReport(requestId, groupId);

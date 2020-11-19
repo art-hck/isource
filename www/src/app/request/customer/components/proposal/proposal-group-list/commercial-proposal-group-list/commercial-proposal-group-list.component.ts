@@ -1,16 +1,16 @@
 import { Component } from '@angular/core';
 import { BehaviorSubject, Observable } from "rxjs";
-import { ProposalGroup } from "../../../../common/models/proposal-group";
+import { ProposalGroup } from "../../../../../common/models/proposal-group";
 import { delayWhen, shareReplay, switchMap, tap, withLatestFrom } from "rxjs/operators";
 import { ActivatedRoute } from "@angular/router";
-import { CommercialProposalsService } from "../../../services/commercial-proposals.service";
-import { RequestState } from "../../../states/request.state";
-import { RequestActions } from "../../../actions/request.actions";
+import { CommercialProposalsService } from "../../../../services/commercial-proposals.service";
+import { RequestState } from "../../../../states/request.state";
+import { RequestActions } from "../../../../actions/request.actions";
 import { UxgBreadcrumbsService } from "uxg";
 import { Select, Store } from "@ngxs/store";
-import { Request } from "../../../../common/models/request";
+import { Request } from "../../../../../common/models/request";
 import { FormBuilder } from "@angular/forms";
-import { ProposalGroupFilter } from "../../../../common/models/proposal-group-filter";
+import { ProposalGroupFilter } from "../../../../../common/models/proposal-group-filter";
 
 @Component({
   selector: 'app-commercial-proposal-group-list',

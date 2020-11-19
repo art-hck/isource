@@ -136,7 +136,7 @@
         <div class="app-bold paymentTerms">{{ position.paymentTerms }}</div>
         <br/>
         <ng-container *ngIf="position.startPrice">
-          <div class="app-ghost-color">Начальная максимальная цена</div>
+          <div class="app-ghost-color">Начальная максимальная цена без НДС</div>
           <div class="app-bold price">{{ position.startPrice | currency: position.currency }}</div>
           <br/>
         </ng-container>

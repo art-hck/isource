@@ -16,7 +16,7 @@ import * as moment from "moment";
 import { ContragentService } from "../../../../../contragent/services/contragent.service";
 import { Observable, Subject, throwError } from "rxjs";
 import { ProcedureAction } from "../../../models/procedure-action";
-import { ProcedureSource } from "../../../enum/procedure-source";
+import { ProposalSource } from "../../../enum/proposal-source";
 import { PositionStatus } from "../../../../common/enum/position-status";
 import { PositionStatusesLabels } from "../../../../common/dictionaries/position-statuses-labels";
 import { Okpd2Item } from "../../../../../core/models/okpd2-item";
@@ -36,7 +36,7 @@ export class ProcedureFormComponent implements OnInit, OnChanges, OnDestroy {
   @Input() positions: RequestPosition[];
   @Input() contragents: ContragentList[] | ContragentShortInfo[] = [];
   @Input() action: ProcedureAction["action"] = "create";
-  @Input() procedureSource: ProcedureSource = ProcedureSource.COMMERCIAL_PROPOSAL;
+  @Input() procedureSource: ProposalSource = ProposalSource.COMMERCIAL_PROPOSAL;
   @Input() groupId: Uuid;
   @Output() complete = new EventEmitter();
   @Output() cancel = new EventEmitter();
@@ -141,7 +141,7 @@ export class ProcedureFormComponent implements OnInit, OnChanges, OnDestroy {
 
     this.form.get("positions").valueChanges.pipe(debounceTime(200), takeUntil(this.destroy$))
       .subscribe(selectedPositions => {
-        if (this.procedureSource === ProcedureSource.COMMERCIAL_PROPOSAL && selectedPositions.length > 0) {
+        if (this.procedureSource === ProposalSource.COMMERCIAL_PROPOSAL && selectedPositions.length > 0) {
           this.positionsSelected.emit(selectedPositions.map(position => position.id));
         }
 
@@ -210,11 +210,11 @@ export class ProcedureFormComponent implements OnInit, OnChanges, OnDestroy {
     delete body['timeEndRegistration'];
     delete body['timeSummingUp'];
 
-    if (this.procedureSource === ProcedureSource.TECHNICAL_COMMERCIAL_PROPOSAL && this.groupId) {
+    if (this.procedureSource === ProposalSource.TECHNICAL_COMMERCIAL_PROPOSAL && this.groupId) {
       body['requestTechnicalCommercialProposalGroupId'] = this.groupId;
     }
 
-    if (this.procedureSource === ProcedureSource.COMMERCIAL_PROPOSAL && this.groupId) {
+    if (this.procedureSource === ProposalSource.COMMERCIAL_PROPOSAL && this.groupId) {
       body['requestCommercialProposalGroupId'] = this.groupId;
     }
 
@@ -257,7 +257,8 @@ export class ProcedureFormComponent implements OnInit, OnChanges, OnDestroy {
     return [
       PositionStatus.WINNER_SELECTED,
       PositionStatus.TCP_WINNER_SELECTED,
-      PositionStatus.RESULTS_AGREEMENT
+      PositionStatus.RESULTS_AGREEMENT,
+      PositionStatus.TECHNICAL_COMMERCIAL_PROPOSALS_AGREEMENT
     ].includes(status);
   }
 

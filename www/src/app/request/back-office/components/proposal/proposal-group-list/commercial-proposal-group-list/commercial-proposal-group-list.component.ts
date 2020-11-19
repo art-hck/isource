@@ -13,7 +13,7 @@ import { CommercialProposalsActions } from "../../../../actions/commercial-propo
 import { FormBuilder, Validators } from "@angular/forms";
 import { ProposalGroupFilter } from "../../../../../common/models/proposal-group-filter";
 import { CommercialProposalState } from "../../../../states/commercial-proposal.state";
-import { ProcedureSource } from "../../../../enum/procedure-source";
+import { ProposalSource } from "../../../../enum/proposal-source";
 import { FeatureService } from "../../../../../../core/services/feature.service";
 import { ToastActions } from "../../../../../../shared/actions/toast.actions";
 import { RequestPosition } from "../../../../../common/models/request-position";
@@ -35,7 +35,7 @@ export class CommercialProposalGroupListComponent implements OnInit, OnDestroy {
   requestId: Uuid;
   destroy$ = new Subject();
 
-  readonly procedureSource = ProcedureSource.COMMERCIAL_PROPOSAL;
+  readonly procedureSource = ProposalSource.COMMERCIAL_PROPOSAL;
   readonly newGroup$ = new BehaviorSubject<ProposalGroup>(null);
   readonly filter$ = new BehaviorSubject<ProposalGroupFilter>({});
   readonly form = this.fb.group({ requestPositionName: null, createdDateFrom: null, createdDateTo: null });

@@ -6,7 +6,7 @@ import { RequestService } from "../../../../customer/services/request.service";
 import { ProcedureService } from "../../../services/procedure.service";
 import { Procedure } from "../../../models/procedure";
 import { Title } from "@angular/platform-browser";
-import { ProcedureSource } from "../../../enum/procedure-source";
+import { ProposalSource } from "../../../enum/proposal-source";
 import { ProcedureAction } from "../../../models/procedure-action";
 import { Select, Store } from "@ngxs/store";
 import { CommercialProposalState } from "../../../states/commercial-proposal.state";
@@ -141,14 +141,14 @@ export class ProcedureViewComponent implements OnDestroy, OnInit {
     });
   }
 
-  getSourceCode(source): ProcedureSource|null {
+  getSourceCode(source): ProposalSource|null {
     switch (source) {
       case "tcp":
-        return ProcedureSource.TECHNICAL_COMMERCIAL_PROPOSAL;
+        return ProposalSource.TECHNICAL_COMMERCIAL_PROPOSAL;
       case "cp":
-        return ProcedureSource.COMMERCIAL_PROPOSAL;
+        return ProposalSource.COMMERCIAL_PROPOSAL;
       case "tp":
-        return ProcedureSource.TECHNICAL_PROPOSAL;
+        return ProposalSource.TECHNICAL_PROPOSAL;
       default:
         return null;
     }

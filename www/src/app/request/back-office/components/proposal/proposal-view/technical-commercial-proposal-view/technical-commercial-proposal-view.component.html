@@ -10,7 +10,7 @@
         [procedures]="procedures$ | async"
         [proposalsByPositions]="proposalsByPositions$ | async"
         [requestStatus]="requestStatus$ | async"
-        [procedureSource]="procedureSource"
+        [source]="procedureSource"
         [canRollback]="canRollback"
         [source]="'tcp'"
         (uploadTemplate)="store.dispatch(uploadTemplate(request.id, groupId, $event))"

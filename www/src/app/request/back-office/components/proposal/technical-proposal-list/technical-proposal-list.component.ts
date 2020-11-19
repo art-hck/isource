@@ -13,7 +13,7 @@ import { FeatureService } from "../../../../../core/services/feature.service";
 import { RequestActions } from "../../../actions/request.actions";
 import { Select, Store } from "@ngxs/store";
 import { RequestState } from "../../../states/request.state";
-import { ProcedureSource } from "../../../enum/procedure-source";
+import { ProposalSource } from "../../../enum/proposal-source";
 import { TechnicalProposalFilter } from "../../../../common/models/technical-proposal-filter";
 import { Procedure } from "../../../models/procedure";
 import { ProcedureService } from "../../../services/procedure.service";
@@ -40,7 +40,7 @@ export class TechnicalProposalListComponent implements OnInit, OnDestroy {
   procedures$: Observable<Procedure[]>;
   positions$: Observable<RequestPosition[]>;
   showForm = false;
-  procedureSource = ProcedureSource;
+  procedureSource = ProposalSource;
   procedureModalPayload: ProcedureAction & { procedure?: Procedure };
   prolongModalPayload: Procedure;
   state: StateStatus = "pristine";
@@ -98,14 +98,14 @@ export class TechnicalProposalListComponent implements OnInit, OnDestroy {
   }
 
   fetchProcedures() {
-    this.procedures$ = this.procedureService.list(this.requestId, ProcedureSource.TECHNICAL_PROPOSAL).pipe(
+    this.procedures$ = this.procedureService.list(this.requestId, ProposalSource.TECHNICAL_PROPOSAL).pipe(
       publishReplay(1), refCount()
     );
   }
 
   refreshProcedures() {
     this.state = "updating";
-    this.procedureService.list(this.requestId, ProcedureSource.TECHNICAL_PROPOSAL)
+    this.procedureService.list(this.requestId, ProposalSource.TECHNICAL_PROPOSAL)
       .pipe(finalize(() => this.state = "received"))
       .subscribe((data) => {
         this.procedures$ = this.procedures$.pipe(mapTo(data));

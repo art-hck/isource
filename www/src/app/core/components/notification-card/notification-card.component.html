@@ -158,6 +158,25 @@
       </div>
     </ng-container>
 
+    <!-- Отправка на доработку позиций КП -->
+    <ng-container *ngSwitchCase="'REQUEST_OFFER_POSITION_CHANGE_STATUS'">
+      <div class="app-row notification-card-header app-primary-color"
+           [ngSwitch]="notification?.body?.requestOfferPositionChangeStatus"
+           [ngClass]="'status-' + notification?.body?.requestOfferPositionChangeStatus + '-badge'">
+        <ng-container *ngSwitchCase="'SENT_TO_EDIT'">
+          <b class="app-col">Отправлены на доработку позиции коммерческого предложения</b>
+        </ng-container>
+      </div>
+
+      <div class="app-row notification-card-request app-secondary-color app-ellipsis">
+        № {{ notification?.body?.requestNumber }} | {{ notification?.body?.requestName }}
+      </div>
+
+      <div class="app-row" *ngFor="let position of notification?.body?.requestPositions.slice(0,2)">
+        <div class="app-col app-secondary-color app-ellipsis"> {{ position.name }} </div>
+      </div>
+    </ng-container>
+
     <div class="app-col"></div>
 
     <div class="app-row notification-card-footer">
