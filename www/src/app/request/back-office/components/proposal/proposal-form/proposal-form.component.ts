@@ -138,7 +138,7 @@ export class ProposalFormComponent implements OnInit, OnDestroy, OnChanges {
         this.invalidDocControl = false;
       }
 
-      if (this.source === ProcedureSource.TECHNICAL_COMMERCIAL_PROPOSAL) {
+      if (this.source === ProposalSource.TECHNICAL_COMMERCIAL_PROPOSAL) {
         this.form.get('positions').setValidators(
           docsCount > 0 && this.isManufacturingNamePristine ?
             [Validators.required] :
