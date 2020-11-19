@@ -118,5 +118,10 @@ export class RequestService {
     const url = `requests/backoffice/${requestId}/hide-contragent`;
     return this.api.post(url, {hideContragent: value});
   }
+
+  downloadRequests() {
+    const url = `requests/backoffice/download`;
+    return this.api.post(url, {}, { responseType: 'blob' });
+  }
 }
 
