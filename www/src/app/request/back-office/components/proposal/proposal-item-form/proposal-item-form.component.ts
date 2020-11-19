@@ -9,7 +9,7 @@ import { OkeiService } from "../../../../../shared/services/okei.service";
 import { PositionCurrency } from "../../../../common/enum/position-currency";
 import { CustomValidators } from "../../../../../shared/forms/custom.validators";
 import { DatePipe } from "@angular/common";
-import { ProcedureSource } from "../../../enum/procedure-source";
+import { ProposalSource } from "../../../enum/proposal-source";
 
 @Component({
   selector: 'app-proposal-item-form',
@@ -21,7 +21,7 @@ export class ProposalItemFormComponent implements OnInit {
 
   @Input() position: RequestPosition;
   @Input() proposalItem: CommonProposalItem;
-  @Input() source: ProcedureSource;
+  @Input() source: ProposalSource;
   @Output() close = new EventEmitter();
   @Output() save = new EventEmitter<Partial<CommonProposalItem>>();
 

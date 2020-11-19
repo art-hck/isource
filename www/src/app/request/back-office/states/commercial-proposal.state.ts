@@ -9,7 +9,7 @@ import { RequestPosition } from "../../common/models/request-position";
 import { saveAs } from 'file-saver/src/FileSaver';
 import { Procedure } from "../models/procedure";
 import { ProcedureService } from "../services/procedure.service";
-import { ProcedureSource } from "../enum/procedure-source";
+import { ProposalSource } from "../enum/proposal-source";
 import { CommonProposal, CommonProposalByPosition } from "../../common/models/common-proposal";
 import { insertOrUpdateProposals } from "../../../shared/state-operators/insert-or-update-proposals";
 import { of } from "rxjs";
@@ -93,7 +93,7 @@ export class CommercialProposalState {
   fetchProcedures({ setState }: Context, { requestId, groupId, update }: FetchProcedures) {
     setState(patch<Model>(update ? { status: "updating" } : { procedures: null, status: "fetching" }));
 
-    return this.procedureService.list(requestId, ProcedureSource.TECHNICAL_COMMERCIAL_PROPOSAL, groupId).pipe(
+    return this.procedureService.list(requestId, ProposalSource.TECHNICAL_COMMERCIAL_PROPOSAL, groupId).pipe(
       tap(procedures => setState(patch({ procedures }))),
       tap(() => setState(patch<Model>(update ? { status: "received" } : {}))),
     );

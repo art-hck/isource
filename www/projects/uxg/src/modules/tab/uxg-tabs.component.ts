@@ -41,7 +41,10 @@ export class UxgTabsComponent implements AfterViewInit, OnDestroy {
       mergeAll(),
       filter(tab => this.activeTab === tab),
       takeUntil(this.destroy$)
-    ).subscribe(() => setTimeout(() => this.tabTitleList.find(item => item.disabled === false)?.activate()));
+    ).subscribe(() => {
+        this.tabTitleList.find(item => item.disabled === false)?.activate();
+        this.cd.detectChanges();
+    });
 
     fromEvent(window, 'resize')
       .pipe(debounceTime(150), takeUntil(this.destroy$))

@@ -10,7 +10,7 @@ import { ProposalGroupFilter } from "../../../../common/models/proposal-group-fi
 import moment from "moment";
 import { ProcedureAction } from "../../../models/procedure-action";
 import { Procedure } from "../../../models/procedure";
-import { ProcedureSource } from "../../../enum/procedure-source";
+import { ProposalSource } from "../../../enum/proposal-source";
 import { FeatureService } from "../../../../../core/services/feature.service";
 import { CommercialProposal } from "../../../../common/models/commercial-proposal";
 import { RequestPosition } from "../../../../common/models/request-position";
@@ -26,7 +26,7 @@ export class ProposalGroupListComponent {
   @Input() request: Request;
   @Input() availablePositions: RequestPosition[];
   @Input() groups: ProposalGroup[];
-  @Input() source = ProcedureSource.COMMERCIAL_PROPOSAL;
+  @Input() source = ProposalSource.COMMERCIAL_PROPOSAL;
 
   @Output() createGroup = new EventEmitter<{ name: string, requestPositions: Uuid[] }>();
   @Output() filter = new EventEmitter<ProposalGroupFilter>();
