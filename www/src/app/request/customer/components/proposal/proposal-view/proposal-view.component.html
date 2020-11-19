@@ -52,6 +52,7 @@
             [positionCell]="true"
             [showParams]="true"
             [proposals]="proposals"
+            [positions]="positions"
             (openCommonParams)="gridTable.scrollIntoView()"
             (selectBySupplier)="selectSupplierProposal($event)"
             (scrollUpdated)="stickedPosition = $event.canScrollLeft"
@@ -128,6 +129,8 @@
               [proposal]="proposal"
               [proposals]="proposals"
               [isLoading]="isLoading"
+              (ыутвцу)="review.emit({approve: $event})
+              (sendTOEdit="e
               (positionSelected)="onPositionSelected($event)">
             </app-request-technical-commercial-proposal-->
           </ng-container>
@@ -221,9 +224,10 @@
     *ngIf="approvalModalData"
     [requestId]="request.id"
     [groupId]="groupId"
+    [positions]="positions"
     [proposalsOnReview]="proposalsOnReview"
     [approvalModalData]="approvalModalData"
-    [isLoading]="isLoading"
+    [isLoading]="stateStatus === 'updating'"
     (close)="selectedProposalsApprovalModal.close()"
     (reviewMultiple)="reviewMultiple()">
   </app-common-proposal-confirm>

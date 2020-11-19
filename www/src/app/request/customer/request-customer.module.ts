@@ -30,6 +30,7 @@ import { ProposalConfirmComponent } from './components/proposal/proposal-confirm
 import { CommercialProposalGroupListComponent } from "./components/proposal/proposal-group-list/commercial-proposal-group-list/commercial-proposal-group-list.component";
 import { ProposalGroupListComponent } from "./components/proposal/proposal-group-list/proposal-group-list.component";
 import { ProposalViewComponent } from "./components/proposal/proposal-view/proposal-view.component";
+import { CommercialProposalsService } from "./services/commercial-proposals.service";
 
 @NgModule({
   declarations: [
@@ -67,6 +68,7 @@ import { ProposalViewComponent } from "./components/proposal/proposal-view/propo
   providers: [
     RequestService,
     TechnicalProposalsService,
+    CommercialProposalsService,
     TechnicalCommercialProposalService,
     ContractService
   ]

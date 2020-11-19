@@ -15,8 +15,7 @@ import { TechnicalCommercialProposalPositionStatus } from "../../../../common/en
 import { TechnicalCommercialProposalByPosition } from "../../../../common/models/technical-commercial-proposal-by-position";
 import { TechnicalCommercialProposalState } from "../../../states/technical-commercial-proposal.state";
 import { StateStatus } from "../../../../common/models/state-status";
-import ReviewMultiple = TechnicalCommercialProposals.ReviewMultiple;
-import SendToEditMultiple = TechnicalCommercialProposals.SendToEditMultiple;
+import Review = TechnicalCommercialProposals.Review;
 
 @Component({
   selector: "app-request-technical-commercial-proposal",
@@ -121,14 +120,14 @@ export class TechnicalCommercialProposalComponent implements OnChanges, OnDestro
   approve(): void {
     if (this.selectedPositions) {
       const selectedPositions = Array.from(this.selectedPositions, (tcp) => tcp);
-      this.dispatchAction(new ReviewMultiple(selectedPositions, []));
+      this.dispatchAction(new Review(selectedPositions, []));
     }
   }
 
   sendToEdit(): void {
     if (this.selectedPositions) {
       const selectedPositions = Array.from(this.selectedPositions, (tcp) => tcp.position);
-      this.dispatchAction(new SendToEditMultiple(selectedPositions));
+      this.dispatchAction(new Review([], selectedPositions));
     }
   }
 

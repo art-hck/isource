@@ -1,17 +1,13 @@
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Inject, Input, OnChanges, OnDestroy, Output, QueryList, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
 import { Subject } from "rxjs";
 import { Request } from "../../../../common/models/request";
-import { finalize, takeUntil, tap } from "rxjs/operators";
+import { takeUntil, tap } from "rxjs/operators";
 import { Uuid } from "../../../../../cart/models/uuid";
 import { UxgRadioItemComponent, UxgTabTitleComponent } from "uxg";
-import { Store } from "@ngxs/store";
-import { TechnicalCommercialProposals } from "../../../actions/technical-commercial-proposal.actions";
 import { StateStatus } from "../../../../common/models/state-status";
 import { TechnicalCommercialProposalComponent } from "../technical-commercial-proposal/technical-commercial-proposal.component";
-import { TechnicalCommercialProposalPosition } from "../../../../common/models/technical-commercial-proposal-position";
 import { DOCUMENT, getCurrencySymbol } from "@angular/common";
 import { PluralizePipe } from "../../../../../shared/pipes/pluralize-pipe";
-import { TechnicalCommercialProposal } from "../../../../common/models/technical-commercial-proposal";
 import { GridFooterComponent } from "../../../../../shared/components/grid/grid-footer/grid-footer.component";
 import { ProposalsView } from "../../../../../shared/models/proposals-view";
 import { GridSupplier } from "../../../../../shared/components/grid/grid-supplier";
@@ -21,8 +17,6 @@ import { ProposalHelperService } from "../../../../../shared/components/grid/pro
 import { ContragentShortInfo } from "../../../../../contragent/models/contragent-short-info";
 import { CommonProposal, CommonProposalByPosition, CommonProposalItem } from "../../../../common/models/common-proposal";
 import { RequestPosition } from "../../../../common/models/request-position";
-import ReviewMultiple = TechnicalCommercialProposals.ReviewMultiple;
-import SendToEditMultiple = TechnicalCommercialProposals.SendToEditMultiple;
 
 @Component({
   selector: 'app-common-proposal-view',
@@ -30,7 +24,7 @@ import SendToEditMultiple = TechnicalCommercialProposals.SendToEditMultiple;
   providers: [PluralizePipe],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ProposalViewComponent implements OnChanges, AfterViewInit, OnDestroy {
+export class ProposalViewComponent implements AfterViewInit, OnChanges, OnDestroy {
   @ViewChild('sentToReviewTab') sentToReviewTabElRef: UxgTabTitleComponent;
   @ViewChild('sendToEditTab') sendToEditTabElRef: UxgTabTitleComponent;
   @ViewChild('reviewedTab') reviewedTabElRef: UxgTabTitleComponent;
@@ -40,6 +34,7 @@ export class ProposalViewComponent implements OnChanges, AfterViewInit, OnDestro
   @ViewChildren("tcpComponent") tcpComponentList: QueryList<TechnicalCommercialProposalComponent>;
 
   @Input() request: Request;
+  @Input() positions: RequestPosition[];
   @Input() proposalsSentToReview: CommonProposalByPosition[];
   @Input() proposalsReviewed: CommonProposalByPosition[];
   @Input() proposalsSendToEdit: CommonProposalByPosition[];
@@ -49,14 +44,13 @@ export class ProposalViewComponent implements OnChanges, AfterViewInit, OnDestro
   @Input() groupId: Uuid;
 
   @Output() viewChange = new EventEmitter<ProposalsView>();
+  @Output() review = new EventEmitter<{ accepted?: CommonProposalItem[], sendToEdit?: RequestPosition[] }>();
 
   readonly chooseBy$ = new Subject<"date" | "price">();
   readonly getCurrencySymbol = getCurrencySymbol;
   readonly destroy$ = new Subject();
-  isLoading: boolean;
   stickedPosition: boolean;
   gridRows: ElementRef[];
-  disabled: boolean;
   modalData: {
     proposalItem: Proposal<CommonProposalItem>,
     supplier: ContragentShortInfo,
@@ -70,27 +64,27 @@ export class ProposalViewComponent implements OnChanges, AfterViewInit, OnDestro
     },
     selectedProposals: {
       supplier: ContragentShortInfo;
-      toSendToEdit: (TechnicalCommercialProposal | Proposal)[];
-      toApprove: (TechnicalCommercialProposal | Proposal)[]
+      toSendToEdit: Proposal<CommonProposalItem>[];
+      toApprove: Proposal<CommonProposalItem>[]
     }[]
   };
 
   get total() {
     return this.proposalsOnReview?.reduce((total, curr) => {
-      const proposalPosition: TechnicalCommercialProposalPosition = curr.selectedProposal.value;
+      const proposalPosition: CommonProposalItem = curr.selectedProposal.value;
       total += proposalPosition?.priceWithoutVat * proposalPosition?.quantity || 0;
       return total;
     }, 0);
   }
 
   /**
-   * Возвращает список выбранных для согласования ТКП
+   * Возвращает список выбранных для согласования CommonProposalItem
    */
-  get selectedToApproveProposals(): (TechnicalCommercialProposal | Proposal)[] {
+  get selectedToApproveProposals(): Proposal<CommonProposalItem>[] {
     // Получаем список ID выбранных предложений
     const selectedToApproveProposalsIds = this.proposalsOnReview?.filter(
-      proposal => proposal.selectedProposal.value
-    ).map(proposal => proposal.selectedProposal.value.id);
+      ({ selectedProposal }) => selectedProposal.value
+    ).map(({ selectedProposal }) => selectedProposal.value.id);
 
     let selectedToApproveProposals = this.proposalsOnReview?.filter(
       proposal => proposal.selectedProposal.value
@@ -98,16 +92,16 @@ export class ProposalViewComponent implements OnChanges, AfterViewInit, OnDestro
 
     selectedToApproveProposals = selectedToApproveProposals?.filter(selectedProposal => selectedToApproveProposalsIds.indexOf(selectedProposal.id) !== -1);
 
-    return selectedToApproveProposals;
+    return selectedToApproveProposals as Proposal[];
   }
 
   /**
    * Возвращает список выбранных для отправки на доработку ТКП
    */
-  get selectedToSendToEditProposals(): (TechnicalCommercialProposal | Proposal)[] {
+  get selectedToSendToEditProposals(): Proposal<CommonProposalItem>[] {
     const selectedSendToEditProposals = this.proposalsOnReview?.filter((proposal) => proposal.sendToEditPosition.value).map(proposal => proposal.proposals);
 
-    return selectedSendToEditProposals?.reduce((acc: [], val) => [...acc, ...val], []);
+    return selectedSendToEditProposals?.reduce((acc: [], val) => [...acc, ...val], []) as Proposal[];
   }
 
 
@@ -124,12 +118,12 @@ export class ProposalViewComponent implements OnChanges, AfterViewInit, OnDestro
    * Возвращает сгруппированный объект, состоящий из Поставщика
    * и отмеченных его предложений на согласование и отправку на доработку
    */
-  get selectedPositionsBySuppliers(): { toSendToEdit: (TechnicalCommercialProposal | Proposal)[]; supplier: ContragentShortInfo; toApprove: (TechnicalCommercialProposal | Proposal)[] }[] {
+  get selectedPositionsBySuppliers(): { toSendToEdit: Proposal<CommonProposalItem>[]; supplier: ContragentShortInfo; toApprove: Proposal<CommonProposalItem>[] }[] {
     // Объединяем все отмеченные предложения (на согласование + на доработку)
     const selectedProposals = this.selectedToApproveProposals.concat(this.selectedToSendToEditProposals);
 
     // Получаем всех поставщиков из собранных и объединённых предложений
-    const flatProposalsSuppliers = selectedProposals.map(({ supplier }) => supplier);
+    const flatProposalsSuppliers = selectedProposals.map(({ sourceProposal }) => sourceProposal.supplierContragent);
 
     // Убираем из массива поставщиков повторяющиеся значения и оставляем только уникальных
     const uniqueProposalsSuppliers = flatProposalsSuppliers.filter((supplier, index, array) =>
@@ -158,16 +152,13 @@ export class ProposalViewComponent implements OnChanges, AfterViewInit, OnDestro
 
   constructor(
     @Inject(DOCUMENT) private document: Document,
-    private store: Store,
     private cd: ChangeDetectorRef,
     public helper: ProposalHelperService,
   ) {}
 
-  ngOnChanges({ proposalsOnReview }: SimpleChanges) {
-    if (proposalsOnReview) {
-      // this.disabled = this.proposalsOnReview?.toArray()
-      //   .every(({ selectedProposal, sendToEditPosition }) => selectedProposal.invalid && sendToEditPosition.invalid);
-      // this.cd.detectChanges();
+  ngOnChanges({proposalsSentToReview, proposalsReviewed, proposalsSendToEdit}: SimpleChanges) {
+    if (proposalsSentToReview || proposalsReviewed || proposalsSendToEdit) {
+      this.cd.detectChanges();
     }
   }
 
@@ -182,37 +173,26 @@ export class ProposalViewComponent implements OnChanges, AfterViewInit, OnDestro
     ).subscribe();
   }
 
+  get disabled() {
+    return this.proposalsOnReview?.toArray()
+      .every(({ selectedProposal, sendToEditPosition }) => selectedProposal.invalid && sendToEditPosition.invalid);
+  }
+
   reviewMultiple() {
-    const acceptedProposalPositions = [];
-    const sendToEditRequestPositions = [];
+    const accepted: CommonProposalItem[] = this.proposalsOnReview
+      .filter(({ selectedProposal }) => selectedProposal.valid)
+      .map(({ selectedProposal }) => selectedProposal.value);
+    const sendToEdit: RequestPosition[] = this.proposalsOnReview
+      .filter(({ sendToEditPosition }) => sendToEditPosition.valid)
+      .map(({ sendToEditPosition }) => sendToEditPosition.value);
 
-    if (this.proposalsOnReview.filter(({ selectedProposal }) => selectedProposal.valid).length) {
-      this.proposalsOnReview
-        .filter(({ selectedProposal }) => selectedProposal.valid)
-        .map(({ selectedProposal }) => {
-          acceptedProposalPositions.push(selectedProposal.value);
-        });
-    }
-
-    if (this.proposalsOnReview.filter(({ sendToEditPosition }) => sendToEditPosition.valid).length) {
-      this.proposalsOnReview
-        .filter(({ sendToEditPosition }) => sendToEditPosition.valid)
-        .map(({ sendToEditPosition }) => {
-          sendToEditRequestPositions.push(sendToEditPosition.value);
-        });
-    }
-
-    this.store.dispatch(new ReviewMultiple(acceptedProposalPositions, sendToEditRequestPositions));
+    this.review.emit({ accepted, sendToEdit });
   }
 
   sendToEditAll() {
-    const sendToEditAllPositions = [];
+    const sendToEdit = this.proposalsOnReview.map(({ position }) => position.sourcePosition);
 
-    this.proposalsOnReview.map(({ position }) => {
-      sendToEditAllPositions.push(position);
-    });
-
-    this.store.dispatch(new SendToEditMultiple(sendToEditAllPositions));
+    this.review.emit({ sendToEdit });
   }
 
   openConfirmApproveFromListModal() {
@@ -241,37 +221,28 @@ export class ProposalViewComponent implements OnChanges, AfterViewInit, OnDestro
   /**
    * Возвращает выбранные предложения для указанного поставщика, и по указанному типу (принятие/на доработку)
    */
-  selectedPositionsBySupplierAndType(type, supplierId = null): (TechnicalCommercialProposal | Proposal)[] {
+  selectedPositionsBySupplierAndType(type, supplierId = null): Proposal<CommonProposalItem>[] {
     const selectedProposals = type === 'to-approve' ? this.selectedToApproveProposals : this.selectedToSendToEditProposals;
 
     if (!supplierId) {
       return selectedProposals;
     }
 
-    return selectedProposals.filter(({ supplier }) => supplier.id === supplierId);
+    return selectedProposals.filter(({ sourceProposal }) => sourceProposal.supplierContragent.id === supplierId);
   }
 
   approveFromListView(): void {
     if (this.selectedPositions) {
       const selectedPositions = Array.from(this.selectedPositions, (tcp) => tcp);
-      this.dispatchAction(new ReviewMultiple(selectedPositions, []));
+      this.review.emit({accepted: selectedPositions});
     }
   }
 
   sendToEditFromListView(): void {
     if (this.selectedPositions) {
       const selectedPositions = Array.from(this.selectedPositions, (tcp) => tcp.position);
-      this.dispatchAction(new SendToEditMultiple(selectedPositions));
+      this.review.emit({sendToEdit: selectedPositions});
     }
-  }
-
-  private dispatchAction(action): void {
-    this.isLoading = true;
-
-    this.store.dispatch(action).pipe(
-      finalize(() => this.isLoading = false),
-      takeUntil(this.destroy$)
-    ).subscribe();
   }
 
   isReviewed(proposalByPos: CommonProposalByPosition): boolean {
