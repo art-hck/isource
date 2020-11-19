@@ -48,7 +48,7 @@ body {
   color: uxg($theme, color-font-primary);
   background: uxg($theme, color-bg);
 
-  &.modal-open {
+  &.modal-open, &.notifications-modal-open {
     overflow: hidden;
   }
 

@@ -82,4 +82,8 @@ app-notification-popup {
   top: 64px;
   overflow: hidden;
   padding: 18px;
+
+  &:hover {
+    z-index: 100;
+  }
 }
