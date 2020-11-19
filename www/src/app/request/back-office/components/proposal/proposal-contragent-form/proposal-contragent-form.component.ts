@@ -14,8 +14,8 @@ import { getCurrencySymbol } from "@angular/common";
 import { Uuid } from "../../../../../cart/models/uuid";
 import { searchContragents } from "../../../../../shared/helpers/search";
 import { CommonProposal } from "../../../../common/models/common-proposal";
-import { ProcedureSource } from "../../../enum/procedure-source";
 import { ProposalSourceLabels } from "../../../../common/dictionaries/proposal-source-labels";
+import { ProposalSource } from "../../../enum/proposal-source";
 
 
 @Component({
@@ -26,7 +26,7 @@ import { ProposalSourceLabels } from "../../../../common/dictionaries/proposal-s
 export class ProposalContragentFormComponent implements OnInit {
   @Input() request: Request;
   @Input() groupId: Uuid;
-  @Input() source: ProcedureSource; // todo Переименовать в проекте ProcedureSource в ProposalSource
+  @Input() source: ProposalSource; // todo Переименовать в проекте ProcedureSource в ProposalSource
   @Input() selectedContragents: ContragentShortInfo[];
   @Input() proposal: CommonProposal;
   @Output() close = new EventEmitter();
