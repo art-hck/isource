@@ -47,7 +47,6 @@ export class PriceOrderFormComponent implements OnInit, OnDestroy {
   @Output() close = new EventEmitter();
 
   onOkatoInput = new Subject<string>();
-  onOkpd2Input = new Subject<string>();
 
   form: FormGroup;
   isLoading: boolean;
@@ -70,20 +69,16 @@ export class PriceOrderFormComponent implements OnInit, OnDestroy {
     return this.form.get('positions') as FormArray;
   }
 
-  constructor(private fb: FormBuilder,
-              private store: Store,
-              private okpd2Service: Okpd2Service,
-              public okeiService: OkeiService,
-              public okatoService: OkatoService,
-              public router: Router) { }
+  constructor(
+    private fb: FormBuilder,
+    private store: Store,
+    public okpd2Service: Okpd2Service,
+    public okeiService: OkeiService,
+    public okatoService: OkatoService,
+    public router: Router
+  ) {}
 
   ngOnInit() {
-    this.okpd2List$ = this.onOkpd2Input.pipe(
-      takeUntil(this.destroy$),
-      filter(value => !!value.trim().length),
-      debounceTime(150),
-      flatMap(value => this.okpd2Service.getOkpd2List(value)));
-
     this.regions$ = this.onOkatoInput.pipe(
       takeUntil(this.destroy$),
       filter(value => !!value.trim().length),

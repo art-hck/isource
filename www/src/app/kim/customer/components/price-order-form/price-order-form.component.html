@@ -200,13 +200,14 @@
 
               <div class="app-col">
                 <uxg-dropdown-input
+                  appOkpdSuggestions
+                  strictMode
                   formControlName="okpd2"
                   placeholder="OКПД2"
-                  [strictMode]="true"
                   [displayByFn]="getOkpd2Name"
-                  (input)="onOkpd2Input.next($event.target.value)"
+                  #okpd2="appOkpdSuggestions"
                   lg>
-                  <ng-container *ngFor="let suggestion of okpd2List$ | async">
+                  <ng-container *ngFor="let suggestion of (okpd2.suggestions$ | async)">
                     <div uxgDropdownItem [value]="suggestion" [attr.title]="suggestion.name">{{ suggestion.name }}</div>
                   </ng-container>
                 </uxg-dropdown-input>
