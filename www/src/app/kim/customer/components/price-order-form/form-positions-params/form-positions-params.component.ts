@@ -13,7 +13,7 @@ import { Okpd2Service } from "../../../../../shared/services/okpd2.service";
   providers: [{ provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => PriceOrderFormPositionsParamsComponent), multi: true }],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class PriceOrderFormPositionsParamsComponent implements ControlValueAccessor, AfterViewInit, OnInit {
+export class PriceOrderFormPositionsParamsComponent implements ControlValueAccessor, AfterViewInit {
   @Output() cancel = new EventEmitter();
   formArray: FormArray;
   value?: (KimPriceOrderPosition & {controlId: Uuid})[];
@@ -26,11 +26,7 @@ export class PriceOrderFormPositionsParamsComponent implements ControlValueAcces
   asFormGroup = (abstractControl: AbstractControl) => abstractControl as FormGroup;
   searchOkpd2 = (query, items: Okpd2Item[]) => items;
 
-  constructor(private fb: FormBuilder, private cd: ChangeDetectorRef, private okpd2Service: Okpd2Service) {}
-
-  ngOnInit() {
-    this.okpd2List$ = this.okpd2Service.getOkpd2Mock();
-  }
+  constructor(private fb: FormBuilder, private cd: ChangeDetectorRef) {}
 
   ngAfterViewInit() {
     this.formArray = this.fb.array((this.value || [null]).map(p => this.getFormPosition(p)));

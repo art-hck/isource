@@ -1,4 +1,12 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, HostBinding, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output
+} from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { KimPriceOrder } from "../../../common/models/kim-price-order";
 import { Select, Store } from "@ngxs/store";
@@ -15,15 +23,15 @@ import * as moment from "moment";
 import { CartActions } from "../../actions/cart.actions";
 import { CartState } from "../../states/cart.state";
 import CreatePriceOrder = CartActions.CreatePriceOrder;
-import { Okpd2Item } from "../../../../core/models/okpd2-item";
 import { OkeiService } from "../../../../shared/services/okei.service";
 import { ToastActions } from "../../../../shared/actions/toast.actions";
 import { Router } from "@angular/router";
-import { shareReplay, takeUntil, tap } from "rxjs/operators";
+import { debounceTime, filter, flatMap, shareReplay, takeUntil, tap } from "rxjs/operators";
 import { KimCartItem } from "../../../common/models/kim-cart-item";
 import { StateStatus } from "../../../../request/common/models/state-status";
 import { Okpd2Service } from "../../../../shared/services/okpd2.service";
 import { OkatoService } from "../../../../shared/services/okato.service";
+import { Okpd2 } from "../../../../shared/models/okpd2";
 
 @Component({
   selector: 'app-kim-price-order-form',
@@ -38,10 +46,12 @@ export class PriceOrderFormComponent implements OnInit, OnDestroy {
   @Input() cartView = false;
   @Output() close = new EventEmitter();
 
+  onOkatoInput = new Subject<string>();
+
   form: FormGroup;
   isLoading: boolean;
   regions$: Observable<OkatoRegion[]>;
-  okpd2List$: Observable<Okpd2Item[]>;
+  okpd2List$: Observable<Okpd2[]>;
   readonly okeiList$ = this.okeiService.getOkeiList().pipe(shareReplay(1));
   readonly destroy$ = new Subject();
   readonly paymentTermsLabels = Object.entries(PaymentTermsLabels);
@@ -52,26 +62,29 @@ export class PriceOrderFormComponent implements OnInit, OnDestroy {
     keepCharPositions: true
   };
   readonly getRegionName = ({ name }) => name;
-  readonly searchRegions = (query: string, items: OkatoRegion[]) => {
-    return items.filter(item => item.name.toLowerCase().indexOf(query.toLowerCase()) >= 0);
-  }
   readonly getOkeiName = ({ name }) => name;
   readonly getOkpd2Name = ({ name }) => name;
-  searchOkpd2 = (query, items: Okpd2Item[]) => items;
 
   get formPositions() {
     return this.form.get('positions') as FormArray;
   }
 
-  constructor(private fb: FormBuilder,
-              private store: Store,
-              private okpd2Service: Okpd2Service,
-              public okeiService: OkeiService,
-              public okatoService: OkatoService,
-              public router: Router) { }
+  constructor(
+    private fb: FormBuilder,
+    private store: Store,
+    public okpd2Service: Okpd2Service,
+    public okeiService: OkeiService,
+    public okatoService: OkatoService,
+    public router: Router
+  ) {}
 
   ngOnInit() {
-    this.okpd2List$ = this.okpd2Service.getOkpd2Mock();
+    this.regions$ = this.onOkatoInput.pipe(
+      takeUntil(this.destroy$),
+      filter(value => !!value.trim().length),
+      debounceTime(150),
+      flatMap(value => this.okatoService.getRegionsList(value)));
+
     this.form = this.fb.group({
       name: ["", Validators.required],
       regions: ["", Validators.required],
@@ -89,7 +102,7 @@ export class PriceOrderFormComponent implements OnInit, OnDestroy {
     });
 
     this.form.get('type').disable();
-    this.regions$ = this.okatoService.getRegions();
+
     if (!this.cartView) {
       this.pushPosition();
       this.form.get('positions').setValidators([Validators.required]);
@@ -125,7 +138,7 @@ export class PriceOrderFormComponent implements OnInit, OnDestroy {
           this.close.emit();
           this.router.navigate(["kim/customer/price-orders"]);
       }),
-            takeUntil(this.destroy$))
+      takeUntil(this.destroy$))
       .subscribe();
   }
 

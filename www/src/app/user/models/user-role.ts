@@ -1,8 +1,8 @@
 export enum UserRole {
   // Системные роли
-  CUSTOMER   = "CUSTOMER",
-  BACKOFFICE = "BACKOFFICE",
-  SUPPLIER   = "SUPPLIER",
+  CUSTOMER   = 'CUSTOMER',
+  BACKOFFICE = 'BACKOFFICE',
+  SUPPLIER   = 'SUPPLIER',
   ADMIN      = 'ADMIN',
 
   // Пользовательские роли
@@ -11,8 +11,11 @@ export enum UserRole {
 
   // Роли БО
   BACKOFFICE_BUYER = 'BACKOFFICE_BUYER',
-  SENIOR_BACKOFFICE = "SENIOR_BACKOFFICE",
+  SENIOR_BACKOFFICE = 'SENIOR_BACKOFFICE',
+
+  // Админ системы
+  SYSTEM_ADMIN = 'SYSTEM_ADMIN',
 
   // Другое
-  CONTRAGENT_CREATOR = "CONTRAGENT_CREATOR"
+  CONTRAGENT_CREATOR = 'CONTRAGENT_CREATOR'
 }

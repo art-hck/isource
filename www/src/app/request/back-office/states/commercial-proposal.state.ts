@@ -93,7 +93,7 @@ export class CommercialProposalState {
   fetchProcedures({ setState }: Context, { requestId, groupId, update }: FetchProcedures) {
     setState(patch<Model>(update ? { status: "updating" } : { procedures: null, status: "fetching" }));
 
-    return this.procedureService.list(requestId, ProposalSource.TECHNICAL_COMMERCIAL_PROPOSAL, groupId).pipe(
+    return this.procedureService.list(requestId, ProposalSource.COMMERCIAL_PROPOSAL, groupId).pipe(
       tap(procedures => setState(patch({ procedures }))),
       tap(() => setState(patch<Model>(update ? { status: "received" } : {}))),
     );

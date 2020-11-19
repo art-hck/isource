@@ -21,8 +21,8 @@ import { User } from "../../../user/models/user";
 import { TextMaskConfig } from "angular2-text-mask/src/angular2TextMask";
 import { ContragentRoleLabels } from "../../dictionaries/currency-labels";
 import { ContragentRole } from "../../enum/contragent-role";
-import { Group } from "../../../core/models/group";
-import { GroupService } from "../../../core/services/group.service";
+import { UsersGroup } from "../../../core/models/users-group";
+import { UsersGroupService } from "../../../core/services/users-group.service";
 
 @Component({
   selector: 'app-contragent-registration',
@@ -37,7 +37,7 @@ export class ContragentRegistrationComponent implements OnInit {
   configBank: DadataConfig;
   isLoading = false;
   seniorBackofficeUsers$: Observable<EmployeeItem[]>;
-  groups$: Observable<Group[]>;
+  groups$: Observable<UsersGroup[]>;
   subscription = new Subscription();
   contragentId: Uuid;
   contragent$: Observable<ContragentInfo>;
@@ -63,7 +63,7 @@ export class ContragentRegistrationComponent implements OnInit {
   }
 
   get groupPlaceholder() {
-    const group: Group = this.form.get('contragent').get('usersGroup').value;
+    const group: UsersGroup = this.form.get('contragent').get('usersGroup').value;
     return group && group.name || 'Выберите группу';
   }
 
@@ -73,7 +73,7 @@ export class ContragentRegistrationComponent implements OnInit {
     private contragentService: ContragentService,
     private store: Store,
     private employeeService: EmployeeService,
-    private groupService: GroupService,
+    private usersGroupService: UsersGroupService,
     protected route: ActivatedRoute,
     private getContragentService: ContragentService,
     private bc: UxgBreadcrumbsService,
@@ -102,7 +102,7 @@ export class ContragentRegistrationComponent implements OnInit {
         ogrn: ['', [Validators.required, CustomValidators.ogrn]],
         taxAuthorityRegistrationDate: ['', [Validators.required, CustomValidators.pastDate()]],
         role: [this.role.CUSTOMER],
-        usersGroup: ['']
+        usersGroup: [null]
       }),
       contragentAddress: this.fb.group({
         country: ['', [Validators.required, CustomValidators.cyrillic]],
@@ -126,7 +126,7 @@ export class ContragentRegistrationComponent implements OnInit {
     });
 
     this.seniorBackofficeUsers$ = this.employeeService.getEmployeeList('SENIOR_BACKOFFICE');
-    this.groups$ = this.groupService.getGroups();
+    this.groups$ = this.usersGroupService.getGroups();
 
     if (this.isEditing) {
       this.getContragentInfo();

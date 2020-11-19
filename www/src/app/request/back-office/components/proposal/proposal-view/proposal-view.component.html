@@ -108,7 +108,7 @@
       <div class="position-row" *ngFor="let procedure of procedures; trackBy: trackById">
         <app-procedure-grid
           [procedure]="procedure"
-          [source]="'tcp'"
+          [source]="source"
           (bargain)="procedureModalPayload = {action: 'bargain', procedure: procedure}"
           (prolong)="prolongModalPayload = procedure"
         ></app-procedure-grid>
@@ -294,6 +294,7 @@
     <h2><b>{{ editingProposal ? 'Редактировать' : 'Добавить' }} столбик контрагента</b></h2>
     <ng-container *ngIf="addContragentModal.state">
       <common-proposal-contragent-form
+        [source]="procedureSource"
         [request]="request"
         [groupId]="groupId"
         [selectedContragents]="getContragents(proposals)"

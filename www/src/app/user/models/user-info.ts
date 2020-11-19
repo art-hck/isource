@@ -1,6 +1,7 @@
 import { Uuid } from "../../cart/models/uuid";
 import { Contragent } from "../../core/models/contragent";
 import { Permission } from "../../auth/models/permission";
+import { UsersGroup } from "../../core/models/users-group";
 
 export class UserInfo {
   id: Uuid;
@@ -17,8 +18,10 @@ export class UserInfo {
   isCustomerBuyer: boolean;
   isBackofficeBuyer: boolean;
   isSeniorBackoffice: boolean;
+  isSystemAdmin: boolean;
   isContragentCreator: boolean;
   permissions: Permission[];
+  groups: UsersGroup[];
 }
 
 

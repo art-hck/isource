@@ -11,11 +11,11 @@ import { CommonModule } from "@angular/common";
 import { RouterModule } from "@angular/router";
 import { WelcomeComponent } from "../pages/welcome/welcome.component";
 import { ChatSharedModule } from "../chat/chat-shared.module";
+import { NotificationPopupComponent } from "./components/notification-popup-list/notification-popup.component";
 import { NotificationListComponent } from "./components/notification-list/notification-list.component";
 import { NotificationCardComponent } from "./components/notification-card/notification-card.component";
-import { NotificationsState } from "./states/notifications.state";
 import { NgxsModule } from "@ngxs/store";
-import { GroupService } from "./services/group.service";
+import { UsersGroupService } from "./services/users-group.service";
 
 @NgModule({
   imports: [
@@ -23,23 +23,23 @@ import { GroupService } from "./services/group.service";
     RouterModule,
     UxgModule,
     ChatSharedModule,
-    NgxsModule.forFeature([
-      NotificationsState
-    ])
+    NgxsModule.forRoot()
   ],
   exports: [NavComponent,
             WelcomeComponent,
             NotificationListComponent,
+            NotificationPopupComponent,
             NotificationCardComponent],
   declarations: [NavComponent,
                 WelcomeComponent,
                 NotificationListComponent,
+                NotificationPopupComponent,
                 NotificationCardComponent],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: BaseUrlInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: DataInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
-    GroupService
+    UsersGroupService
   ],
 })
 

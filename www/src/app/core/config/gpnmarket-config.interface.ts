@@ -16,7 +16,8 @@ export interface GpnmarketConfigInterface {
     api: string,
     ws: string,
     apiChat: string,
-    wsChat: string
+    wsChat: string,
+    wsNotifications: string
   };
   files: {
     allowedExtensions: AppFileExtensions,
@@ -47,6 +48,9 @@ export interface GpnmarketConfigInterface {
     url: string
   };
   intelplan: {
+    url: string;
+  };
+  element: {
     url: string;
   };
   notifications: {

@@ -19,6 +19,7 @@ export class ProposalGroupFormComponent implements OnChanges, OnDestroy {
   @Input() availablePositions: RequestPosition[];
   @Input() requestId: Uuid;
   @Input() group: ProposalGroup;
+  @Input() sourceLabel = 'ТКП';
   isLoading = false;
   readonly searchPosition = searchPosition;
   readonly destroy$ = new Subject();

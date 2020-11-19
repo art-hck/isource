@@ -47,6 +47,7 @@ export class ProposalViewComponent implements OnDestroy, AfterViewInit, OnChange
   @Input() source: ProposalSource;
   @Input() contragentsWithTp: ContragentShortInfo[];
   @Input() canRollback: (position: RequestPosition, rollbackDuration: number) => boolean;
+  @Input() source: string;
 
   @Output() downloadTemplate = new EventEmitter();
   @Output() uploadTemplate = new EventEmitter<File[]>();

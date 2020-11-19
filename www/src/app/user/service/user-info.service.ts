@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { UserInfo } from "../models/user-info";
 import { UserRole } from "../models/user-role";
 import { Permission } from "../../auth/models/permission";
+import { UsersGroup } from "../../core/models/users-group";
 
 const USER_INFO_KEY = 'UserInfo';
 
@@ -33,9 +34,13 @@ export class UserInfoService {
     isBackofficeBuyer: 'isBackofficeBuyer',
     isSeniorBackoffice: 'isSeniorBackoffice',
 
+    isSystemAdmin: 'isSystemAdmin',
+
     isContragentCreator: 'isContragentCreator',
 
-    permissions: 'permissions'
+    permissions: 'permissions',
+
+    groups: 'groups'
   };
 
   /* @TODO лучше если бэк будет присылать список ролей массивом */
@@ -71,6 +76,10 @@ export class UserInfoService {
 
       if (this.isSeniorBackoffice()) {
         roles.push(UserRole.SENIOR_BACKOFFICE);
+      }
+
+      if (this.isSystemAdmin()) {
+        roles.push(UserRole.SYSTEM_ADMIN);
       }
 
       if (this.isContragentCreator()) {
@@ -125,6 +134,23 @@ export class UserInfoService {
     return false;
   }
 
+  public getGroups(): UsersGroup[] {
+    if (!this.getUserInfo()) {
+      return [];
+    }
+    return this.getUserInfo().groups;
+  }
+
+  public isInGroup(groupId: string): boolean {
+    for (const group of this.getGroups()) {
+      if (group.id === groupId) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
   public isAuth(): boolean {
     if (this.getUserInfo()) {
       return true;
@@ -158,6 +184,10 @@ export class UserInfoService {
 
   public isSeniorBackoffice(): boolean {
     return this.getUserInfo()?.isSeniorBackoffice;
+  }
+
+  public isSystemAdmin(): boolean {
+    return this.getUserInfo()?.isSystemAdmin;
   }
 
   public isContragentCreator(): boolean {

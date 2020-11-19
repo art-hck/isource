@@ -8,6 +8,7 @@ export const AppConfig: GpnmarketConfigInterface = {
     ws: 'ws://localhost:3000',
     apiChat: 'https://chat-test.isource.ru/',
     wsChat: 'wss://chat-test.isource.ru/ws',
+    wsNotifications: 'wss://notifications-test.isource.ru/ws',
   },
   files: {
     allowedExtensions: [
@@ -54,14 +55,17 @@ export const AppConfig: GpnmarketConfigInterface = {
     url: 'https://demo2.etpgpb.ru/#nsi/priceorder/directCustomer/orderId/'
   },
   profile: {
-      url: 'https://profile.ezgg.site/api/v1/'
-    },
+    url: 'https://profile.ezgg.site/api/v1/'
+  },
   intelplan: {
-      url: 'https://intelplan.gpb.isale.pro/api/v1/'
-      },
+    url: 'https://intelplan.gpb.isale.pro/api/v1/'
+  },
+  element: {
+    url: 'https://element-test.isource.ru/'
+  },
   notifications: {
-      url: 'https://notifications-test.isource.ru/api/v1/notifications'
-      },
+    url: 'https://notifications-test.isource.ru/api/v1/notifications'
+  },
   instructions: {
     forCustomer: "assets/Краткая инструкция (внешние клиенты).pdf",
     forBackoffice: "assets/Краткая инструкция БО (по внешним клиентам).pdf",
