@@ -1,13 +1,9 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { TechnicalCommercialProposal } from "../../common/models/technical-commercial-proposal";
 import { Uuid } from "../../../cart/models/uuid";
-import { RequestPosition } from "../../common/models/request-position";
 import { FormDataService } from "../../../shared/services/form-data.service";
-import { TechnicalCommercialProposalPosition } from "../../common/models/technical-commercial-proposal-position";
 import { ProposalGroup } from "../../common/models/proposal-group";
 import { TechnicalCommercialProposalGroupFilter } from "../../common/models/technical-commercial-proposal-group-filter";
-import { CommonProposal, CommonProposalItem, CommonProposalPayload } from "../../common/models/common-proposal";
 
 @Injectable()
 export class TechnicalCommercialProposalGroupService {

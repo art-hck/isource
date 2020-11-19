@@ -21,7 +21,7 @@ import { PaymentTermsLabels } from "../../../../../common/dictionaries/payment-t
 import { Subject } from "rxjs";
 
 @Component({
-  selector: 'app-technical-commercial-proposal-parameters-form',
+  selector: 'app-common-proposal-parameters-form',
   templateUrl: './proposal-parameters-form.component.html',
   styleUrls: ['./proposal-parameters-form.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

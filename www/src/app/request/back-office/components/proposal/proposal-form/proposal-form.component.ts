@@ -33,7 +33,7 @@ import { PositionCurrency } from "../../../../common/enum/position-currency";
 import { Uuid } from "../../../../../cart/models/uuid";
 import { searchContragents } from "../../../../../shared/helpers/search";
 import { CommonProposal, CommonProposalItem } from "../../../../common/models/common-proposal";
-import { ProcedureSource } from "../../../enum/procedure-source";
+import { ProposalSource } from "../../../enum/proposal-source";
 
 @Component({
   selector: 'app-common-proposal-form',
@@ -48,7 +48,7 @@ export class ProposalFormComponent implements OnInit, OnDestroy, OnChanges {
   @Input() groupId: Uuid;
   @Input() proposal: CommonProposal;
   @Input() closable = true;
-  @Input() source: ProcedureSource;
+  @Input() source: ProposalSource;
   @Input() availablePositions: RequestPosition[];
   @Output() close = new EventEmitter();
   @Output() create = new EventEmitter<{ proposal: Partial<CommonProposal>, items: CommonProposalItem[] }>();

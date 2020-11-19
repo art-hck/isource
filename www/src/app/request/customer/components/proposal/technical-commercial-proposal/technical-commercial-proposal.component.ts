@@ -1,22 +1,21 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, Output, QueryList, ViewChild, ViewChildren } from '@angular/core';
-import { Uuid } from "../../../../cart/models/uuid";
+import { Uuid } from "../../../../../cart/models/uuid";
 import { Select, Store } from "@ngxs/store";
-import { TechnicalCommercialProposals } from "../../actions/technical-commercial-proposal.actions";
+import { TechnicalCommercialProposals } from "../../../actions/technical-commercial-proposal.actions";
 import { getCurrencySymbol } from "@angular/common";
 import { Observable, Subject } from "rxjs";
 import { UxgModalComponent } from "uxg";
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
 import { filter, finalize, takeUntil, tap } from "rxjs/operators";
-import { TechnicalCommercialProposalHelperService } from "../../../common/services/technical-commercial-proposal-helper.service";
-import { TechnicalCommercialProposal } from "../../../common/models/technical-commercial-proposal";
-import { TechnicalCommercialProposalPosition } from "../../../common/models/technical-commercial-proposal-position";
-import { Position } from "../../../../shared/components/grid/position";
-import { TechnicalCommercialProposalPositionStatus } from "../../../common/enum/technical-commercial-proposal-position-status";
-import { TechnicalCommercialProposalByPosition } from "../../../common/models/technical-commercial-proposal-by-position";
-import { TechnicalCommercialProposalState } from "../../states/technical-commercial-proposal.state";
-import { StateStatus } from "../../../common/models/state-status";
-import ReviewMultiple = TechnicalCommercialProposals.ReviewMultiple;
-import SendToEditMultiple = TechnicalCommercialProposals.SendToEditMultiple;
+import { TechnicalCommercialProposalHelperService } from "../../../../common/services/technical-commercial-proposal-helper.service";
+import { TechnicalCommercialProposal } from "../../../../common/models/technical-commercial-proposal";
+import { TechnicalCommercialProposalPosition } from "../../../../common/models/technical-commercial-proposal-position";
+import { Position } from "../../../../../shared/components/grid/position";
+import { TechnicalCommercialProposalPositionStatus } from "../../../../common/enum/technical-commercial-proposal-position-status";
+import { TechnicalCommercialProposalByPosition } from "../../../../common/models/technical-commercial-proposal-by-position";
+import { TechnicalCommercialProposalState } from "../../../states/technical-commercial-proposal.state";
+import { StateStatus } from "../../../../common/models/state-status";
+import Review = TechnicalCommercialProposals.Review;
 
 @Component({
   selector: "app-request-technical-commercial-proposal",
@@ -121,14 +120,14 @@ export class TechnicalCommercialProposalComponent implements OnChanges, OnDestro
   approve(): void {
     if (this.selectedPositions) {
       const selectedPositions = Array.from(this.selectedPositions, (tcp) => tcp);
-      this.dispatchAction(new ReviewMultiple(selectedPositions, []));
+      this.dispatchAction(new Review(selectedPositions, []));
     }
   }
 
   sendToEdit(): void {
     if (this.selectedPositions) {
       const selectedPositions = Array.from(this.selectedPositions, (tcp) => tcp.position);
-      this.dispatchAction(new SendToEditMultiple(selectedPositions));
+      this.dispatchAction(new Review([], selectedPositions));
     }
   }
 

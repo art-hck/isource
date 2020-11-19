@@ -3,17 +3,17 @@ import { RouterModule } from '@angular/router';
 import { RequestComponent as CustomerRequestComponent } from "./components/request/request.component";
 import { DesignDocumentationListComponent } from "../common/components/design-documentation-list/design-documentation-list.component";
 import { PositionComponent } from "./components/position/position.component";
-import { TechnicalProposalListComponent } from "./components/technical-proposal-list/technical-proposal-list.component";
-import { CommercialProposalViewComponent } from "./components/commercial-proposal-view/commercial-proposal-view.component";
+import { TechnicalProposalListComponent } from "./components/proposal/technical-proposal-list/technical-proposal-list.component";
+import { CommercialProposalViewComponent } from "./components/proposal/proposal-view/commercial-proposal-view/commercial-proposal-view.component";
 import { CanActivateFeatureGuard } from "../../core/can-activate-feature.guard";
 
 import { RequestFormComponent } from "./components/request-form/request-form.component";
-import { TechnicalCommercialProposalListComponent } from "./components/technical-commercial-proposal-list/technical-commercial-proposal-list.component";
+import { TechnicalCommercialProposalViewComponent } from "./components/proposal/proposal-view/technical-commercial-proposal-view/technical-commercial-proposal-view.component";
 import { RequestListComponent } from "./components/request-list/request-list.component";
 import { Routes } from "../../core/models/routes";
-import { TechnicalCommercialProposalGroupListComponent } from "./components/common-proposal-group-list/technical-commercial-proposal-group-list/technical-commercial-proposal-group-list.component";
+import { TechnicalCommercialProposalGroupListComponent } from "./components/proposal/proposal-group-list/technical-commercial-proposal-group-list/technical-commercial-proposal-group-list.component";
 import { ContractListComponent } from "./components/contract-list/contract-list.component";
-import { CommercialProposalGroupListComponent } from "./components/common-proposal-group-list/commercial-proposal-group-list/commercial-proposal-group-list.component";
+import { CommercialProposalGroupListComponent } from "./components/proposal/proposal-group-list/commercial-proposal-group-list/commercial-proposal-group-list.component";
 
 const routes: Routes = [
   {
@@ -62,7 +62,7 @@ const routes: Routes = [
       },
       {
         path: 'technical-commercial-proposals/:groupId',
-        component: TechnicalCommercialProposalListComponent,
+        component: TechnicalCommercialProposalViewComponent,
       },
       {
         path: 'design-documentation',

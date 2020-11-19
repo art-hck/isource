@@ -3,22 +3,25 @@ import { getCurrencySymbol } from "@angular/common";
 import { ContragentShortInfo } from "../../../../../contragent/models/contragent-short-info";
 import { TechnicalCommercialProposal } from "../../../../common/models/technical-commercial-proposal";
 import { Proposal } from "../../../../../shared/components/grid/proposal";
-import { TechnicalCommercialProposalComponent } from "../../technical-commercial-proposal/technical-commercial-proposal.component";
+import { TechnicalCommercialProposalComponent } from "../technical-commercial-proposal/technical-commercial-proposal.component";
 import { GridRowComponent } from "../../../../../shared/components/grid/grid-row/grid-row.component";
 import { Store } from "@ngxs/store";
 import { TechnicalCommercialProposals } from "../../../actions/technical-commercial-proposal.actions";
 import { Uuid } from "../../../../../cart/models/uuid";
 import DownloadAnalyticalReport = TechnicalCommercialProposals.DownloadAnalyticalReport;
+import { CommonProposalItem } from "../../../../common/models/common-proposal";
+import { RequestPosition } from "../../../../common/models/request-position";
 
 @Component({
-  selector: 'app-technical-commercial-proposal-confirm',
-  templateUrl: './technical-commercial-proposal-confirm.component.html',
-  styleUrls: ['./technical-commercial-proposal-confirm.component.scss']
+  selector: 'app-common-proposal-confirm',
+  templateUrl: './proposal-confirm.component.html',
+  styleUrls: ['./proposal-confirm.component.scss']
 })
-export class TechnicalCommercialProposalConfirmComponent {
+export class ProposalConfirmComponent {
   @Input() isLoading: boolean;
   @Input() requestId: Uuid;
   @Input() groupId: Uuid;
+  @Input() positions: RequestPosition[];
   @Input() proposalsOnReview: QueryList<TechnicalCommercialProposalComponent | GridRowComponent>;
   @Input() approvalModalData: {
     counters: {
@@ -28,8 +31,8 @@ export class TechnicalCommercialProposalConfirmComponent {
     },
     selectedProposals: {
       supplier: ContragentShortInfo;
-      toSendToEdit: (TechnicalCommercialProposal | Proposal)[];
-      toApprove: (TechnicalCommercialProposal | Proposal)[]
+      toSendToEdit: Proposal<CommonProposalItem>[];
+      toApprove: Proposal<CommonProposalItem>[]
     }[]
   };
   @Output() close = new EventEmitter();
@@ -39,10 +42,7 @@ export class TechnicalCommercialProposalConfirmComponent {
   readonly getCurrencySymbol = getCurrencySymbol;
   readonly downloadAnalyticalReport = () => new DownloadAnalyticalReport(this.requestId, this.groupId);
 
-  constructor(
-    public store: Store,
-  ) {
-  }
+  constructor(public store: Store) {}
 
   /**
    * Сумма выбранных предложений по поставщику
@@ -61,32 +61,36 @@ export class TechnicalCommercialProposalConfirmComponent {
     return propsFlat.reduce((sum, p) => sum += (p.priceWithoutVat * p.quantity ?? 0), 0);
   }
 
-  getSelectedToSendToEditPositions(selectedProposals): (TechnicalCommercialProposal | Proposal)[] {
-    const positions = selectedProposals.map(selectedProposal => selectedProposal.toSendToEdit).reduce((acc, val) => acc.concat(val), []);
+  getSelectedToSendToEditPositions(selectedProposals): Proposal[] {
+    const items: Proposal<CommonProposalItem>[] = selectedProposals.map(selectedProposal => selectedProposal.toSendToEdit).reduce((acc, val) => acc.concat(val), []);
 
     // Убираем из массива позиций повторяющиеся значения и оставляем только уникальные
-    return positions.filter((position, index, array) =>
-      !array.filter((v, i) => JSON.stringify(position.position.id) === JSON.stringify(v.position.id) && i < index).length);
+    return items.filter((item, i, arr) => arr.indexOf(item) === i);
   }
 
   /**
    * Возвращает true, если позиция отфильтрована из списка
    */
   positionIsFiltered(proposalPosition): boolean {
-    return proposalPosition.manufacturingName.toLowerCase().indexOf(this.filterQuery.trim().toLowerCase()) === -1;
+    const name = proposalPosition.manufacturingName || this.getPosition(proposalPosition).name;
+    return name.toLowerCase().indexOf(this.filterQuery.trim().toLowerCase()) === -1;
   }
 
   /**
    * Возвращает true, если все позиции поставщика на утверждение отфильтрованы из списка
    */
   allPositionsToApproveFiltered(proposalPositionsBlock): boolean {
-    return proposalPositionsBlock.toApprove.every(proposal => proposal.manufacturingName.toLowerCase().indexOf(this.filterQuery.trim().toLowerCase()) === -1);
+    return proposalPositionsBlock.toApprove.every(proposal => this.positionIsFiltered(proposal));
   }
 
   /**
    * Возвращает true, если все позиции на доработку отфильтрованы из списка
    */
   allPositionsToSendToEditFiltered(selectedToSendToEditPositions): boolean {
-    return selectedToSendToEditPositions.every(proposal => proposal.manufacturingName.toLowerCase().indexOf(this.filterQuery.trim().toLowerCase()) === -1);
+    return selectedToSendToEditPositions.every(proposal => this.positionIsFiltered(proposal));
+  }
+
+  getPosition(proposal: Proposal<CommonProposalItem>) {
+    return this.positions.find(p => p.id === proposal.sourceProposal.requestPositionId);
   }
 }

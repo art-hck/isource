@@ -14,7 +14,7 @@ import { RequestState } from "../../../../states/request.state";
 import { RequestActions } from "../../../../actions/request.actions";
 import { animate, style, transition, trigger } from "@angular/animations";
 import { StateStatus } from "../../../../../common/models/state-status";
-import { ProcedureSource } from "../../../../enum/procedure-source";
+import { ProposalSource } from "../../../../enum/proposal-source";
 import { Procedure } from "../../../../models/procedure";
 import { Title } from "@angular/platform-browser";
 import { CommonProposal, CommonProposalByPosition, CommonProposalItem } from "../../../../../common/models/common-proposal";
@@ -61,7 +61,7 @@ export class CommercialProposalViewComponent implements OnInit, OnDestroy {
     withLatestFrom(this.procedurePositionsSelected$),
     switchMap(([{ id }, ids]) => this.service.getContragentsWithTp(id, ids))
   );
-  readonly procedureSource = ProcedureSource.COMMERCIAL_PROPOSAL;
+  readonly procedureSource = ProposalSource.COMMERCIAL_PROPOSAL;
   readonly downloadTemplate = (requestId: Uuid, groupId: Uuid) => new DownloadTemplate(requestId, groupId);
   readonly uploadTemplate = (requestId: Uuid, groupId: Uuid, files: File[]) => new UploadTemplate(requestId, files, groupId);
   readonly downloadAnalyticalReport = (requestId: Uuid, groupId: Uuid) => new DownloadAnalyticalReport(requestId, groupId);

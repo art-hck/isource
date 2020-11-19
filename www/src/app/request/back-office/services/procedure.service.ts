@@ -7,7 +7,7 @@ import { Request } from "../../common/models/request";
 import { ProcedureCreateResponse } from '../models/procedure-create-response';
 import { Procedure } from "../models/procedure";
 import { FormDataService } from "../../../shared/services/form-data.service";
-import { ProcedureSource } from "../enum/procedure-source";
+import { ProposalSource } from "../enum/proposal-source";
 import { Okpd2 } from "../../../shared/models/okpd2";
 
 @Injectable()
@@ -18,10 +18,10 @@ export class ProcedureService {
     private formDataService: FormDataService
   ) {}
 
-  list(requestId: Uuid, source: ProcedureSource, groupId?: Uuid): Observable<Procedure[]> {
+  list(requestId: Uuid, source: ProposalSource, groupId?: Uuid): Observable<Procedure[]> {
     const url = `requests/backoffice/${requestId}/procedures`;
     const body = { source };
-    body[source === ProcedureSource.COMMERCIAL_PROPOSAL ? 'requestCommercialProposalGroupId' : 'requestTechnicalCommercialProposalGroupId'] = groupId;
+    body[source === ProposalSource.COMMERCIAL_PROPOSAL ? 'requestCommercialProposalGroupId' : 'requestTechnicalCommercialProposalGroupId'] = groupId;
 
     return this.api.post<Procedure[]>(url, body);
   }

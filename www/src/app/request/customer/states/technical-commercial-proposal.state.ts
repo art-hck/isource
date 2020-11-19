@@ -1,23 +1,22 @@
-import { TechnicalCommercialProposal } from "../../common/models/technical-commercial-proposal";
 import { Action, createSelector, Selector, State, StateContext } from "@ngxs/store";
-import { finalize, tap } from "rxjs/operators";
+import { tap } from "rxjs/operators";
 import { TechnicalCommercialProposals } from "../actions/technical-commercial-proposal.actions";
-import { patch, updateItem } from "@ngxs/store/operators";
+import { patch } from "@ngxs/store/operators";
 import { saveAs } from 'file-saver/src/FileSaver';
 import { StateStatus } from "../../common/models/state-status";
 import { TechnicalCommercialProposalService } from "../services/technical-commercial-proposal.service";
 import { Injectable } from "@angular/core";
-import { TechnicalCommercialProposalByPosition } from "../../common/models/technical-commercial-proposal-by-position";
 import { Uuid } from "../../../cart/models/uuid";
-import { TechnicalCommercialProposalPositionStatus } from "../../common/enum/technical-commercial-proposal-position-status";
+import { CommonProposal, CommonProposalByPosition, CommonProposalItemStatus } from "../../common/models/common-proposal";
+import { RequestPosition } from "../../common/models/request-position";
+import { insertOrUpdateProposals } from "../../../shared/state-operators/insert-or-update-proposals";
 import Fetch = TechnicalCommercialProposals.Fetch;
-import Reject = TechnicalCommercialProposals.Reject;
-import SendToEditMultiple = TechnicalCommercialProposals.SendToEditMultiple;
-import ReviewMultiple = TechnicalCommercialProposals.ReviewMultiple;
+import Review = TechnicalCommercialProposals.Review;
 import DownloadAnalyticalReport = TechnicalCommercialProposals.DownloadAnalyticalReport;
 
 export interface TechnicalCommercialProposalStateModel {
-  proposals: TechnicalCommercialProposal[];
+  positions: RequestPosition[];
+  proposals: CommonProposal[];
   status: StateStatus;
 }
 
@@ -26,87 +25,55 @@ type Context = StateContext<Model>;
 
 @State<Model>({
   name: 'CustomerTechnicalCommercialProposals',
-  defaults: { proposals: null, status: "pristine" }
+  defaults: { proposals: null, positions: null, status: "pristine" }
 })
 @Injectable()
 export class TechnicalCommercialProposalState {
-  cache: { [requestId in Uuid]: TechnicalCommercialProposal[] } = {};
 
   constructor(private rest: TechnicalCommercialProposalService) {}
 
-  static proposalsByPos(status: TechnicalCommercialProposalPositionStatus[]) {
+  static proposalsByPos(status: CommonProposalItemStatus[]) {
     return createSelector(
       [TechnicalCommercialProposalState],
-      ({proposals}: Model) => proposals
-        .reduce((group: TechnicalCommercialProposalByPosition[], proposal) => {
-          proposal.positions.forEach(proposalPosition => {
-            const item = group.find(({position}) => position.id === proposalPosition.position.id);
-            if (item) {
-              item.data.push({ proposal, proposalPosition });
+      ({ proposals, positions }: Model) => proposals
+        .reduce((acc: CommonProposalByPosition[], proposal) => {
+          proposal.items.forEach(item => {
+            const proposalByPosition = acc.find(({ position: { id } }) => item.requestPositionId === id);
+            if (proposalByPosition) {
+              proposalByPosition.items.push(item);
             } else {
-              group.push({ position: proposalPosition.position, data: [{ proposal, proposalPosition }] });
+              const position = positions.find(({ id }) => item.requestPositionId === id);
+              acc.push({ position, items: [item] });
             }
           });
-          return group;
+          return acc;
         }, [])
-        .filter(({data}) => data.every(({proposalPosition}) => status.includes(proposalPosition.status)))
+        .filter(({ items }) => items.every((item) => status.includes(item.status)))
     );
   }
 
   @Selector() static status({ status }: Model) { return status; }
   @Selector() static proposals({ proposals }: Model) { return proposals; }
+  @Selector() static positions({ positions }: Model) { return positions; }
 
   @Action(Fetch)
   fetch({ setState }: Context, { requestId, groupId }: Fetch) {
-    // @TODO: Временно выпилил кеширование
-    // if (this.cache[requestId]) {
-    //   return ctx.setState(patch({proposals: this.cache[requestId]}));
-    // }
-    setState(patch({ proposals: null, status: "fetching" as StateStatus }));
-    return this.rest.list(requestId, { requestTechnicalCommercialProposalGroupId: groupId })
-      .pipe(
-        tap(proposals => setState(patch({ proposals, status: "received" as StateStatus }))),
-        tap(proposals => this.cache[requestId] = proposals),
-      );
+    setState(patch<Model>({ proposals: null, status: "fetching" }));
+    return this.rest.list(requestId, groupId).pipe(
+      tap(({ proposals, positions }) => setState(patch<Model>({ proposals, positions, status: "received" })))
+    );
   }
 
-  @Action(SendToEditMultiple)
-  sendToEditMultiple({ setState, getState }: Context, { requestPositions }: SendToEditMultiple) {
+  @Action(Review)
+  review({ setState, getState }: Context, { proposalItems, positions }: Review) {
     setState(patch({ status: "updating" as StateStatus }));
-    return this.rest.sendToEditMultiple(requestPositions.map(({ id }) => id)).pipe(
-      tap(proposalPositions => proposalPositions.forEach(proposalPosition => setState(patch({
-        proposals: updateItem(
-          ({ positions }) => positions.some(({ id }) => proposalPosition.id === id),
-          patch({ positions: updateItem(({ id }) => proposalPosition.id === id, proposalPosition) })
-        ),
-        status: "received" as StateStatus
-      })))));
-  }
-
-  @Action(ReviewMultiple)
-  reviewMultiple({ setState, getState }: Context, { proposalPositions, requestPositions }: ReviewMultiple) {
-    setState(patch({ status: "updating" as StateStatus }));
-
-    const data: { accepted: Uuid[], sendToEdit: Uuid[] } = {
-      'accepted': proposalPositions.map(({ id }) => id),
-      'sendToEdit': requestPositions.map(({ id }) => id)
+    console.log(proposalItems, positions);
+    const body: { accepted: Uuid[], sendToEdit: Uuid[] } = {
+      'accepted': proposalItems?.map(({ id }) => id),
+      'sendToEdit': positions?.map(({ id }) => id)
     };
 
-    return this.rest.reviewMultiple(data).pipe(
-      tap(technicalProposalPositions => {
-        setState(patch({ status: "updating" as StateStatus }));
-
-        technicalProposalPositions.forEach(technicalProposalPosition => setState(patch(
-          {
-            proposals: updateItem(
-              ({ positions }) => positions.some(({ id }) => technicalProposalPosition.id === id),
-              patch({ positions: updateItem(({ id }) => technicalProposalPosition.id === id, technicalProposalPosition) })
-            ),
-            status: "received" as StateStatus
-          }))
-        );
-      })
-    );
+    return this.rest.review(body).pipe(tap(data => setState(insertOrUpdateProposals(data))));
   }
 
   @Action(DownloadAnalyticalReport)

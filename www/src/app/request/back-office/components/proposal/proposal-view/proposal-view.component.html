@@ -58,7 +58,7 @@
         <!-- Новое предложение  -->
         <button *ngSwitchCase="'list'" uxgButton secondary iconText (click)="showForm = true">
           <uxg-icon shape="app-plus"></uxg-icon>
-          <span>Новое {{ sourceLabels[procedureSource]}}</span>
+          <span>Новое {{ sourceLabels[source]}}</span>
         </button>
 
         <!-- Добавить столбец контрагента  -->
@@ -72,7 +72,7 @@
         <!-- Новое предложение шаблона -->
         <button uxgButton primary iconText (click)="uploadTemplateModal.open()">
           <uxg-icon shape="app-plus"></uxg-icon>
-          <span>{{ sourceLabels[procedureSource]}} из шаблона</span>
+          <span>{{ sourceLabels[source]}} из шаблона</span>
         </button>
 
         <!-- Отправить на согласование -->
@@ -207,7 +207,7 @@
         [groupId]="groupId"
         (close)="showForm = false"
         [availablePositions]="positions"
-        [source]="procedureSource"
+        [source]="source"
         (create)="create.emit($event)"
       ></app-common-proposal-form>
       <ng-container *ngFor="let procedure of procedures; trackBy: trackById">
@@ -222,7 +222,7 @@
         <app-request-technical-commercial-proposal
           [request]="request"
           [groupId]="groupId"
-          [source]="procedureSource"
+          [source]="source"
           [positions]="positions"
           [proposal]="proposal"
           (edit)="edit.emit($event)"
@@ -245,7 +245,7 @@
         [positions]="positions"
         [action]="procedureModalPayload.action"
         [procedure]="procedureModalPayload.procedure"
-        [procedureSource]="procedureSource"
+        [procedureSource]="source"
         [contragents]="contragentsWithTp"
         [groupId]="groupId"
         (positionsSelected)="procedurePositionsSelected.emit($event)"
@@ -257,10 +257,10 @@
 
   <uxg-modal #uploadTemplateModal size="l" (stateChange)="$event && (files = [])">
     <ng-container *ngIf="uploadTemplateModal.state">
-      <h2 class="modal-title"><b>Загрузить {{ sourceLabels[procedureSource]}} из шаблона</b></h2>
+      <h2 class="modal-title"><b>Загрузить {{ sourceLabels[source]}} из шаблона</b></h2>
       <div class="app-secondary-color template">
-        Вы можете загрузить {{ sourceLabels[procedureSource]}} списком, если заполните шаблон xls таблицы (<a class="app-link" (click)="downloadTemplate.emit()"><b>скачать
-        шаблон</b></a>), и загрузите файл в систему. Если указать несколько поставщиков, то будет создано несколько {{ sourceLabels[procedureSource]}}.
+        Вы можете загрузить {{ sourceLabels[source]}} списком, если заполните шаблон xls таблицы (<a class="app-link" (click)="downloadTemplate.emit()"><b>скачать
+        шаблон</b></a>), и загрузите файл в систему. Если указать несколько поставщиков, то будет создано несколько {{ sourceLabels[source]}}.
       </div>
       <div class="dragAndDropArea">
         <app-template-upload
@@ -279,12 +279,12 @@
   </uxg-modal>
 
   <uxg-modal [(state)]="addProposalPositionPayload">
-    <h2>Добавить новое {{ sourceLabels[procedureSource]}} от {{addProposalPositionPayload?.proposal?.supplier.shortName}}</h2>
+    <h2>Добавить новое {{ sourceLabels[source]}} от {{addProposalPositionPayload?.proposal?.supplier.shortName}}</h2>
     <app-proposal-item-form
       *ngIf="addProposalPositionPayload as p"
       [position]="p.position"
       [proposalItem]="p.proposalPosition"
-      [source]="procedureSource"
+      [source]="source"
       (close)="addProposalPositionPayload = null"
       (save)="saveProposalItem.emit({item: $event, proposal: addProposalPositionPayload.proposal})"
     ></app-proposal-item-form>
