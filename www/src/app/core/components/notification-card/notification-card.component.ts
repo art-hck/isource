@@ -50,5 +50,4 @@ export class NotificationCardComponent {
   markNotificationAsRead() {
     this.readNotification.emit(this.notification);
   }
-
 }
