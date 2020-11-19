@@ -10,7 +10,7 @@ export const PositionInfoFieldsLabels: Record<PositionInfoField, string> = {
   [PositionInfoField.PAYMENT_TERMS]: 'Условия оплаты',
   [PositionInfoField.PRODUCTION_DOCUMENT]: 'Документ изготовления',
   [PositionInfoField.QUANTITY]: 'Количество',
-  [PositionInfoField.START_PRICE]: 'Начальная максимальная цена',
+  [PositionInfoField.START_PRICE]: 'Начальная максимальная цена без НДС',
   [PositionInfoField.RELATED_SERVICES]: 'Необходимость сопутствующих услуг',
   [PositionInfoField.COMMENTS]: 'Дополнительные требования',
 };
