@@ -351,12 +351,12 @@
 
     <uxg-modal #parametersModal size="l">
       <h2>Параметры {{source === 'TECHNICAL_COMMERCIAL_PROPOSAL' ? 'ТКП' : 'КП'}} по позициям</h2>
-      <app-technical-commercial-proposal-parameters-form
+      <app-common-proposal-parameters-form
         *ngIf="parametersModal.state"
         formControlName="positions"
         (ngModelChange)="parametersModal.close()"
         (cancel)="parametersModal.close()"
-      ></app-technical-commercial-proposal-parameters-form>
+      ></app-common-proposal-parameters-form>
     </uxg-modal>
   </div>
 </form>

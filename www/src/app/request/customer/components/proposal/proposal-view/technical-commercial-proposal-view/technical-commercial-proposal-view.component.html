@@ -8,7 +8,9 @@
   [stateStatus]="stateStatus$ | async"
   [groupId]="groupId"
   [view]="view"
+  [positions]="positions$ | async"
   (viewChange)="switchView($event)"
+  (review)="store.dispatch(review($event.accepted, $event.sendToEdit))"
 ></app-common-proposal-view>
 
 <ng-template #placeholder>

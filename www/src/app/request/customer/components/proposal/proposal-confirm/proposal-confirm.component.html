@@ -54,7 +54,7 @@
         <div class="to-approve">
           <ng-container *ngFor="let toApproveProposalPosition of proposalPositionsBlock.toApprove">
             <div class="app-row select-list-item" *ngIf="!positionIsFiltered(toApproveProposalPosition)">
-              <div class="app-col app-bold select-list-item-title">{{ toApproveProposalPosition.manufacturingName }}</div>
+              <div class="app-col app-bold select-list-item-title">{{ toApproveProposalPosition?.manufacturingName || getPosition(toApproveProposalPosition).name }}</div>
 
               <div class="app-col app-col-auto select-list-item-quantity">
                 <span>{{ toApproveProposalPosition.quantity }} </span>
@@ -98,7 +98,7 @@
       <div class="to-send-to-edit">
         <ng-container *ngFor="let toSendToEditProposalPosition of getSelectedToSendToEditPositions(approvalModalData.selectedProposals); let i = index">
           <div class="app-row select-list-item" *ngIf="!positionIsFiltered(toSendToEditProposalPosition)">
-            <div class="app-col app-bold select-list-item-title">{{ toSendToEditProposalPosition.manufacturingName }}</div>
+            <div class="app-col app-bold select-list-item-title">{{ toSendToEditProposalPosition?.manufacturingName || getPosition(toSendToEditProposalPosition).name }}</div>
 
             <div class="app-col select-list-item-supplier-name">
               <span class="app-ghost-color">На доработку</span>

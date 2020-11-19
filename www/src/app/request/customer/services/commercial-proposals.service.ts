@@ -1,18 +1,24 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Uuid } from "../../../cart/models/uuid";
-import { PositionsWithSuppliers } from "../../back-office/models/positions-with-suppliers";
-import { CommercialProposalReviewBody } from "../../common/models/commercial-proposal-review-body";
 import { ProposalGroup } from "../../common/models/proposal-group";
 import { ProposalGroupFilter } from "../../common/models/proposal-group-filter";
+import { CommonProposalPayload } from "../../common/models/common-proposal";
 
-
-@Injectable({
-  providedIn: "root"
-})
+@Injectable()
 export class CommercialProposalsService {
 
   constructor(private api: HttpClient) {}
+
+  list(requestId: Uuid, groupId: Uuid) {
+    const url = `requests/customer/${requestId}/positions-with-offers`;
+    return this.api.post<CommonProposalPayload>(url, { groupId });
+  }
+
+  review(requestId: Uuid, data: { accepted: Uuid[], sendToEdit: Uuid[] }) {
+    const url = `requests/customer/${requestId}/commercial-proposals/change-statuses`;
+    return this.api.post(url, data);
+  }
 
   group(requestId: Uuid, groupId: Uuid) {
     const url = `requests/customer/${ requestId }/commercial-proposal-groups/${ groupId }/view`;
@@ -22,16 +28,6 @@ export class CommercialProposalsService {
   groupList(requestId: Uuid, filters: ProposalGroupFilter = {}) {
     const url = `requests/customer/${ requestId }/commercial-proposal-groups`;
     return this.api.post<ProposalGroup[]>(url, { filters });
-  }
-
-  positionsWithOffers(requestId: Uuid, groupId: Uuid) {
-    const url = `requests/customer/${requestId}/positions-with-offers`;
-    return this.api.post<PositionsWithSuppliers>(url, { requestCommercialProposalGroupId: groupId });
-  }
-
-  review(requestId: Uuid, body: CommercialProposalReviewBody) {
-    const url = `requests/customer/${requestId}/commercial-proposals/change-statuses`;
-    return this.api.post(url, body);
   }
 
   downloadAnalyticalReport(requestId: Uuid, groupId: Uuid) {
