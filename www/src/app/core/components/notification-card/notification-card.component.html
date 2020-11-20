@@ -143,7 +143,7 @@
     <!-- Согласование/отклонение/отправка на доработку позиций ТКП -->
     <ng-container *ngSwitchCase="'REQUEST_TCP_POSITION_CHANGE_STATUS'">
       <div class="app-row notification-card-header app-primary-color"
-           [ngSwitch]="notification?.body?.requestTcpPositionChangeStatus" [ngClass]="'status-' + notification?.body?.requestTcpPositionChangeStatus + '-badge'">
+           [ngSwitch]="notification?.body?.requestTcpPositionStatus" [ngClass]="'status-' + notification?.body?.requestTcpPositionStatus + '-badge'">
         <ng-container *ngSwitchCase="'SENT_TO_EDIT'">
           <b class="app-col">Отправлены на доработку позиции технико-коммерч. предложения</b>
         </ng-container>
