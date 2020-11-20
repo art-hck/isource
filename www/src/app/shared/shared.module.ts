@@ -22,6 +22,7 @@ import { PaginationComponent } from './components/pagination/pagination.componen
 import { RouterModule } from "@angular/router";
 import { PhonePipe } from './pipes/phone.pipe';
 import { SuggestionsDirective } from "./directives/suggestions.directive";
+import { OkpdSuggestionsDirective } from "./directives/okpdSuggestions.directive";
 import { HumanDatePipe } from './pipes/human-date.pipe';
 import { AddFromExcelComponent } from "./components/add-from-excel/add-from-excel.component";
 import { DocumentsFormControlComponent } from "./components/documents-form-control/documents-form-control.component";
@@ -78,6 +79,7 @@ import { FilterDirective } from './components/filter/filter.directive';
     PhonePipe,
     HumanDatePipe,
     SuggestionsDirective,
+    OkpdSuggestionsDirective,
     PriceInputFilterDirective,
     AddFromExcelComponent,
     DocumentsFormControlComponent,
@@ -151,6 +153,7 @@ import { FilterDirective } from './components/filter/filter.directive';
     FilterCheckboxListComponent,
     FilterButtonComponent,
     FilterDirective,
+    OkpdSuggestionsDirective,
   ]
 })
 export class SharedModule {

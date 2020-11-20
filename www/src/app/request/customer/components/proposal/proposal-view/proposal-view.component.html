@@ -245,6 +245,7 @@
     [approvalModalData]="approvalModalData"
     [isLoading]="stateStatus === 'updating'"
     (close)="selectedProposalsApprovalModal.close()"
+    (downloadAnalyticalReport)="downloadAnalyticalReport.emit()"
     (reviewMultiple)="reviewMultiple()">
   </app-common-proposal-confirm>
 </uxg-modal>

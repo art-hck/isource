@@ -10,4 +10,5 @@
   [form]="form"
   (filter)="fetchFilters$.next($event)"
   (refresh)="fetchFilters$.next({})"
+  (downloadRequests)="downloadRequests()"
 ></app-request-list>

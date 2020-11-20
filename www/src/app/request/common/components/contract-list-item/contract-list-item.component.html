@@ -34,8 +34,8 @@
       <div class="app-row app-uppercase app-ghost-color app-bold">
         <small class="app-col-6 app-ellipsis">Наименование позиции</small>
         <small class="app-col-2 app-ellipsis">Количество</small>
-        <small class="app-col-2 app-ellipsis">Цена за единицу</small>
-        <small class="app-col-2 app-ellipsis">Cумма</small>
+        <small class="app-col-2 app-ellipsis">Цена за единицу без НДС</small>
+        <small class="app-col-2 app-ellipsis">Сумма без НДС</small>
       </div>
       <div class="app-row" *ngFor="let winner of contract.winners">
         <div class="app-col-6 app-ellipsis name">{{winner.offerPosition.requestPosition.name}}</div>
@@ -43,11 +43,11 @@
           <span>{{winner.offerPosition.quantity}} </span>
           <span class="app-ghost-color">{{winner.offerPosition.measureUnit}}</span>
         </div>
-        <div class="app-col-2 app-ellipsis price">
+        <div class="app-col-2 app-ellipsis price" title="Без НДС">
           <span>{{winner.offerPosition.priceWithoutVat | number:'1.0-2'}} </span>
           <span class="app-ghost-color">{{getCurrencySymbol(winner.offerPosition.currency, "narrow")}}</span>
         </div>
-        <div class="app-col-2 app-ellipsis total">
+        <div class="app-col-2 app-ellipsis total" title="Без НДС">
           <span>{{(winner.offerPosition.priceWithoutVat * winner.offerPosition.quantity) | number:'1.0-2'}} </span>
           <span class="app-ghost-color">{{getCurrencySymbol(winner.offerPosition.currency, "narrow")}}</span>
         </div>
@@ -56,7 +56,7 @@
         <div class="app-col-6 app-ellipsis name"></div>
         <div class="app-col-2 app-ellipsis quantity"></div>
         <div class="app-col-2 app-ellipsis price"></div>
-        <div class="app-col-2 app-ellipsis total app-bold">
+        <div class="app-col-2 app-ellipsis total app-bold" title="Без НДС">
           <span>{{ total | number:'1.0-2' }}</span>
           {{getCurrencySymbol(contract.winners[0].offerPosition.currency, "narrow")}}
         </div>

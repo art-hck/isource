@@ -48,6 +48,7 @@ export class RequestListComponent implements OnInit, OnDestroy {
   @Output() filter = new EventEmitter<{ page?: number, filters?: RequestsListFilter, sort?: RequestsListSort }>();
   @Output() addRequest = new EventEmitter();
   @Output() refresh = new EventEmitter();
+  @Output() downloadRequests = new EventEmitter();
 
   sortDirection: string = null;
   sortingColumn: string;

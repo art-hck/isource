@@ -1,4 +1,4 @@
-import { Component, Inject, Input, OnInit, Renderer2 } from "@angular/core";
+import { Component, ElementRef, Inject, QueryList, Renderer2, ViewChildren } from "@angular/core";
 import { DOCUMENT } from "@angular/common";
 import { Observable, of, Subject } from "rxjs";
 import { NotificationItem, Notifications } from "../../models/notifications";
@@ -11,6 +11,8 @@ import { take, takeUntil } from "rxjs/operators";
   styleUrls: ['./notification-list.component.scss']
 })
 export class NotificationListComponent {
+  @ViewChildren("notificationCardRef", { read: ElementRef }) notificationCards: QueryList<ElementRef>;
+
   notifications$: Observable<Notifications>;
   newNotifications$: Observable<NotificationItem[]>;
   openModal = false;
@@ -23,7 +25,16 @@ export class NotificationListComponent {
     this.notificationsService.getNotifications(this.notificationsLimit).subscribe(notifications => {
       this.notificationsCount = notifications.totalHits;
       this.notifications$ = of(notifications);
+
       this.markNotificationsAsRead(notifications);
+
+      // Через 2 секунды после открытия шторки визуально помечаем непрочитанные уведомления как прочитанные
+      this.notificationCards.changes.subscribe((notificationCards) => {
+        notificationCards.filter(card => card.nativeElement.firstChild.classList.contains('not_seen'))
+          .forEach((card: ElementRef) => {
+            setTimeout(() => { card.nativeElement.firstChild.classList.remove('not_seen'); }, 2000);
+          });
+      });
 
       this.renderer.addClass(this.document.body, "aside-modal-open");
       this.renderer.addClass(this.document.body, "notifications-modal-open");

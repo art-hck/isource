@@ -16,7 +16,7 @@ import { TechnicalCommercialProposalGroupFilter } from "../../../../../common/mo
 import { TechnicalCommercialProposalState } from "../../../../states/technical-commercial-proposal.state";
 import { ProcedureAction } from "../../../../models/procedure-action";
 import { Procedure } from "../../../../models/procedure";
-import { ProcedureSource } from "../../../../enum/procedure-source";
+import { ProposalSource } from "../../../../enum/proposal-source";
 import { FeatureService } from "../../../../../../core/services/feature.service";
 import { ToastActions } from "../../../../../../shared/actions/toast.actions";
 import { RequestPosition } from "../../../../../common/models/request-position";
@@ -38,7 +38,7 @@ export class TechnicalCommercialProposalGroupListComponent implements OnInit, On
   requestId: Uuid;
   destroy$ = new Subject();
 
-  readonly procedureSource = ProcedureSource.TECHNICAL_COMMERCIAL_PROPOSAL;
+  readonly procedureSource = ProposalSource.TECHNICAL_COMMERCIAL_PROPOSAL;
   readonly newGroup$ = new BehaviorSubject<ProposalGroup>(null);
   readonly filter$ = new BehaviorSubject<TechnicalCommercialProposalGroupFilter>({});
   readonly form = this.fb.group({ requestPositionName: null, createdDateFrom: null, createdDateTo: null });

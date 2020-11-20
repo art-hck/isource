@@ -46,6 +46,7 @@ export class ProposalViewComponent implements AfterViewInit, OnChanges, OnDestro
 
   @Output() viewChange = new EventEmitter<ProposalsView>();
   @Output() review = new EventEmitter<{ accepted?: CommonProposalItem[], sendToEdit?: RequestPosition[] }>();
+  @Output() downloadAnalyticalReport = new EventEmitter();
 
   readonly chooseBy$ = new Subject<"date" | "price">();
   readonly getCurrencySymbol = getCurrencySymbol;

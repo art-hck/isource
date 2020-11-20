@@ -1,4 +1,16 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  Output,
+  SimpleChanges,
+  ViewChild
+} from '@angular/core';
 import { Request } from "../../../../common/models/request";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { Observable, Subject } from "rxjs";
@@ -21,7 +33,7 @@ import { PositionCurrency } from "../../../../common/enum/position-currency";
 import { Uuid } from "../../../../../cart/models/uuid";
 import { searchContragents } from "../../../../../shared/helpers/search";
 import { CommonProposal, CommonProposalItem } from "../../../../common/models/common-proposal";
-import { ProcedureSource } from "../../../enum/procedure-source";
+import { ProposalSource } from "../../../enum/proposal-source";
 
 @Component({
   selector: 'app-common-proposal-form',
@@ -36,7 +48,7 @@ export class ProposalFormComponent implements OnInit, OnDestroy, OnChanges {
   @Input() groupId: Uuid;
   @Input() proposal: CommonProposal;
   @Input() closable = true;
-  @Input() source: ProcedureSource;
+  @Input() source: ProposalSource;
   @Input() availablePositions: RequestPosition[];
   @Output() close = new EventEmitter();
   @Output() create = new EventEmitter<{ proposal: Partial<CommonProposal>, items: CommonProposalItem[] }>();
@@ -60,6 +72,10 @@ export class ProposalFormComponent implements OnInit, OnDestroy, OnChanges {
   parameterErrorMessage = false;
   publish = this.fb.control(true);
   proposalPositions: { position: RequestPosition }[];
+
+  get isManufacturingNamePristine(): boolean {
+    return this.form.get("positions").value.filter(pos => pos.manufacturer).length === 0;
+  }
 
   get isManufacturerPristine(): boolean {
     return this.form.get("positions").value.filter(pos => pos.manufacturingName).length === 0;
@@ -116,17 +132,25 @@ export class ProposalFormComponent implements OnInit, OnDestroy, OnChanges {
         }
       }
 
-      if (this.form.get('positions').dirty && this.form.get('positions').value.length && this.isManufacturerPristine) {
+      if (this.form.get('positions').value.length && (this.isManufacturerPristine || this.isManufacturingNamePristine)) {
         this.manufactureErrorMessage = true;
         this.parameterErrorMessage = true;
         this.invalidDocControl = false;
       }
 
-      this.form.get('positions').setValidators(
-        docsCount > 0 && this.isManufacturerPristine ?
-          [Validators.required] :
-          [Validators.required, proposalManufacturerValidator]
-      );
+      if (this.source === ProposalSource.TECHNICAL_COMMERCIAL_PROPOSAL) {
+        this.form.get('positions').setValidators(
+          docsCount > 0 && this.isManufacturingNamePristine ?
+            [Validators.required] :
+            [Validators.required, proposalManufacturerValidator, proposalParametersFormValidator]
+        );
+      } else {
+        this.form.get('positions').setValidators(
+          docsCount > 0 && this.isManufacturerPristine ?
+            [Validators.required] :
+            [Validators.required, proposalParametersFormValidator]
+        );
+      }
 
       this.form.get('deliveryPickup').setValidators(
         this.form.get('deliveryType').value === this.deliveryType.PICKUP ? [Validators.required] : null);

@@ -21,9 +21,12 @@ export class NotificationCardComponent {
   @Output() readNotification = new EventEmitter<NotificationItem>();
 
   getLink(notification) {
-    return (notification?.body as NotificationInfo)?.rows?.length ?
-      (notification?.body as NotificationInfo)?.rows[0].requestUrl?.replace(/https?\:\/\/.*?\//, '/') :
-      (notification?.body as NotificationInfo)?.requestUrl?.replace(/https?\:\/\/.*?\//, '/');
+    const body = notification?.body as NotificationInfo;
+    const url = body?.rows?.length ?
+      (body?.rows[0].webUrl ? body?.rows[0].webUrl : body?.rows[0].requestUrl) :
+      (body?.webUrl ? body?.webUrl : body?.requestUrl);
+
+    return url.replace(/https?\:\/\/.*?\//, '/');
   }
 
   getNotificationHeaderTitle(item): string {
@@ -47,5 +50,4 @@ export class NotificationCardComponent {
   markNotificationAsRead() {
     this.readNotification.emit(this.notification);
   }
-
 }

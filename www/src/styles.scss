@@ -48,7 +48,7 @@ body {
   color: uxg($theme, color-font-primary);
   background: uxg($theme, color-bg);
 
-  &.modal-open {
+  &.modal-open, &.notifications-modal-open {
     overflow: hidden;
   }
 
@@ -108,4 +108,54 @@ a, a:hover, a:visited, [routerlink]:hover, [ng-reflect-router-link]:hover {
   .counter {
     @extend .app-font-normal;
   }
+}
+
+.pull-right {
+  float: right;
+  clear: both;
+}
+
+.pull-left {
+  float: left;
+  clear: both;
+}
+
+.margin-bottom-5 {
+  margin-bottom: 5px;
+}
+
+.margin-bottom-10 {
+  margin-bottom: 10px;
+}
+
+.margin-bottom-15 {
+  margin-bottom: 15px;
+}
+
+.margin-bottom-20 {
+  margin-bottom: 20px;
+}
+
+.margin-bottom-25 {
+  margin-bottom: 25px;
+}
+
+.margin-bottom-30 {
+  margin-bottom: 30px;
+}
+
+.margin-bottom-35 {
+  margin-bottom: 35px;
+}
+
+.margin-bottom-40 {
+  margin-bottom: 40px;
+}
+
+.margin-bottom-45 {
+  margin-bottom: 45px;
+}
+
+.margin-bottom-50 {
+  margin-bottom: 50px;
 }

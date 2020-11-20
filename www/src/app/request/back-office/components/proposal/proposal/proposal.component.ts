@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from 
 import { getCurrencySymbol } from "@angular/common";
 import { Request } from "../../../../common/models/request";
 import { Uuid } from "../../../../../cart/models/uuid";
-import { ProcedureSource } from "../../../enum/procedure-source";
+import { ProposalSource } from "../../../enum/proposal-source";
 import { CommonProposal, CommonProposalItem } from "../../../../common/models/common-proposal";
 import { RequestPosition } from "../../../../common/models/request-position";
 
@@ -17,7 +17,7 @@ export class ProposalComponent {
   @Input() groupId: Uuid;
   @Input() proposal: CommonProposal;
   @Input() positions: RequestPosition[];
-  @Input() source: ProcedureSource;
+  @Input() source: ProposalSource;
   @Output() edit = new EventEmitter<{ proposal: Partial<CommonProposal> & { id: Uuid }, items: CommonProposalItem[] }>();
 
   state: "view" | "edit" = "view";

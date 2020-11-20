@@ -21,6 +21,7 @@ import { CommercialProposalState } from "../../../../states/commercial-proposal.
 import { RequestPosition } from "../../../../../common/models/request-position";
 import Fetch = CommercialProposals.Fetch;
 import Review = CommercialProposals.Review;
+import DownloadAnalyticalReport = CommercialProposals.DownloadAnalyticalReport;
 
 @Component({
   templateUrl: './commercial-proposal-view.component.html',
@@ -42,10 +43,10 @@ export class CommercialProposalViewComponent implements OnInit, OnDestroy {
   readonly stateStatus$: Observable<StateStatus>;
 
   groupId: Uuid;
-  requestId: Uuid;
   view: ProposalsView = "grid";
   readonly destroy$ = new Subject();
   readonly review = (requestId: Uuid, proposalItems: CommonProposalItem[], positions: RequestPosition[]) => new Review(requestId, proposalItems, positions);
+  readonly downloadAnalyticalReport = (requestId: Uuid, groupId: Uuid) => new DownloadAnalyticalReport(requestId, groupId);
 
   constructor(
     private route: ActivatedRoute,
@@ -62,7 +63,6 @@ export class CommercialProposalViewComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.route.params.pipe(
       tap(({ groupId }) => this.groupId = groupId),
-      tap(({ id }) => this.requestId = id),
       tap(({ id, groupId }) => this.store.dispatch(new Fetch(id, groupId))),
       delayWhen(({ id }) => this.store.dispatch(new RequestActions.Fetch(id))),
       withLatestFrom(this.request$),

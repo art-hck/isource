@@ -21,7 +21,6 @@ import { RequestListComponent } from "./components/request-list/request-list.com
 import { RequestListState } from "./states/request-list.state";
 import { TechnicalProposalState } from "./states/technical-proposal.state";
 import { CommercialProposalState } from "./states/commercial-proposal.state";
-import { CommercialProposalComponent } from "./components/proposal/commercial-proposal/commercial-proposal.component";
 import { TechnicalCommercialProposalGroupListComponent } from "./components/proposal/proposal-group-list/technical-commercial-proposal-group-list/technical-commercial-proposal-group-list.component";
 import { ContractListComponent } from "./components/contract-list/contract-list.component";
 import { ContractState } from "./states/contract.state";
@@ -45,7 +44,6 @@ import { CommercialProposalsService } from "./services/commercial-proposals.serv
     TechnicalCommercialProposalViewComponent,
     TechnicalCommercialProposalComponent,
     RequestListComponent,
-    CommercialProposalComponent,
     TechnicalCommercialProposalGroupListComponent,
     ProposalConfirmComponent,
     ContractListComponent,
