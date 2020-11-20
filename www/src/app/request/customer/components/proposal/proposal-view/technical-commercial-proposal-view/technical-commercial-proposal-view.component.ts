@@ -21,6 +21,8 @@ import { TechnicalCommercialProposalState } from "../../../../states/technical-c
 import { RequestPosition } from "../../../../../common/models/request-position";
 import Fetch = TechnicalCommercialProposals.Fetch;
 import Review = TechnicalCommercialProposals.Review;
+import DownloadAnalyticalReport = TechnicalCommercialProposals.DownloadAnalyticalReport;
+import { ProposalSource } from "../../../../../back-office/enum/proposal-source";
 
 @Component({
   templateUrl: './technical-commercial-proposal-view.component.html',
@@ -44,7 +46,9 @@ export class TechnicalCommercialProposalViewComponent implements OnInit, OnDestr
   groupId: Uuid;
   view: ProposalsView = "grid";
   readonly destroy$ = new Subject();
+  readonly source = ProposalSource.TECHNICAL_COMMERCIAL_PROPOSAL;
   readonly review = (proposalItems: CommonProposalItem[], positions: RequestPosition[]) => new Review(proposalItems, positions);
+  readonly downloadAnalyticalReport = (requestId: Uuid, groupId: Uuid) => new DownloadAnalyticalReport(requestId, groupId);
 
   constructor(
     private route: ActivatedRoute,

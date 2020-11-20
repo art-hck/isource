@@ -21,6 +21,8 @@ import { CommercialProposalState } from "../../../../states/commercial-proposal.
 import { RequestPosition } from "../../../../../common/models/request-position";
 import Fetch = CommercialProposals.Fetch;
 import Review = CommercialProposals.Review;
+import DownloadAnalyticalReport = CommercialProposals.DownloadAnalyticalReport;
+import { ProposalSource } from "../../../../../back-office/enum/proposal-source";
 
 @Component({
   templateUrl: './commercial-proposal-view.component.html',
@@ -42,10 +44,11 @@ export class CommercialProposalViewComponent implements OnInit, OnDestroy {
   readonly stateStatus$: Observable<StateStatus>;
 
   groupId: Uuid;
-  requestId: Uuid;
   view: ProposalsView = "grid";
   readonly destroy$ = new Subject();
+  readonly source = ProposalSource.COMMERCIAL_PROPOSAL;
   readonly review = (requestId: Uuid, proposalItems: CommonProposalItem[], positions: RequestPosition[]) => new Review(requestId, proposalItems, positions);
+  readonly downloadAnalyticalReport = (requestId: Uuid, groupId: Uuid) => new DownloadAnalyticalReport(requestId, groupId);
 
   constructor(
     private route: ActivatedRoute,
@@ -62,7 +65,6 @@ export class CommercialProposalViewComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.route.params.pipe(
       tap(({ groupId }) => this.groupId = groupId),
-      tap(({ id }) => this.requestId = id),
       tap(({ id, groupId }) => this.store.dispatch(new Fetch(id, groupId))),
       delayWhen(({ id }) => this.store.dispatch(new RequestActions.Fetch(id))),
       withLatestFrom(this.request$),
@@ -91,7 +93,7 @@ export class CommercialProposalViewComponent implements OnInit, OnDestroy {
         this.pluralize.transform(length, "позиция", "позиции", "позиций"),
       ][i] || all);
 
-      this.store.dispatch(e ? new ToastActions.Error(e && e.error.detail) : new ToastActions.Success(text));
+      this.store.dispatch(e ? new ToastActions.Error(e && e.error?.detail) : new ToastActions.Success(text));
     });
 
     this.switchView(this.view);

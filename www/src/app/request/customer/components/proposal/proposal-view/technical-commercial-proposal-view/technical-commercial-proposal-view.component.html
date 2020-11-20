@@ -1,5 +1,6 @@
+<ng-container *ngIf="(stateStatus$ | async) !== 'fetching'; else placeholder">
 <app-common-proposal-view
-  *ngIf="(stateStatus$ | async) !== 'fetching'; else placeholder"
+  *ngIf="request$ | async as request"
   [proposals]="proposals$ | async"
   [proposalsReviewed]="proposalsReviewed$ | async"
   [request]="request$ | async"
@@ -9,10 +10,12 @@
   [groupId]="groupId"
   [view]="view"
   [positions]="positions$ | async"
+  [source]="source"
   (viewChange)="switchView($event)"
   (review)="store.dispatch(review($event.accepted, $event.sendToEdit))"
+  (downloadAnalyticalReport)="store.dispatch(downloadAnalyticalReport(request.id, groupId))"
 ></app-common-proposal-view>
-
+</ng-container>
 <ng-template #placeholder>
   <div class="app-row" [class.app-layout]="view === 'grid'">
     <div class="app-col">

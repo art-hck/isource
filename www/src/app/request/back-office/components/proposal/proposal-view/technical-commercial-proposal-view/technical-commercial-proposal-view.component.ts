@@ -111,7 +111,7 @@ export class TechnicalCommercialProposalViewComponent implements OnInit, OnDestr
   }
 
   saveProposalItem(item: Partial<CommonProposalItem>, proposal: CommonProposal) {
-    const items: Partial<CommonProposalItem>[] = [...proposal?.items ?? []];
+    const items: Partial<CommonProposalItem>[] = [...proposal?.items.filter(({ status }) => ['NEW', 'SENT_TO_EDIT'].includes(status)) ?? []];
     const i = items?.findIndex(({ id }) => item.id === id);
     i >= 0 ? items[i] = item : items.push(item);
 

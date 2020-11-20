@@ -17,7 +17,7 @@ export class CommercialProposalsService {
 
   review(requestId: Uuid, data: { accepted: Uuid[], sendToEdit: Uuid[] }) {
     const url = `requests/customer/${requestId}/commercial-proposals/change-statuses`;
-    return this.api.post(url, data);
+    return this.api.post<CommonProposalPayload>(url, data);
   }
 
   group(requestId: Uuid, groupId: Uuid) {

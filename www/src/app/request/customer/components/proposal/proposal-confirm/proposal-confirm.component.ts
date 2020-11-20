@@ -1,14 +1,10 @@
 import { Component, EventEmitter, Input, Output, QueryList } from '@angular/core';
 import { getCurrencySymbol } from "@angular/common";
 import { ContragentShortInfo } from "../../../../../contragent/models/contragent-short-info";
-import { TechnicalCommercialProposal } from "../../../../common/models/technical-commercial-proposal";
 import { Proposal } from "../../../../../shared/components/grid/proposal";
 import { TechnicalCommercialProposalComponent } from "../technical-commercial-proposal/technical-commercial-proposal.component";
 import { GridRowComponent } from "../../../../../shared/components/grid/grid-row/grid-row.component";
-import { Store } from "@ngxs/store";
-import { TechnicalCommercialProposals } from "../../../actions/technical-commercial-proposal.actions";
 import { Uuid } from "../../../../../cart/models/uuid";
-import DownloadAnalyticalReport = TechnicalCommercialProposals.DownloadAnalyticalReport;
 import { CommonProposalItem } from "../../../../common/models/common-proposal";
 import { RequestPosition } from "../../../../common/models/request-position";
 
@@ -37,12 +33,10 @@ export class ProposalConfirmComponent {
   };
   @Output() close = new EventEmitter();
   @Output() reviewMultiple = new EventEmitter();
+  @Output() downloadAnalyticalReport = new EventEmitter();
 
   filterQuery = "";
   readonly getCurrencySymbol = getCurrencySymbol;
-  readonly downloadAnalyticalReport = () => new DownloadAnalyticalReport(this.requestId, this.groupId);
-
-  constructor(public store: Store) {}
 
   /**
    * Сумма выбранных предложений по поставщику
