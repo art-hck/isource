@@ -143,8 +143,8 @@
     <!-- Отправка на доработку позиций КП -->
     <ng-container *ngSwitchCase="'REQUEST_OFFER_POSITION_CHANGE_STATUS'">
       <div class="app-row notification-card-header app-primary-color"
-           [ngSwitch]="notification?.body?.requestOfferPositionChangeStatus"
-           [ngClass]="'status-' + notification?.body?.requestOfferPositionChangeStatus + '-badge'">
+           [ngSwitch]="notification?.body?.requestOfferPositionStatus"
+           [ngClass]="'status-' + notification?.body?.requestOfferPositionStatus + '-badge'">
         <ng-container *ngSwitchCase="'SENT_TO_EDIT'">
           <b class="app-col">Отправлены на доработку позиции коммерческого предложения</b>
         </ng-container>
