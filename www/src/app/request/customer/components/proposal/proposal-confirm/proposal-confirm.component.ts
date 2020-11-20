@@ -59,7 +59,9 @@ export class ProposalConfirmComponent {
     const items: Proposal<CommonProposalItem>[] = selectedProposals.map(selectedProposal => selectedProposal.toSendToEdit).reduce((acc, val) => acc.concat(val), []);
 
     // Убираем из массива позиций повторяющиеся значения и оставляем только уникальные
-    return items.filter((item, i, arr) => arr.indexOf(item) === i);
+    return items.filter(({ sourceProposal: { requestPositionId: id } }, i, arr) => {
+      return arr.findIndex(({ sourceProposal }) => sourceProposal.requestPositionId === id) === i;
+    });
   }
 
   /**
