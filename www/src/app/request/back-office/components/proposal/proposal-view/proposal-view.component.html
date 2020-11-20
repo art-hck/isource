@@ -294,7 +294,7 @@
     <h2><b>{{ editingProposal ? 'Редактировать' : 'Добавить' }} столбик контрагента</b></h2>
     <ng-container *ngIf="addContragentModal.state">
       <common-proposal-contragent-form
-        [source]="procedureSource"
+        [source]="source"
         [request]="request"
         [groupId]="groupId"
         [selectedContragents]="getContragents(proposals)"

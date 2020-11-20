@@ -26,7 +26,7 @@ import { ProposalSource } from "../../../enum/proposal-source";
 export class ProposalContragentFormComponent implements OnInit {
   @Input() request: Request;
   @Input() groupId: Uuid;
-  @Input() source: ProposalSource; // todo Переименовать в проекте ProcedureSource в ProposalSource
+  @Input() source: ProposalSource;
   @Input() selectedContragents: ContragentShortInfo[];
   @Input() proposal: CommonProposal;
   @Output() close = new EventEmitter();

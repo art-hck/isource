@@ -12,7 +12,6 @@
         [requestStatus]="requestStatus$ | async"
         [source]="procedureSource"
         [canRollback]="canRollback"
-        [source]="'tcp'"
         (uploadTemplate)="store.dispatch(uploadTemplate(request.id, groupId, $event))"
         (downloadTemplate)="store.dispatch(downloadTemplate(request.id, groupId))"
         (rollback)="store.dispatch(rollback(request.id, groupId, $event))"
