@@ -7,7 +7,7 @@
 
   <div class="app-col">
     <div class="app-row app-justify-content-end analytical-report">
-      <button uxgButton clear class="app-link" (click)="store.dispatch(downloadAnalyticalReport())">
+      <button uxgButton clear class="app-link" (click)="downloadAnalyticalReport.emit()">
         <span>Аналитическая справка </span>
         <uxg-icon shape="app-download"></uxg-icon>
       </button>
