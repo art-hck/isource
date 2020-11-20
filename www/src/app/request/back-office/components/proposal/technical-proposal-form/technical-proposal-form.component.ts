@@ -20,6 +20,7 @@ import { AppFile } from "../../../../../shared/components/file/file";
 import { UxgModalComponent } from "uxg";
 import { saveAs } from 'file-saver/src/FileSaver';
 import { searchContragents } from "../../../../../shared/helpers/search";
+import { ProposalSource } from "../../../enum/proposal-source";
 
 @Component({
   selector: 'app-request-technical-proposals-form',
@@ -37,6 +38,7 @@ export class TechnicalProposalFormComponent implements OnInit, OnDestroy {
   @ViewChild('uploadTemplateModal') uploadTemplateModal: UxgModalComponent;
   isLoading: boolean;
   form: FormGroup;
+  procedureSource = ProposalSource;
   positionsWithManufacturer$: Observable<PositionWithManufacturer[]>;
   contragents$: Observable<ContragentList[]>;
   files: File[] = [];

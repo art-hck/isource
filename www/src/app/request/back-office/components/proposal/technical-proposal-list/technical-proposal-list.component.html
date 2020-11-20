@@ -39,7 +39,7 @@
         <app-request-procedure
           *ngFor="let procedure of procedures"
           [procedure]="procedure"
-          [source]="'TECHNICAL_PROPOSAL'"
+          [source]="procedureSource.TECHNICAL_PROPOSAL"
           (bargain)="procedureModalPayload = { action: 'bargain', procedure: procedure }"
           (prolong)="prolongModalPayload = procedure"
         ></app-request-procedure>
