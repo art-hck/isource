@@ -213,7 +213,7 @@
       <ng-container *ngFor="let procedure of procedures; trackBy: trackById">
         <app-request-procedure
           [procedure]="procedure"
-          [source]="'tcp'"
+          [source]="source"
           (bargain)="procedureModalPayload = {action: 'bargain', procedure: procedure}"
           (prolong)="prolongModalPayload = procedure"
         ></app-request-procedure>
