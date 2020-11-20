@@ -108,7 +108,7 @@
     <div class="app-col app-col-auto" [style.width.px]="290">
       <div class="app-control-wrap">
         <input #startPrice uxgInput lg class="start-price" formControlName="startPrice"/>
-        <label class="app-control-label" (click)="startPrice.focus()">Начальная макс. цена без НДС (необязательно)</label>
+        <label class="app-control-label" (click)="startPrice.focus()">Начальн. макс. цена без НДС (необяз.)</label>
         <div class="app-control-error" *ngIf="form.get('startPrice').errors as e">
           <span *ngIf="e.min">Значение должно быть больше 0</span>
         </div>
