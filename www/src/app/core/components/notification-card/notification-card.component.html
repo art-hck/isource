@@ -4,7 +4,6 @@
      [ngClass]="{ 'not_seen': notification?.status === 'STATUS_SENT' }">
 
   <a class="notification-link" [routerLink]="getLink(notification)">
-
     <ng-container *ngIf="view === 'popup'">
       <button uxgButton icon clear class="btn-close-popup app-secondary-color" (click)="onHideNotification($event, notification)">
         <uxg-icon shape="app-cross" size="14"></uxg-icon>
