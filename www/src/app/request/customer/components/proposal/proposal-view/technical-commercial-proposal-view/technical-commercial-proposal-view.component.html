@@ -10,7 +10,7 @@
   [groupId]="groupId"
   [view]="view"
   [positions]="positions$ | async"
-  [source]="'tcp'"
+  [source]="source"
   (viewChange)="switchView($event)"
   (review)="store.dispatch(review($event.accepted, $event.sendToEdit))"
   (downloadAnalyticalReport)="store.dispatch(downloadAnalyticalReport(request.id, groupId))"

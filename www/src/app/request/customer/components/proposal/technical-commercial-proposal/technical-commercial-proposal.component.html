@@ -43,7 +43,7 @@
           <div class="app-row app-uppercase app-ghost-color app-bold position-list">
             <div class="app-col-auto checkbox-space" *ngIf="onReview"></div>
             <small class="app-col app-ellipsis name">Наименование позиции</small>
-            <small class="app-col app-ellipsis manufacturing-name" *ngIf="source === 'tcp'">Заводское наименование</small>
+            <small class="app-col app-ellipsis manufacturing-name" *ngIf="source === 'TECHNICAL_COMMERCIAL_PROPOSAL'">Заводское наименование</small>
             <small class="app-col app-ellipsis manufacturer">Изготовитель</small>
             <small class="app-col total">Сумма</small>
             <small class="app-col quantity">Количество</small>
@@ -148,7 +148,7 @@
 
         <div class="app-row app-col app-col-auto app-align-items-center">
           <span *ngIf="isLoading" class="spinner spinner-inline">Загрузка...</span>
-<!-- Вернуть после доработки бэка -->
+<!-- Вернуть после реализации gpn_market-3126 -->
 <!--          <button uxgButton secondary-->
 <!--                  (click)="sendToEdit.emit()"-->
 <!--                  [disabled]="selectedPositions?.length === 0 || isLoading">-->

@@ -17,6 +17,7 @@ import { ProposalHelperService } from "../../../../../shared/components/grid/pro
 import { ContragentShortInfo } from "../../../../../contragent/models/contragent-short-info";
 import { CommonProposal, CommonProposalByPosition, CommonProposalItem } from "../../../../common/models/common-proposal";
 import { RequestPosition } from "../../../../common/models/request-position";
+import { ProposalSource } from "../../../../back-office/enum/proposal-source";
 
 @Component({
   selector: 'app-common-proposal-view',
@@ -42,7 +43,7 @@ export class ProposalViewComponent implements AfterViewInit, OnChanges, OnDestro
   @Input() stateStatus: StateStatus;
   @Input() view: ProposalsView = "grid";
   @Input() groupId: Uuid;
-  @Input() source: string;
+  @Input() source: ProposalSource;
 
   @Output() viewChange = new EventEmitter<ProposalsView>();
   @Output() review = new EventEmitter<{ accepted?: CommonProposalItem[], sendToEdit?: RequestPosition[] }>();
@@ -51,7 +52,6 @@ export class ProposalViewComponent implements AfterViewInit, OnChanges, OnDestro
   readonly chooseBy$ = new Subject<"date" | "price">();
   readonly getCurrencySymbol = getCurrencySymbol;
   readonly destroy$ = new Subject();
-  isLoading: boolean;
   stickedPosition: boolean;
   gridRows: ElementRef[];
   modalData: {

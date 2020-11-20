@@ -22,6 +22,7 @@ import { RequestPosition } from "../../../../../common/models/request-position";
 import Fetch = CommercialProposals.Fetch;
 import Review = CommercialProposals.Review;
 import DownloadAnalyticalReport = CommercialProposals.DownloadAnalyticalReport;
+import { ProposalSource } from "../../../../../back-office/enum/proposal-source";
 
 @Component({
   templateUrl: './commercial-proposal-view.component.html',
@@ -45,6 +46,7 @@ export class CommercialProposalViewComponent implements OnInit, OnDestroy {
   groupId: Uuid;
   view: ProposalsView = "grid";
   readonly destroy$ = new Subject();
+  readonly source = ProposalSource.COMMERCIAL_PROPOSAL;
   readonly review = (requestId: Uuid, proposalItems: CommonProposalItem[], positions: RequestPosition[]) => new Review(requestId, proposalItems, positions);
   readonly downloadAnalyticalReport = (requestId: Uuid, groupId: Uuid) => new DownloadAnalyticalReport(requestId, groupId);
 

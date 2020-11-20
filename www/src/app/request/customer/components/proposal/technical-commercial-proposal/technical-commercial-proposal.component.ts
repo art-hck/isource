@@ -22,6 +22,7 @@ import {
   CommonProposalItem
 } from "../../../../common/models/common-proposal";
 import { RequestPosition } from "../../../../common/models/request-position";
+import { ProposalSource } from "../../../../back-office/enum/proposal-source";
 
 @Component({
   selector: "app-request-technical-commercial-proposal",
@@ -42,7 +43,7 @@ export class TechnicalCommercialProposalComponent implements OnChanges, OnDestro
   @Input() requestId: Uuid;
   @Input() chooseBy$: Subject<"date" | "price">;
   @Input() isLoading: boolean;
-  @Input() source: string;
+  @Input() source: ProposalSource;
   @Input() proposals: CommonProposal[];
   @Input() positions: RequestPosition[];
   @Output() positionSelected = new EventEmitter();
