@@ -91,7 +91,7 @@ export class CommercialProposalViewComponent implements OnInit, OnDestroy {
         this.pluralize.transform(length, "позиция", "позиции", "позиций"),
       ][i] || all);
 
-      this.store.dispatch(e ? new ToastActions.Error(e && e.error.detail) : new ToastActions.Success(text));
+      this.store.dispatch(e ? new ToastActions.Error(e && e.error?.detail) : new ToastActions.Success(text));
     });
 
     this.switchView(this.view);
@@ -101,6 +101,10 @@ export class CommercialProposalViewComponent implements OnInit, OnDestroy {
     this.view = view;
     this.app.noHeaderStick = this.app.noContentPadding = view !== "list";
     this.cd.detectChanges();
+  }
+
+  cons() {
+    console.log('dfbdv');
   }
 
   ngOnDestroy() {

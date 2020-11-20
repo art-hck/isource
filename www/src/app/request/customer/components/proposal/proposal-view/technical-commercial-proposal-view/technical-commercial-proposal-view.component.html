@@ -9,6 +9,7 @@
   [groupId]="groupId"
   [view]="view"
   [positions]="positions$ | async"
+  [source]="'tcp'"
   (viewChange)="switchView($event)"
   (review)="store.dispatch(review($event.accepted, $event.sendToEdit))"
 ></app-common-proposal-view>

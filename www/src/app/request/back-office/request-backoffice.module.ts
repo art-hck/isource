@@ -90,10 +90,11 @@ import { CommercialProposalsDeprecatedService } from "./services/commercial-prop
     ]),
     RequestCommonModule
   ],
-  exports: [
-    ProcedureFormComponent,
-    ProcedureProlongateComponent
-  ],
+    exports: [
+        ProcedureFormComponent,
+        ProcedureProlongateComponent,
+        ProposalComponent
+    ],
   providers: [
     DesignDocumentationService,
     CommercialProposalsService,

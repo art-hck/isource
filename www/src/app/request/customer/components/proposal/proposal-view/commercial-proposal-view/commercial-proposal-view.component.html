@@ -9,8 +9,9 @@
   [groupId]="groupId"
   [view]="view"
   [positions]="positions$ | async"
+  [source]="'cp'"
   (viewChange)="switchView($event)"
-  (review)="store.dispatch(review(requestId, $event.accepted, $event.sendToEdit))"
+  (review)="store.dispatch(review(requestId, $event.accepted, $event.sendToEdit)); cons()"
 ></app-common-proposal-view>
 
 <ng-template #placeholder>

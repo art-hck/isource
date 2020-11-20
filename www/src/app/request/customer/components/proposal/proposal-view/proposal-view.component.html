@@ -26,10 +26,12 @@
         <ng-container *ngIf="proposals.length">
           <div class="app-secondary-color">Режим отображения:</div>
           <div class="app-btn-group">
-            <button uxgButton [primary]="view==='grid'" [secondary]="view!=='grid'" icon (click)="viewChange.emit('grid')">
+            <button uxgButton [primary]="view==='grid'" [secondary]="view!=='grid'" icon
+                    (click)="viewChange.emit('grid')">
               <uxg-icon shape="app-grid-view"></uxg-icon>
             </button>
-            <button uxgButton [primary]="view==='list'" [secondary]="view!=='list'" icon (click)="viewChange.emit('list')">
+            <button uxgButton [primary]="view==='list'" [secondary]="view!=='list'" icon
+                    (click)="viewChange.emit('list')">
               <uxg-icon shape="app-list-view"></uxg-icon>
             </button>
           </div>
@@ -39,7 +41,8 @@
 
       <br/>
 
-      <ng-container [ngSwitch]="view" *ngIf="(reviewedTab.active ? proposalsReviewed : sentToReviewTab.active ? proposalsSentToReview : proposalsSendToEdit) as proposalsByPos">
+      <ng-container [ngSwitch]="view"
+                    *ngIf="(reviewedTab.active ? proposalsReviewed : sentToReviewTab.active ? proposalsSentToReview : proposalsSendToEdit) as proposalsByPos">
         <div #gridTable *ngIf="view !== 'list'" [ngClass]="{
           'grid-table': view === 'grid',
           'simple-grid-table': view === 'simple-grid',
@@ -81,11 +84,13 @@
                       <span class="app-ghost-color"> | </span>
                       <ng-container *ngIf="proposalByPos.position.startPrice">
                         <span class="app-ghost-color">{{proposalByPos.position.startPrice | number:'1.0-2'}} </span>
-                        <span class="app-ghost-color">{{getCurrencySymbol(proposalByPos.position.currency, "narrow")}}/{{proposalByPos.position.measureUnit}}</span>
+                        <span class="app-ghost-color">{{getCurrencySymbol(proposalByPos.position.currency, "narrow")}}
+                          /{{proposalByPos.position.measureUnit}}</span>
                         <span class="app-ghost-color"> | </span>
                       </ng-container>
                       <span *ngIf="proposalByPos.position.isDeliveryDateAsap; else deliveryDate">как можно скорее</span>
-                      <ng-template #deliveryDate><span>{{proposalByPos.position.deliveryDate | date:"dd.MM.yyyy"}}</span></ng-template>
+                      <ng-template #deliveryDate>
+                        <span>{{proposalByPos.position.deliveryDate | date:"dd.MM.yyyy"}}</span></ng-template>
                     </div>
                     <div class="app-col"></div>
 
@@ -117,30 +122,34 @@
 
         <!-- list -->
         <ng-container *ngSwitchCase="'list'">
-          <ng-container *ngIf="(reviewedTab.active ?
-            proposalsReviewed :
-            sentToReviewTab.active ?
-                proposalsSentToReview :
-                proposalsSendToEdit) as proposals">
-            <!--app-request-technical-commercial-proposal #tcpComponent
-              *ngFor="let proposal of proposals; let i = index; trackBy: trackById"
-              [technicalCommercialProposalIndex]="i"
-              [chooseBy$]="chooseBy$"
-              [proposal]="proposal"
-              [proposals]="proposals"
-              [isLoading]="isLoading"
-              (ыутвцу)="review.emit({approve: $event})
-              (sendTOEdit="e
-              (positionSelected)="onPositionSelected($event)">
-            </app-request-technical-commercial-proposal-->
-          </ng-container>
+          <!--          <ng-container *ngIf="(reviewedTab.active ?-->
+          <!--            proposalsReviewed :-->
+          <!--            sentToReviewTab.active ?-->
+          <!--                proposalsSentToReview :-->
+          <!--                proposalsSendToEdit) as proposals">-->
+          <app-request-technical-commercial-proposal
+            #tcpComponent
+            *ngFor="let proposal of proposals; let i = index; trackBy: trackById"
+            [technicalCommercialProposalIndex]="i"
+            [chooseBy$]="chooseBy$"
+            [proposal]="proposal"
+            [proposals]="proposals"
+            [isLoading]="stateStatus === 'updating'"
+            [source]="source"
+            [positions]="positions"
+            (positionSelected)="onPositionSelected($event)"
+            (approve)="approveFromListView()"
+            (sendToEdit)="sendToEditFromListView()">
+          </app-request-technical-commercial-proposal>
+          <!--          </ng-container>-->
         </ng-container>
 
         <!-- empty -->
-        <div *ngIf="proposalsByPos.length === 0">
+        <div *ngIf="proposals.length === 0">
           <h1 class="text-center" [style.opacity]="0.1">
             <br/>
-            <uxg-icon shape="app-publish" size="270"></uxg-icon><br/>
+            <uxg-icon shape="app-publish" size="270"></uxg-icon>
+            <br/>
             Все технико-коммерческие предложения рассмотрены
           </h1>
         </div>
@@ -171,7 +180,8 @@
     <div class="app-col">
       <div class="app-row">
         <div class="app-col app-row">
-          <div class="placeholder-row" *ngFor="let i of [].constructor(2)" [style.height.px]="40" [style.width.px]="200"></div>
+          <div class="placeholder-row" *ngFor="let i of [].constructor(2)" [style.height.px]="40"
+               [style.width.px]="200"></div>
         </div>
         <div class="placeholder-row" [style.height.px]="40" [style.width.px]="80"></div>
       </div>
@@ -199,13 +209,19 @@
 
     <ng-template uxgModalFooter>
       <div class="app-col app-bold">
-        <div class="app-success-color" *ngIf="helper.isQuantityValid(modalData.position, modalData.proposalItem)">- Позиция в нужном количестве</div>
-        <div class="app-success-color" *ngIf="helper.isDateValid(modalData.position, modalData.proposalItem)">- Сроки укладываются в заданные</div>
+        <div class="app-success-color" *ngIf="helper.isQuantityValid(modalData.position, modalData.proposalItem)">-
+          Позиция в нужном количестве
+        </div>
+        <div class="app-success-color" *ngIf="helper.isDateValid(modalData.position, modalData.proposalItem)">- Сроки
+          укладываются в заданные
+        </div>
 
         <div class="app-error-color" *ngIf="!helper.isQuantityValid(modalData.position, modalData.proposalItem)">
           {{ helper.getRequestedQuantityLabel(modalData.position, modalData.proposalItem) }}
         </div>
-        <div class="app-error-color" *ngIf="!helper.isDateValid(modalData.position, modalData.proposalItem)">- Сроки не укладываются в заданные</div>
+        <div class="app-error-color" *ngIf="!helper.isDateValid(modalData.position, modalData.proposalItem)">- Сроки не
+          укладываются в заданные
+        </div>
       </div>
 
       <div *ngIf="!['APPROVED', 'REJECTED', 'SENT_TO_EDIT'].includes(modalData.proposalItem.sourceProposal.status)">

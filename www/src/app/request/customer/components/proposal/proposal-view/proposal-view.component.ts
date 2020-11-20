@@ -42,6 +42,7 @@ export class ProposalViewComponent implements AfterViewInit, OnChanges, OnDestro
   @Input() stateStatus: StateStatus;
   @Input() view: ProposalsView = "grid";
   @Input() groupId: Uuid;
+  @Input() source: string;
 
   @Output() viewChange = new EventEmitter<ProposalsView>();
   @Output() review = new EventEmitter<{ accepted?: CommonProposalItem[], sendToEdit?: RequestPosition[] }>();
@@ -49,6 +50,7 @@ export class ProposalViewComponent implements AfterViewInit, OnChanges, OnDestro
   readonly chooseBy$ = new Subject<"date" | "price">();
   readonly getCurrencySymbol = getCurrencySymbol;
   readonly destroy$ = new Subject();
+  isLoading: boolean;
   stickedPosition: boolean;
   gridRows: ElementRef[];
   modalData: {
@@ -88,7 +90,9 @@ export class ProposalViewComponent implements AfterViewInit, OnChanges, OnDestro
 
     let selectedToApproveProposals = this.proposalsOnReview?.filter(
       proposal => proposal.selectedProposal.value
-    ).map(proposal => proposal.proposals)?.reduce((acc: [], val) => [...acc, ...val], []);
+    ).map(proposal => {
+      return proposal['proposals'] ? (<GridRowComponent>proposal).proposals : (<TechnicalCommercialProposalComponent>proposal).proposalByPos.items;
+    })?.reduce((acc: [], val) => [...acc, ...val], []);
 
     selectedToApproveProposals = selectedToApproveProposals?.filter(selectedProposal => selectedToApproveProposalsIds.indexOf(selectedProposal.id) !== -1);
 
@@ -99,7 +103,9 @@ export class ProposalViewComponent implements AfterViewInit, OnChanges, OnDestro
    * Возвращает список выбранных для отправки на доработку ТКП
    */
   get selectedToSendToEditProposals(): Proposal<CommonProposalItem>[] {
-    const selectedSendToEditProposals = this.proposalsOnReview?.filter((proposal) => proposal.sendToEditPosition.value).map(proposal => proposal.proposals);
+    const selectedSendToEditProposals = this.proposalsOnReview?.filter((proposal) => proposal.sendToEditPosition.value).map(proposal => {
+      return proposal['proposals'] ? (<GridRowComponent>proposal).proposals : (<TechnicalCommercialProposalComponent>proposal).proposalByPos.items;
+    });
 
     return selectedSendToEditProposals?.reduce((acc: [], val) => [...acc, ...val], []) as Proposal[];
   }
@@ -259,7 +265,10 @@ export class ProposalViewComponent implements AfterViewInit, OnChanges, OnDestro
 
   selectProposal(proposal: Proposal): void {
     this.proposalsOnReview
-      .filter(({ proposals }) => proposals.some((_proposal) => proposal.id === _proposal.id))
+      .filter((c) => {
+        const proposals = c['proposals'] ? (<GridRowComponent>c).proposals : (<TechnicalCommercialProposalComponent>c).proposalByPos.items;
+        return proposals.some((_proposal) => proposal.id === _proposal.id)
+      })
       .forEach(({ selectedProposal }) => selectedProposal.setValue(proposal.sourceProposal));
   }
 
@@ -296,7 +305,7 @@ export class ProposalViewComponent implements AfterViewInit, OnChanges, OnDestro
   }
 
   converProposalPosition = ({ items }: CommonProposalByPosition) => items.map((item) => new Proposal(item));
-  trackById = (i, { position }: CommonProposalByPosition) => position.id;
+  trackById = (i, { id }: CommonProposal) => id;
 
   ngOnDestroy() {
     this.destroy$.next();
