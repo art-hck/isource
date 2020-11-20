@@ -18,7 +18,7 @@
         (downloadAnalyticalReport)="store.dispatch(downloadAnalyticalReport(request.id, groupId))"
         (publishPositions)="store.dispatch(publishPositions($event))"
         (saveProposalItem)="saveProposalItem($event.item, $event.proposal)"
-        (updateProcedures)="updateProcedures(request.id, groupId)"
+        (updateProcedures)="store.dispatch(updateProcedures(request.id, groupId))"
         (viewChange)="switchView($event)"
         (create)="store.dispatch(create(request.id, groupId, $event.proposal, $event.items))"
         (edit)="store.dispatch(edit($event.proposal, $event.items))"
