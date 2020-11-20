@@ -35,7 +35,7 @@ export class ProcedureViewComponent implements OnDestroy, OnInit {
   @Output() prolong = new EventEmitter();
 
   requestId: Uuid;
-  sourceFromUrl: string;
+  sourceFromUrl: ProposalSource;
   procedure: Procedure|null;
   procedureId: number;
   positions$: Observable<RequestPosition[]>;
@@ -67,17 +67,17 @@ export class ProcedureViewComponent implements OnDestroy, OnInit {
     let sourceSegment: string;
 
     switch (this.sourceFromUrl) {
-      case "tcp":
+      case ProposalSource.TECHNICAL_COMMERCIAL_PROPOSAL:
         sourceName = 'Согласование технико-коммерческих предложений';
         sourceSegment = 'technical-commercial-proposals';
         this.positions$ = this.technicalCommercialProposalPositions$;
         break;
-      case "cp":
+      case ProposalSource.COMMERCIAL_PROPOSAL:
         sourceName = 'Согласование коммерческих предложений';
         sourceSegment = 'commercial-proposals';
         this.positions$ = this.commercialProposalPositions$;
         break;
-      case "tp":
+      case ProposalSource.TECHNICAL_PROPOSAL:
         sourceName = 'Согласование технических предложений';
         sourceSegment = 'technical-proposals';
         this.positions$ = this.technicalProposalsService.positions(this.requestId);
@@ -109,9 +109,7 @@ export class ProcedureViewComponent implements OnDestroy, OnInit {
   }
 
   fetchProcedures(sourceFromUrl): void {
-    const source = this.getSourceCode(sourceFromUrl);
-
-    this.procedureService.list(this.requestId, source).pipe(
+    this.procedureService.list(this.requestId, sourceFromUrl).pipe(
       publishReplay(1), refCount()
     ).subscribe((data) => {
       this.procedures$ = of(data);
@@ -124,10 +122,8 @@ export class ProcedureViewComponent implements OnDestroy, OnInit {
   }
 
   refreshProcedures(sourceFromUrl) {
-    const source = this.getSourceCode(sourceFromUrl);
-
     this.state = "updating";
-    this.procedureService.list(this.requestId, source)
+    this.procedureService.list(this.requestId, sourceFromUrl)
       .pipe(
         finalize(() => this.state = "received"),
         publishReplay(1), refCount()
@@ -139,19 +135,6 @@ export class ProcedureViewComponent implements OnDestroy, OnInit {
         this.setPageInfo(data);
       }
     });
-  }
-
-  getSourceCode(source): ProposalSource|null {
-    switch (source) {
-      case "tcp":
-        return ProposalSource.TECHNICAL_COMMERCIAL_PROPOSAL;
-      case "cp":
-        return ProposalSource.COMMERCIAL_PROPOSAL;
-      case "tp":
-        return ProposalSource.TECHNICAL_PROPOSAL;
-      default:
-        return null;
-    }
   }
 
   ngOnDestroy() {

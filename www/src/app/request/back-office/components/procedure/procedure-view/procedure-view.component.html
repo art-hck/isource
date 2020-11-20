@@ -16,7 +16,7 @@
       [positions]="(positions$ | async)"
       [action]="procedureModalPayload.action"
       [procedure]="procedureModalPayload.procedure"
-      [procedureSource]="getSourceCode(sourceFromUrl)"
+      [procedureSource]="sourceFromUrl"
       (cancel)="procedureModalPayload = null"
       (complete)="refreshProcedures(sourceFromUrl); procedureModalPayload = null"
     ></app-request-procedure-form>
