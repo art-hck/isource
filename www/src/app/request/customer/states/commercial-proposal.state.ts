@@ -68,9 +68,10 @@ export class CommercialProposalState {
     setState(patch({ status: "updating" as StateStatus }));
 
     return this.rest.review(requestId, {
-      'accepted': proposalItems.map(({ id }) => id),
-      'sendToEdit': positions.map(({ id }) => id)
-    }).pipe(tap(data => setState(insertOrUpdateProposals(data))));
+      'accepted': proposalItems?.map(({ id }) => id),
+      'sendToEdit': positions?.map(({ id }) => id)
+    }).pipe(
+      tap(data => setState(insertOrUpdateProposals(data))));
   }
 
   @Action(DownloadAnalyticalReport)

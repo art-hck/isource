@@ -92,8 +92,9 @@ import { CommercialProposalsDeprecatedService } from "./services/commercial-prop
   ],
   exports: [
     ProcedureFormComponent,
-    ProcedureProlongateComponent
-  ],
+    ProcedureProlongateComponent,
+    ProposalComponent
+    ],
   providers: [
     DesignDocumentationService,
     CommercialProposalsService,
