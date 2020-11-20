@@ -267,7 +267,7 @@ export class ProposalViewComponent implements AfterViewInit, OnChanges, OnDestro
     this.proposalsOnReview
       .filter((c) => {
         const proposals = c['proposals'] ? (<GridRowComponent>c).proposals : (<TechnicalCommercialProposalComponent>c).proposalByPos.items;
-        return proposals.some((_proposal) => proposal.id === _proposal.id)
+        return proposals.some((_proposal) => proposal.id === _proposal.id);
       })
       .forEach(({ selectedProposal }) => selectedProposal.setValue(proposal.sourceProposal));
   }

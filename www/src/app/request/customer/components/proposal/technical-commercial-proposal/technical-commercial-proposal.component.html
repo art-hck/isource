@@ -148,12 +148,12 @@
 
         <div class="app-row app-col app-col-auto app-align-items-center">
           <span *ngIf="isLoading" class="spinner spinner-inline">Загрузка...</span>
-
-          <button uxgButton secondary
-                  (click)="sendToEdit.emit()"
-                  [disabled]="selectedPositions?.length === 0 || isLoading">
-            На доработку
-          </button>
+<!-- Вернуть после доработки бэка -->
+<!--          <button uxgButton secondary-->
+<!--                  (click)="sendToEdit.emit()"-->
+<!--                  [disabled]="selectedPositions?.length === 0 || isLoading">-->
+<!--            На доработку-->
+<!--          </button>-->
 
           <button uxgButton primary
                   (click)="approve.emit()"
