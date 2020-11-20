@@ -30,7 +30,7 @@ export class NotificationInfo {
   requestStatus: string;
   requestStatusLabel: string;
   requestTpPositionStatus?: string;
-  requestTcpPositionChangeStatus?: string;
+  requestTcpPositionStatus?: string;
   requestOfferPositionChangeStatus?: string;
   requestUrl: string;
   webUrl?: string;

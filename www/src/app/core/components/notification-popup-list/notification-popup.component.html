@@ -4,6 +4,7 @@
        (mouseenter)="holdNotifications = true"
        (mouseleave)="holdNotifications = false"
        [@notificationAnimate]>
+
     <app-notification-card
       (click)="hideAllNotifications()"
       (contextmenu)="hideNotification(notification, $event)"
