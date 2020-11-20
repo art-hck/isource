@@ -45,9 +45,9 @@ export class TechnicalCommercialProposalViewComponent implements OnInit, OnDestr
 
   groupId: Uuid;
   view: ProposalsView = "grid";
+  readonly source = ProposalSource.TECHNICAL_COMMERCIAL_PROPOSAL;
   readonly destroy$ = new Subject();
   readonly review = (proposalItems: CommonProposalItem[], positions: RequestPosition[]) => new Review(proposalItems, positions);
-  readonly source = ProposalSource.TECHNICAL_COMMERCIAL_PROPOSAL;
   readonly downloadAnalyticalReport = (requestId: Uuid, groupId: Uuid) => new DownloadAnalyticalReport(requestId, groupId);
 
   constructor(
