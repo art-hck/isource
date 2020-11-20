@@ -103,10 +103,6 @@ export class CommercialProposalViewComponent implements OnInit, OnDestroy {
     this.cd.detectChanges();
   }
 
-  cons() {
-    console.log('dfbdv');
-  }
-
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();
