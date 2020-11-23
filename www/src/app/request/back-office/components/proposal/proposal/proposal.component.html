@@ -8,7 +8,8 @@
         <uxg-icon shape="app-draft"></uxg-icon>
         <span>Черновик</span>
       </div>
-      <div class="app-ghost-color app-bold" *ngIf="!isReviewed && !isPartiallyReviewed && publishedCount > 0">
+      <div class="app-ghost-color app-bold"
+           *ngIf="!isReviewed && !isPartiallyReviewed && !isSentToEdit && publishedCount > 0">
         <uxg-icon shape="app-waiting" class="is-solid"></uxg-icon>
         <span>Отправлено {{ publishedCount }} из {{ proposal.items.length }}</span>
       </div>
@@ -20,7 +21,10 @@
         <uxg-icon shape="app-warning"></uxg-icon>
         <span>Частично рассмотрено</span>
       </div>
-
+      <div class="app-warning-color app-bold" *ngIf="isSentToEdit">
+        <uxg-icon shape="app-warning"></uxg-icon>
+        <span>На доработке</span>
+      </div>
       <button uxgButton icon link (click)="state = 'edit'" [disabled]="!editable">
         <uxg-icon shape="app-pen"></uxg-icon>
       </button>
