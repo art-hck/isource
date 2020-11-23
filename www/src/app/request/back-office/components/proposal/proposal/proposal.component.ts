@@ -35,6 +35,9 @@ export class ProposalComponent {
   }
 
   get isReviewed() {
+    return this.proposal?.items.length > 0 && this.proposal?.items.every(({status}) => ['APPROVED'].includes(status));
+  }
+  get isPartiallyReviewed() {
     return this.proposal?.items.length > 0 && this.proposal?.items.some(({status}) => ['APPROVED'].includes(status));
   }
 }
