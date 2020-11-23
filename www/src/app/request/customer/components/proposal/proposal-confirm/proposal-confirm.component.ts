@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, QueryList } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output, QueryList } from '@angular/core';
 import { getCurrencySymbol } from "@angular/common";
 import { ContragentShortInfo } from "../../../../../contragent/models/contragent-short-info";
 import { Proposal } from "../../../../../shared/components/grid/proposal";
@@ -11,7 +11,8 @@ import { RequestPosition } from "../../../../common/models/request-position";
 @Component({
   selector: 'app-common-proposal-confirm',
   templateUrl: './proposal-confirm.component.html',
-  styleUrls: ['./proposal-confirm.component.scss']
+  styleUrls: ['./proposal-confirm.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProposalConfirmComponent {
   @Input() isLoading: boolean;
@@ -26,7 +27,10 @@ export class ProposalConfirmComponent {
       sendToEditCounter: number,
     },
     selectedProposals: {
-      supplier: ContragentShortInfo;
+      supplier: {
+        info: ContragentShortInfo
+        index: number;
+      };
       toSendToEdit: Proposal<CommonProposalItem>[];
       toApprove: Proposal<CommonProposalItem>[]
     }[]

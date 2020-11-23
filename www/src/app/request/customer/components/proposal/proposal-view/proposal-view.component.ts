@@ -69,7 +69,10 @@ export class ProposalViewComponent implements AfterViewInit, OnChanges, OnDestro
       sendToEditCounter: number,
     },
     selectedProposals: {
-      supplier: ContragentShortInfo;
+      supplier: {
+        info: ContragentShortInfo;
+        index: number;
+      };
       toSendToEdit: Proposal<CommonProposalItem>[];
       toApprove: Proposal<CommonProposalItem>[]
     }[]
@@ -128,7 +131,14 @@ export class ProposalViewComponent implements AfterViewInit, OnChanges, OnDestro
    * Возвращает сгруппированный объект, состоящий из Поставщика
    * и отмеченных его предложений на согласование и отправку на доработку
    */
-  get selectedPositionsBySuppliers(): { toSendToEdit: Proposal<CommonProposalItem>[]; supplier: ContragentShortInfo; toApprove: Proposal<CommonProposalItem>[] }[] {
+  get selectedPositionsBySuppliers(): {
+    supplier: {
+      info: ContragentShortInfo;
+      index: number;
+    };
+    toSendToEdit: Proposal<CommonProposalItem>[];
+    toApprove: Proposal<CommonProposalItem>[]
+  }[] {
     // Объединяем все отмеченные предложения (на согласование + на доработку)
     const selectedProposals = this.selectedToApproveProposals.concat(this.selectedToSendToEditProposals);
 
@@ -140,12 +150,23 @@ export class ProposalViewComponent implements AfterViewInit, OnChanges, OnDestro
       !array.filter((v, i) => JSON.stringify(supplier.id) === JSON.stringify(v.id) && i < index).length);
 
     // Используем собранный список поставщиков для формирования массива объектов
-    return uniqueProposalsSuppliers.map(supplier => {
+    const uniqueProposalsSuppliersData = uniqueProposalsSuppliers.map(supplier => {
+      const suppliersIds = this.suppliers(this.proposals).map(supplierItem => supplierItem.id);
+      const supplierIndexNumber = suppliersIds.indexOf((supplier.id));
+
       return {
-        supplier: supplier,
+        supplier: {
+          info: supplier,
+          index: supplierIndexNumber
+        },
         toApprove: this.selectedPositionsBySupplierAndType('to-approve', supplier.id),
         toSendToEdit: this.selectedPositionsBySupplierAndType('to-send-to-edit', supplier.id)
       };
+    });
+
+    // Сортируем собранные данные по индексу поставщика
+    return uniqueProposalsSuppliersData.sort((a, b) => {
+      return a.supplier.index - b.supplier.index;
     });
   }
 
