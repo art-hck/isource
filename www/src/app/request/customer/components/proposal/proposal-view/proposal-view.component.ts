@@ -69,10 +69,8 @@ export class ProposalViewComponent implements AfterViewInit, OnChanges, OnDestro
       sendToEditCounter: number,
     },
     selectedProposals: {
-      supplier: {
-        info: ContragentShortInfo;
-        index: number;
-      };
+      supplier: ContragentShortInfo;
+      supplierIndex: number;
       toSendToEdit: Proposal<CommonProposalItem>[];
       toApprove: Proposal<CommonProposalItem>[]
     }[]
@@ -132,10 +130,8 @@ export class ProposalViewComponent implements AfterViewInit, OnChanges, OnDestro
    * и отмеченных его предложений на согласование и отправку на доработку
    */
   get selectedPositionsBySuppliers(): {
-    supplier: {
-      info: ContragentShortInfo;
-      index: number;
-    };
+    supplier: ContragentShortInfo;
+    supplierIndex: number;
     toSendToEdit: Proposal<CommonProposalItem>[];
     toApprove: Proposal<CommonProposalItem>[]
   }[] {
@@ -155,10 +151,8 @@ export class ProposalViewComponent implements AfterViewInit, OnChanges, OnDestro
       const supplierIndexNumber = suppliersIds.indexOf((supplier.id));
 
       return {
-        supplier: {
-          info: supplier,
-          index: supplierIndexNumber
-        },
+        supplier: supplier,
+        supplierIndex: supplierIndexNumber,
         toApprove: this.selectedPositionsBySupplierAndType('to-approve', supplier.id),
         toSendToEdit: this.selectedPositionsBySupplierAndType('to-send-to-edit', supplier.id)
       };
@@ -166,7 +160,7 @@ export class ProposalViewComponent implements AfterViewInit, OnChanges, OnDestro
 
     // Сортируем собранные данные по индексу поставщика
     return uniqueProposalsSuppliersData.sort((a, b) => {
-      return a.supplier.index - b.supplier.index;
+      return a.supplierIndex - b.supplierIndex;
     });
   }
 

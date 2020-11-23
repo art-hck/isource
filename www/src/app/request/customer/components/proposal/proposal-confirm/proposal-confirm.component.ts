@@ -11,8 +11,7 @@ import { RequestPosition } from "../../../../common/models/request-position";
 @Component({
   selector: 'app-common-proposal-confirm',
   templateUrl: './proposal-confirm.component.html',
-  styleUrls: ['./proposal-confirm.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  styleUrls: ['./proposal-confirm.component.scss']
 })
 export class ProposalConfirmComponent {
   @Input() isLoading: boolean;
@@ -27,10 +26,8 @@ export class ProposalConfirmComponent {
       sendToEditCounter: number,
     },
     selectedProposals: {
-      supplier: {
-        info: ContragentShortInfo
-        index: number;
-      };
+      supplier: ContragentShortInfo;
+      supplierIndex: number;
       toSendToEdit: Proposal<CommonProposalItem>[];
       toApprove: Proposal<CommonProposalItem>[]
     }[]

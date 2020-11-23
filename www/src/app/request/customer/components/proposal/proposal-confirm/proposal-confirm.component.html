@@ -39,7 +39,7 @@
     <div class="supplier-block" [hidden]="allPositionsToApproveFiltered(proposalPositionsBlock)">
       <div class="app-row app-justify-content-between short-name">
         <div class="app-col app-col-auto">
-          <h3>{{ proposalPositionsBlock.supplier.info.shortName || 'Поставщик №' + (proposalPositionsBlock.supplier.index + 1) }}</h3>
+          <h3>{{ proposalPositionsBlock.supplier.shortName || 'Поставщик №' + (proposalPositionsBlock.supplierIndex + 1) }}</h3>
         </div>
 
         <h3 class="app-col app-col-auto app-font-normal">
@@ -73,7 +73,7 @@
               </div>
 
               <div class="app-col select-list-item-supplier-name">
-                <span>{{ proposalPositionsBlock.supplier.info.shortName || 'Поставщик №' + (proposalPositionsBlock.supplier.index + 1) }}</span>
+                <span>{{ proposalPositionsBlock.supplier.shortName || 'Поставщик №' + (proposalPositionsBlock.supplierIndex + 1) }}</span>
               </div>
 
               <div class="app-col app-col-auto app-success-color select-list-item-icon">
