@@ -3,7 +3,7 @@
     <ng-container *ngIf="(proposals$ | async) as proposals">
       <app-common-proposal-view
         [positions]="positions$ | async"
-        [availablePositions]="positions$ | async"
+        [availablePositions]="availablePositions$ | async"
         [request]="request"
         [proposals]="proposals"
         [status]="status$ | async"
