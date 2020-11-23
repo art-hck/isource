@@ -21,6 +21,7 @@ import { GridRowComponent } from "../../../../../shared/components/grid/grid-row
 import { ScrollPositionService } from "../../../../../shared/services/scroll-position.service";
 import { CommonProposal, CommonProposalByPosition, CommonProposalItem } from "../../../../common/models/common-proposal";
 import { ProposalSourceLabels } from "../../../../common/dictionaries/proposal-source-labels";
+import { ProposalHelperService } from "../../../../../shared/components/grid/proposal-helper.service";
 
 @Component({
   selector: 'app-common-proposal-view',
@@ -94,6 +95,7 @@ export class ProposalViewComponent implements OnDestroy, AfterViewInit, OnChange
     private cd: ChangeDetectorRef,
     public featureService: FeatureService,
     public scrollPositionService: ScrollPositionService,
+    public helper: ProposalHelperService
   ) {}
 
   ngOnChanges({ proposalsByPositions }: SimpleChanges) {
