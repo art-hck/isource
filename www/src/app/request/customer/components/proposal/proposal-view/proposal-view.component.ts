@@ -115,7 +115,6 @@ export class ProposalViewComponent implements AfterViewInit, OnChanges, OnDestro
     return selectedSendToEditProposals?.reduce((acc: [], val) => [...acc, ...val], []) as Proposal[];
   }
 
-
   get allSelectedProposals(): { toApprove, toSendToEdit } {
     // Объединяем все отмеченные предложения (на согласование + на доработку)
 
@@ -222,7 +221,7 @@ export class ProposalViewComponent implements AfterViewInit, OnChanges, OnDestro
 
   openConfirmApproveFromListModal() {
     const toApproveCounter = this.selectedToApproveProposals.length;
-    const sendToEditCounter = this.selectedToSendToEditProposals.length;
+    const sendToEditCounter = this.proposalsOnReview?.filter(({ sendToEditPosition }) => sendToEditPosition.value).length;
 
     this.approvalModalData = {
       counters: {
