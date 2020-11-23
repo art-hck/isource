@@ -84,7 +84,7 @@ export class TechnicalCommercialProposalViewComponent implements OnInit, OnDestr
       takeUntil(this.destroy$)
     ).subscribe(({ result, action }) => {
       const e = result.error as any;
-      const length = (action?.proposalPositions?.length ?? 0) + (action?.requestPositions?.length ?? 0) || 1;
+      const length = (action?.proposalItems?.length ?? 0) + (action?.positions?.length ?? 0) || 1;
       let text = "По $0 принято решение";
 
       text = text.replace(/\$(\d)/g, (all, i) => [
