@@ -38,6 +38,7 @@ export class ProposalViewComponent implements OnDestroy, AfterViewInit, OnChange
   @ViewChildren('selectPopover') selectPopoverRef: QueryList<UxgPopoverComponent>;
   @Input() proposals: CommonProposal[];
   @Input() proposalsByPositions: CommonProposalByPosition[];
+  @Input() availablePositions: RequestPosition[];
   @Input() positions: RequestPosition[];
   @Input() procedures: Procedure[];
   @Input() status: StateStatus;
