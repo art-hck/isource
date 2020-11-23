@@ -89,5 +89,13 @@ export class GridContragentsComponent implements AfterViewInit, OnChanges, After
     return suppliers.some(supplier => supplier.hasAnalogs);
   }
 
+  getUniqueSupplierIndex(supplierId): number {
+    const uniqueProposalsSuppliers = this.suppliers.filter((supplier, index, array) =>
+      !array.filter((v, i) => JSON.stringify(supplier.id) === JSON.stringify(v.id) && i < index).length);
+    const uniqueProposalsSupplierIds = uniqueProposalsSuppliers.map(supplier => supplier.id);
+
+    return uniqueProposalsSupplierIds.indexOf(supplierId);
+  }
+
   getProposalBySupplier = ({ id }: ContragentShortInfo, proposals: ProposalWithCommonInfo[]) => proposals.find((p) => (p.supplier?.id ?? p.supplierId) === id);
 }
