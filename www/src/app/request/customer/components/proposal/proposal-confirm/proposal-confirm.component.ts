@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output, QueryList } from '@angular/core';
+import { Component, EventEmitter, Input, Output, QueryList } from '@angular/core';
 import { getCurrencySymbol } from "@angular/common";
 import { ContragentShortInfo } from "../../../../../contragent/models/contragent-short-info";
 import { Proposal } from "../../../../../shared/components/grid/proposal";
