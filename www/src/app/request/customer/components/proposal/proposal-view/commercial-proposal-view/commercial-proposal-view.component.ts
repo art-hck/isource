@@ -31,13 +31,19 @@ import { ProposalSource } from "../../../../../back-office/enum/proposal-source"
 export class CommercialProposalViewComponent implements OnInit, OnDestroy {
   @Select(RequestState.request) readonly request$: Observable<Request>;
   @Select(CommercialProposalState.proposalsByPos(['NEW', 'SENT_TO_REVIEW']))
-  readonly proposalsSentToReview$: Observable<CommonProposalByPosition[]>;
+  readonly proposalsByPosSentToReview$: Observable<CommonProposalByPosition[]>;
   @Select(CommercialProposalState.proposalsByPos(['APPROVED', 'REJECTED']))
-  readonly proposalsReviewed$: Observable<CommonProposalByPosition[]>;
+  readonly proposalsByPosReviewed$: Observable<CommonProposalByPosition[]>;
   @Select(CommercialProposalState.proposalsByPos(['SENT_TO_EDIT']))
-  readonly proposalsSendToEdit$: Observable<CommonProposalByPosition[]>;
+  readonly proposalsByPosSendToEdit$: Observable<CommonProposalByPosition[]>;
   @Select(CommercialProposalState.proposals)
   readonly proposals$: Observable<CommonProposal[]>;
+  @Select(CommercialProposalState.proposalsByStatus(['NEW', 'SENT_TO_REVIEW']))
+  readonly proposalsSentToReview$: Observable<CommonProposal[]>;
+  @Select(CommercialProposalState.proposalsByStatus(['APPROVED']))
+  readonly proposalsReviewed$: Observable<CommonProposal[]>;
+  @Select(CommercialProposalState.proposalsByStatus(['SENT_TO_EDIT']))
+  readonly proposalsSendToEdit$: Observable<CommonProposal[]>;
   @Select(CommercialProposalState.positions)
   readonly positions$: Observable<RequestPosition[]>;
   @Select(CommercialProposalState.status)

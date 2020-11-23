@@ -6,7 +6,6 @@ import { saveAs } from 'file-saver/src/FileSaver';
 import { StateStatus } from "../../common/models/state-status";
 import { TechnicalCommercialProposalService } from "../services/technical-commercial-proposal.service";
 import { Injectable } from "@angular/core";
-import { Uuid } from "../../../cart/models/uuid";
 import { CommonProposal, CommonProposalByPosition, CommonProposalItemStatus } from "../../common/models/common-proposal";
 import { RequestPosition } from "../../common/models/request-position";
 import { insertOrUpdateProposals } from "../../../shared/state-operators/insert-or-update-proposals";
@@ -51,6 +50,11 @@ export class TechnicalCommercialProposalState {
         .filter(({ items }) => items.every((item) => status.includes(item.status)))
     );
   }
+  static proposalsByStatus(status?: CommonProposalItemStatus[]) {
+    return createSelector([TechnicalCommercialProposalState], ({ proposals }: Model) => proposals
+      .filter(({ items }) => items.some((item) => !status || status.includes(item.status)))
+    );
+  }
 
   @Selector() static status({ status }: Model) { return status; }
   @Selector() static proposals({ proposals }: Model) { return proposals; }
@@ -67,13 +71,11 @@ export class TechnicalCommercialProposalState {
   @Action(Review)
   review({ setState, getState }: Context, { proposalItems, positions }: Review) {
     setState(patch({ status: "updating" as StateStatus }));
-    console.log(proposalItems, positions);
-    const body: { accepted: Uuid[], sendToEdit: Uuid[] } = {
+
+    return this.rest.review({
       'accepted': proposalItems?.map(({ id }) => id),
       'sendToEdit': positions?.map(({ id }) => id)
-    };
-
-    return this.rest.review(body).pipe(tap(data => setState(insertOrUpdateProposals(data))));
+    }).pipe(tap(data => setState(insertOrUpdateProposals(data))));
   }
 
   @Action(DownloadAnalyticalReport)

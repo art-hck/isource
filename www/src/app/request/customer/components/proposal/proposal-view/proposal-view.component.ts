@@ -36,9 +36,12 @@ export class ProposalViewComponent implements AfterViewInit, OnChanges, OnDestro
 
   @Input() request: Request;
   @Input() positions: RequestPosition[];
-  @Input() proposalsSentToReview: CommonProposalByPosition[];
-  @Input() proposalsReviewed: CommonProposalByPosition[];
-  @Input() proposalsSendToEdit: CommonProposalByPosition[];
+  @Input() proposalsByPosSentToReview: CommonProposalByPosition[];
+  @Input() proposalsByPosReviewed: CommonProposalByPosition[];
+  @Input() proposalsByPosSendToEdit: CommonProposalByPosition[];
+  @Input() proposalsSentToReview: CommonProposal[];
+  @Input() proposalsReviewed: CommonProposal[];
+  @Input() proposalsSendToEdit: CommonProposal[];
   @Input() proposals: CommonProposal[];
   @Input() stateStatus: StateStatus;
   @Input() view: ProposalsView = "grid";

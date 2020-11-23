@@ -4,20 +4,20 @@
       <div class="app-row app-align-items-center" [class.app-layout]="view === 'grid'">
 
         <uxg-tabs class="app-col">
-          <uxg-tab-title #sentToReviewTab [disabled]="proposalsSentToReview.length === 0" [active]="true">
-            <ng-container *ngIf="proposalsSentToReview as proposals">
+          <uxg-tab-title #sentToReviewTab [disabled]="proposalsByPosSentToReview.length === 0" [active]="true">
+            <ng-container *ngIf="proposalsByPosSentToReview as proposals">
               Необходимо рассмотреть <span class="counter">({{proposals?.length}})</span>
             </ng-container>
           </uxg-tab-title>
 
-          <uxg-tab-title #sendToEditTab [disabled]="proposalsSendToEdit.length === 0">
-            <ng-container *ngIf="proposalsSendToEdit as proposals">
+          <uxg-tab-title #sendToEditTab [disabled]="proposalsByPosSendToEdit.length === 0">
+            <ng-container *ngIf="proposalsByPosSendToEdit as proposals">
               На доработке <span class="counter">({{ proposals?.length }})</span>
             </ng-container>
           </uxg-tab-title>
 
-          <uxg-tab-title #reviewedTab [disabled]="proposalsReviewed.length === 0">
-            <ng-container *ngIf="proposalsReviewed as proposals">
+          <uxg-tab-title #reviewedTab [disabled]="proposalsByPosReviewed.length === 0">
+            <ng-container *ngIf="proposalsByPosReviewed as proposals">
               Рассмотренные <span class="counter">({{ proposals?.length }})</span>
             </ng-container>
           </uxg-tab-title>
@@ -42,7 +42,7 @@
       <br/>
 
       <ng-container [ngSwitch]="view"
-                    *ngIf="(reviewedTab.active ? proposalsReviewed : sentToReviewTab.active ? proposalsSentToReview : proposalsSendToEdit) as proposalsByPos">
+                    *ngIf="(reviewedTab.active ? proposalsByPosReviewed : sentToReviewTab.active ? proposalsByPosSentToReview : proposalsByPosSendToEdit) as proposalsByPos">
         <div #gridTable *ngIf="view !== 'list'" [ngClass]="{
           'grid-table': view === 'grid',
           'simple-grid-table': view === 'simple-grid',
@@ -122,26 +122,26 @@
 
         <!-- list -->
         <ng-container *ngSwitchCase="'list'">
-          <!--          <ng-container *ngIf="(reviewedTab.active ?-->
-          <!--            proposalsReviewed :-->
-          <!--            sentToReviewTab.active ?-->
-          <!--                proposalsSentToReview :-->
-          <!--                proposalsSendToEdit) as proposals">-->
-          <app-request-technical-commercial-proposal
-            #tcpComponent
-            *ngFor="let proposal of proposals; let i = index; trackBy: trackById"
-            [technicalCommercialProposalIndex]="i"
-            [chooseBy$]="chooseBy$"
-            [proposal]="proposal"
-            [proposals]="proposals"
-            [isLoading]="stateStatus === 'updating'"
-            [source]="source"
-            [positions]="positions"
-            (positionSelected)="onPositionSelected($event)"
-            (approve)="approveFromListView()"
-            (sendToEdit)="sendToEditFromListView()">
-          </app-request-technical-commercial-proposal>
-          <!--          </ng-container>-->
+          <ng-container *ngIf="(reviewedTab.active ?
+            proposalsReviewed :
+            sentToReviewTab.active ?
+                proposalsSentToReview :
+                proposalsSendToEdit) as proposals">
+            <app-request-technical-commercial-proposal
+              #tcpComponent
+              *ngFor="let proposal of proposals; let i = index; trackBy: trackById"
+              [technicalCommercialProposalIndex]="i"
+              [chooseBy$]="chooseBy$"
+              [proposal]="proposal"
+              [proposals]="proposals"
+              [isLoading]="stateStatus === 'updating'"
+              [source]="source"
+              [positions]="positions"
+              (positionSelected)="onPositionSelected($event)"
+              (approve)="approveFromListView()"
+              (sendToEdit)="sendToEditFromListView()">
+            </app-request-technical-commercial-proposal>
+          </ng-container>
         </ng-container>
 
         <!-- empty -->
