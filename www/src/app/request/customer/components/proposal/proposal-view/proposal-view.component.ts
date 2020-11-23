@@ -148,7 +148,7 @@ export class ProposalViewComponent implements AfterViewInit, OnChanges, OnDestro
     // Используем собранный список поставщиков для формирования массива объектов
     const uniqueProposalsSuppliersData = uniqueProposalsSuppliers.map(supplier => {
       const suppliersIds = this.suppliers(this.proposals).map(supplierItem => supplierItem.id);
-      const supplierIndexNumber = suppliersIds.indexOf((supplier.id));
+      const supplierIndexNumber = suppliersIds.indexOf(supplier.id);
 
       return {
         supplier: supplier,
