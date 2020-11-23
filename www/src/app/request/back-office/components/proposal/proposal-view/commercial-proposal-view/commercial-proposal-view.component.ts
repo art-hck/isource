@@ -47,7 +47,8 @@ import moment from "moment";
 export class CommercialProposalViewComponent implements OnInit, OnDestroy {
   @Select(CommercialProposalState.proposals) proposals$: Observable<CommonProposal[]>;
   @Select(CommercialProposalState.proposalsByPositions) proposalsByPositions$: Observable<CommonProposalByPosition[]>;
-  @Select(CommercialProposalState.availablePositions) positions$: Observable<RequestPosition[]>;
+  @Select(CommercialProposalState.positions) positions$: Observable<RequestPosition[]>;
+  @Select(CommercialProposalState.availablePositions) availablePositions$: Observable<RequestPosition[]>;
   @Select(CommercialProposalState.procedures) procedures$: Observable<Procedure[]>;
   @Select(CommercialProposalState.status) status$: Observable<StateStatus>;
   @Select(RequestState.request) request$: Observable<Request>;

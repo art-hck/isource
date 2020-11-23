@@ -52,7 +52,7 @@ export class CommercialProposalState {
   @Selector() static status({ status }: Model) { return status; }
   @Selector() static procedures({ procedures }: Model) { return procedures; }
   @Selector() static positions({ positions }: Model) { return positions; }
-  @Selector() static proposalsByPositions({ proposals, positions, availablePositions }: Model) {
+  @Selector() static proposalsByPositions({ proposals, positions }: Model) {
     // Перегруппировываем ТКП попозиционно, включаем позиции по которым еще не создано ни одного ТКП
     return proposals.reduce((acc: CommonProposalByPosition[], proposal) => {
       proposal.items.forEach(item => {
@@ -66,7 +66,7 @@ export class CommercialProposalState {
       });
 
       return acc;
-    }, availablePositions?.map(position => ({ position, items: [] })) || []);
+    }, positions?.map(position => ({ position, items: [] })) || []);
   }
 
   @Action(Fetch)
