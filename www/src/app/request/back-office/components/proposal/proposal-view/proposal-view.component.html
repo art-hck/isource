@@ -206,7 +206,7 @@
         [closable]="proposals.length > 0"
         [groupId]="groupId"
         (close)="showForm = false"
-        [availablePositions]="positions"
+        [availablePositions]="availablePositions"
         [source]="source"
         (create)="create.emit($event)"
       ></app-common-proposal-form>
@@ -224,6 +224,7 @@
           [groupId]="groupId"
           [source]="source"
           [positions]="positions"
+          [availablePositions]="availablePositions"
           [proposal]="proposal"
           (edit)="edit.emit($event)"
         ></app-request-technical-commercial-proposal>

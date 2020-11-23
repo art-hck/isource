@@ -3,6 +3,7 @@
     <ng-container *ngIf="(proposals$ | async) as proposals">
       <app-common-proposal-view
         [positions]="positions$ | async"
+        [availablePositions]="availablePositions$ | async"
         [request]="request"
         [proposals]="proposals"
         [status]="status$ | async"
@@ -16,12 +17,12 @@
         (downloadTemplate)="store.dispatch(downloadTemplate(request.id, groupId))"
         (rollback)="store.dispatch(rollback(request.id, groupId, $event))"
         (downloadAnalyticalReport)="store.dispatch(downloadAnalyticalReport(request.id, groupId))"
-        (publishPositions)="store.dispatch(publishPositions($event))"
+        (publishPositions)="store.dispatch(publishPositions(request.id, groupId, $event))"
         (saveProposalItem)="saveProposalItem($event.item, $event.proposal)"
         (updateProcedures)="store.dispatch(updateProcedures(request.id, groupId))"
         (viewChange)="switchView($event)"
         (create)="store.dispatch(create(request.id, groupId, $event.proposal, $event.items))"
-        (edit)="store.dispatch(edit($event.proposal, $event.items))"
+        (edit)="store.dispatch(edit(request.id, groupId, $event.proposal, $event.items))"
       ></app-common-proposal-view>
     </ng-container>
   </ng-container>

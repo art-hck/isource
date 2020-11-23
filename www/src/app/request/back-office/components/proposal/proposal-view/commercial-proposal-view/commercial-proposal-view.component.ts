@@ -65,11 +65,11 @@ export class CommercialProposalViewComponent implements OnInit, OnDestroy {
   readonly downloadTemplate = (requestId: Uuid, groupId: Uuid) => new DownloadTemplate(requestId, groupId);
   readonly uploadTemplate = (requestId: Uuid, groupId: Uuid, files: File[]) => new UploadTemplate(requestId, files, groupId);
   readonly downloadAnalyticalReport = (requestId: Uuid, groupId: Uuid) => new DownloadAnalyticalReport(requestId, groupId);
-  readonly publishPositions = (proposalPositions: CommonProposalByPosition[]) => new Publish(this.groupId, proposalPositions);
+  readonly publishPositions = (requestId: Uuid, groupId: Uuid, proposalPositions: CommonProposalByPosition[]) => new Publish(requestId, groupId, proposalPositions);
   readonly updateProcedures = (requestId: Uuid, groupId: Uuid) => [new RefreshProcedures(requestId, groupId), new FetchAvailablePositions(requestId, groupId)];
   readonly rollback = (requestId: Uuid, groupId: Uuid, { id }: RequestPosition) => new Rollback(requestId, groupId, id);
   readonly create = (requestId: Uuid, groupId: Uuid, payload: Partial<CommonProposal>, items?: CommonProposalItem[]) => new Create(requestId, groupId, payload, items);
-  readonly edit = (payload: Partial<CommonProposal> & { id: Uuid }, items?: CommonProposalItem[]) => new Update(payload, items);
+  readonly edit = (requestId: Uuid, groupId: Uuid, payload: Partial<CommonProposal> & { id: Uuid }, items?: CommonProposalItem[]) => new Update(requestId, groupId, payload, items);
   readonly canRollback = ({ status, statusChangedDate }: RequestPosition, rollbackDuration: number) => status === PositionStatus.RESULTS_AGREEMENT &&
     moment().diff(moment(statusChangedDate), 'seconds') < rollbackDuration
 

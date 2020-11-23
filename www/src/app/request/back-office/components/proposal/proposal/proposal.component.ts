@@ -17,6 +17,7 @@ export class ProposalComponent {
   @Input() groupId: Uuid;
   @Input() proposal: CommonProposal;
   @Input() positions: RequestPosition[];
+  @Input() availablePositions: RequestPosition[];
   @Input() source: ProposalSource;
   @Output() edit = new EventEmitter<{ proposal: Partial<CommonProposal> & { id: Uuid }, items: CommonProposalItem[] }>();
 
