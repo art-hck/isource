@@ -3,7 +3,7 @@
     <div *ngIf="positionCell" class="app-col grid-cell app-bold">Наименование позиции</div>
     <div class="app-col grid-cell app-ellipsis app-row app-flex-column app-flex-nowrap"
          *ngFor="let supplier of suppliers; index as i; trackBy: trackBySupplierId">
-      <app-contragent-info-link class="app-bold app-ellipsis" hiddenName="Поставщик №{{i + 1}}" [contragent]="supplier">
+      <app-contragent-info-link class="app-bold app-ellipsis" hiddenName="Поставщик №{{ getUniqueSupplierIndex(supplier.id) + 1}}" [contragent]="supplier">
       </app-contragent-info-link>
       <div class="app-ghost-color" *ngIf="supplier.hasAnalogs">аналоги</div>
     </div>

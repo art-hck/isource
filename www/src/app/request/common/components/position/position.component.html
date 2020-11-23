@@ -54,7 +54,8 @@
     <uxg-tabs class="app-tabs-border">
       <uxg-tab-title #historyTab [active]="true">История</uxg-tab-title>
       <uxg-tab-title #docTab>Документы</uxg-tab-title>
-      <uxg-tab-title #offersTab [attr.disabled]="!position.linkedOffers.length">Коммерческие предложения</uxg-tab-title>
+      <!-- Таб «Коммерческие предложения» временно скрыт, задача gpn_market-3188 -->
+      <uxg-tab-title #offersTab [attr.disabled]="!position.linkedOffers.length" [hidden]="true">Коммерческие предложения</uxg-tab-title>
       <uxg-tab-title #inspectionTab [hidden]="!showInspection(position)">Изготовление</uxg-tab-title>
       <uxg-tab-title #deliveryTab [hidden]="!isAfterManufacturing(position) || isNotActual(position)">Доставка</uxg-tab-title>
     </uxg-tabs>

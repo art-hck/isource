@@ -53,8 +53,6 @@ export class CommercialProposalGroupListComponent implements OnInit, OnDestroy {
       { label: `Заявка №${number}`, link: `/requests/backoffice/${id}` },
       { label: 'Согласование КП', link: `/requests/backoffice/${id}/commercial-proposals`},
     ]),
-    switchMap(() => this.filter$),
-    switchMap(filter => this.service.list(this.requestId, filter)),
     switchMap(groups => this.newGroup$.pipe(
       tap(g => g && this.store.dispatch(new FetchAvailablePositions(this.requestId))),
       scan((acc, group) => {
@@ -65,6 +63,8 @@ export class CommercialProposalGroupListComponent implements OnInit, OnDestroy {
 
       return acc;
     }, groups))),
+    switchMap(() => this.filter$),
+    switchMap(filter => this.service.list(this.requestId, filter)),
     shareReplay(1)
   );
 

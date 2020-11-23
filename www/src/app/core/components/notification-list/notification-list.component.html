@@ -25,7 +25,7 @@
     <app-notification-popup [view]="'list'"></app-notification-popup>
 
     <ng-container *ngIf="notifications.totalHits === '0'; else notificationsList">
-      <span class="app-ghost-color">Уведомления отсуствуют</span>
+      <span class="app-ghost-color">Уведомления отсутствуют</span>
     </ng-container>
 
     <ng-template #notificationsList>

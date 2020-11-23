@@ -101,7 +101,9 @@ export class ProposalFormComponent implements OnInit, OnDestroy, OnChanges {
     this.form = this.fb.group({
       supplier: [this.proposal?.supplier, Validators.required],
       documents: [this.proposal?.documents ?? []],
-      positions: [this.proposalPositions, [Validators.required, this.parametersValidator, this.manufacturerValidator]],
+      positions: [
+        this.proposal?.items.map(item => ({ position: this.availablePositions.find(({ id }) => id === item.requestPositionId), ...item })) ?? []
+        , [Validators.required, this.parametersValidator, this.manufacturerValidator]],
       files: [[]],
       deliveryType: [this.proposal?.deliveryType || this.deliveryType.INCLUDED],
       deliveryAdditionalTerms: [this.proposal?.deliveryAdditionalTerms || ''],

@@ -27,6 +27,7 @@ export class ProposalConfirmComponent {
     },
     selectedProposals: {
       supplier: ContragentShortInfo;
+      supplierIndex: number;
       toSendToEdit: Proposal<CommonProposalItem>[];
       toApprove: Proposal<CommonProposalItem>[]
     }[]
