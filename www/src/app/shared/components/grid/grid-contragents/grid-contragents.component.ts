@@ -6,6 +6,7 @@ import { UserInfoService } from "../../../../user/service/user-info.service";
 import { FormControl } from "@angular/forms";
 import { ProposalWithCommonInfo } from "../../../../request/common/models/proposal-with-common-info";
 import { RequestPosition } from "../../../../request/common/models/request-position";
+import { Uuid } from "../../../../cart/models/uuid";
 
 @Component({
   selector: 'app-grid-contragents',
@@ -89,7 +90,7 @@ export class GridContragentsComponent implements AfterViewInit, OnChanges, After
     return suppliers.some(supplier => supplier.hasAnalogs);
   }
 
-  getUniqueSupplierIndex(supplierId): number {
+  getUniqueSupplierIndex(supplierId: Uuid): number {
     const uniqueProposalsSuppliers = this.suppliers.filter((supplier, index, array) =>
       !array.filter((v, i) => JSON.stringify(supplier.id) === JSON.stringify(v.id) && i < index).length);
     const uniqueProposalsSupplierIds = uniqueProposalsSuppliers.map(supplier => supplier.id);
