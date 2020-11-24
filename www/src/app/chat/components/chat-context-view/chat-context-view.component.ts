@@ -45,7 +45,7 @@ export class ChatContextViewComponent implements OnInit, OnDestroy, AfterViewIni
   conversationId: ChatConversation["id"]; // ID Текущего чата
   scrollDirty = false; // Если true - скроллим плавно
   conversationLoading: boolean;
-  allPositionsAreDrafts: boolean;
+  allPositionsAreDrafts$: Observable<boolean>;
 
   readonly PositionStatusesLabels = PositionStatusesLabels;
   readonly destroy$ = new Subject();
@@ -110,9 +110,9 @@ export class ChatContextViewComponent implements OnInit, OnDestroy, AfterViewIni
       request => this.store.dispatch(new ChatSubItems.Fetch(this.role, request)),
     );
 
-    this.subItems$.pipe(takeUntil(this.destroy$)).subscribe((subItems) => {
-      this.allPositionsAreDrafts = subItems.length && subItems.every(({position}) => this.asPosition(position).status === 'DRAFT');
-    });
+    this.allPositionsAreDrafts$ = this.subItems$.pipe(
+      map(subItems => subItems.length && subItems.every(({ position }) => this.asPosition(position)?.status === 'DRAFT'))
+    );
 
     this.listenConversations();
     this.listenMessages();
