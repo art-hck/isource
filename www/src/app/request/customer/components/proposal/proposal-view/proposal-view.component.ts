@@ -195,6 +195,9 @@ export class ProposalViewComponent implements AfterViewInit, OnChanges, OnDestro
       tap(() => this.cd.detectChanges()),
       takeUntil(this.destroy$)
     ).subscribe();
+
+    // Для корректного автопереключения таба при загрузке страницы детектим изменения
+    this.cd.detectChanges();
   }
 
   get disabled() {
