@@ -16,16 +16,16 @@ export class TechnicalCommercialProposalHelperService {
   }
 
   isDateValid(proposalPosition: CommonProposalItem, position: RequestPosition): boolean {
-    return position.isDeliveryDateAsap ||
-      moment(proposalPosition.deliveryDate).isSameOrBefore(moment(position.deliveryDate));
+    return position?.isDeliveryDateAsap ||
+      moment(proposalPosition?.deliveryDate).isSameOrBefore(moment(position?.deliveryDate));
   }
 
   isQuantityValid(proposalPosition: CommonProposalItem, position: RequestPosition): boolean {
-    return proposalPosition.quantity === position.quantity;
+    return proposalPosition?.quantity === position?.quantity;
   }
 
   getRequestedQuantityLabel(proposalPosition: CommonProposalItem, position: RequestPosition): string {
-    return proposalPosition.quantity > position.quantity ?
+    return proposalPosition?.quantity > position?.quantity ?
       ' - Количество больше нужного' :
       ' - Количество меньше нужного';
   }

@@ -5,6 +5,7 @@ import { Uuid } from "../../../../../cart/models/uuid";
 import { ProposalSource } from "../../../enum/proposal-source";
 import { CommonProposal, CommonProposalItem } from "../../../../common/models/common-proposal";
 import { RequestPosition } from "../../../../common/models/request-position";
+import { TechnicalCommercialProposalHelperService } from "../../../../common/services/technical-commercial-proposal-helper.service";
 
 @Component({
   selector: 'app-request-technical-commercial-proposal',
@@ -25,7 +26,7 @@ export class ProposalComponent {
   folded = false;
 
   readonly getCurrencySymbol = getCurrencySymbol;
-  readonly getPosition = (item: CommonProposalItem) => this.positions?.find(({ id }) => id === item.requestPositionId);
+  readonly getPosition = (item: CommonProposalItem) => this.positions?.find(({ id }) => id === item?.requestPositionId);
 
   get publishedCount() {
     return this.proposal?.items.filter(({status}) => status !== 'NEW').length;
@@ -45,5 +46,8 @@ export class ProposalComponent {
 
   get isSentToEdit() {
     return this.proposal?.items.length > 0 && this.proposal?.items.every(({status}) => ['SENT_TO_EDIT'].includes(status));
+  }
+
+  constructor(public helper: TechnicalCommercialProposalHelperService) {
   }
 }

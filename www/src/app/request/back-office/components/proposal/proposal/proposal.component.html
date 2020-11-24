@@ -65,14 +65,21 @@
             {{(item.priceWithoutVat * item.quantity) || null | number:'1.0-2'}}
             <span class="app-ghost-color">{{getCurrencySymbol(item.currency, "narrow")}}</span>
           </div>
-          <div class="app-col quantity">{{item.quantity}} <span class="app-ghost-color">{{item.measureUnit}}</span></div>
+          <div class="app-col quantity" [class.app-error-color]="!helper.isQuantityValid(item, getPosition(item))">
+            {{item.quantity}}
+            <span class="app-ghost-color" [class.app-error-color]="!helper.isQuantityValid(item, getPosition(item))">
+              {{item.measureUnit}}
+            </span>
+          </div>
 
           <div class="app-col price">
             {{item.priceWithoutVat | number:'1.0-2'}}
             <span class="app-ghost-color">{{getCurrencySymbol(item.currency, "narrow")}}</span>
           </div>
 
-          <div class="app-col date">{{item.deliveryDate | date:"dd.MM.yyyy"}}</div>
+          <div class="app-col date" [class.app-error-color]="!helper.isDateValid(item, getPosition(item))">
+            {{item.deliveryDate | date:"dd.MM.yyyy"}}
+          </div>
           <div class="status text-center"
                [class.app-ghost-color]="item.status !== 'APPROVED'"
                [class.app-success-color]="item.status === 'APPROVED'"
