@@ -17,7 +17,8 @@ export class ChatFormComponent implements OnDestroy, OnChanges {
   @ViewChild('attachmentModal') attachmentModal: UxgModalComponent;
   @Output() send = new EventEmitter<{ text: string, attachments: ChatAttachment[] }>();
   @Input() disabled: boolean;
-  @Input() isDraft: boolean;
+  @Input() itemIsDraft: boolean;
+  @Input() allItemsAreDrafts: boolean;
 
   isLoading: boolean;
 
@@ -33,7 +34,7 @@ export class ChatFormComponent implements OnDestroy, OnChanges {
   }
 
   ngOnChanges() {
-    if (this.disabled || this.isDraft) {
+    if (this.disabled || this.itemIsDraft || this.allItemsAreDrafts) {
       this.form.disable();
     } else {
       this.form.enable();
