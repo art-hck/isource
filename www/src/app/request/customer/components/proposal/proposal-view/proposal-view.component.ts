@@ -180,8 +180,8 @@ export class ProposalViewComponent implements AfterViewInit, OnChanges, OnDestro
     public helper: ProposalHelperService,
   ) {}
 
-  ngOnChanges({proposalsSentToReview, proposalsReviewed, proposalsSendToEdit}: SimpleChanges) {
-    if (proposalsSentToReview || proposalsReviewed || proposalsSendToEdit) {
+  ngOnChanges({proposalsSentToReview, proposalsReviewed, proposalsSendToEdit, stateStatus}: SimpleChanges) {
+    if (proposalsSentToReview || proposalsReviewed || proposalsSendToEdit || stateStatus) {
       this.cd.detectChanges();
     }
   }
@@ -192,8 +192,9 @@ export class ProposalViewComponent implements AfterViewInit, OnChanges, OnDestro
 
     this.proposalsOnReview.changes.pipe(
       tap(() => this.gridRows = this.proposalsOnReview.reduce((gridRows, c) => [...gridRows, ...c.gridRows], [])),
+      tap(() => this.cd.detectChanges()),
       takeUntil(this.destroy$)
-    ).subscribe(() => this.cd.detectChanges());
+    ).subscribe();
 
     // Для корректного автопереключения таба при загрузке страницы детектим изменения
     this.cd.detectChanges();
