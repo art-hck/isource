@@ -70,9 +70,9 @@
                 {{(item.priceWithoutVat * item.quantity) || null | number:'1.0-2'}}
                 <span class="app-ghost-color">{{getCurrencySymbol(item.currency, "narrow")}}</span>
               </div>
-              <div class="app-col quantity" [ngClass]="!helper.isQuantityValid(item, getPosition(item)) ? 'app-error-color' : ''">
+              <div class="app-col quantity" [class.app-error-color]="!helper.isQuantityValid(item, getPosition(item))">
                 {{item.quantity}}
-                <span class="app-ghost-color" [ngClass]="!helper.isQuantityValid(item, getPosition(item)) ? 'app-error-color' : ''">
+                <span class="app-ghost-color" [class.app-error-color]="!helper.isQuantityValid(item, getPosition(item))">
                   {{item.measureUnit}}
                 </span>
               </div>
@@ -82,7 +82,7 @@
                 <span class="app-ghost-color">{{getCurrencySymbol(item.currency, "narrow")}}</span>
               </div>
 
-              <div class="app-col date" [ngClass]="!helper.isDateValid(item, getPosition(item)) ? 'app-error-color' : ''">
+              <div class="app-col date" [class.app-error-color]="!helper.isDateValid(item, getPosition(item))">
                 {{item.deliveryDate | date:"dd.MM.yyyy"}}
               </div>
               <div class="status text-center"
