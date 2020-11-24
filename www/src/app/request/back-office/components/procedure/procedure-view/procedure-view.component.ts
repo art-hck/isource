@@ -27,7 +27,7 @@ import { TechnicalProposalsService } from "../../../services/technical-proposals
 export class ProcedureViewComponent implements OnDestroy, OnInit {
 
   @Select(TechnicalCommercialProposalState.availablePositions) technicalCommercialProposalPositions$: Observable<RequestPosition[]>;
-  @Select(CommercialProposalState.positions) commercialProposalPositions$: Observable<RequestPosition[]>;
+  @Select(CommercialProposalState.availablePositions) commercialProposalPositions$: Observable<RequestPosition[]>;
   @Select(RequestState.request) request$: Observable<Request>;
   readonly destroy$ = new Subject();
 

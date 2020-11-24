@@ -38,8 +38,13 @@
         <hr/>
         <div class="app-row app-uppercase app-ghost-color app-bold">
           <small class="app-col app-ellipsis name">Наименование позиции</small>
-          <small class="app-col app-ellipsis manufacturing-name">Заводское наименование</small>
+          <small class="app-col app-ellipsis manufacturing-name" *ngIf="source === 'TECHNICAL_COMMERCIAL_PROPOSAL'">
+            Заводское наименование
+          </small>
           <small class="app-col app-ellipsis manufacturer">Изготовитель</small>
+          <small class="app-col app-ellipsis manufacturing-name" *ngIf="source === 'COMMERCIAL_PROPOSAL'">
+            Стандарт
+          </small>
           <small class="app-col total">Сумма без НДС</small>
           <small class="app-col quantity">Количество</small>
           <small class="app-col price">Цена за ед. без НДС</small>
@@ -50,9 +55,12 @@
         <div class="app-row" *ngFor="let item of proposal.items">
           <div class="app-col app-ellipsis name">{{getPosition(item)?.name}}</div>
           <div class="app-col app-ellipsis manufacturing-name" *ngIf="source === 'TECHNICAL_COMMERCIAL_PROPOSAL'">
-            {{item?.manufacturingName}}
+            {{item.manufacturingName}}
           </div>
           <div class="app-col app-ellipsis manufacturer">{{item?.manufacturer}}</div>
+          <div class="app-col app-ellipsis manufacturing-name" *ngIf="source === 'COMMERCIAL_PROPOSAL'">
+            {{item?.standard}}
+          </div>
           <div class="app-col total">
             {{(item.priceWithoutVat * item.quantity) || null | number:'1.0-2'}}
             <span class="app-ghost-color">{{getCurrencySymbol(item.currency, "narrow")}}</span>
@@ -123,7 +131,7 @@
   <app-common-proposal-form
     *ngSwitchCase="'edit'"
     [proposal]="proposal"
-    [availablePositions]="positions"
+    [availablePositions]="availablePositions"
     [request]="request"
     [groupId]="groupId"
     [source]="source"

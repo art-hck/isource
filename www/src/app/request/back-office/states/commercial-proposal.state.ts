@@ -1,6 +1,6 @@
 import { Action, Selector, State, StateContext } from "@ngxs/store";
 import { CommercialProposalsService } from "../services/commercial-proposals.service";
-import { switchMap, tap } from "rxjs/operators";
+import { delayWhen, switchMap, tap } from "rxjs/operators";
 import { CommercialProposalsActions } from "../actions/commercial-proposal.actions";
 import { patch, updateItem } from "@ngxs/store/operators";
 import { StateStatus } from "../../common/models/state-status";
@@ -52,7 +52,7 @@ export class CommercialProposalState {
   @Selector() static status({ status }: Model) { return status; }
   @Selector() static procedures({ procedures }: Model) { return procedures; }
   @Selector() static positions({ positions }: Model) { return positions; }
-  @Selector() static proposalsByPositions({ proposals, positions, availablePositions }: Model) {
+  @Selector() static proposalsByPositions({ proposals, positions }: Model) {
     // Перегруппировываем ТКП попозиционно, включаем позиции по которым еще не создано ни одного ТКП
     return proposals.reduce((acc: CommonProposalByPosition[], proposal) => {
       proposal.items.forEach(item => {
@@ -66,7 +66,7 @@ export class CommercialProposalState {
       });
 
       return acc;
-    }, availablePositions?.map(position => ({ position, items: [] })) || []);
+    }, positions?.map(position => ({ position, items: [] })) || []);
   }
 
   @Action(Fetch)
@@ -104,16 +104,18 @@ export class CommercialProposalState {
     setState(patch<Model>({ status: "updating" }));
 
     return this.rest.create(requestId, groupId, payload).pipe(
+      delayWhen(() => dispatch(new FetchAvailablePositions(requestId, groupId))),
       tap(proposal => setState(insertOrUpdateProposals({ proposals: [proposal] }))),
       switchMap(({ id }) => !!items?.length ? dispatch(new UpdateItems(id, items)) : of(null))
     );
   }
 
   @Action(Update)
-  update({ setState, dispatch }: Context, { payload, items }: Update) {
+  update({ setState, dispatch }: Context, { requestId, groupId, payload, items }: Update) {
     setState(patch<Model>({ status: "updating" }));
 
     return this.rest.update(payload).pipe(
+      delayWhen(() => dispatch(new FetchAvailablePositions(requestId, groupId))),
       tap(proposal => setState(insertOrUpdateProposals({ proposals: [proposal] }))),
       switchMap(({ id }) => !!items?.length ? dispatch(new UpdateItems(id, items)) : of(null))
     );
@@ -130,11 +132,13 @@ export class CommercialProposalState {
   }
 
   @Action(Publish)
-  publish({ setState }: Context, { groupId, proposalsByPositions }: Publish) {
+  publish({ setState, dispatch }: Context, { requestId, groupId, proposalsByPositions }: Publish) {
     setState(patch<Model>({ status: "updating" }));
 
-    return this.rest.publish(groupId, proposalsByPositions.reduce((ids, { items }) => [...ids, ...items.map(({ id }) => id)], []))
-      .pipe(tap(data => setState(insertOrUpdateProposals(data))));
+    return this.rest.publish(groupId, proposalsByPositions.reduce((ids, { items }) => [...ids, ...items.map(({ id }) => id)], [])).pipe(
+      delayWhen(() => dispatch(new FetchAvailablePositions(requestId, groupId))),
+      tap(data => setState(insertOrUpdateProposals(data)))
+    );
   }
 
   @Action(DownloadTemplate)
@@ -144,10 +148,11 @@ export class CommercialProposalState {
   }
 
   @Action(UploadTemplate)
-  uploadTemplate({ setState }: Context, { requestId, groupId, files, groupName }: UploadTemplate) {
+  uploadTemplate({ setState, dispatch }: Context, { requestId, groupId, files, groupName }: UploadTemplate) {
     setState(patch<Model>({ status: "updating" }));
 
     const uploadTemplate = this.rest.uploadTemplate(requestId, groupId, files).pipe(
+      delayWhen(() => dispatch(new FetchAvailablePositions(requestId, groupId))),
       tap(data => setState(insertOrUpdateProposals(data)))
     );
 
@@ -166,6 +171,9 @@ export class CommercialProposalState {
   rollback({ setState, dispatch }: Context, { requestId, groupId, positionId }: Rollback) {
     setState(patch<Model>({ status: "updating" }));
 
-    return this.rest.rollback(requestId, groupId, positionId).pipe(tap(data => setState(insertOrUpdateProposals(data))));
+    return this.rest.rollback(requestId, groupId, positionId).pipe(
+      delayWhen(() => dispatch(new FetchAvailablePositions(requestId, groupId))),
+      tap(data => setState(insertOrUpdateProposals(data)))
+    );
   }
 }

@@ -48,13 +48,13 @@ export namespace TechnicalCommercialProposals {
   export class Update {
     static readonly type = '[Technical Commercial Proposals Backoffice] Update';
 
-    constructor(public payload: Partial<CommonProposal> & { id: Uuid }, public items?: Partial<CommonProposalItem>[]) {}}
+    constructor(public requestId: Uuid, public groupId: Uuid, public payload: Partial<CommonProposal> & { id: Uuid }, public items?: Partial<CommonProposalItem>[]) {}}
 
   // Отправить на согласование по позиции
   export class Publish {
     static readonly type = '[Technical Commercial Proposals Backoffice] Publish';
 
-    constructor(public groupId: Uuid, public proposalsByPositions: CommonProposalByPosition[]) {}
+    constructor(public requestId: Uuid, public groupId: Uuid, public proposalsByPositions: CommonProposalByPosition[]) {}
   }
 
   // Создать из шаблона
