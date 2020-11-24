@@ -48,12 +48,12 @@ export class TechnicalCommercialProposalHelperService {
 
       switch (type) {
         case "price":
-          return prevPos.priceWithoutVat <= currPos.priceWithoutVat ? prev : curr;
+          return prevPos?.priceWithoutVat <= currPos?.priceWithoutVat ? prev : curr;
         case "date":
-          if (moment(prevPos.deliveryDate).isSame(currPos.deliveryDate)) {
-            return prevPos.priceWithoutVat <= currPos.priceWithoutVat ? prev : curr;
+          if (moment(prevPos?.deliveryDate).isSame(currPos?.deliveryDate)) {
+            return prevPos?.priceWithoutVat <= currPos?.priceWithoutVat ? prev : curr;
           } else {
-            return moment(prevPos.deliveryDate).isBefore(currPos.deliveryDate) ? prev : curr;
+            return moment(prevPos?.deliveryDate).isBefore(currPos?.deliveryDate) ? prev : curr;
           }
       }
     }, null);
