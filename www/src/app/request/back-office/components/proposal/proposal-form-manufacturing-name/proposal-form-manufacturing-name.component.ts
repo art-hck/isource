@@ -3,16 +3,16 @@ import { AbstractControl, ControlValueAccessor, FormArray, FormBuilder, FormGrou
 import { ProposalSource } from "../../../enum/proposal-source";
 
 @Component({
-  selector: 'app-request-proposal-form-manufacturer',
-  templateUrl: './proposal-form-manufacturer.component.html',
-  styleUrls: ['proposal-form-manufacturer.component.scss'],
+  selector: 'app-request-proposal-form-manufacturing-name',
+  templateUrl: './proposal-form-manufacturing-name.component.html',
+  styleUrls: ['proposal-form-manufacturing-name.component.scss'],
   providers: [{
     provide: NG_VALUE_ACCESSOR,
-    useExisting: forwardRef(() => ProposalFormManufacturerComponent),
+    useExisting: forwardRef(() => ProposalFormManufacturingNameComponent),
     multi: true
   }]
 })
-export class ProposalFormManufacturerComponent implements OnInit, ControlValueAccessor {
+export class ProposalFormManufacturingNameComponent implements OnInit, ControlValueAccessor {
   @Output() cancel = new EventEmitter();
   @Input() disabledFn: (item) => boolean;
   @Input() showManufacturer = true;
