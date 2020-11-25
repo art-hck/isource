@@ -84,10 +84,10 @@ export class TechnicalCommercialProposalComponent implements OnChanges, OnDestro
       this.chooseBy$.pipe(
         tap(type => {
           this.getNotReviewedPositionsByProposals(this.proposals).forEach((item) => {
-            const proposalsWithPosition = this.getAllProposalsWithPosition(item);
             const position = this.getPosition(item);
+            const proposalsWithPosition = this.getAllProposalsWithPosition(item, position);
             const proposalToCheck = this.helper.chooseBy(type, position, proposalsWithPosition);
-            const proposalPositionToCheck = this.getTcpPositionByPositionAndProposal(position, proposalToCheck);
+            const proposalPositionToCheck = this.getPositionByPositionAndProposal(position, proposalToCheck);
 
             (this.form.get('positions') as FormArray).controls?.map(
               (control) => {
@@ -143,8 +143,8 @@ export class TechnicalCommercialProposalComponent implements OnChanges, OnDestro
   /**
    * Имея в распоряжении позицию и ткп-предложение, получаем из последней ткп-позицию
    */
-  getTcpPositionByPositionAndProposal(position, proposal): TechnicalCommercialProposalPosition {
-    return proposal?.positions?.find(pos => pos.position.id === position.position.id);
+  getPositionByPositionAndProposal(position: RequestPosition, proposal: CommonProposal): CommonProposalItem {
+    return proposal?.items?.find(item => item.requestPositionId === position.id);
   }
 
   getPosition = (proposal: CommonProposalItem): RequestPosition => {
@@ -167,9 +167,9 @@ export class TechnicalCommercialProposalComponent implements OnChanges, OnDestro
   /**
    * Получаем все ТКП, в которых участвует указанная позиция
    */
-  getAllProposalsWithPosition(proposalPosition: CommonProposalItem): CommonProposal[] {
+  getAllProposalsWithPosition(proposalPosition: CommonProposalItem, position: RequestPosition): CommonProposal[] {
     // Получаем все ТКП, в которых участвует указанная позиция
-    return this.proposals.filter(({ items }) => items.find(pos => pos.requestId === proposalPosition.requestPositionId));
+    return this.proposals?.filter(({ items }) => items.find(pos => pos.requestPositionId === position.id));
   }
 
   // Функция сбрасывает чекбоксы во всех ТКП у тех позиций, которые становятся отмечены в другом ТКП
