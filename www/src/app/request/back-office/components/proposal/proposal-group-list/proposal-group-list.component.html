@@ -171,6 +171,8 @@
       [action]="procedureModalPayload.action"
       [procedure]="procedureModalPayload.procedure"
       [procedureSource]="source"
+      [contragents]="contragentsWithTp"
+      (positionsSelected)="procedurePositionsSelected.emit($event)"
       (complete)="newProcedure.emit(); procedureModalPayload = null"
       (cancel)="procedureModalPayload = null"
     ></app-request-procedure-form>
