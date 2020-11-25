@@ -1,6 +1,6 @@
 <div class="price-info-block">
   <ng-container *ngIf="proposal.items.length; else positionsPriceInfo">
-    <div class="app-success-color" *ngIf="helper.isProposalQuantityValid(proposal, positions); else positionsInvalid">
+    <div class="app-success-color" *ngIf="helper.isProposalQuantityValid(proposal, positions, hasAnalogs); else positionsInvalid">
       <b>Предложены все позиции</b>
     </div>
     <ng-template #positionsInvalid>
