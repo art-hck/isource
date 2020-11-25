@@ -15,6 +15,7 @@ import { FeatureService } from "../../../../../core/services/feature.service";
 import { CommercialProposal } from "../../../../common/models/commercial-proposal";
 import { RequestPosition } from "../../../../common/models/request-position";
 import { ProposalSourceLabels } from "../../../../common/dictionaries/proposal-source-labels";
+import { ContragentShortInfo } from "../../../../../contragent/models/contragent-short-info";
 
 @Component({
   selector: 'app-common-proposal-group-list',
@@ -27,12 +28,14 @@ export class ProposalGroupListComponent {
   @Input() availablePositions: RequestPosition[];
   @Input() groups: ProposalGroup[];
   @Input() source = ProposalSource.COMMERCIAL_PROPOSAL;
+  @Input() contragentsWithTp: ContragentShortInfo[];
 
   @Output() createGroup = new EventEmitter<{ name: string, requestPositions: Uuid[] }>();
   @Output() filter = new EventEmitter<ProposalGroupFilter>();
   @Output() newProcedure = new EventEmitter();
   @Output() uploadTemplate = new EventEmitter<{ files: File[], groupName: string}>();
   @Output() downloadTemplate = new EventEmitter();
+  @Output() procedurePositionsSelected = new EventEmitter<Uuid[]>();
 
   requestId: Uuid;
   procedureModalPayload: ProcedureAction & { procedure?: Procedure };

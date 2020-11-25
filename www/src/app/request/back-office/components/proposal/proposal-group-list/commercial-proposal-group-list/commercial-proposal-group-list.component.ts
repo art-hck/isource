@@ -23,6 +23,7 @@ import UploadTemplate = CommercialProposalsActions.UploadTemplate;
 import FetchProcedures = CommercialProposalsActions.FetchProcedures;
 import RefreshProcedures = CommercialProposalsActions.RefreshProcedures;
 import DownloadTemplate = CommercialProposalsActions.DownloadTemplate;
+import { CommercialProposalsService } from "../../../../services/commercial-proposals.service";
 
 @Component({
   selector: 'app-commercial-proposal-group-list',
@@ -43,6 +44,11 @@ export class CommercialProposalGroupListComponent implements OnInit, OnDestroy {
     commercialProposalGroupName: [null, [Validators.required]],
     fileTemplate: [null, [Validators.required]]
   });
+  readonly procedurePositionsSelected$ = new Subject<Uuid[]>();
+  readonly contragentsWithTp$ = this.procedurePositionsSelected$.pipe(
+    withLatestFrom(this.route.params),
+    switchMap(([ids, { id }]) => this.commercialProposalsService.getContragentsWithTp(id, ids))
+  );
 
   readonly groups$: Observable<ProposalGroup[]> = this.route.params.pipe(
     tap(({ id }) => this.requestId = id),
@@ -81,7 +87,8 @@ export class CommercialProposalGroupListComponent implements OnInit, OnDestroy {
     private actions: Actions,
     public featureService: FeatureService,
     public store: Store,
-    public service: CommercialProposalGroupService
+    public service: CommercialProposalGroupService,
+    public commercialProposalsService: CommercialProposalsService,
   ) {}
 
   ngOnInit() {

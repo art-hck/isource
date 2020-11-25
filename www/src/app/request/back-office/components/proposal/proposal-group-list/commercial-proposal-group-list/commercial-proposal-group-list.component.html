@@ -5,10 +5,12 @@
     [groups]="groups"
     [source]="procedureSource"
     [request]="request"
+    [contragentsWithTp]="contragentsWithTp$ | async"
     (filter)="filter$.next($event)"
     (createGroup)="saveGroup($event)"
     (newProcedure)="store.dispatch(updateProcedures(request)); updateGroups()"
     (downloadTemplate)="store.dispatch(downloadTemplate(request))"
     (uploadTemplate)="uploadTemplate($event.groupName, $event.files)"
+    (procedurePositionsSelected)="procedurePositionsSelected$.next($event)"
   ></app-common-proposal-group-list>
 </ng-container>
