@@ -153,28 +153,34 @@
                     </ng-template>
                   </div>
                   <div class="app-col"></div>
-                  <div class="app-success-color app-bold" *ngIf="isReviewed(proposalsByPos)">
-                    <uxg-icon shape="app-check"></uxg-icon>
-                    <span>Выбран победитель</span>
-                  </div>
-                  <div class="app-ghost-color app-bold" *ngIf="isOnReview(proposalsByPos)">
-                    <uxg-icon shape="app-waiting"></uxg-icon>
-                    <span>На согласовании</span>
-                  </div>
-                  <div class="app-warning-color app-bold" *ngIf="isSentToEdit(proposalsByPos)">
-                    <uxg-icon shape="app-warning"></uxg-icon>
-                    <span>На доработке</span>
-                  </div>
-                  <div class="app-ghost-color app-bold" *ngIf="isDraft(proposalsByPos)">
-                    <uxg-icon shape="app-draft"></uxg-icon>
-                    <span>Черновик</span>
+                  <ng-container *ngIf="!isPositionOnApprove(proposalsByPos)">
+                    <div class="app-success-color app-bold" *ngIf="isReviewed(proposalsByPos)">
+                      <uxg-icon shape="app-check"></uxg-icon>
+                      <span>Выбран победитель</span>
+                    </div>
+                    <div class="app-ghost-color app-bold" *ngIf="isOnReview(proposalsByPos)">
+                      <uxg-icon shape="app-waiting"></uxg-icon>
+                      <span>На согласовании</span>
+                    </div>
+                    <div class="app-warning-color app-bold" *ngIf="isSentToEdit(proposalsByPos)">
+                      <uxg-icon shape="app-warning"></uxg-icon>
+                      <span>На доработке</span>
+                    </div>
+                    <div class="app-ghost-color app-bold" *ngIf="isDraft(proposalsByPos)">
+                      <uxg-icon shape="app-draft"></uxg-icon>
+                      <span>Черновик</span>
+                    </div>
+                  </ng-container>
+
+                  <div *ngIf="isPositionOnApprove(proposalsByPos)" class="app-ghost-color app-bold">
+                    <div title="Позиция была отредактирована и находится на согласовании заказчика, работа с предложениями недоступна">
+                      <uxg-icon shape="app-waiting"></uxg-icon>
+                      <span>Позиция отредактирована</span>
+                    </div>
                   </div>
                   <ng-container *ngIf="canRollback(proposalsByPos.position, rollbackDuration)">
-                    <button uxgButton primary type="button" [style.min-width.px]="135"
-                            (click)="rollback.emit(proposalsByPos.position)"
-                    >
-                      Отозвать <span
-                      class="cancel-timer"> {{ proposalsByPos.position.statusChangedDate | countdownTimer: rollbackDuration }} </span>
+                    <button uxgButton primary type="button" [style.min-width.px]="135" (click)="rollback.emit(proposalsByPos.position)">
+                      Отозвать <span class="cancel-timer"> {{ proposalsByPos.position.statusChangedDate | countdownTimer: rollbackDuration }} </span>
                     </button>
                   </ng-container>
                 </div>

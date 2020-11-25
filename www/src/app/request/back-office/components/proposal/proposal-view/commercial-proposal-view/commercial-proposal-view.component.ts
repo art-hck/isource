@@ -58,9 +58,9 @@ export class CommercialProposalViewComponent implements OnInit, OnDestroy {
 
   readonly destroy$ = new Subject();
   readonly procedurePositionsSelected$ = new Subject<Uuid[]>();
-  readonly contragentsWithTp$ = this.route.params.pipe(
-    withLatestFrom(this.procedurePositionsSelected$),
-    switchMap(([{ id }, ids]) => this.service.getContragentsWithTp(id, ids))
+  readonly contragentsWithTp$ = this.procedurePositionsSelected$.pipe(
+    withLatestFrom(this.route.params),
+    switchMap(([ids, { id }]) => this.service.getContragentsWithTp(id, ids))
   );
   readonly procedureSource = ProposalSource.COMMERCIAL_PROPOSAL;
   readonly downloadTemplate = (requestId: Uuid, groupId: Uuid) => new DownloadTemplate(requestId, groupId);
