@@ -23,6 +23,7 @@ import { ContragentRoleLabels } from "../../dictionaries/currency-labels";
 import { ContragentRole } from "../../enum/contragent-role";
 import { UsersGroup } from "../../../core/models/users-group";
 import { UsersGroupService } from "../../../core/services/users-group.service";
+import { UserInfoService } from "../../../user/service/user-info.service";
 
 @Component({
   selector: 'app-contragent-registration',
@@ -77,7 +78,8 @@ export class ContragentRegistrationComponent implements OnInit {
     protected route: ActivatedRoute,
     private getContragentService: ContragentService,
     private bc: UxgBreadcrumbsService,
-    protected router: Router
+    protected router: Router,
+    public user: UserInfoService,
   ) {
     this.configParty = {
       apiKey: appConfig.dadata.apiKey,
