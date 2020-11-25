@@ -29,8 +29,8 @@ export class ProposalHelperService {
     return proposals.length >= positions.length;
   }
 
-  isProposalQuantityValid(proposal: CommonProposal, positions: RequestPosition[]): boolean {
-    return proposal.items.length >= positions.length;
+  isProposalQuantityValid(proposal: CommonProposal, positions: RequestPosition[], hasAnalogs: boolean): boolean {
+    return proposal.items.filter(({isAnalog}) => isAnalog === hasAnalogs).length >= positions.length;
   }
 
   isQuantityPositionsValid(items: CommonProposalItem[], positions: RequestPosition[], hasAnalogs: boolean): boolean {
