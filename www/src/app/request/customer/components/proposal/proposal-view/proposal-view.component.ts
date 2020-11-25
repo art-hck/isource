@@ -180,7 +180,7 @@ export class ProposalViewComponent implements AfterViewInit, OnChanges, OnDestro
     public helper: ProposalHelperService,
   ) {}
 
-  ngOnChanges({proposalsSentToReview, proposalsReviewed, proposalsSendToEdit, stateStatus}: SimpleChanges) {
+  ngOnChanges({proposalsSentToReview, proposalsReviewed, proposalsSendToEdit}: SimpleChanges) {
     if (proposalsSentToReview || proposalsReviewed || proposalsSendToEdit) {
       this.cd.detectChanges();
     }
