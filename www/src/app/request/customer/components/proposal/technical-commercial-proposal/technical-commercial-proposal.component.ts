@@ -23,7 +23,6 @@ import {
 } from "../../../../common/models/common-proposal";
 import { RequestPosition } from "../../../../common/models/request-position";
 import { ProposalSource } from "../../../../back-office/enum/proposal-source";
-import { indentIconName } from "@clr/core/icon-shapes/shapes/indent";
 
 @Component({
   selector: "app-request-technical-commercial-proposal",
