@@ -192,8 +192,9 @@ export class ProposalViewComponent implements AfterViewInit, OnChanges, OnDestro
 
     this.proposalsOnReview.changes.pipe(
       tap(() => this.gridRows = this.proposalsOnReview.reduce((gridRows, c) => [...gridRows, ...c.gridRows], [])),
+      tap(() => this.cd.detectChanges()),
       takeUntil(this.destroy$)
-    ).subscribe(() => this.cd.detectChanges());
+    ).subscribe();
 
     // Для корректного автопереключения таба при загрузке страницы детектим изменения
     this.cd.detectChanges();

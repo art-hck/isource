@@ -21,11 +21,9 @@ export class UxgTabTitleComponent {
   @HostBinding('class.app-tabs-item-active')
   @Input() active = false;
   @HostBinding('attr.disabled')
-  @Input() set disabled(disabled: boolean | { disabled: boolean, emitEvent: boolean }) {
-    if (typeof disabled === "boolean") {
-      this._disabled = disabled;
-      this.disabledChanges.next(disabled);
-    }
+  @Input() set disabled(disabled: boolean) {
+    this._disabled = disabled;
+    this.disabledChanges.next(disabled);
   }
   @Output() toggle = new EventEmitter<boolean>();
   get disabled() { return this._disabled; }
