@@ -90,7 +90,20 @@ div.notification-card-header:before {
 }
 
 @each $status, $color in $statuses {
-  div[class*="status-#{$status}-badge"]:before {
-    border-color: $color;
+  div[class*="status-#{$status}-badge"] {
+    &:before {
+      border-color: $color;
+    }
+
+    // todo Будет убрано после реализации gpn_market-3191
+    &.TP-badge:before {
+      border-color: #fb6a9e;
+    }
+    &.CP-badge:before {
+      border-color: #f38b00;
+    }
+    &.TCP-badge:before {
+      border-color: #ee64e8;
+    }
   }
 }
