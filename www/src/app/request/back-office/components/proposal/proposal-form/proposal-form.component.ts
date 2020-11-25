@@ -19,7 +19,7 @@ import { ContragentService } from "../../../../../contragent/services/contragent
 import { shareReplay, takeUntil } from "rxjs/operators";
 import { TechnicalCommercialProposal } from "../../../../common/models/technical-commercial-proposal";
 import { Select, Store } from "@ngxs/store";
-import { proposalManufacturerValidator } from "../proposal-form-manufacturer/proposal-form-manufacturer.validator";
+import { proposalManufacturingNameValidator } from "../proposal-form-manufacturing-name/proposal-form-manufacturing-name.validator";
 import { TechnicalCommercialProposalState } from "../../../states/technical-commercial-proposal.state";
 import { getCurrencySymbol } from "@angular/common";
 import { proposalParametersFormValidator } from "./proposal-parameters-form/proposal-parameters-form.validator";
@@ -34,6 +34,7 @@ import { Uuid } from "../../../../../cart/models/uuid";
 import { searchContragents } from "../../../../../shared/helpers/search";
 import { CommonProposal, CommonProposalItem } from "../../../../common/models/common-proposal";
 import { ProposalSource } from "../../../enum/proposal-source";
+import { proposalManufacturerValidator } from "./proposal-form-manufacturer.validator";
 
 @Component({
   selector: 'app-common-proposal-form',
@@ -61,7 +62,7 @@ export class ProposalFormComponent implements OnInit, OnDestroy, OnChanges {
   readonly currencies = Object.entries(CurrencyLabels);
   readonly getCurrencySymbol = getCurrencySymbol;
   readonly parametersValidator = proposalParametersFormValidator;
-  readonly manufacturerValidator = proposalManufacturerValidator;
+  readonly manufacturingNameValidator = proposalManufacturingNameValidator;
   readonly searchContragents = searchContragents;
   readonly destroy$ = new Subject();
 
@@ -74,11 +75,11 @@ export class ProposalFormComponent implements OnInit, OnDestroy, OnChanges {
   proposalPositions: { position: RequestPosition }[];
 
   get isManufacturingNamePristine(): boolean {
-    return this.form.get("positions").value.filter(pos => pos.manufacturer).length === 0;
+    return this.form.get("positions").value.filter(pos => pos.manufacturingName).length === 0;
   }
 
   get isManufacturerPristine(): boolean {
-    return this.form.get("positions").value.filter(pos => pos.manufacturingName).length === 0;
+    return this.form.get("positions").value.filter(pos => pos.manufacturer).length === 0;
   }
 
   constructor(
@@ -103,7 +104,7 @@ export class ProposalFormComponent implements OnInit, OnDestroy, OnChanges {
       documents: [this.proposal?.documents ?? []],
       positions: [
         this.proposal?.items.map(item => ({ position: this.availablePositions.find(({ id }) => id === item.requestPositionId), ...item })) ?? []
-        , [Validators.required, this.parametersValidator, this.manufacturerValidator]],
+        , [Validators.required, this.parametersValidator, this.manufacturingNameValidator]],
       files: [[]],
       deliveryType: [this.proposal?.deliveryType || this.deliveryType.INCLUDED],
       deliveryAdditionalTerms: [this.proposal?.deliveryAdditionalTerms || ''],
@@ -144,13 +145,13 @@ export class ProposalFormComponent implements OnInit, OnDestroy, OnChanges {
         this.form.get('positions').setValidators(
           docsCount > 0 && this.isManufacturingNamePristine ?
             [Validators.required] :
-            [Validators.required, proposalManufacturerValidator, proposalParametersFormValidator]
+            [Validators.required, proposalManufacturingNameValidator, proposalParametersFormValidator]
         );
       } else {
         this.form.get('positions').setValidators(
           docsCount > 0 && this.isManufacturerPristine ?
             [Validators.required] :
-            [Validators.required, proposalParametersFormValidator]
+            [Validators.required, proposalManufacturerValidator, proposalParametersFormValidator]
         );
       }
 
