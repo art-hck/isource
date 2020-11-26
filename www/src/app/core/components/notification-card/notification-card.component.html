@@ -16,8 +16,8 @@
         <b class="app-col">Вы назначены исполнителем по позициям заявки</b>
       </div>
 
-      <div class="app-row notification-card-request app-secondary-color app-ellipsis">
-        № {{ notification?.body?.requestNumber || notification?.body?.rows[0]?.requestNumber }} | {{ notification?.body?.requestName }}
+      <div class="app-row notification-card-request app-secondary-color">
+        <div class="app-col app-ellipsis">№ {{ notification?.body?.requestNumber || notification?.body?.rows[0]?.requestNumber }} | {{ notification?.body?.requestName }}</div>
       </div>
 
       <div class="app-row" *ngFor="let position of notification?.body?.requestPositions.slice(0,2)">
@@ -31,8 +31,8 @@
         <b class="app-col">Поступила новая заявка</b>
       </div>
 
-      <div class="app-row notification-card-request app-secondary-color app-ellipsis">
-        № {{ notification?.body?.requestNumber || notification?.body?.rows[0]?.requestNumber }} | {{ notification?.body?.requestName }}
+      <div class="app-row notification-card-request app-secondary-color">
+        <div class="app-col app-ellipsis">№ {{ notification?.body?.requestNumber || notification?.body?.rows[0]?.requestNumber }} | {{ notification?.body?.requestName }}</div>
       </div>
 
       <div class="app-row">
@@ -46,8 +46,8 @@
         <b class="app-col">Добавлена новая позиция в заявку</b>
       </div>
 
-      <div class="app-row notification-card-request app-secondary-color app-ellipsis">
-        № {{notification?.body?.requestNumber}} | {{notification?.body?.requestName}}
+      <div class="app-row notification-card-request app-secondary-color">
+        <div class="app-col app-ellipsis">№ {{notification?.body?.requestNumber}} | {{notification?.body?.requestName}}</div>
       </div>
 
       <div class="app-row">
@@ -61,8 +61,8 @@
         <b class="app-col">Подтвердите редактирование позиции</b>
       </div>
 
-      <div class="app-row notification-card-request app-secondary-color app-ellipsis">
-        № {{notification?.body?.requestNumber}} | {{notification?.body?.requestName}}
+      <div class="app-row notification-card-request app-secondary-color">
+        <div class="app-col app-ellipsis">№ {{notification?.body?.requestNumber}} | {{notification?.body?.requestName}}</div>
       </div>
 
       <div class="app-row" *ngFor="let position of notification?.body?.requestPositions.slice(0,2)">
@@ -76,8 +76,8 @@
         <b class="app-col">Согласовано добавление новых позиций</b>
       </div>
 
-      <div class="app-row notification-card-request app-secondary-color app-ellipsis">
-        № {{notification?.body?.requestNumber}} | {{notification?.body?.requestName}}
+      <div class="app-row notification-card-request app-secondary-color">
+        <div class="app-col app-ellipsis">№ {{notification?.body?.requestNumber}} | {{notification?.body?.requestName}}</div>
       </div>
 
       <div class="app-row" *ngFor="let position of notification?.body?.requestPositions.slice(0,2)">
@@ -102,8 +102,8 @@
         </ng-container>
       </div>
 
-      <div class="app-row notification-card-request app-secondary-color app-ellipsis">
-        № {{ notification?.body?.requestNumber }} | {{ notification?.body?.requestName }}
+      <div class="app-row notification-card-request app-secondary-color">
+        <div class="app-col app-ellipsis">№ {{ notification?.body?.requestNumber }} | {{ notification?.body?.requestName }}</div>
       </div>
 
       <div class="app-row" *ngFor="let position of notification?.body?.items.slice(0,2)">
@@ -119,7 +119,7 @@
         </div>
 
         <div class="app-row notification-card-request app-secondary-color app-ellipsis">
-          № {{ row.requestNumber }} | {{ row.requestName }}
+          <div class="app-col app-ellipsis">№ {{ row.requestNumber }} | {{ row.requestName }}</div>
         </div>
 
         <div class="app-row">
@@ -146,8 +146,8 @@
         </ng-container>
       </div>
 
-      <div class="app-row notification-card-request app-secondary-color app-ellipsis">
-        № {{ notification?.body?.requestNumber }} | {{ notification?.body?.requestName }}
+      <div class="app-row notification-card-request app-secondary-color">
+        <div class="app-col app-ellipsis">№ {{ notification?.body?.requestNumber }} | {{ notification?.body?.requestName }}</div>
       </div>
 
       <div class="app-row" *ngFor="let position of notification?.body?.requestPositions.slice(0,2)">
@@ -169,8 +169,8 @@
         </ng-container>
       </div>
 
-      <div class="app-row notification-card-request app-secondary-color app-ellipsis">
-        № {{ notification?.body?.requestNumber }} | {{ notification?.body?.requestName }}
+      <div class="app-row notification-card-request app-secondary-color">
+        <div class="app-col app-ellipsis">№ {{ notification?.body?.requestNumber }} | {{ notification?.body?.requestName }}</div>
       </div>
 
       <div class="app-row" *ngFor="let position of notification?.body?.requestPositions.slice(0,2)">
@@ -188,8 +188,8 @@
         </ng-container>
       </div>
 
-      <div class="app-row notification-card-request app-secondary-color app-ellipsis">
-        № {{ notification?.body?.requestNumber }} | {{ notification?.body?.requestName }}
+      <div class="app-row notification-card-request app-secondary-color">
+        <div class="app-col app-ellipsis">№ {{ notification?.body?.requestNumber }} | {{ notification?.body?.requestName }}</div>
       </div>
 
       <div class="app-row" *ngFor="let position of notification?.body?.requestPositions.slice(0,2)">
