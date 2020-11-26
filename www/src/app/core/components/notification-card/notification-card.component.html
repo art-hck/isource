@@ -130,8 +130,9 @@
 
     <!-- Согласование/отклонение/отправка на доработку позиций ТП -->
     <ng-container *ngSwitchCase="'REQUEST_TP_POSITION_CHANGE_STATUS'">
-      <div class="app-row notification-card-header app-primary-color"
-           [ngSwitch]="notification?.body?.requestTpPositionStatus" [ngClass]="'status-' + notification?.body?.requestTpPositionStatus + '-badge'">
+      <div class="app-row notification-card-header app-primary-color TP-badge"
+           [ngSwitch]="notification?.body?.requestTpPositionStatus"
+           [ngClass]="'status-' + notification?.body?.requestTpPositionStatus + '-badge'">
         <ng-container *ngSwitchCase="'ACCEPTED'">
           <b class="app-col">Согласованы позиции технического предложения</b>
         </ng-container>
@@ -156,8 +157,9 @@
 
     <!-- Согласование/отклонение/отправка на доработку позиций ТКП -->
     <ng-container *ngSwitchCase="'REQUEST_TCP_POSITION_CHANGE_STATUS'">
-      <div class="app-row notification-card-header app-primary-color"
-           [ngSwitch]="notification?.body?.requestTcpPositionStatus" [ngClass]="'status-' + notification?.body?.requestTcpPositionStatus + '-badge'">
+      <div class="app-row notification-card-header app-primary-color TCP-badge"
+           [ngSwitch]="notification?.body?.requestTcpPositionStatus"
+           [ngClass]="'status-' + notification?.body?.requestTcpPositionStatus + '-badge'">
         <ng-container *ngSwitchCase="'SENT_TO_EDIT'">
           <b class="app-col">Отправлены на доработку позиции технико-коммерч. предложения</b>
         </ng-container>
@@ -178,7 +180,7 @@
 
     <!-- Отправка на доработку позиций КП -->
     <ng-container *ngSwitchCase="'REQUEST_OFFER_POSITION_CHANGE_STATUS'">
-      <div class="app-row notification-card-header app-primary-color"
+      <div class="app-row notification-card-header app-primary-color CP-badge"
            [ngSwitch]="notification?.body?.requestOfferPositionStatus"
            [ngClass]="'status-' + notification?.body?.requestOfferPositionStatus + '-badge'">
         <ng-container *ngSwitchCase="'SENT_TO_EDIT'">
