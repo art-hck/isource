@@ -1,0 +1,17 @@
+FROM node:10.13-alpine
+
+WORKDIR /var/www
+
+RUN npm install --global @angular/cli@9.1.1
+
+ADD www/package*.json ./
+
+RUN echo "10.15.1.100 nexus.etpgpb.ru" >> /etc/hosts && \
+    npm config set registry "https://nexus.etpgpb.ru/repository/npm-group" && \
+    npm ci --no-optional --no-audit --prefer-offline
+
+ADD www ./
+
+RUN npm run build -- --prod
+
+CMD [ "ng", "serve", "--host", "0.0.0.0" ]
