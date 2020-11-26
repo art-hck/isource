@@ -4,7 +4,7 @@ import { Request } from "../../../common/models/request";
 import { RequestPositionList } from "../../../common/models/request-position-list";
 import { RequestService } from "../../services/request.service";
 import { ActivatedRoute } from "@angular/router";
-import { switchMap, takeUntil, tap } from "rxjs/operators";
+import { filter, switchMap, takeUntil, tap } from "rxjs/operators";
 import { Title } from "@angular/platform-browser";
 import { UxgBreadcrumbsService } from "uxg";
 import { Actions, ofActionCompleted, Select, Store } from "@ngxs/store";
@@ -56,6 +56,7 @@ export class RequestComponent implements OnInit, OnDestroy {
       tap(({id}) => this.requestId = id),
       switchMap(({id}) => this.store.dispatch([new Fetch(id), new FetchPositions(id)])),
       switchMap(() => this.request$),
+      filter(request => !!request),
       tap(({id, name}) => this.title.setTitle(name || "Заявка №" + id)),
       tap(({id, number}) => this.bc.breadcrumbs = [
         { label: "Заявки", link: "/requests/backoffice" },
