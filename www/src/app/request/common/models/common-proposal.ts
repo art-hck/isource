@@ -43,6 +43,7 @@ export class CommonProposalItem {
   quantity: number;
   requestId: Uuid;
   requestPositionId: Uuid;
+  source?: "MANUAL"|"ETP";
   standard: string;
   status: CommonProposalItemStatus;
   supplierContragent: ContragentShortInfo;

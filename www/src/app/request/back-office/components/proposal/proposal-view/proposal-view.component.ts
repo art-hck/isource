@@ -105,7 +105,13 @@ export class ProposalViewComponent implements OnDestroy, AfterViewInit, OnChange
         checked: false,
         positions: this.fb.array(this.proposalsByPositions.map(item => {
           const form = this.fb.group({ checked: false, item });
-          if (this.isReviewed(item) || this.isOnReview(item) || this.isPositionOnApprove(item) || item.items.length === 0) {
+          if (
+            this.isReviewed(item) ||
+            this.isOnReview(item) ||
+            this.isPositionOnApprove(item) ||
+            !this.isPositionOnProposalsPreparation(item) ||
+            item.items.length === 0
+          ) {
             form.get("checked").disable();
           }
           return form;
@@ -137,6 +143,7 @@ export class ProposalViewComponent implements OnDestroy, AfterViewInit, OnChange
   isOnReview = ({ items }: CommonProposalByPosition) => items.every(p => ['SENT_TO_REVIEW'].includes(p.status)) && items.length > 0;
   isSentToEdit = ({ items }: CommonProposalByPosition) => items.some(p => ['SENT_TO_EDIT'].includes(p.status)) && items.length > 0;
   isDraft = ({ items }: CommonProposalByPosition): boolean => items.every(p => ['NEW'].includes(p.status));
+  isPositionOnProposalsPreparation = ({ position }: CommonProposalByPosition): boolean => position.status === 'PROPOSALS_PREPARATION';
   isPositionOnApprove = ({ position }: CommonProposalByPosition): boolean => position.status === 'ON_CUSTOMER_APPROVAL';
   allPositionsOnReview = () => this.proposalsByPositions.length > 0 && this.proposalsByPositions.every(
     item => (this.isOnReview(item) || this.isReviewed(item)) && item.items.length > 0
