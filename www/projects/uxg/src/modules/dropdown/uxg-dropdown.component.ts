@@ -142,7 +142,9 @@ export class UxgDropdownComponent implements AfterViewInit, OnDestroy, AfterView
       });
   }
 
-  toggle() {
+  toggle(e) {
+    e.stopPropagation();
+
     if (!this.is(this.disabled)) {
       this.isHidden = !this.isHidden;
     }
