@@ -15,6 +15,7 @@ export const AppConfig: GpnmarketConfigInterface = {
       'odt', 'ott', 'oth', 'odm', 'ods', 'ots', // OpenOffice
       'rtf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', // MS Office
       'bmp', 'jpg', 'gif', 'png', 'svg', // Картинки
+      'zip', '7z', 'tar', 'rar', 'gz', // архивы
       'pdf', 'txt', '7z', 'cdw', 'sld', 'drw', '3ds', 'ma', 'obj' // Чертежи и прочее
     ],
     deniedExtensions: []
