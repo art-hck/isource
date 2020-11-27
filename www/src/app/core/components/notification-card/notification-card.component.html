@@ -78,10 +78,10 @@
       </div>
     </ng-container>
 
-    <!-- Согласовано добавление новых позиций -->
+    <!-- Согласовано добавление/редактирование новых позиций -->
     <ng-container *ngSwitchCase="'REQUEST_POSITION_APPROVE'">
       <div class="app-row notification-card-header app-primary-color" [ngClass]="'status-' + notification?.body?.type + '-badge'">
-        <b class="app-col">Согласовано добавление новых позиций</b>
+        <b class="app-col">{{ notification?.title }}</b>
       </div>
 
       <div class="app-row notification-card-request app-secondary-color">
