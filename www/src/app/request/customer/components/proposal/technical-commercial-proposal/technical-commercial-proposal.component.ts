@@ -41,6 +41,7 @@ export class TechnicalCommercialProposalComponent implements OnChanges, OnDestro
   @Input() isLoading: boolean;
   @Input() source: ProposalSource;
   @Input() proposals: CommonProposal[];
+  @Input() proposalsByPos: CommonProposalByPosition[];
   @Input() positions: RequestPosition[];
   @Output() positionSelected = new EventEmitter();
   @Output() approve = new EventEmitter();
@@ -79,19 +80,12 @@ export class TechnicalCommercialProposalComponent implements OnChanges, OnDestro
     if (this.chooseBy$) {
       this.chooseBy$.pipe(
         tap(type => {
-          this.getNotReviewedPositionsByProposals(this.proposals).forEach((item) => {
-            const position = this.getPosition(item);
-            const proposalsWithPosition = this.getAllProposalsWithPosition(item, position);
-            const proposalToCheck = this.helper.chooseBy(type, position, proposalsWithPosition);
-            const proposalPositionToCheck = this.getPositionByPositionAndProposal(position, proposalToCheck);
-
-            (this.form.get('positions') as FormArray).controls?.map(
-              (control) => {
-                if (proposalPositionToCheck && !control.disabled && control.value.position.id === proposalPositionToCheck.id) {
-                  control.get('checked').setValue(true);
-                }
-              }
-            );
+          (this.form.get('positions') as FormArray).controls?.forEach(c => c.get('checked').setValue(false));
+          this.proposalsByPos.forEach(proposalByPos => {
+            const item = this.helper.chooseBy(type, proposalByPos.position, proposalByPos.items);
+            (this.form.get('positions') as FormArray).controls
+            ?.filter(c => item && !c.disabled && c.value.position.id === item.id)
+            ?.forEach(c => c.get('checked').setValue(true));
           });
         }),
         takeUntil(this.destroy$)
@@ -136,36 +130,8 @@ export class TechnicalCommercialProposalComponent implements OnChanges, OnDestro
     ).subscribe();
   }
 
-  /**
-   * Имея в распоряжении позицию и ткп-предложение, получаем из последней ткп-позицию
-   */
-  getPositionByPositionAndProposal(position: RequestPosition, proposal: CommonProposal): CommonProposalItem {
-    return proposal?.items?.find(item => item.requestPositionId === position.id);
-  }
-
   getPosition = (proposal: CommonProposalItem): RequestPosition => {
     return this.positions.find(({ id }) => id === proposal.requestPositionId);
-  }
-
-  /**
-   * Получаем список всех позиций, по которым созданы ТКП
-   */
-  getNotReviewedPositionsByProposals(proposals: CommonProposal[]): CommonProposalItem[] {
-    const flatProposalsPositions = proposals?.map(({items}) => items) ?? [];
-
-    const allPositionsByProposals = flatProposalsPositions.reduce((acc, curr) => [...acc, ...curr], [])
-      .filter((position, index, array) =>
-      !array.filter((v, i) => position.requestPositionId === v.requestPositionId && i < index).length);
-
-    return allPositionsByProposals.filter(position => !this.isProposalPositionReviewed(position));
-  }
-
-  /**
-   * Получаем все ТКП, в которых участвует указанная позиция
-   */
-  getAllProposalsWithPosition(proposalPosition: CommonProposalItem, position: RequestPosition): CommonProposal[] {
-    // Получаем все ТКП, в которых участвует указанная позиция
-    return this.proposals?.filter(({ items }) => items.find(pos => pos.requestPositionId === position.id));
   }
 
   // Функция сбрасывает чекбоксы во всех ТКП у тех позиций, которые становятся отмечены в другом ТКП
