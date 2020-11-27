@@ -110,6 +110,14 @@
         <ng-container *ngSwitchCase="'ON_CUSTOMER_APPROVAL'">
           <b class="app-col">Подтвердите создание позиций в заявке</b>
         </ng-container>
+
+        <ng-container *ngSwitchCase="'NOT_RELEVANT'">
+          <b class="app-col">Заявка отменена</b>
+        </ng-container>
+
+        <ng-container *ngSwitchDefault>
+          <b class="app-col">{{ notification?.title }}</b>
+        </ng-container>
       </div>
 
       <div class="app-row notification-card-request app-secondary-color">
