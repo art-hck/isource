@@ -1,7 +1,7 @@
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Inject, Input, OnChanges, OnDestroy, Output, QueryList, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
 import { Subject } from "rxjs";
 import { Request } from "../../../../common/models/request";
-import { takeUntil, tap } from "rxjs/operators";
+import { startWith, takeUntil, tap } from "rxjs/operators";
 import { Uuid } from "../../../../../cart/models/uuid";
 import { UxgRadioItemComponent, UxgTabTitleComponent } from "uxg";
 import { StateStatus } from "../../../../common/models/state-status";
@@ -191,6 +191,7 @@ export class ProposalViewComponent implements AfterViewInit, OnChanges, OnDestro
     footerEl.parentElement.insertBefore(this.proposalsFooterRef.nativeElement, footerEl);
 
     this.proposalsOnReview.changes.pipe(
+      startWith(this.proposalsOnReview),
       tap(() => this.gridRows = this.proposalsOnReview.reduce((gridRows, c) => [...gridRows, ...c.gridRows], [])),
       tap(() => this.cd.detectChanges()),
       takeUntil(this.destroy$)
