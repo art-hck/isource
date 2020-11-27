@@ -1,21 +1,17 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, Output, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { Uuid } from "../../../../../cart/models/uuid";
 import { Select, Store } from "@ngxs/store";
-import { TechnicalCommercialProposals } from "../../../actions/technical-commercial-proposal.actions";
 import { getCurrencySymbol } from "@angular/common";
 import { Observable, Subject } from "rxjs";
 import { UxgModalComponent } from "uxg";
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
 import { filter, finalize, takeUntil, tap } from "rxjs/operators";
 import { TechnicalCommercialProposalHelperService } from "../../../../common/services/technical-commercial-proposal-helper.service";
-import { TechnicalCommercialProposal } from "../../../../common/models/technical-commercial-proposal";
 import { TechnicalCommercialProposalPosition } from "../../../../common/models/technical-commercial-proposal-position";
 import { Position } from "../../../../../shared/components/grid/position";
 import { TechnicalCommercialProposalPositionStatus } from "../../../../common/enum/technical-commercial-proposal-position-status";
-import { TechnicalCommercialProposalByPosition } from "../../../../common/models/technical-commercial-proposal-by-position";
 import { TechnicalCommercialProposalState } from "../../../states/technical-commercial-proposal.state";
 import { StateStatus } from "../../../../common/models/state-status";
-import Review = TechnicalCommercialProposals.Review;
 import {
   CommonProposal,
   CommonProposalByPosition,
@@ -175,11 +171,11 @@ export class TechnicalCommercialProposalComponent implements OnChanges, OnDestro
   // Функция сбрасывает чекбоксы во всех ТКП у тех позиций, которые становятся отмечены в другом ТКП
   refreshPositionsSelectedState(i, checkedProposalPositions: CommonProposalItem[]): void {
     if (this.technicalCommercialProposalIndex !== i) {
-      const checkedPositionsIds = checkedProposalPositions.map(({id}) => id);
+      const checkedPositionsIds = checkedProposalPositions.map(({requestPositionId}) => requestPositionId);
 
       (this.form.get('positions') as FormArray).controls?.forEach(
         (control) => {
-          const index = checkedPositionsIds.indexOf(control.value.id);
+          const index = checkedPositionsIds.indexOf(control.value.position.requestPositionId);
 
           if (index !== -1 && control.get('checked').value === true) {
             control.get('checked').setValue(false);
