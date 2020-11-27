@@ -91,6 +91,10 @@
       display: flex;
       align-items: flex-end;
 
+      &-body {
+        overflow: hidden;
+      }
+
       &-own {
         background: uxg($theme, color-list-hover);
       }
