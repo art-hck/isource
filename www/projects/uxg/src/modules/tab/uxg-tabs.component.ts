@@ -37,11 +37,14 @@ export class UxgTabsComponent implements AfterViewInit, OnDestroy {
 
     this.tabTitleList.changes.pipe(
       startWith<QueryList<UxgTabTitleComponent>>(this.tabTitleList),
-      flatMap((tabs: QueryList<UxgTabTitleComponent>) => tabs.map(tab => tab.disabledChanges.pipe(filter(Boolean), mapTo(tab)))),
+      flatMap((tabs: QueryList<UxgTabTitleComponent>) => tabs.map(tab => tab.disabledChanges.pipe(mapTo(tab)))),
       mergeAll(),
-      filter(tab => this.activeTab === tab),
+      filter(() => this.activeTab.disabled),
       takeUntil(this.destroy$)
-    ).subscribe(() => setTimeout(() => this.tabTitleList.find(item => item.disabled === false)?.activate()));
+    ).subscribe(() => {
+        this.tabTitleList.find(item => item.disabled === false)?.activate();
+        this.cd.detectChanges();
+    });
 
     fromEvent(window, 'resize')
       .pipe(debounceTime(150), takeUntil(this.destroy$))

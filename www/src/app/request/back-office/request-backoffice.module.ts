@@ -9,39 +9,44 @@ import { RequestComponent } from './components/request/request.component';
 import { PositionComponent } from "./components/position/position.component";
 import { RequestService } from "./services/request.service";
 import { TechnicalProposalsService } from "./services/technical-proposals.service";
-import { TechnicalProposalListComponent } from './components/technical-proposal-list/technical-proposal-list.component';
-import { TechnicalProposalFormComponent } from './components/technical-proposal-form/technical-proposal-form.component';
-import { ProposalFormManufacturerComponent } from './components/proposal-form-manufacturer/proposal-form-manufacturer.component';
-import { ProcedureFormComponent } from './components/procedure-form/procedure-form.component';
-import { ProcedureFormPropertiesComponent } from './components/procedure-form/procedure-form-properties/procedure-form-properties.component';
-import { ProcedureFormDocumentsComponent } from "./components/procedure-form/procedure-form-documents/procedure-form-documents.component";
-import { CommercialProposalFormComponent } from './components/commercial-proposal-form/commercial-proposal-form.component';
-import { TechnicalProposalComponent } from "./components/technical-proposal/technical-proposal.component";
+import { TechnicalProposalListComponent } from './components/proposal/technical-proposal-list/technical-proposal-list.component';
+import { TechnicalProposalFormComponent } from './components/proposal/technical-proposal-form/technical-proposal-form.component';
+import { ProposalFormManufacturingNameComponent } from './components/proposal/proposal-form-manufacturing-name/proposal-form-manufacturing-name.component';
+import { ProcedureFormComponent } from './components/procedure/procedure-form/procedure-form.component';
+import { ProcedureFormPropertiesComponent } from './components/procedure/procedure-form/procedure-form-properties/procedure-form-properties.component';
+import { ProcedureFormDocumentsComponent } from "./components/procedure/procedure-form/procedure-form-documents/procedure-form-documents.component";
+import { TechnicalProposalComponent } from "./components/proposal/technical-proposal/technical-proposal.component";
 import { PositionService } from "./services/position.service";
-import { TechnicalCommercialProposalListComponent } from './components/technical-commercial-proposal-list/technical-commercial-proposal-list.component';
-import { TechnicalCommercialProposalFormComponent } from "./components/technical-commercial-proposal-form/technical-commercial-proposal-form.component";
+import { TechnicalCommercialProposalViewComponent } from './components/proposal/proposal-view/technical-commercial-proposal-view/technical-commercial-proposal-view.component';
+import { ProposalFormComponent } from "./components/proposal/proposal-form/proposal-form.component";
 import { TechnicalCommercialProposalService } from "./services/technical-commercial-proposal.service";
 import { NgxsModule } from "@ngxs/store";
 import { TechnicalCommercialProposalState } from "./states/technical-commercial-proposal.state";
-import { TechnicalCommercialProposalComponent } from "./components/technical-commercial-proposal/technical-commercial-proposal.component";
-import { TechnicalCommercialProposalParametersFormComponent } from './components/technical-commercial-proposal-form/technical-commercial-proposal-parameters-form/technical-commercial-proposal-parameters-form.component';
+import { ProposalComponent } from "./components/proposal/proposal/proposal.component";
+import { ProposalParametersFormComponent } from './components/proposal/proposal-form/proposal-parameters-form/proposal-parameters-form.component';
 import { RequestState } from "./states/request.state";
 import { RequestListState } from "./states/request-list.state";
 import { RequestListComponent } from './components/request-list/request-list.component';
 import { CommercialProposalState } from "./states/commercial-proposal.state";
-import { TechnicalCommercialProposalContragentFormComponent } from "./components/technical-commercial-proposal-list/contragent-form/contragent-form.component";
-import { TechnicalCommercialProposalPositionFormComponent } from "./components/technical-commercial-proposal-list/proposal-position-form/proposal-position-form.component";
-import { ProcedureComponent } from './components/procedure/procedure.component';
-import { ProcedureGridComponent } from './components/procedure-grid/procedure-grid.component';
-import { CommercialProposalViewComponent } from "./components/commercial-proposal-view/commercial-proposal-view.component";
-import { ProcedureProlongateComponent } from "./components/procedure-prolongate/procedure-prolongate.component";
-import { ProcedureViewComponent } from './components/procedure-view/procedure-view.component';
-import { TechnicalCommercialProposalGroupViewComponent } from './components/technical-commercial-proposal-group-view/technical-commercial-proposal-group-view.component';
-import { TechnicalCommercialProposalGroupFormComponent } from './components/technical-commercial-proposal-group-form/technical-commercial-proposal-group-form.component';
+import { ProposalContragentFormComponent } from "./components/proposal/proposal-contragent-form/proposal-contragent-form.component";
+import { ProcedureComponent } from './components/procedure/procedure/procedure.component';
+import { ProcedureGridComponent } from './components/procedure/procedure-grid/procedure-grid.component';
+import { CommercialProposalViewComponent } from "./components/proposal/proposal-view/commercial-proposal-view/commercial-proposal-view.component";
+import { ProcedureProlongateComponent } from "./components/procedure/procedure-prolongate/procedure-prolongate.component";
+import { ProcedureViewComponent } from './components/procedure/procedure-view/procedure-view.component';
+import { TechnicalCommercialProposalGroupListComponent } from './components/proposal/proposal-group-list/technical-commercial-proposal-group-list/technical-commercial-proposal-group-list.component';
 import { ContractFormComponent } from "./components/contract-form/contract-form.component";
 import { ContractListComponent } from "./components/contract-list/contract-list.component";
 import { ContractState } from "./states/contract.state";
 import { ContractService } from "./services/contract.service";
+import { CommercialProposalGroupListComponent } from "./components/proposal/proposal-group-list/commercial-proposal-group-list/commercial-proposal-group-list.component";
+import { ProposalGroupFormComponent } from "./components/proposal/proposal-group-form/proposal-group-form.component";
+import { ProposalGroupListComponent } from './components/proposal/proposal-group-list/proposal-group-list.component';
+import { ProposalItemFormComponent } from './components/proposal/proposal-item-form/proposal-item-form.component';
+import { TechnicalCommercialProposalGroupService } from "./services/technical-commercial-proposal-group.service";
+import { ProposalViewComponent } from "./components/proposal/proposal-view/proposal-view.component";
+import { CommercialProposalGroupService } from "./services/commercial-proposal-group.service";
+import { CommercialProposalsDeprecatedService } from "./services/commercial-proposals-deprecated.service";
 
 @NgModule({
   declarations: [
@@ -49,28 +54,30 @@ import { ContractService } from "./services/contract.service";
     PositionComponent,
     TechnicalProposalListComponent,
     TechnicalProposalFormComponent,
-    ProposalFormManufacturerComponent,
+    ProposalFormManufacturingNameComponent,
     ProcedureFormComponent,
     ProcedureFormPropertiesComponent,
     ProcedureFormDocumentsComponent,
     ProcedureProlongateComponent,
     TechnicalProposalComponent,
     CommercialProposalViewComponent,
-    CommercialProposalFormComponent,
-    TechnicalCommercialProposalComponent,
-    TechnicalCommercialProposalListComponent,
-    TechnicalCommercialProposalFormComponent,
-    TechnicalCommercialProposalParametersFormComponent,
+    CommercialProposalGroupListComponent,
+    ProposalGroupFormComponent,
+    ProposalViewComponent,
+    ProposalComponent,
+    TechnicalCommercialProposalViewComponent,
+    ProposalFormComponent,
+    ProposalParametersFormComponent,
     RequestListComponent,
-    TechnicalCommercialProposalContragentFormComponent,
-    TechnicalCommercialProposalPositionFormComponent,
+    ProposalContragentFormComponent,
     ProcedureComponent,
     ProcedureGridComponent,
     ProcedureViewComponent,
-    TechnicalCommercialProposalGroupViewComponent,
-    TechnicalCommercialProposalGroupFormComponent,
+    TechnicalCommercialProposalGroupListComponent,
     ContractFormComponent,
-    ContractListComponent
+    ContractListComponent,
+    ProposalGroupListComponent,
+    ProposalItemFormComponent,
   ],
   imports: [
     RequestBackofficeRoutingModule,
@@ -85,16 +92,20 @@ import { ContractService } from "./services/contract.service";
   ],
   exports: [
     ProcedureFormComponent,
-    ProcedureProlongateComponent
-  ],
+    ProcedureProlongateComponent,
+    ProposalComponent
+    ],
   providers: [
     DesignDocumentationService,
     CommercialProposalsService,
+    CommercialProposalsDeprecatedService,
+    CommercialProposalGroupService,
     ProcedureService,
     RequestService,
     TechnicalProposalsService,
     PositionService,
     TechnicalCommercialProposalService,
+    TechnicalCommercialProposalGroupService,
     ContractService
   ]
 })

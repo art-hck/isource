@@ -15,8 +15,10 @@ import { AvailableFilters } from "../../models/available-filters";
 import { RequestListComponent as CommonRequestListComponent } from "../../../common/components/request-list/request-list.component";
 import { RequestsListSort } from "../../../common/models/requests-list/requests-list-sort";
 import { FormBuilder } from "@angular/forms";
+import { saveAs } from 'file-saver/src/FileSaver';
 import Fetch = RequestListActions.Fetch;
 import FetchAvailableFilters = RequestListActions.FetchAvailableFilters;
+import { RequestService } from "../../services/request.service";
 
 @Component({
   templateUrl: './request-list.component.html',
@@ -48,6 +50,7 @@ export class RequestListComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private fb: FormBuilder,
     public store: Store,
+    public requestService: RequestService
   ) {}
 
   ngOnInit() {
@@ -73,6 +76,11 @@ export class RequestListComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  downloadRequests() {
+    this.requestService.downloadRequests()
+      .subscribe(data => saveAs(data, `Registry.xlsx`));
   }
 
 }

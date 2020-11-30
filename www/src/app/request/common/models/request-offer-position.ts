@@ -32,4 +32,6 @@ export class RequestOfferPosition {
   documents?: RequestDocument[];
   technicalProposals?: RequestDocument[];
   status: CommercialProposalsStatus;
+  manufacturer: string;
+  standard: string;
 }

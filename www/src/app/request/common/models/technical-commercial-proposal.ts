@@ -4,10 +4,10 @@ import { TechnicalCommercialProposalStatus } from "../enum/technical-commercial-
 import { TechnicalCommercialProposalStatusLabel } from "../enum/technical-commercial-proposal-status-label";
 import { RequestDocument } from "./request-document";
 import { TechnicalCommercialProposalPosition } from "./technical-commercial-proposal-position";
-import { PositionCurrency } from "../enum/position-currency";
-import { CurrencyItem } from "../../../core/models/currency-item";
+import { ProposalWithCommonInfo } from "./proposal-with-common-info";
+import { DeliveryType } from "../../back-office/enum/delivery-type";
 
-export class TechnicalCommercialProposal {
+export class TechnicalCommercialProposal implements ProposalWithCommonInfo {
   id: Uuid;
   supplier: ContragentShortInfo;
   name: string;
@@ -16,7 +16,8 @@ export class TechnicalCommercialProposal {
   createdDate: string;
   status: TechnicalCommercialProposalStatus;
   statusLabel: TechnicalCommercialProposalStatusLabel;
-  deliveryType: 'INCLUDED' | 'NOT_INCLUDED' | 'PICKUP';
+  deliveryType: DeliveryType;
+  deliveryTypeLabel: string;
   deliveryAdditionalTerms: string;
   warrantyConditions: string;
   deliveryPrice: number;

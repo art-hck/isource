@@ -2,10 +2,11 @@ import { AfterViewChecked, AfterViewInit, ChangeDetectionStrategy, ChangeDetecto
 import { timer } from "rxjs";
 import { GridSupplier } from "../grid-supplier";
 import { ContragentShortInfo } from "../../../../contragent/models/contragent-short-info";
-import { TechnicalCommercialProposal } from "../../../../request/common/models/technical-commercial-proposal";
-import { TechnicalCommercialProposalByPosition } from "../../../../request/common/models/technical-commercial-proposal-by-position";
 import { UserInfoService } from "../../../../user/service/user-info.service";
 import { FormControl } from "@angular/forms";
+import { ProposalWithCommonInfo } from "../../../../request/common/models/proposal-with-common-info";
+import { RequestPosition } from "../../../../request/common/models/request-position";
+import { Uuid } from "../../../../cart/models/uuid";
 
 @Component({
   selector: 'app-grid-contragents',
@@ -23,12 +24,12 @@ export class GridContragentsComponent implements AfterViewInit, OnChanges, After
   @Input() gridRows: ElementRef[] | QueryList<ElementRef>;
   @Input() suppliers: GridSupplier[];
   @Input() positionCell: boolean;
-  @Input() proposals: TechnicalCommercialProposal[];
-  @Input() proposalsByPos: TechnicalCommercialProposalByPosition[];
+  @Input() positions: RequestPosition[];
+  @Input() proposals: ProposalWithCommonInfo[];
   @Input() showParams = false;
   @Output() scrollUpdated = new EventEmitter<{ canScrollRight: boolean, canScrollLeft: boolean }>();
-  @Output() editTechnicalCommercialProposal = new EventEmitter<TechnicalCommercialProposal>();
-  @Output() selectProposalBySupplier = new EventEmitter<TechnicalCommercialProposal>();
+  @Output() edit = new EventEmitter();
+  @Output() selectBySupplier = new EventEmitter();
   @Output() openCommonParams = new EventEmitter();
   canScrollLeft: boolean;
   canScrollRight: boolean;
@@ -89,5 +90,13 @@ export class GridContragentsComponent implements AfterViewInit, OnChanges, After
     return suppliers.some(supplier => supplier.hasAnalogs);
   }
 
-  getProposalBySupplier = ({ id }: ContragentShortInfo, proposals: TechnicalCommercialProposal[]) => proposals.find(({supplier}) => supplier.id === id);
+  getUniqueSupplierIndex(supplierId: Uuid): number {
+    const uniqueProposalsSuppliers = this.suppliers.filter((supplier, index, array) =>
+      !array.filter((v, i) => JSON.stringify(supplier.id) === JSON.stringify(v.id) && i < index).length);
+    const uniqueProposalsSupplierIds = uniqueProposalsSuppliers.map(supplier => supplier.id);
+
+    return uniqueProposalsSupplierIds.indexOf(supplierId);
+  }
+
+  getProposalBySupplier = ({ id }: ContragentShortInfo, proposals: ProposalWithCommonInfo[]) => proposals.find((p) => (p.supplier?.id ?? p.supplierId) === id);
 }

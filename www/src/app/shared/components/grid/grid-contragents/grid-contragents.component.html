@@ -3,7 +3,7 @@
     <div *ngIf="positionCell" class="app-col grid-cell app-bold">Наименование позиции</div>
     <div class="app-col grid-cell app-ellipsis app-row app-flex-column app-flex-nowrap"
          *ngFor="let supplier of suppliers; index as i; trackBy: trackBySupplierId">
-      <app-contragent-info-link class="app-bold" hiddenName="Поставщик №{{i + 1}}" [contragent]="supplier">
+      <app-contragent-info-link class="app-bold app-ellipsis" hiddenName="Поставщик №{{ getUniqueSupplierIndex(supplier.id) + 1}}" [contragent]="supplier">
       </app-contragent-info-link>
       <div class="app-ghost-color" *ngIf="supplier.hasAnalogs">аналоги</div>
     </div>
@@ -25,13 +25,14 @@
           <app-grid-common-parameters
             #gridCommonParams
             class="app-col"
-            [proposal]="getProposalBySupplier(supplier, proposals)"
-            [proposalsByPos]="proposalsByPos"
+            *ngIf="getProposalBySupplier(supplier, proposals) as proposal"
+            [proposal]="proposal"
             [hasAnalogs]="supplier.hasAnalogs"
-            (close)="showCommonParams = false"
-            (openEditModal)="editTechnicalCommercialProposal.emit($event)"
             [showDocs]="showDocsControl.value"
-            (selectAll)="selectProposalBySupplier.emit($event)"
+            [positions]="positions"
+            (close)="showCommonParams = false"
+            (openEditModal)="edit.emit(proposal)"
+            (selectAll)="selectBySupplier.emit(proposal)"
           ></app-grid-common-parameters>
           <div class="common-footer">
             <uxg-switcher *ngIf="showCommonParams && i === 0" label="Показать документы предложений" labelAlign="right" [formControl]="showDocsControl">

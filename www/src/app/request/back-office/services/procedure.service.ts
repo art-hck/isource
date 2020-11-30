@@ -7,7 +7,7 @@ import { Request } from "../../common/models/request";
 import { ProcedureCreateResponse } from '../models/procedure-create-response';
 import { Procedure } from "../models/procedure";
 import { FormDataService } from "../../../shared/services/form-data.service";
-import { ProcedureSource } from "../enum/procedure-source";
+import { ProposalSource } from "../enum/proposal-source";
 import { Okpd2 } from "../../../shared/models/okpd2";
 
 @Injectable()
@@ -18,9 +18,12 @@ export class ProcedureService {
     private formDataService: FormDataService
   ) {}
 
-  list(requestId: Uuid, source: ProcedureSource, requestTechnicalCommercialProposalGroupId?: Uuid): Observable<Procedure[]> {
+  list(requestId: Uuid, source: ProposalSource, groupId?: Uuid): Observable<Procedure[]> {
     const url = `requests/backoffice/${requestId}/procedures`;
-    return this.api.post<Procedure[]>(url, { source, requestTechnicalCommercialProposalGroupId });
+    const body = { source };
+    body[source === ProposalSource.COMMERCIAL_PROPOSAL ? 'requestCommercialProposalGroupId' : 'requestTechnicalCommercialProposalGroupId'] = groupId;
+
+    return this.api.post<Procedure[]>(url, body);
   }
 
   create(requestId: Uuid, body: Procedure): Observable<ProcedureCreateResponse> {
@@ -48,7 +51,9 @@ export class ProcedureService {
     return this.api.post<Procedure[]>(url, { positionId });
   }
 
-  getOkpd2(searchText: string) {
-    return this.api.post<Okpd2[]>(`okpd`, { searchText });
+  prolongateProcedureEndDate(requestId, procedureId, dateEndRegistration, dateSummingUp) {
+    const url = `requests/backoffice/${ requestId }/procedures/${ procedureId }/prolong`;
+
+    return this.api.post(url, { dateEndRegistration, dateSummingUp });
   }
 }

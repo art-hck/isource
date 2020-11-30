@@ -52,7 +52,8 @@
       right: -8px;
       text-align: center;
       top: -8px;
-      width: 16px;
+      min-width: 10px;
+      padding: 0 3px;
     }
   }
 
@@ -72,5 +73,18 @@
       > div { max-width: 130px}
       img { margin-right: 8px }
     }
+  }
+}
+
+app-notification-popup {
+  position: absolute;
+  right: 10px;
+  top: 64px;
+  overflow: hidden;
+  padding: 8px 18px 18px 18px;
+  margin-top: 10px;
+
+  &:hover {
+    z-index: 100;
   }
 }

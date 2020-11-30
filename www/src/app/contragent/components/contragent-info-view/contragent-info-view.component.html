@@ -8,8 +8,13 @@
       <span *ngIf="downloading" class="spinner spinner-sm"></span>
     </div>
 
-    <button uxgButton secondary iconText *ngIf="user.isSeniorBackoffice()"
-            (click)="router.navigateByUrl('/contragents/' + contragent.id + '/edit')">
+    <button
+      uxgButton
+      secondary
+      iconText
+      *ngIf="(user.isBackOffice() && user.isInGroup(contragent.usersGroupId)) || user.isAdmin()"
+      (click)="router.navigateByUrl('/contragents/' + contragent.id + '/edit')"
+    >
       <uxg-icon shape="app-pen"></uxg-icon>
       Редактировать контрагента
     </button>
@@ -24,7 +29,7 @@
     <div class="app-col">
       <uxg-tabs class="app-tabs-border">
         <uxg-tab-title #contragentInfoTab [active]="true">Информация о контрагенте</uxg-tab-title>
-        <uxg-tab-title #employeesTab [hidden]="user.isCustomer()">Сотрудники</uxg-tab-title>
+        <uxg-tab-title #employeesTab [hidden]="user.isCustomer() || (user.isBackOffice() && !user.isInGroup(contragent.usersGroupId))">Сотрудники</uxg-tab-title>
       </uxg-tabs>
 
       <ng-container *uxgTab="contragentInfoTab">

@@ -16,10 +16,9 @@
   </div>
 
   <div class="app-row">
-    <div class="app-col">
+    <div class="app-col agreements-col">
       <app-agreements [agreements]="agreements"></app-agreements>
     </div>
-
 
     <app-filter [formGroup]="form" [count]="totalCount$| async" [skipKeys]="['actions']" (filter)="filter$.next($event)">
       <app-filter-section label="Заявка">

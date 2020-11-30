@@ -7,13 +7,15 @@ export const AppConfig: GpnmarketConfigInterface = {
     api: 'api/',
     ws: 'ws://localhost:3000',
     apiChat: 'https://chat-test.isource.ru/',
-    wsChat: 'wss://chat-test.isource.ru',
+    wsChat: 'wss://chat-test.isource.ru/ws',
+    wsNotifications: 'wss://notifications-test.isource.ru/ws',
   },
   files: {
     allowedExtensions: [
       'odt', 'ott', 'oth', 'odm', 'ods', 'ots', // OpenOffice
       'rtf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', // MS Office
       'bmp', 'jpg', 'gif', 'png', 'svg', // Картинки
+      'zip', '7z', 'tar', 'rar', 'gz', // архивы
       'pdf', 'txt', '7z', 'cdw', 'sld', 'drw', '3ds', 'ma', 'obj' // Чертежи и прочее
     ],
     deniedExtensions: []
@@ -29,8 +31,9 @@ export const AppConfig: GpnmarketConfigInterface = {
     },
     loadUserProfileAtStartUp: false,
     bearerExcludedUrls: [
+      'https://test-chats.ezgg.site/',
       'https://suggestions.dadata.ru/',
-      'https://test-chats.ezgg.site/'
+      'https://notifications-test.isource.ru/',
     ],
   },
   dadata: {
@@ -53,11 +56,17 @@ export const AppConfig: GpnmarketConfigInterface = {
     url: 'https://demo2.etpgpb.ru/#nsi/priceorder/directCustomer/orderId/'
   },
   profile: {
-      url: 'https://profile.ezgg.site/api/v1/'
-    },
+    url: 'https://profile.ezgg.site/api/v1/'
+  },
   intelplan: {
-      url: 'https://intelplan.gpb.isale.pro/api/v1/'
-      },
+    url: 'https://intelplan.gpb.isale.pro/api/v1/'
+  },
+  element: {
+    url: 'https://element-test.isource.ru/'
+  },
+  notifications: {
+    url: 'https://notifications-test.isource.ru/api/v1/notifications'
+  },
   instructions: {
     forCustomer: "assets/Краткая инструкция (внешние клиенты).pdf",
     forBackoffice: "assets/Краткая инструкция БО (по внешним клиентам).pdf",

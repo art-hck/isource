@@ -15,6 +15,12 @@
       <button type="button" class="close" (click)="hideNeedUpdate = true"><uxg-icon shape="app-cross"></uxg-icon></button>
     </div>
 
+    <div class="app-row app-justify-content-end" *ngIf="user.isBackOffice()">
+      <div class="app-col-auto">
+        <button uxgButton clear link class="app-link" (click)="downloadRequests.emit()">Создать выгрузку в Excel <uxg-icon shape="app-download"></uxg-icon></button>
+      </div>
+    </div>
+
     <div class="app-row app-align-items-center">
       <uxg-tabs class="app-col">
         <uxg-tab-title #inProgressTab [active]="true"

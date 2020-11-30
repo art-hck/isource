@@ -1,20 +1,20 @@
 <div class="price-info-block">
-  <ng-container *ngIf="proposal.positions.length; else positionsPriceInfo">
-    <div class="app-success-color" *ngIf="helper.isPositionsValid(proposal.positions, proposalsByPos); else positionsInvalid">
+  <ng-container *ngIf="proposal.items.length; else positionsPriceInfo">
+    <div class="app-success-color" *ngIf="helper.isProposalQuantityValid(proposal, positions, hasAnalogs); else positionsInvalid">
       <b>Предложены все позиции</b>
     </div>
     <ng-template #positionsInvalid>
       <div class="app-error-color"><b>Предложены не все позиции</b></div>
     </ng-template>
 
-    <div class="app-success-color" *ngIf="helper.isQuantityPositionsValid(proposal.positions, proposal, hasAnalogs); else quantityInvalid">
+    <div class="app-success-color" *ngIf="helper.isQuantityPositionsValid(proposal.items, positions, hasAnalogs); else quantityInvalid">
       <b>Все позиции в нужном количестве</b>
     </div>
     <ng-template #quantityInvalid>
       <div class="app-error-color"><b>Не все поз-ии в нужном количестве</b></div>
     </ng-template>
 
-    <div class="app-success-color" *ngIf="helper.isDatePositionsValid(proposal.positions, proposal, hasAnalogs); else dateInvalid">
+    <div class="app-success-color" *ngIf="helper.isDatePositionsValid(proposal.items, positions, hasAnalogs); else dateInvalid">
       <b>Сроки укладываются в заданные</b>
     </div>
     <ng-template #dateInvalid>
@@ -23,9 +23,9 @@
 
     <br/>
 
-    <div class="app-ghost-color">Общая сумма поставки с НДС</div>
+    <div class="app-ghost-color">Общая сумма поставки без НДС</div>
     <h2 class="price">
-      <span>{{helper.getSummaryPrice(proposal.positions, hasAnalogs) | number: "1.0-2"}} </span>
+      <span>{{helper.getSummaryPrice(proposal.items, hasAnalogs) | number: "1.0-2"}} </span>
       <span class="app-ghost-color">{{getCurrencySymbol('RUB', 'narrow') }}</span>
     </h2>
   </ng-container>
@@ -36,7 +36,7 @@
       <div>Сроки не указаны</div>
       <br/>
       <br/>
-      <div>Общая сумма поставки с НДС</div>
+      <div>Общая сумма поставки без НДС</div>
       <h2 class="price"><b>0 {{ getCurrencySymbol('RUB', 'narrow') }}</b></h2>
     </div>
   </ng-template>
@@ -50,7 +50,8 @@
 
     <ng-container *ngIf="proposal.deliveryType !== 'PICKUP'">
       <div class="app-ghost-color">Стоимость доставки</div>
-      <div class="info-value">{{proposal.deliveryType === 'INCLUDED' ? 'Включена в стоимость' : proposal.deliveryPrice + ' ' + proposal.deliveryCurrency}}</div>
+      <div class="info-value" *ngIf="proposal.deliveryType === 'INCLUDED'">Включена в стоимость</div>
+      <div class="info-value" *ngIf="proposal.deliveryType !== 'INCLUDED'">{{ proposal.deliveryPrice }} {{proposal.deliveryCurrency}}</div>
     </ng-container>
 
     <ng-container *ngIf="proposal.deliveryAdditionalTerms">

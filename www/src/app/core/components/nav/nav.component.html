@@ -20,6 +20,17 @@
       <app-chat-notification></app-chat-notification>
     </div>
 
+    <!-- Уведомления -->
+    <div class="app-menu-icon">
+      <button uxgButton clear (click)="openNotificationsModal();">
+        <div class="app-ghost-color"><uxg-icon shape="app-ring" size="24"></uxg-icon></div>
+
+        <small class="counter" *ngIf="unreadNotificationsCount$ | async as notificationsCount">
+          {{ notificationsCount }}
+        </small>
+      </button>
+    </div>
+
     <!-- Корзина -->
     <ng-container *ngIf="featureService.authorize('cart')">
       <a class="app-menu-icon" routerLink="cart" routerLinkActive="active" *ngIf="cartStoreService.getCount() > 0">
@@ -49,3 +60,8 @@
     </div>
   </div>
 </nav>
+
+<ng-container *ngIf="!document.body.classList.contains('notifications-modal-open')">
+  <app-notification-popup #notificationPopupComponent [view]="'popup'"></app-notification-popup>
+</ng-container>
+

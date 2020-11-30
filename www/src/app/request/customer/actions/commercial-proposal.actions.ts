@@ -1,25 +1,24 @@
 import { Uuid } from "../../../cart/models/uuid";
-import { CommercialProposalReviewBody } from "../../common/models/commercial-proposal-review-body";
+import { RequestPosition } from "../../common/models/request-position";
+import { CommonProposalItem } from "../../common/models/common-proposal";
 
 export namespace CommercialProposals {
-  // Получить список КП
+  // Получить список
   export class Fetch {
     static readonly type = '[Commercial Proposals Customer] Fetch';
-    update = false;
-    constructor(public requestId: Uuid) {}
+    constructor(public requestId: Uuid, public groupId: Uuid) {}
   }
 
-  // Обновить список КП
-  export class Update implements Fetch {
-    static readonly type = '[Commercial Proposals Customer] Update';
-    update = true;
-
-    constructor(public requestId: Uuid) {}
-  }
-
-  // Рассмотреть КП по позиции
+  // Рассмотреть предложения
   export class Review {
     static readonly type = '[Commercial Proposals Customer] Review';
-    constructor(public requestId: Uuid, public body: CommercialProposalReviewBody) {}
+    constructor(public requestId: Uuid, public proposalItems: CommonProposalItem[], public positions: RequestPosition[]) {}
+  }
+
+  // Скачать аналитическую справку
+  export class DownloadAnalyticalReport {
+    static readonly type = '[Commercial Proposals Customer] DownloadAnalyticalReport';
+
+    constructor(public requestId: Uuid, public groupId: Uuid) {}
   }
 }

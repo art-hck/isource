@@ -19,7 +19,7 @@
 
   <div class="app-col action">
     <button uxgButton secondary iconText
-            *ngIf="userInfoService.isSeniorBackoffice()"
+            *ngIf="userInfoService.isBackOffice() || userInfoService.isAdmin()"
             (click)="router.navigateByUrl('contragents/create')">
       <uxg-icon size="16" shape="app-plus"></uxg-icon>
       <span>Новый контрагент</span>

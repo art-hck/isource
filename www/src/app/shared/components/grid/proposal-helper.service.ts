@@ -2,10 +2,10 @@ import { Injectable } from "@angular/core";
 import * as moment from "moment";
 import { Position } from "./position";
 import { Proposal } from "./proposal";
-import { RequestPosition } from "../../../request/common/models/request-position";
-import { TechnicalCommercialProposal } from "../../../request/common/models/technical-commercial-proposal";
 import { TechnicalCommercialProposalByPosition } from "../../../request/common/models/technical-commercial-proposal-by-position";
 import { TechnicalCommercialProposalPosition } from "../../../request/common/models/technical-commercial-proposal-position";
+import { CommonProposal, CommonProposalItem } from "../../../request/common/models/common-proposal";
+import { RequestPosition } from "../../../request/common/models/request-position";
 
 @Injectable({
   providedIn: "root"
@@ -29,21 +29,32 @@ export class ProposalHelperService {
     return proposals.length >= positions.length;
   }
 
-  isQuantityPositionsValid(positions: TechnicalCommercialProposalPosition[], proposal: TechnicalCommercialProposal, hasAnalogs: boolean): boolean {
-    const filteredProposals = positions.filter(position => position.isAnalog === hasAnalogs);
-
-    return filteredProposals.every(({position, quantity}) => position.quantity === quantity);
+  isProposalQuantityValid(proposal: CommonProposal, positions: RequestPosition[], hasAnalogs: boolean): boolean {
+    return proposal.items.filter(({isAnalog}) => isAnalog === hasAnalogs).length >= positions.length;
   }
 
-  isDatePositionsValid(positions: TechnicalCommercialProposalPosition[], proposal: TechnicalCommercialProposal, hasAnalogs: boolean): boolean {
-    const filteredProposals = positions.filter(position => position.isAnalog === hasAnalogs);
+  isQuantityPositionsValid(items: CommonProposalItem[], positions: RequestPosition[], hasAnalogs: boolean): boolean {
+    const filteredProposals = items.filter(position => position.isAnalog === hasAnalogs);
+
+    return filteredProposals.every(({ quantity, requestPositionId }) => {
+      const position = positions.find(p => p.id === requestPositionId);
+      return position.quantity === quantity;
+    });
+  }
+
+  isDatePositionsValid(items: CommonProposalItem[], positions: RequestPosition[], hasAnalogs: boolean): boolean {
+    const filteredProposals = items.filter(position => position.isAnalog === hasAnalogs);
 
     return filteredProposals.every(
-      position => moment(position.deliveryDate).isSameOrBefore(moment(position.position.deliveryDate))
-        || position.position.isDeliveryDateAsap);
+      (item) => {
+        const position = positions.find(p => p.id === item.requestPositionId);
+
+        return moment(item.deliveryDate).isSameOrBefore(moment(position.deliveryDate))
+        || position.isDeliveryDateAsap;
+      });
   }
 
-  getSummaryPrice(positions: TechnicalCommercialProposalPosition[], hasAnalogs: boolean) {
+  getSummaryPrice(positions: CommonProposalItem[], hasAnalogs: boolean) {
     return positions
       .map(position => position.isAnalog === hasAnalogs ? position.priceWithoutVat * position.quantity : 0)
       .reduce((sum, priceWithoutVat) => sum + priceWithoutVat, 0);

@@ -8,7 +8,6 @@ import { Store } from "@ngxs/store";
 import { Observable, Subject } from "rxjs";
 import { EmployeeSettings } from "../../models/employee-settings";
 import { Uuid } from "../../../cart/models/uuid";
-import { FormBuilder, FormGroup } from "@angular/forms";
 import { takeUntil } from "rxjs/operators";
 
 @Component({
@@ -20,31 +19,20 @@ import { takeUntil } from "rxjs/operators";
 export class EmployeeListComponent implements OnChanges, OnDestroy {
   @Input() employees: EmployeeItem[];
   @Input() userInfo$: Observable<EmployeeSettings>;
-  @Output() edit = new EventEmitter<{ internalAvailable: boolean, externalAvailable: boolean, userId: Uuid }>();
   @Output() getUserInfo = new EventEmitter<Uuid>();
 
   editedEmployee: EmployeeItem;
   sendingActivationLink = false;
-  public form: FormGroup;
   readonly destroy$ = new Subject();
 
   constructor(
     public userInfoService: UserInfoService,
     protected employeeService: EmployeeService,
     public router: Router,
-    private store: Store,
-    private fb: FormBuilder
+    private store: Store
   ) { }
 
   ngOnChanges() {
-      this.userInfo$?.pipe(takeUntil(this.destroy$)).subscribe(
-        (data) => {
-          this.form = this.fb.group({
-            internalAvailable: data.isInternalAvailable,
-            externalAvailable: data.isExternalAvailable
-          });
-        }
-      );
   }
 
   openEditModal(ev, userId) {
@@ -58,15 +46,6 @@ export class EmployeeListComponent implements OnChanges, OnDestroy {
     ev.stopPropagation();
 
     window.open('mailto:' + email);
-  }
-
-  editSettings(userId: Uuid) {
-    const settings = {
-      internalAvailable: this.form.get("internalAvailable").value,
-      externalAvailable: this.form.get("externalAvailable").value,
-      userId
-    };
-    this.edit.emit(settings);
   }
 
   resendActivationLink(ev, userId): void {

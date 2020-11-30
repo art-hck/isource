@@ -5,6 +5,7 @@ import { WebsocketService } from './services/websocket.service';
 import { WsChatService } from "./services/ws-chat.service";
 import { WsConfig } from "./models/ws-config";
 import { config } from "./services/ws-config-token";
+import { WsNotificationsService } from "./services/ws-notifications.service";
 
 @NgModule({
     imports: [
@@ -12,7 +13,8 @@ import { config } from "./services/ws-config-token";
     ],
     providers: [
         WebsocketService,
-        WsChatService
+        WsChatService,
+        WsNotificationsService
     ]
 })
 export class WebsocketModule {

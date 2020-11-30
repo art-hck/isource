@@ -1,36 +1,37 @@
 import { Action, Selector, State, StateContext } from "@ngxs/store";
-import { switchMap, tap } from "rxjs/operators";
+import { CommercialProposalsService } from "../services/commercial-proposals.service";
+import { delayWhen, switchMap, tap } from "rxjs/operators";
+import { CommercialProposalsActions } from "../actions/commercial-proposal.actions";
+import { patch, updateItem } from "@ngxs/store/operators";
 import { StateStatus } from "../../common/models/state-status";
 import { Injectable } from "@angular/core";
 import { RequestPosition } from "../../common/models/request-position";
-import { Uuid } from "../../../cart/models/uuid";
 import { saveAs } from 'file-saver/src/FileSaver';
-import { CommercialProposal } from "../../common/models/commercial-proposal";
-import { CommercialProposalsService } from "../services/commercial-proposals.service";
-import { CommercialProposalsActions } from "../actions/commercial-proposal.actions";
-import { ContragentList } from "../../../contragent/models/contragent-list";
-import { insertItem, patch, updateItem } from "@ngxs/store/operators";
 import { Procedure } from "../models/procedure";
-import { ProcedureSource } from "../enum/procedure-source";
 import { ProcedureService } from "../services/procedure.service";
-import { ToastActions } from "../../../shared/actions/toast.actions";
-import DownloadAnalyticalReport = CommercialProposalsActions.DownloadAnalyticalReport;
+import { ProposalSource } from "../enum/proposal-source";
+import { CommonProposal, CommonProposalByPosition } from "../../common/models/common-proposal";
+import { insertOrUpdateProposals } from "../../../shared/state-operators/insert-or-update-proposals";
+import { of } from "rxjs";
 import Fetch = CommercialProposalsActions.Fetch;
-import DownloadTemplate = CommercialProposalsActions.DownloadTemplate;
-import UploadTemplate = CommercialProposalsActions.UploadTemplate;
-import Refresh = CommercialProposalsActions.Refresh;
-import PublishPositions = CommercialProposalsActions.PublishPositions;
+import FetchAvailablePositions = CommercialProposalsActions.FetchAvailablePositions;
 import FetchProcedures = CommercialProposalsActions.FetchProcedures;
 import RefreshProcedures = CommercialProposalsActions.RefreshProcedures;
-import AddSupplier = CommercialProposalsActions.AddSupplier;
-import SaveProposal = CommercialProposalsActions.SaveProposal;
+import Create = CommercialProposalsActions.Create;
+import Update = CommercialProposalsActions.Update;
+import UpdateItems = CommercialProposalsActions.UpdateItems;
+import DownloadAnalyticalReport = CommercialProposalsActions.DownloadAnalyticalReport;
+import DownloadTemplate = CommercialProposalsActions.DownloadTemplate;
+import UploadTemplate = CommercialProposalsActions.UploadTemplate;
 import Rollback = CommercialProposalsActions.Rollback;
+import Publish = CommercialProposalsActions.Publish;
 
 export interface CommercialProposalStateModel {
-  positions: RequestPosition[];
-  suppliers: ContragentList[];
-  procedures: Procedure[];
+  proposals: CommonProposal[];
   status: StateStatus;
+  procedures: Procedure[];
+  positions: RequestPosition[];
+  availablePositions: RequestPosition[];
 }
 
 type Model = CommercialProposalStateModel;
@@ -38,113 +39,141 @@ type Context = StateContext<Model>;
 
 @State<Model>({
   name: 'BackofficeCommercialProposals',
-  defaults: { positions: null, suppliers: null, procedures: null, status: "pristine" }
+  defaults: { proposals: null, availablePositions: null, positions: null, procedures: null, status: "pristine" }
 })
 @Injectable()
 export class CommercialProposalState {
-  cache: { [requestId in Uuid]: CommercialProposal[] } = {};
 
-  constructor(
-    private rest: CommercialProposalsService,
-    private procedureService: ProcedureService,
-  ) {
+  constructor(private rest: CommercialProposalsService, private procedureService: ProcedureService) {
   }
 
-  @Selector() static positions({ positions }: Model) { return positions; }
-  @Selector() static suppliers({ suppliers }: Model) { return suppliers; }
-  @Selector() static procedures({ procedures }: Model) { return procedures; }
-  @Selector() static positionsLength({ positions }: Model) { return positions.length; }
+  @Selector() static proposals({ proposals }: Model) { return proposals; }
+  @Selector() static availablePositions({ availablePositions }: Model) { return availablePositions; }
   @Selector() static status({ status }: Model) { return status; }
+  @Selector() static procedures({ procedures }: Model) { return procedures; }
+  @Selector() static positions({ positions }: Model) { return positions; }
+  @Selector() static proposalsByPositions({ proposals, positions }: Model) {
+    // Перегруппировываем ТКП попозиционно, включаем позиции по которым еще не создано ни одного ТКП
+    return proposals.reduce((acc: CommonProposalByPosition[], proposal) => {
+      proposal.items.forEach(item => {
+        const proposalByPosition = acc.find(({ position: { id } }) => item.requestPositionId === id);
+        if (proposalByPosition) {
+          proposalByPosition.items.push(item);
+        } else {
+          const position = positions.find(({ id }) => item.requestPositionId === id);
+          acc.push({ position, items: [item] });
+        }
+      });
 
-  @Action([Fetch, Refresh])
-  fetch({ setState, dispatch }: Context, { update, requestId }: Fetch) {
-    if (update) {
-      setState(patch({ status: "updating" } as Model));
-    } else {
-      setState(patch({ positions: null, suppliers: null, status: "fetching" } as Model));
-    }
+      return acc;
+    }, positions?.map(position => ({ position, items: [] })) || []);
+  }
 
-    return this.rest.getOffers(requestId).pipe(
-      tap(({positions, suppliers}) => setState(patch({ positions, suppliers } as Model))),
-      switchMap(() => dispatch( update ? new RefreshProcedures(requestId) : new FetchProcedures(requestId))),
-      tap(() => setState(patch({ status: "received" } as Model))),
+  @Action(Fetch)
+  fetch({ setState, dispatch }: Context, { requestId, groupId }: Fetch) {
+    setState(patch<Model>({ proposals: null, status: "fetching" }));
+
+    return this.rest.list(requestId, groupId).pipe(
+      switchMap(({ proposals, positions }) => dispatch(new FetchProcedures(requestId, groupId)).pipe(
+        tap(() => setState(patch<Model>({ proposals, positions, status: "received" }))))
+      ),
+    );
+  }
+
+  @Action(FetchAvailablePositions)
+  fetchAvailablePositions({ setState }: Context, { requestId, groupId }: FetchAvailablePositions) {
+    setState(patch({ availablePositions: null }));
+
+    return this.rest.availablePositions(requestId, groupId).pipe(
+      tap(availablePositions => setState(patch({ availablePositions })))
     );
   }
 
   @Action([FetchProcedures, RefreshProcedures])
-  fetchProcedures({ setState }: Context, { update, requestId }: Fetch) {
-    if (update) {
-      setState(patch({ status: "updating" } as Model));
-    } else {
-      setState(patch({ procedures: null, status: "fetching" } as Model));
-    }
+  fetchProcedures({ setState }: Context, { requestId, groupId, update }: FetchProcedures) {
+    setState(patch<Model>(update ? { status: "updating" } : { procedures: null, status: "fetching" }));
 
-    return this.procedureService.list(requestId, ProcedureSource.COMMERCIAL_PROPOSAL).pipe(
-      tap(procedures => setState(patch({ procedures, status: "received" } as Model))),
+    return this.procedureService.list(requestId, ProposalSource.COMMERCIAL_PROPOSAL, groupId).pipe(
+      tap(procedures => setState(patch({ procedures }))),
+      tap(() => setState(patch<Model>(update ? { status: "received" } : {}))),
     );
   }
 
-  @Action(AddSupplier)
-  addSupplier({ setState, dispatch }: Context, { requestId, supplierId }: AddSupplier) {
-    setState(patch({ status: "updating" } as Model));
+  @Action(Create)
+  create({ setState, dispatch }: Context, { requestId, groupId, payload, items }: Create) {
+    setState(patch<Model>({ status: "updating" }));
 
-    return this.rest.addSupplier(requestId, supplierId).pipe(
-      tap(suppliers => setState(patch({suppliers, status: "received"} as Model)))
+    return this.rest.create(requestId, groupId, payload).pipe(
+      delayWhen(() => dispatch(new FetchAvailablePositions(requestId, groupId))),
+      tap(proposal => setState(insertOrUpdateProposals({ proposals: [proposal] }))),
+      switchMap(({ id }) => !!items?.length ? dispatch(new UpdateItems(id, items)) : of(null))
     );
   }
 
-  @Action(SaveProposal)
-  savedProposal({ setState, dispatch }: Context, { requestId, positionId, proposal }: SaveProposal) {
-    setState(patch({ status: "updating" } as Model));
-    return (proposal.id ? this.rest.editOffer(requestId, positionId, proposal) : this.rest.addOffer(requestId, positionId, proposal))
-      .pipe(tap(_proposal => setState(patch({
-        positions: updateItem(({ id }) => id === positionId, patch({
-          linkedOffers: proposal.id ? updateItem(({ id }) => id === proposal.id, _proposal) : insertItem(_proposal)
-        })),
-        status: "received" as StateStatus
-      }))));
-  }
+  @Action(Update)
+  update({ setState, dispatch }: Context, { requestId, groupId, payload, items }: Update) {
+    setState(patch<Model>({ status: "updating" }));
 
-  @Action(PublishPositions)
-  publishPositions({ setState, dispatch }: Context, { requestId, positions }: PublishPositions) {
-    setState(patch({ status: "updating" } as Model));
-    return this.rest.publishRequestOffers(requestId, positions).pipe(tap(() => dispatch(new Refresh(requestId))));
-  }
-
-  @Action(Rollback)
-  rollback({ setState, dispatch }: Context, { requestId, positionId }: Rollback) {
-    setState(patch({ status: "updating" } as Model));
-    return this.rest.rollback(requestId, positionId).pipe(
-      tap(position => setState(patch({
-        positions: updateItem(({id}) => positionId === id, position),
-        status: "received" as StateStatus
-      })))
+    return this.rest.update(payload).pipe(
+      delayWhen(() => dispatch(new FetchAvailablePositions(requestId, groupId))),
+      tap(proposal => setState(insertOrUpdateProposals({ proposals: [proposal] }))),
+      switchMap(({ id }) => !!items?.length ? dispatch(new UpdateItems(id, items)) : of(null))
     );
   }
 
-  @Action(DownloadAnalyticalReport)
-  downloadAnalyticalReport(ctx: Context, { requestId }: DownloadAnalyticalReport) {
-    return this.rest.downloadAnalyticalReport(requestId).pipe(
-      tap((data) => saveAs(data, `Аналитическая справка.xlsx`))
+  @Action(UpdateItems)
+  updateItems({ setState }: Context, { proposalId, payload }: UpdateItems) {
+    setState(patch<Model>({ status: "updating" }));
+
+    return this.rest.editItems(proposalId, payload).pipe(tap(items => setState(patch<Model>({
+      proposals: updateItem(p => p.id === proposalId, patch({ items })),
+      status: "received"
+    }))));
+  }
+
+  @Action(Publish)
+  publish({ setState, dispatch }: Context, { requestId, groupId, proposalsByPositions }: Publish) {
+    setState(patch<Model>({ status: "updating" }));
+
+    return this.rest.publish(groupId, proposalsByPositions.reduce((ids, { items }) => [...ids, ...items.map(({ id }) => id)], [])).pipe(
+      delayWhen(() => dispatch(new FetchAvailablePositions(requestId, groupId))),
+      tap(data => setState(insertOrUpdateProposals(data)))
     );
   }
 
   @Action(DownloadTemplate)
-  downloadTemplate(ctx: Context, { request }: DownloadTemplate) {
-    return this.rest.downloadTemplate(request).pipe(
-      tap((data) => saveAs(data, `Request${request.number}OffersTemplate.xlsx`))
-    );
+  downloadTemplate(ctx: Context, { requestId, groupId }: DownloadTemplate) {
+    return this.rest.downloadTemplate(requestId, groupId)
+      .pipe(tap(data => saveAs(data, `RequestTechnicalCommercialProposalsTemplate.xlsx`)));
   }
 
   @Action(UploadTemplate)
-  uploadTemplate({ setState, dispatch }: Context, { requestId, files }: UploadTemplate) {
-    setState(patch({ status: "updating" } as Model));
-    return this.rest.addOffersFromExcel(requestId, files).pipe(tap(
-        () => dispatch([
-          new Refresh(requestId),
-          new ToastActions.Success("Шаблон импортирован")
-        ]),
-        () => dispatch(new Refresh(requestId)))
+  uploadTemplate({ setState, dispatch }: Context, { requestId, groupId, files, groupName }: UploadTemplate) {
+    setState(patch<Model>({ status: "updating" }));
+
+    const uploadTemplate = this.rest.uploadTemplate(requestId, groupId, files).pipe(
+      delayWhen(() => dispatch(new FetchAvailablePositions(requestId, groupId))),
+      tap(data => setState(insertOrUpdateProposals(data)))
+    );
+
+    const uploadTemplateFromGroups = this.rest.uploadTemplateFromGroups(requestId, files, groupName);
+
+    return groupId ? uploadTemplate : uploadTemplateFromGroups;
+  }
+
+  @Action(DownloadAnalyticalReport)
+  downloadAnalyticalReport(ctx: Context, { requestId, groupId }: DownloadAnalyticalReport) {
+    return this.rest.downloadAnalyticalReport(requestId, groupId)
+      .pipe(tap((data) => saveAs(data, `Аналитическая справка.xlsx`)));
+  }
+
+  @Action(Rollback)
+  rollback({ setState, dispatch }: Context, { requestId, groupId, positionId }: Rollback) {
+    setState(patch<Model>({ status: "updating" }));
+
+    return this.rest.rollback(requestId, groupId, positionId).pipe(
+      delayWhen(() => dispatch(new FetchAvailablePositions(requestId, groupId))),
+      tap(data => setState(insertOrUpdateProposals(data)))
     );
   }
 }

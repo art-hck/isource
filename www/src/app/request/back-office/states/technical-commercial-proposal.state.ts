@@ -1,114 +1,89 @@
-import { TechnicalCommercialProposal } from "../../common/models/technical-commercial-proposal";
-import { Action, Selector, State, StateContext, StateOperator } from "@ngxs/store";
+import { Action, Selector, State, StateContext } from "@ngxs/store";
 import { TechnicalCommercialProposalService } from "../services/technical-commercial-proposal.service";
-import { catchError, map, mergeMap, switchMap, tap } from "rxjs/operators";
+import { delayWhen, switchMap, tap } from "rxjs/operators";
 import { TechnicalCommercialProposals } from "../actions/technical-commercial-proposal.actions";
-import { insertItem, patch, updateItem } from "@ngxs/store/operators";
-import { of, throwError } from "rxjs";
+import { patch, updateItem } from "@ngxs/store/operators";
 import { StateStatus } from "../../common/models/state-status";
 import { Injectable } from "@angular/core";
 import { RequestPosition } from "../../common/models/request-position";
-import { Uuid } from "../../../cart/models/uuid";
 import { saveAs } from 'file-saver/src/FileSaver';
-import { TechnicalCommercialProposalByPosition } from "../../common/models/technical-commercial-proposal-by-position";
 import { Procedure } from "../models/procedure";
 import { ProcedureService } from "../services/procedure.service";
-import { ProcedureSource } from "../enum/procedure-source";
-import Publish = TechnicalCommercialProposals.Publish;
-import Create = TechnicalCommercialProposals.Create;
+import { ProposalSource } from "../enum/proposal-source";
+import { CommonProposal, CommonProposalByPosition } from "../../common/models/common-proposal";
+import { insertOrUpdateProposals } from "../../../shared/state-operators/insert-or-update-proposals";
+import { of } from "rxjs";
 import Fetch = TechnicalCommercialProposals.Fetch;
 import FetchAvailablePositions = TechnicalCommercialProposals.FetchAvailablePositions;
-import Update = TechnicalCommercialProposals.Update;
-import UploadTemplate = TechnicalCommercialProposals.UploadTemplate;
-import DownloadTemplate = TechnicalCommercialProposals.DownloadTemplate;
-import DownloadAnalyticalReport = TechnicalCommercialProposals.DownloadAnalyticalReport;
-import PublishByPosition = TechnicalCommercialProposals.PublishByPosition;
-import CreateContragent = TechnicalCommercialProposals.CreateContragent;
-import CreatePosition = TechnicalCommercialProposals.CreatePosition;
 import FetchProcedures = TechnicalCommercialProposals.FetchProcedures;
 import RefreshProcedures = TechnicalCommercialProposals.RefreshProcedures;
+import Create = TechnicalCommercialProposals.Create;
+import Update = TechnicalCommercialProposals.Update;
+import UpdateItems = TechnicalCommercialProposals.UpdateItems;
+import DownloadAnalyticalReport = TechnicalCommercialProposals.DownloadAnalyticalReport;
+import DownloadTemplate = TechnicalCommercialProposals.DownloadTemplate;
+import UploadTemplate = TechnicalCommercialProposals.UploadTemplate;
 import Rollback = TechnicalCommercialProposals.Rollback;
-import UpdateParams = TechnicalCommercialProposals.UpdateParams;
+import Publish = TechnicalCommercialProposals.Publish;
 
 export interface TechnicalCommercialProposalStateModel {
-  proposals: TechnicalCommercialProposal[];
+  proposals: CommonProposal[];
   status: StateStatus;
   procedures: Procedure[];
+  positions: RequestPosition[];
   availablePositions: RequestPosition[];
 }
 
 type Model = TechnicalCommercialProposalStateModel;
 type Context = StateContext<Model>;
 
-function insertOrUpdateProposals(proposals: TechnicalCommercialProposal[]): StateOperator<Model> {
-  return (state: Readonly<Model>) => ({
-    ...state,
-    status: "received",
-    proposals: proposals.reduce((updatedProposals, proposal) => {
-      const i = updatedProposals.findIndex(({ id }) => id === proposal.id);
-      i < 0 ? updatedProposals.push(proposal) : updatedProposals[i] = proposal;
-      return updatedProposals;
-    }, state.proposals)
-  });
-}
-
 @State<Model>({
   name: 'BackofficeTechnicalCommercialProposals',
-  defaults: { proposals: null, availablePositions: null, procedures: null, status: "pristine" }
+  defaults: { proposals: null, availablePositions: null, positions: null, procedures: null, status: "pristine" }
 })
 @Injectable()
 export class TechnicalCommercialProposalState {
-  cache: { [requestId in Uuid]: TechnicalCommercialProposal[] } = {};
 
   constructor(private rest: TechnicalCommercialProposalService, private procedureService: ProcedureService) {
   }
 
-  @Selector()
-  static proposals({ proposals }: Model) { return proposals; }
-
-  @Selector()
-  static availablePositions({ availablePositions }: Model) { return availablePositions; }
-
-  @Selector()
-  static status({ status }: Model) { return status; }
-
-  @Selector()
-  static procedures({ procedures }: Model) { return procedures; }
-
-  @Selector()
-  static proposalsByPositions({ proposals, availablePositions }: Model) {
+  @Selector() static proposals({ proposals }: Model) { return proposals; }
+  @Selector() static availablePositions({ availablePositions }: Model) { return availablePositions; }
+  @Selector() static status({ status }: Model) { return status; }
+  @Selector() static procedures({ procedures }: Model) { return procedures; }
+  @Selector() static positions({ positions }: Model) { return positions; }
+  @Selector() static proposalsByPositions({ proposals, positions }: Model) {
     // Перегруппировываем ТКП попозиционно, включаем позиции по которым еще не создано ни одного ТКП
-    return proposals.reduce((group: TechnicalCommercialProposalByPosition[], proposal) => {
-      proposal.positions.forEach(proposalPosition => {
-        const item = group.find(({ position: { id } }) => proposalPosition.position.id === id);
-        if (item) {
-          item.data.push({ proposal, proposalPosition });
+    return proposals.reduce((acc: CommonProposalByPosition[], proposal) => {
+      proposal.items.forEach(item => {
+        const proposalByPosition = acc.find(({ position: { id } }) => item.requestPositionId === id);
+        if (proposalByPosition) {
+          proposalByPosition.items.push(item);
         } else {
-          group.push({ position: proposalPosition.position, data: [{ proposal, proposalPosition }] });
+          const position = positions.find(({ id }) => item.requestPositionId === id);
+          acc.push({ position, items: [item] });
         }
       });
-      return group;
-    }, availablePositions?.map(p => ({ position: p, data: [] })) || []);
+
+      return acc;
+    }, positions?.map(position => ({ position, items: [] })) || []);
   }
 
   @Action(Fetch)
-  fetch(ctx: Context, { requestId, groupId }: Fetch) {
-    // Временно выпилил кеш
-    // if (this.cache[requestId]) {
-    //   return ctx.setState(patch({proposals: this.cache[requestId]}));
-    // }
-    ctx.setState(patch({ proposals: null, status: "fetching" as StateStatus }));
-    return this.rest.list(requestId, { requestTechnicalCommercialProposalGroupId: groupId }).pipe(
-      tap(proposals => ctx.setState(patch({ proposals }))),
-      tap(proposals => this.cache[requestId] = proposals),
-      switchMap(() => ctx.dispatch(new FetchProcedures(requestId, groupId))),
-      tap(() => ctx.setState(patch({ status: "received" as StateStatus }))),
+  fetch({ setState, dispatch }: Context, { requestId, groupId }: Fetch) {
+    setState(patch<Model>({ proposals: null, status: "fetching" }));
+
+    return this.rest.list(requestId, groupId).pipe(
+      switchMap(({ proposals, positions }) => dispatch(new FetchProcedures(requestId, groupId)).pipe(
+        tap(() => setState(patch<Model>({ proposals, positions, status: "received" }))))
+      ),
     );
   }
 
   @Action(FetchAvailablePositions)
   fetchAvailablePositions({ setState }: Context, { requestId, groupId }: FetchAvailablePositions) {
     setState(patch({ availablePositions: null }));
+
     return this.rest.availablePositions(requestId, groupId).pipe(
       tap(availablePositions => setState(patch({ availablePositions })))
     );
@@ -116,147 +91,89 @@ export class TechnicalCommercialProposalState {
 
   @Action([FetchProcedures, RefreshProcedures])
   fetchProcedures({ setState }: Context, { requestId, groupId, update }: FetchProcedures) {
-    if (update) {
-      setState(patch({ status: "updating" as StateStatus }));
-    } else {
-      setState(patch({ procedures: null, status: "fetching" as StateStatus }));
-    }
+    setState(patch<Model>(update ? { status: "updating" } : { procedures: null, status: "fetching" }));
 
-    return this.procedureService.list(requestId, ProcedureSource.TECHNICAL_COMMERCIAL_PROPOSAL, groupId).pipe(
+    return this.procedureService.list(requestId, ProposalSource.TECHNICAL_COMMERCIAL_PROPOSAL, groupId).pipe(
       tap(procedures => setState(patch({ procedures }))),
-      tap(() => {
-        if (update) {
-          setState(patch({ status: "received" as StateStatus }));
-        }
-      }),
+      tap(() => setState(patch<Model>(update ? { status: "received" } : {}))),
     );
   }
 
-  @Action([Create, CreateContragent])
-  create(ctx: Context, { publish, payload, requestId, groupId }: Create) {
-    ctx.setState(patch({ status: "updating" as StateStatus }));
+  @Action(Create)
+  create({ setState, dispatch }: Context, { requestId, groupId, payload, items }: Create) {
+    setState(patch<Model>({ status: "updating" }));
+
     return this.rest.create(requestId, groupId, payload).pipe(
-      catchError(err => {
-        ctx.setState(patch({ status: "error" as StateStatus }));
-        return throwError(err);
-      }),
-      tap(proposal => ctx.setState(patch({
-        proposals: insertItem(proposal),
-        status: "received" as StateStatus
-      }))),
-      mergeMap(proposal => publish ? ctx.dispatch(new Publish(proposal)) : of(proposal))
+      delayWhen(() => dispatch(new FetchAvailablePositions(requestId, groupId))),
+      tap(proposal => setState(insertOrUpdateProposals({ proposals: [proposal] }))),
+      switchMap(({ id }) => !!items?.length ? dispatch(new UpdateItems(id, items)) : of(null))
     );
   }
 
-  @Action([Update, CreatePosition])
-  update(ctx: Context, { publish, payload }: Update) {
-    ctx.setState(patch({ status: "updating" as StateStatus }));
+  @Action(Update)
+  update({ setState, dispatch }: Context, { requestId, groupId, payload, items }: Update) {
+    setState(patch<Model>({ status: "updating" }));
+
     return this.rest.update(payload).pipe(
-      tap(proposal => ctx.setState(patch({
-        proposals: updateItem<TechnicalCommercialProposal>(_proposal => _proposal.id === proposal.id, patch(proposal)),
-        status: "received" as StateStatus
-      }))),
-      mergeMap(proposal => {
-        if (publish) {
-          return ctx.dispatch(new Publish(proposal));
-        } else {
-          return of(proposal);
-        }
-      }),
+      delayWhen(() => dispatch(new FetchAvailablePositions(requestId, groupId))),
+      tap(proposal => setState(insertOrUpdateProposals({ proposals: [proposal] }))),
+      switchMap(({ id }) => !!items?.length ? dispatch(new UpdateItems(id, items)) : of(null))
     );
   }
 
-  @Action(UpdateParams)
-  updateParams(ctx: Context, action: UpdateParams) {
-    ctx.setState(patch({ status: "updating" as StateStatus }));
-    return this.rest.updateParams(action.requestId, action.payload).pipe(
-      tap(proposal => ctx.setState(patch({
-        proposals: updateItem<TechnicalCommercialProposal>(_proposal => _proposal.id === proposal.id, patch(proposal)),
-        status: "received" as StateStatus
-      })))
-    );
+  @Action(UpdateItems)
+  updateItems({ setState }: Context, { proposalId, payload }: UpdateItems) {
+    setState(patch<Model>({ status: "updating" }));
+
+    return this.rest.editItems(proposalId, payload).pipe(tap(items => setState(patch<Model>({
+      proposals: updateItem(p => p.id === proposalId, patch({ items })),
+      status: "received"
+    }))));
   }
 
   @Action(Publish)
-  publish({ setState }: Context, { proposal }: Publish) {
-    setState(patch({ status: "updating" as StateStatus }));
-    return this.rest.publish(proposal).pipe(
-      tap((_proposal) => setState(patch({
-        proposals: updateItem<TechnicalCommercialProposal>(__proposal => __proposal.id === _proposal.id, patch(_proposal)),
-        status: "received" as StateStatus
-      })))
-    );
-  }
+  publish({ setState, dispatch }: Context, { requestId, groupId, proposalsByPositions }: Publish) {
+    setState(patch<Model>({ status: "updating" }));
 
-  @Action(PublishByPosition)
-  publishPositions({ setState }: Context, { proposalsByPositions }: PublishByPosition) {
-    setState(patch({ status: "updating" as StateStatus }));
-    return this.rest.publishPositions(
-      proposalsByPositions.reduce((ids, { data }) => [...ids, ...data.map(({ proposalPosition: { id } }) => id)], [])
-    ).pipe(
-      tap(proposalPositions => proposalPositions.forEach(proposalPosition => setState(patch({
-        proposals: updateItem(({ positions }) => positions.some(({ id }) => proposalPosition.id === id), patch({
-          positions: updateItem(({ id }) => proposalPosition.id === id, proposalPosition)
-        })),
-        availablePositions: updateItem(({ id }) => proposalPosition.position.id === id, proposalPosition.position),
-        status: "received" as StateStatus,
-      }))))
+    return this.rest.publish(groupId, proposalsByPositions.reduce((ids, { items }) => [...ids, ...items.map(({ id }) => id)], [])).pipe(
+      delayWhen(() => dispatch(new FetchAvailablePositions(requestId, groupId))),
+      tap(data => setState(insertOrUpdateProposals(data)))
     );
   }
 
   @Action(DownloadTemplate)
   downloadTemplate(ctx: Context, { requestId, groupId }: DownloadTemplate) {
-    return this.rest.downloadTemplate(requestId, groupId).pipe(
-      tap((data) => saveAs(data, `RequestTechnicalCommercialProposalsTemplate.xlsx`))
-    );
+    return this.rest.downloadTemplate(requestId, groupId)
+      .pipe(tap(data => saveAs(data, `RequestTechnicalCommercialProposalsTemplate.xlsx`)));
   }
 
   @Action(UploadTemplate)
-  uploadTemplate(ctx: Context, { requestId, groupId, files, groupName }: UploadTemplate) {
-    ctx.setState(patch({ status: "updating" as StateStatus }));
+  uploadTemplate({ setState, dispatch }: Context, { requestId, groupId, files, groupName }: UploadTemplate) {
+    setState(patch<Model>({ status: "updating" }));
 
     const uploadTemplate = this.rest.uploadTemplate(requestId, groupId, files).pipe(
-      catchError(err => {
-        ctx.setState(patch({ status: "error" as StateStatus }));
-        return throwError(err);
-      }),
-      tap(proposals => ctx.setState(insertOrUpdateProposals(proposals))),
+      delayWhen(() => dispatch(new FetchAvailablePositions(requestId, groupId))),
+      tap(data => setState(insertOrUpdateProposals(data)))
     );
 
-    const uploadTemplateFromGroups = this.rest.uploadTemplateFromGroups(requestId, files, groupName).pipe(
-      catchError(err => {
-        ctx.setState(patch({ status: "error" as StateStatus }));
-        return throwError(err);
-      })
-    );
+    const uploadTemplateFromGroups = this.rest.uploadTemplateFromGroups(requestId, files, groupName);
 
     return groupId ? uploadTemplate : uploadTemplateFromGroups;
   }
 
   @Action(DownloadAnalyticalReport)
   downloadAnalyticalReport(ctx: Context, { requestId, groupId }: DownloadAnalyticalReport) {
-    return this.rest.downloadAnalyticalReport(requestId, groupId).pipe(
-      tap((data) => saveAs(data, `Аналитическая справка.xlsx`))
-    );
+    return this.rest.downloadAnalyticalReport(requestId, groupId)
+      .pipe(tap((data) => saveAs(data, `Аналитическая справка.xlsx`)));
   }
 
   @Action(Rollback)
-  rollback({ setState, dispatch }: Context, { requestId, positionId }: Rollback) {
-    setState(patch({ status: "updating" } as Model));
-    return this.rest.rollback(requestId, positionId).pipe(
-      tap(proposalPositions => {
-        proposalPositions.forEach(proposalPosition => {
-          setState(patch({
-            proposals: updateItem(({ positions }) => positions.some(({ id }) => id === proposalPosition.id),
-              patch({
-                positions: updateItem(({ id }) => id === proposalPosition.id, proposalPosition)
-              })
-            ),
-            availablePositions: updateItem(({ id }) => proposalPosition.position.id === id, proposalPosition.position)
-          }));
-        });
-        setState(patch({ status: "received" } as Model));
-      })
+  rollback({ setState, dispatch }: Context, { requestId, groupId, positionId }: Rollback) {
+    setState(patch<Model>({ status: "updating" }));
+
+    return this.rest.rollback(requestId, groupId, positionId).pipe(
+      delayWhen(() => dispatch(new FetchAvailablePositions(requestId, groupId))),
+      tap(data => setState(insertOrUpdateProposals(data)))
     );
   }
 }

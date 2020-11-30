@@ -5,15 +5,15 @@ import { RequestCustomerRoutingModule } from "./request-customer-routing.module"
 import { RequestService } from "./services/request.service";
 import { TechnicalProposalsService } from "./services/technical-proposals.service";
 import { PositionComponent } from "./components/position/position.component";
-import { RequestTechnicalProposalComponent } from './components/technical-proposal/technical-proposal.component';
-import { TechnicalProposalListComponent } from './components/technical-proposal-list/technical-proposal-list.component';
-import { CommercialProposalViewComponent } from './components/commercial-proposal-view/commercial-proposal-view.component';
+import { RequestTechnicalProposalComponent } from './components/proposal/technical-proposal-list/technical-proposal/technical-proposal.component';
+import { TechnicalProposalListComponent } from './components/proposal/technical-proposal-list/technical-proposal-list.component';
+import { CommercialProposalViewComponent } from './components/proposal/proposal-view/commercial-proposal-view/commercial-proposal-view.component';
 import { AgreementsModule } from "../../agreements/agreements.module";
-import { TechnicalCommercialProposalListComponent } from './components/technical-commercial-proposal-list/technical-commercial-proposal-list.component';
+import { TechnicalCommercialProposalViewComponent } from './components/proposal/proposal-view/technical-commercial-proposal-view/technical-commercial-proposal-view.component';
 import { TechnicalCommercialProposalService } from "./services/technical-commercial-proposal.service";
 import { NgxsModule } from "@ngxs/store";
 import { TechnicalCommercialProposalState } from "./states/technical-commercial-proposal.state";
-import { TechnicalCommercialProposalComponent } from "./components/technical-commercial-proposal/technical-commercial-proposal.component";
+import { TechnicalCommercialProposalComponent } from "./components/proposal/technical-commercial-proposal/technical-commercial-proposal.component";
 import { RequestFormComponent } from "./components/request-form/request-form.component";
 import { RequestFormFreeComponent } from "./components/request-form-free/request-form-free.component";
 import { RequestState } from "./states/request.state";
@@ -21,12 +21,15 @@ import { RequestListComponent } from "./components/request-list/request-list.com
 import { RequestListState } from "./states/request-list.state";
 import { TechnicalProposalState } from "./states/technical-proposal.state";
 import { CommercialProposalState } from "./states/commercial-proposal.state";
-import { CommercialProposalListComponent } from "./components/commercial-proposal-list/commercial-proposal-list.component";
-import { TechnicalCommercialProposalGroupViewComponent } from "./components/technical-commercial-proposal-group-view/technical-commercial-proposal-group-view.component";
+import { TechnicalCommercialProposalGroupListComponent } from "./components/proposal/proposal-group-list/technical-commercial-proposal-group-list/technical-commercial-proposal-group-list.component";
 import { ContractListComponent } from "./components/contract-list/contract-list.component";
 import { ContractState } from "./states/contract.state";
 import { ContractService } from "./services/contract.service";
-import { TechnicalCommercialProposalConfirmComponent } from './components/technical-commercial-proposal-list/technical-commercial-proposal-confirm/technical-commercial-proposal-confirm.component';
+import { ProposalConfirmComponent } from './components/proposal/proposal-confirm/proposal-confirm.component';
+import { CommercialProposalGroupListComponent } from "./components/proposal/proposal-group-list/commercial-proposal-group-list/commercial-proposal-group-list.component";
+import { ProposalGroupListComponent } from "./components/proposal/proposal-group-list/proposal-group-list.component";
+import { ProposalViewComponent } from "./components/proposal/proposal-view/proposal-view.component";
+import { CommercialProposalsService } from "./services/commercial-proposals.service";
 
 @NgModule({
   declarations: [
@@ -37,13 +40,15 @@ import { TechnicalCommercialProposalConfirmComponent } from './components/techni
     RequestTechnicalProposalComponent,
     TechnicalProposalListComponent,
     CommercialProposalViewComponent,
-    TechnicalCommercialProposalListComponent,
+    CommercialProposalGroupListComponent,
+    TechnicalCommercialProposalViewComponent,
     TechnicalCommercialProposalComponent,
     RequestListComponent,
-    CommercialProposalListComponent,
-    TechnicalCommercialProposalGroupViewComponent,
-    TechnicalCommercialProposalConfirmComponent,
-    ContractListComponent
+    TechnicalCommercialProposalGroupListComponent,
+    ProposalConfirmComponent,
+    ContractListComponent,
+    ProposalGroupListComponent,
+    ProposalViewComponent,
   ],
   imports: [
     AgreementsModule,
@@ -61,6 +66,7 @@ import { TechnicalCommercialProposalConfirmComponent } from './components/techni
   providers: [
     RequestService,
     TechnicalProposalsService,
+    CommercialProposalsService,
     TechnicalCommercialProposalService,
     ContractService
   ]

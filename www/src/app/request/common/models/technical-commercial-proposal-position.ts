@@ -3,8 +3,10 @@ import { RequestPosition } from "./request-position";
 import { PositionCurrency } from "../enum/position-currency";
 import { TechnicalCommercialProposalPositionStatus } from "../enum/technical-commercial-proposal-position-status";
 import { TechnicalCommercialProposalPositionStatusLabel } from "../enum/technical-commercial-proposal-position-status-label";
+import { CommonProposalItem } from "./common-proposal";
+import { ContragentShortInfo } from "../../../contragent/models/contragent-short-info";
 
-export class TechnicalCommercialProposalPosition {
+export class TechnicalCommercialProposalPosition implements CommonProposalItem {
   id: Uuid;
   proposalId: Uuid;
   manufacturingName: string;
@@ -22,4 +24,15 @@ export class TechnicalCommercialProposalPosition {
   isAnalog: boolean;
   manufacturer: string;
   standard: string;
+
+  /**
+   * @TODO: review it
+   */
+  isWinner: boolean;
+  createdDate: string;
+  requestId: Uuid;
+  comments: string;
+  supplierContragentId: Uuid;
+  supplierContragent: ContragentShortInfo;
+  requestPositionId: Uuid;
 }
