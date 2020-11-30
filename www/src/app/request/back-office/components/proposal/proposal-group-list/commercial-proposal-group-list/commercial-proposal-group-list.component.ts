@@ -100,7 +100,7 @@ export class CommercialProposalGroupListComponent implements OnInit, OnDestroy {
       const e = result.error as any;
       this.store.dispatch(e ?
         new ToastActions.Error(e && e.error.detail) :
-        new ToastActions.Success(`Группа ТКП успешно сохранена`));
+        new ToastActions.Success(`Группа КП успешно сохранена`));
       if (!e) { this.updateGroups(); }
     });
   }
