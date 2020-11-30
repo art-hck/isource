@@ -225,6 +225,19 @@
       </div>
     </ng-container>
 
+    <!-- Отображение старых уведомлений без поля type -->
+    <ng-container *ngSwitchDefault>
+      <div class="app-row notification-card-header app-primary-color">
+        <b class="app-col">{{ notification?.title }}</b>
+      </div>
+
+      <div class="app-row notification-card-request app-secondary-color">
+        <div class="app-col app-ellipsis" title="{{ notification?.body?.requestName }}">
+          № {{ notification?.body?.requestNumber }} | {{ notification?.body?.requestName }}
+        </div>
+      </div>
+    </ng-container>
+
     <div class="app-col"></div>
 
     <div class="app-row notification-card-footer">
