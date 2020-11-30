@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { AgreementsService } from "../../../agreements/customer/services/agreements.service";
-import { AgreementsResponse } from "../../../agreements/common/models/agreements-response";
+import { AgreementsService } from "../../../../agreements/customer/services/agreements.service";
+import { AgreementsResponse } from "../../../../agreements/common/models/agreements-response";
 import { Observable } from "rxjs";
-import { NotificationService } from "../../../notification/services/notification.service";
-import { NotificationsResponse } from "../../../notification/models/notifications-response";
+import { NotificationService } from "../../../../notification/services/notification.service";
+import { NotificationsResponse } from "../../../../notification/models/notifications-response";
 
 @Component({
   templateUrl: './dashboard.component.html',

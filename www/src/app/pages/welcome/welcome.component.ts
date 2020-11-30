@@ -22,10 +22,11 @@ export class WelcomeComponent implements OnInit {
   ngOnInit(): void {
     this.authService.saveAuthUserData().subscribe(() => {
       if (this.user.isCustomer()) {
-        const url = this.featureService.authorize("dashboard") ? "/dashboard" : "/requests/customer";
+        const url = this.featureService.authorize("dashboard") ? "/dashboard/customer" : "/requests/customer";
         this.router.navigateByUrl(url);
       } else if (this.user.isBackOffice()) {
-        this.router.navigateByUrl("/agreements/backoffice");
+        const url = this.featureService.authorize("dashboard") ? "/dashboard/backoffice" : "/agreements/backoffice";
+        this.router.navigateByUrl(url);
       }
     });
   }

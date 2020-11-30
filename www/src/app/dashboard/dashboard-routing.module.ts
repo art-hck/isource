@@ -1,15 +1,9 @@
 import { RouterModule, Routes } from "@angular/router";
-import { CanActivateFeatureGuard } from "../core/can-activate-feature.guard";
 import { NgModule } from "@angular/core";
-import { DashboardComponent } from "./components/dashboard/dashboard.component";
 
 const routes: Routes = [
-  {
-    path: '',
-    component: DashboardComponent,
-    canActivate: [CanActivateFeatureGuard],
-    data: { title: "Главная", hideTitle: true, feature: 'dashboard' }
-  },
+  { path: 'customer', loadChildren: () => import('./customer/dashboard-customer.module').then(m => m.DashboardCustomerModule) },
+  { path: 'backoffice', loadChildren: () => import('./back-office/dashboard-backoffice.module').then(m => m.DashboardBackofficeModule) },
 ];
 
 @NgModule({

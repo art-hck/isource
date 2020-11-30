@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { DashboardService } from "../../services/dashboard.service";
-import { PositionStatus } from "../../../request/common/enum/position-status";
-import { PieChartItem } from "../../../shared/models/pie-chart-item";
+import { PositionStatus } from "../../../../request/common/enum/position-status";
+import { PieChartItem } from "../../../../shared/models/pie-chart-item";
 import { map } from "rxjs/operators";
 import { Observable } from "rxjs";
-import { PositionStatusesGroupsInfo } from "../../../request/common/dictionaries/position-statuses-groups-info";
+import { PositionStatusesGroupsInfo } from "../../../../request/common/dictionaries/position-statuses-groups-info";
 
 @Component({
   selector: 'app-dashboard-statistic',
