@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { History } from "../../../request/common/models/history";
+import { History } from "../../../../request/common/models/history";
 
 @Component({
   selector: 'app-dashboard-notification',

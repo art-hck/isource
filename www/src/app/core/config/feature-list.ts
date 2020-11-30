@@ -2,7 +2,8 @@ import { UserRole } from "../../user/models/user-role";
 import { Feature } from "../models/feature";
 
 export interface IFeatureList {
-  dashboard;
+  dashboardForBackoffice;
+  dashboardForCustomer;
   registration;
   customerRequest;
   createRequest;
@@ -36,7 +37,8 @@ export interface IFeatureList {
 }
 
 export const FeatureList: { [key in keyof IFeatureList]: Feature } = {
-  dashboard: { roles: [UserRole.CUSTOMER] },
+  dashboardForBackoffice: { roles: [UserRole.SENIOR_BACKOFFICE, UserRole.BACKOFFICE] },
+  dashboardForCustomer: { roles: [UserRole.CUSTOMER] },
   registration: {},
   customerRequest: { roles: [UserRole.CUSTOMER] },
   createRequest: { roles: [UserRole.CUSTOMER] },
