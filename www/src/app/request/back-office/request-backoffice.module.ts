@@ -11,7 +11,7 @@ import { RequestService } from "./services/request.service";
 import { TechnicalProposalsService } from "./services/technical-proposals.service";
 import { TechnicalProposalListComponent } from './components/proposal/technical-proposal-list/technical-proposal-list.component';
 import { TechnicalProposalFormComponent } from './components/proposal/technical-proposal-form/technical-proposal-form.component';
-import { ProposalFormManufacturerComponent } from './components/proposal/proposal-form-manufacturer/proposal-form-manufacturer.component';
+import { ProposalFormManufacturingNameComponent } from './components/proposal/proposal-form-manufacturing-name/proposal-form-manufacturing-name.component';
 import { ProcedureFormComponent } from './components/procedure/procedure-form/procedure-form.component';
 import { ProcedureFormPropertiesComponent } from './components/procedure/procedure-form/procedure-form-properties/procedure-form-properties.component';
 import { ProcedureFormDocumentsComponent } from "./components/procedure/procedure-form/procedure-form-documents/procedure-form-documents.component";
@@ -54,7 +54,7 @@ import { CommercialProposalsDeprecatedService } from "./services/commercial-prop
     PositionComponent,
     TechnicalProposalListComponent,
     TechnicalProposalFormComponent,
-    ProposalFormManufacturerComponent,
+    ProposalFormManufacturingNameComponent,
     ProcedureFormComponent,
     ProcedureFormPropertiesComponent,
     ProcedureFormDocumentsComponent,

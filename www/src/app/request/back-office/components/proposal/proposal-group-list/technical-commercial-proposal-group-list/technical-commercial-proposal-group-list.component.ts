@@ -3,7 +3,6 @@ import { BehaviorSubject, iif, Observable, Subject, throwError } from "rxjs";
 import { ProposalGroup } from "../../../../../common/models/proposal-group";
 import { catchError, delayWhen, finalize, scan, shareReplay, switchMap, takeUntil, tap, throttleTime, withLatestFrom } from "rxjs/operators";
 import { ActivatedRoute } from "@angular/router";
-import { TechnicalCommercialProposalService } from "../../../../services/technical-commercial-proposal.service";
 import { Uuid } from "../../../../../../cart/models/uuid";
 import { RequestState } from "../../../../states/request.state";
 import { RequestActions } from "../../../../actions/request.actions";
@@ -14,18 +13,16 @@ import { TechnicalCommercialProposals } from "../../../../actions/technical-comm
 import { FormBuilder, Validators } from "@angular/forms";
 import { TechnicalCommercialProposalGroupFilter } from "../../../../../common/models/technical-commercial-proposal-group-filter";
 import { TechnicalCommercialProposalState } from "../../../../states/technical-commercial-proposal.state";
-import { ProcedureAction } from "../../../../models/procedure-action";
-import { Procedure } from "../../../../models/procedure";
 import { ProposalSource } from "../../../../enum/proposal-source";
 import { FeatureService } from "../../../../../../core/services/feature.service";
 import { ToastActions } from "../../../../../../shared/actions/toast.actions";
 import { RequestPosition } from "../../../../../common/models/request-position";
+import { TechnicalCommercialProposalGroupService } from "../../../../services/technical-commercial-proposal-group.service";
 import FetchAvailablePositions = TechnicalCommercialProposals.FetchAvailablePositions;
 import UploadTemplate = TechnicalCommercialProposals.UploadTemplate;
 import FetchProcedures = TechnicalCommercialProposals.FetchProcedures;
 import RefreshProcedures = TechnicalCommercialProposals.RefreshProcedures;
 import DownloadTemplate = TechnicalCommercialProposals.DownloadTemplate;
-import { TechnicalCommercialProposalGroupService } from "../../../../services/technical-commercial-proposal-group.service";
 
 @Component({
   selector: 'app-technical-commercial-proposal-group-list',
@@ -56,8 +53,6 @@ export class TechnicalCommercialProposalGroupListComponent implements OnInit, On
       { label: `Заявка №${number}`, link: `/requests/backoffice/${id}` },
       { label: 'Согласование ТКП', link: `/requests/backoffice/${id}/technical-commercial-proposals`},
     ]),
-    switchMap(() => this.filter$),
-    switchMap(filter => this.service.list(this.requestId, filter)),
     switchMap(groups => this.newGroup$.pipe(
       tap(g => g && this.store.dispatch(new FetchAvailablePositions(this.requestId))),
       scan((acc, group) => {
@@ -68,6 +63,8 @@ export class TechnicalCommercialProposalGroupListComponent implements OnInit, On
 
       return acc;
     }, groups))),
+    switchMap(() => this.filter$),
+    switchMap(filter => this.service.list(this.requestId, filter)),
     shareReplay(1)
   );
 

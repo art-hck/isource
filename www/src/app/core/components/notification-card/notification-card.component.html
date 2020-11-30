@@ -16,8 +16,10 @@
         <b class="app-col">Вы назначены исполнителем по позициям заявки</b>
       </div>
 
-      <div class="app-row notification-card-request app-secondary-color app-ellipsis">
-        № {{ notification?.body?.requestNumber || notification?.body?.rows[0]?.requestNumber }} | {{ notification?.body?.requestName }}
+      <div class="app-row notification-card-request app-secondary-color">
+        <div class="app-col app-ellipsis" title="№ {{ notification?.body?.requestNumber || notification?.body?.rows[0]?.requestNumber }} | {{ notification?.body?.requestName }}">
+          № {{ notification?.body?.requestNumber || notification?.body?.rows[0]?.requestNumber }} | {{ notification?.body?.requestName }}
+        </div>
       </div>
 
       <div class="app-row" *ngFor="let position of notification?.body?.requestPositions.slice(0,2)">
@@ -31,8 +33,10 @@
         <b class="app-col">Поступила новая заявка</b>
       </div>
 
-      <div class="app-row notification-card-request app-secondary-color app-ellipsis">
-        № {{ notification?.body?.requestNumber || notification?.body?.rows[0]?.requestNumber }} | {{ notification?.body?.requestName }}
+      <div class="app-row notification-card-request app-secondary-color">
+        <div class="app-col app-ellipsis" title="№ {{ notification?.body?.requestNumber || notification?.body?.rows[0]?.requestNumber }} | {{ notification?.body?.requestName }}">
+          № {{ notification?.body?.requestNumber || notification?.body?.rows[0]?.requestNumber }} | {{ notification?.body?.requestName }}
+        </div>
       </div>
 
       <div class="app-row">
@@ -46,8 +50,10 @@
         <b class="app-col">Добавлена новая позиция в заявку</b>
       </div>
 
-      <div class="app-row notification-card-request app-secondary-color app-ellipsis">
-        № {{notification?.body?.requestNumber}} | {{notification?.body?.requestName}}
+      <div class="app-row notification-card-request app-secondary-color">
+        <div class="app-col app-ellipsis"  title="№ {{notification?.body?.requestNumber}} | {{notification?.body?.requestName}}">
+          № {{notification?.body?.requestNumber}} | {{notification?.body?.requestName}}
+        </div>
       </div>
 
       <div class="app-row">
@@ -61,8 +67,10 @@
         <b class="app-col">Подтвердите редактирование позиции</b>
       </div>
 
-      <div class="app-row notification-card-request app-secondary-color app-ellipsis">
-        № {{notification?.body?.requestNumber}} | {{notification?.body?.requestName}}
+      <div class="app-row notification-card-request app-secondary-color">
+        <div class="app-col app-ellipsis"  title="№ {{notification?.body?.requestNumber}} | {{notification?.body?.requestName}}">
+          № {{notification?.body?.requestNumber}} | {{notification?.body?.requestName}}
+        </div>
       </div>
 
       <div class="app-row" *ngFor="let position of notification?.body?.requestPositions.slice(0,2)">
@@ -70,14 +78,16 @@
       </div>
     </ng-container>
 
-    <!-- Согласовано добавление новых позиций -->
+    <!-- Согласовано добавление/редактирование новых позиций -->
     <ng-container *ngSwitchCase="'REQUEST_POSITION_APPROVE'">
       <div class="app-row notification-card-header app-primary-color" [ngClass]="'status-' + notification?.body?.type + '-badge'">
-        <b class="app-col">Согласовано добавление новых позиций</b>
+        <b class="app-col">{{ notification?.title }}</b>
       </div>
 
-      <div class="app-row notification-card-request app-secondary-color app-ellipsis">
-        № {{notification?.body?.requestNumber}} | {{notification?.body?.requestName}}
+      <div class="app-row notification-card-request app-secondary-color">
+        <div class="app-col app-ellipsis" title="№ {{notification?.body?.requestNumber}} | {{notification?.body?.requestName}}">
+          № {{notification?.body?.requestNumber}} | {{notification?.body?.requestName}}
+        </div>
       </div>
 
       <div class="app-row" *ngFor="let position of notification?.body?.requestPositions.slice(0,2)">
@@ -100,10 +110,20 @@
         <ng-container *ngSwitchCase="'ON_CUSTOMER_APPROVAL'">
           <b class="app-col">Подтвердите создание позиций в заявке</b>
         </ng-container>
+
+        <ng-container *ngSwitchCase="'NOT_RELEVANT'">
+          <b class="app-col">Заявка отменена</b>
+        </ng-container>
+
+        <ng-container *ngSwitchDefault>
+          <b class="app-col">{{ notification?.title }}</b>
+        </ng-container>
       </div>
 
-      <div class="app-row notification-card-request app-secondary-color app-ellipsis">
-        № {{ notification?.body?.requestNumber }} | {{ notification?.body?.requestName }}
+      <div class="app-row notification-card-request app-secondary-color">
+        <div class="app-col app-ellipsis" title="№ {{ notification?.body?.requestNumber }} | {{ notification?.body?.requestName }}">
+          № {{ notification?.body?.requestNumber }} | {{ notification?.body?.requestName }}
+        </div>
       </div>
 
       <div class="app-row" *ngFor="let position of notification?.body?.items.slice(0,2)">
@@ -119,7 +139,9 @@
         </div>
 
         <div class="app-row notification-card-request app-secondary-color app-ellipsis">
-          № {{ row.requestNumber }} | {{ row.requestName }}
+          <div class="app-col app-ellipsis"  title="№ {{ row.requestNumber }} | {{ row.requestName }}">
+            № {{ row.requestNumber }} | {{ row.requestName }}
+          </div>
         </div>
 
         <div class="app-row">
@@ -130,8 +152,9 @@
 
     <!-- Согласование/отклонение/отправка на доработку позиций ТП -->
     <ng-container *ngSwitchCase="'REQUEST_TP_POSITION_CHANGE_STATUS'">
-      <div class="app-row notification-card-header app-primary-color"
-           [ngSwitch]="notification?.body?.requestTpPositionStatus" [ngClass]="'status-' + notification?.body?.requestTpPositionStatus + '-badge'">
+      <div class="app-row notification-card-header app-primary-color TP-badge"
+           [ngSwitch]="notification?.body?.requestTpPositionStatus"
+           [ngClass]="'status-' + notification?.body?.requestTpPositionStatus + '-badge'">
         <ng-container *ngSwitchCase="'ACCEPTED'">
           <b class="app-col">Согласованы позиции технического предложения</b>
         </ng-container>
@@ -145,8 +168,10 @@
         </ng-container>
       </div>
 
-      <div class="app-row notification-card-request app-secondary-color app-ellipsis">
-        № {{ notification?.body?.requestNumber }} | {{ notification?.body?.requestName }}
+      <div class="app-row notification-card-request app-secondary-color">
+        <div class="app-col app-ellipsis"  title="{{ notification?.body?.requestName }}">
+          № {{ notification?.body?.requestNumber }} | {{ notification?.body?.requestName }}
+        </div>
       </div>
 
       <div class="app-row" *ngFor="let position of notification?.body?.requestPositions.slice(0,2)">
@@ -156,15 +181,22 @@
 
     <!-- Согласование/отклонение/отправка на доработку позиций ТКП -->
     <ng-container *ngSwitchCase="'REQUEST_TCP_POSITION_CHANGE_STATUS'">
-      <div class="app-row notification-card-header app-primary-color"
-           [ngSwitch]="notification?.body?.requestTcpPositionStatus" [ngClass]="'status-' + notification?.body?.requestTcpPositionStatus + '-badge'">
+      <div class="app-row notification-card-header app-primary-color TCP-badge"
+           [ngSwitch]="notification?.body?.requestTcpPositionStatus"
+           [ngClass]="'status-' + notification?.body?.requestTcpPositionStatus + '-badge'">
         <ng-container *ngSwitchCase="'SENT_TO_EDIT'">
           <b class="app-col">Отправлены на доработку позиции технико-коммерч. предложения</b>
         </ng-container>
+
+        <ng-container *ngSwitchCase="'SENT_TO_REVIEW'">
+          <b class="app-col">Подготовлены технико-коммерческие предложения по позициям:</b>
+        </ng-container>
       </div>
 
-      <div class="app-row notification-card-request app-secondary-color app-ellipsis">
-        № {{ notification?.body?.requestNumber }} | {{ notification?.body?.requestName }}
+      <div class="app-row notification-card-request app-secondary-color">
+        <div class="app-col app-ellipsis" title="{{ notification?.body?.requestName }}">
+          № {{ notification?.body?.requestNumber }} | {{ notification?.body?.requestName }}
+        </div>
       </div>
 
       <div class="app-row" *ngFor="let position of notification?.body?.requestPositions.slice(0,2)">
@@ -174,7 +206,7 @@
 
     <!-- Отправка на доработку позиций КП -->
     <ng-container *ngSwitchCase="'REQUEST_OFFER_POSITION_CHANGE_STATUS'">
-      <div class="app-row notification-card-header app-primary-color"
+      <div class="app-row notification-card-header app-primary-color CP-badge"
            [ngSwitch]="notification?.body?.requestOfferPositionStatus"
            [ngClass]="'status-' + notification?.body?.requestOfferPositionStatus + '-badge'">
         <ng-container *ngSwitchCase="'SENT_TO_EDIT'">
@@ -182,12 +214,27 @@
         </ng-container>
       </div>
 
-      <div class="app-row notification-card-request app-secondary-color app-ellipsis">
-        № {{ notification?.body?.requestNumber }} | {{ notification?.body?.requestName }}
+      <div class="app-row notification-card-request app-secondary-color">
+        <div class="app-col app-ellipsis" title="{{ notification?.body?.requestName }}">
+          № {{ notification?.body?.requestNumber }} | {{ notification?.body?.requestName }}
+        </div>
       </div>
 
       <div class="app-row" *ngFor="let position of notification?.body?.requestPositions.slice(0,2)">
         <div class="app-col app-secondary-color app-ellipsis"> {{ position.name }} </div>
+      </div>
+    </ng-container>
+
+    <!-- Отображение старых уведомлений без поля type -->
+    <ng-container *ngSwitchDefault>
+      <div class="app-row notification-card-header app-primary-color">
+        <b class="app-col">{{ notification?.title }}</b>
+      </div>
+
+      <div class="app-row notification-card-request app-secondary-color">
+        <div class="app-col app-ellipsis" title="{{ notification?.body?.requestName }}">
+          № {{ notification?.body?.requestNumber }} | {{ notification?.body?.requestName }}
+        </div>
       </div>
     </ng-container>
 

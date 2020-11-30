@@ -1,7 +1,7 @@
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Inject, Input, OnChanges, OnDestroy, Output, QueryList, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
 import { Subject } from "rxjs";
 import { Request } from "../../../../common/models/request";
-import { takeUntil, tap } from "rxjs/operators";
+import { startWith, takeUntil, tap } from "rxjs/operators";
 import { Uuid } from "../../../../../cart/models/uuid";
 import { UxgRadioItemComponent, UxgTabTitleComponent } from "uxg";
 import { StateStatus } from "../../../../common/models/state-status";
@@ -36,9 +36,12 @@ export class ProposalViewComponent implements AfterViewInit, OnChanges, OnDestro
 
   @Input() request: Request;
   @Input() positions: RequestPosition[];
-  @Input() proposalsSentToReview: CommonProposalByPosition[];
-  @Input() proposalsReviewed: CommonProposalByPosition[];
-  @Input() proposalsSendToEdit: CommonProposalByPosition[];
+  @Input() proposalsByPosSentToReview: CommonProposalByPosition[];
+  @Input() proposalsByPosReviewed: CommonProposalByPosition[];
+  @Input() proposalsByPosSendToEdit: CommonProposalByPosition[];
+  @Input() proposalsSentToReview: CommonProposal[];
+  @Input() proposalsReviewed: CommonProposal[];
+  @Input() proposalsSendToEdit: CommonProposal[];
   @Input() proposals: CommonProposal[];
   @Input() stateStatus: StateStatus;
   @Input() view: ProposalsView = "grid";
@@ -67,6 +70,7 @@ export class ProposalViewComponent implements AfterViewInit, OnChanges, OnDestro
     },
     selectedProposals: {
       supplier: ContragentShortInfo;
+      supplierIndex: number;
       toSendToEdit: Proposal<CommonProposalItem>[];
       toApprove: Proposal<CommonProposalItem>[]
     }[]
@@ -111,7 +115,6 @@ export class ProposalViewComponent implements AfterViewInit, OnChanges, OnDestro
     return selectedSendToEditProposals?.reduce((acc: [], val) => [...acc, ...val], []) as Proposal[];
   }
 
-
   get allSelectedProposals(): { toApprove, toSendToEdit } {
     // Объединяем все отмеченные предложения (на согласование + на доработку)
 
@@ -125,7 +128,12 @@ export class ProposalViewComponent implements AfterViewInit, OnChanges, OnDestro
    * Возвращает сгруппированный объект, состоящий из Поставщика
    * и отмеченных его предложений на согласование и отправку на доработку
    */
-  get selectedPositionsBySuppliers(): { toSendToEdit: Proposal<CommonProposalItem>[]; supplier: ContragentShortInfo; toApprove: Proposal<CommonProposalItem>[] }[] {
+  get selectedPositionsBySuppliers(): {
+    supplier: ContragentShortInfo;
+    supplierIndex: number;
+    toSendToEdit: Proposal<CommonProposalItem>[];
+    toApprove: Proposal<CommonProposalItem>[]
+  }[] {
     // Объединяем все отмеченные предложения (на согласование + на доработку)
     const selectedProposals = this.selectedToApproveProposals.concat(this.selectedToSendToEditProposals);
 
@@ -137,12 +145,21 @@ export class ProposalViewComponent implements AfterViewInit, OnChanges, OnDestro
       !array.filter((v, i) => JSON.stringify(supplier.id) === JSON.stringify(v.id) && i < index).length);
 
     // Используем собранный список поставщиков для формирования массива объектов
-    return uniqueProposalsSuppliers.map(supplier => {
+    const uniqueProposalsSuppliersData = uniqueProposalsSuppliers.map(supplier => {
+      const suppliersIds = this.suppliers(this.proposals).map(supplierItem => supplierItem.id);
+      const supplierIndexNumber = suppliersIds.indexOf(supplier.id);
+
       return {
         supplier: supplier,
+        supplierIndex: supplierIndexNumber,
         toApprove: this.selectedPositionsBySupplierAndType('to-approve', supplier.id),
         toSendToEdit: this.selectedPositionsBySupplierAndType('to-send-to-edit', supplier.id)
       };
+    });
+
+    // Сортируем собранные данные по индексу поставщика
+    return uniqueProposalsSuppliersData.sort((a, b) => {
+      return a.supplierIndex - b.supplierIndex;
     });
   }
 
@@ -174,10 +191,14 @@ export class ProposalViewComponent implements AfterViewInit, OnChanges, OnDestro
     footerEl.parentElement.insertBefore(this.proposalsFooterRef.nativeElement, footerEl);
 
     this.proposalsOnReview.changes.pipe(
+      startWith(this.proposalsOnReview),
       tap(() => this.gridRows = this.proposalsOnReview.reduce((gridRows, c) => [...gridRows, ...c.gridRows], [])),
       tap(() => this.cd.detectChanges()),
       takeUntil(this.destroy$)
     ).subscribe();
+
+    // Для корректного автопереключения таба при загрузке страницы детектим изменения
+    this.cd.detectChanges();
   }
 
   get disabled() {
@@ -204,7 +225,7 @@ export class ProposalViewComponent implements AfterViewInit, OnChanges, OnDestro
 
   openConfirmApproveFromListModal() {
     const toApproveCounter = this.selectedToApproveProposals.length;
-    const sendToEditCounter = this.selectedToSendToEditProposals.length;
+    const sendToEditCounter = this.proposalsOnReview?.filter(({ sendToEditPosition }) => sendToEditPosition.value).length;
 
     this.approvalModalData = {
       counters: {

@@ -4,7 +4,7 @@ import { Position } from "./position";
 import { Proposal } from "./proposal";
 import { TechnicalCommercialProposalByPosition } from "../../../request/common/models/technical-commercial-proposal-by-position";
 import { TechnicalCommercialProposalPosition } from "../../../request/common/models/technical-commercial-proposal-position";
-import { CommonProposalItem } from "../../../request/common/models/common-proposal";
+import { CommonProposal, CommonProposalItem } from "../../../request/common/models/common-proposal";
 import { RequestPosition } from "../../../request/common/models/request-position";
 
 @Injectable({
@@ -27,6 +27,10 @@ export class ProposalHelperService {
 
   isPositionsValid(proposals: TechnicalCommercialProposalPosition[], positions: TechnicalCommercialProposalByPosition[]): boolean {
     return proposals.length >= positions.length;
+  }
+
+  isProposalQuantityValid(proposal: CommonProposal, positions: RequestPosition[], hasAnalogs: boolean): boolean {
+    return proposal.items.filter(({isAnalog}) => isAnalog === hasAnalogs).length >= positions.length;
   }
 
   isQuantityPositionsValid(items: CommonProposalItem[], positions: RequestPosition[], hasAnalogs: boolean): boolean {

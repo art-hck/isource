@@ -51,9 +51,10 @@
   </ng-container>
 
   <ng-container *ngIf="view === 'list'; else gridButtons">
-    <button uxgButton secondary lg (click)="sendToEditFromListView.emit()" [disabled]="loading || selectedPositions.length === 0">
-      На доработку
-    </button>
+    <!-- Временно скрыто -->
+<!--    <button uxgButton secondary lg (click)="sendToEditFromListView.emit()" [disabled]="loading || selectedPositions.length === 0">-->
+<!--      На доработку-->
+<!--    </button>-->
 
     <button uxgButton primary lg (click)="approveFromListView.emit()" [disabled]="loading || selectedPositions.length === 0">
       Выбрать победителя

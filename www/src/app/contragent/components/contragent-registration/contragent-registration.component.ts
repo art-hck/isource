@@ -23,6 +23,7 @@ import { ContragentRoleLabels } from "../../dictionaries/currency-labels";
 import { ContragentRole } from "../../enum/contragent-role";
 import { UsersGroup } from "../../../core/models/users-group";
 import { UsersGroupService } from "../../../core/services/users-group.service";
+import { UserInfoService } from "../../../user/service/user-info.service";
 
 @Component({
   selector: 'app-contragent-registration',
@@ -64,7 +65,7 @@ export class ContragentRegistrationComponent implements OnInit {
 
   get groupPlaceholder() {
     const group: UsersGroup = this.form.get('contragent').get('usersGroup').value;
-    return group && group.name || 'Выберите группу';
+    return group && group.name;
   }
 
   constructor(
@@ -77,7 +78,8 @@ export class ContragentRegistrationComponent implements OnInit {
     protected route: ActivatedRoute,
     private getContragentService: ContragentService,
     private bc: UxgBreadcrumbsService,
-    protected router: Router
+    protected router: Router,
+    public user: UserInfoService,
   ) {
     this.configParty = {
       apiKey: appConfig.dadata.apiKey,
@@ -102,7 +104,7 @@ export class ContragentRegistrationComponent implements OnInit {
         ogrn: ['', [Validators.required, CustomValidators.ogrn]],
         taxAuthorityRegistrationDate: ['', [Validators.required, CustomValidators.pastDate()]],
         role: [this.role.CUSTOMER],
-        usersGroup: [null]
+        usersGroup: [null, Validators.required]
       }),
       contragentAddress: this.fb.group({
         country: ['', [Validators.required, CustomValidators.cyrillic]],
@@ -132,8 +134,11 @@ export class ContragentRegistrationComponent implements OnInit {
       this.getContragentInfo();
       this.form.get('contragent').get('ogrn').disable();
       this.form.get('contragent').get('inn').disable();
+    } else {
+      this.groups$.subscribe(groups => {
+        this.form.get('contragent').get('usersGroup').setValue(groups[0]);
+      });
     }
-
     this.form.get('contragent').get('role').disable();
   }
 

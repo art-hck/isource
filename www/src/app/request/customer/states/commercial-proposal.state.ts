@@ -51,6 +51,12 @@ export class CommercialProposalState {
     );
   }
 
+  static proposalsByStatus(status?: CommonProposalItemStatus[]) {
+    return createSelector([CommercialProposalState], ({ proposals }: Model) => proposals
+      .filter(({ items }) => items.some((item) => status.includes(item.status)))
+    );
+  }
+
   @Selector() static status({ status }: Model) { return status; }
   @Selector() static proposals({ proposals }: Model) { return proposals; }
   @Selector() static positions({ positions }: Model) { return positions; }
@@ -70,8 +76,7 @@ export class CommercialProposalState {
     return this.rest.review(requestId, {
       'accepted': proposalItems?.map(({ id }) => id),
       'sendToEdit': positions?.map(({ id }) => id)
-    }).pipe(
-      tap(data => setState(insertOrUpdateProposals(data))));
+    }).pipe(tap(data => setState(insertOrUpdateProposals(data))));
   }
 
   @Action(DownloadAnalyticalReport)
@@ -80,5 +85,4 @@ export class CommercialProposalState {
       tap((data) => saveAs(data, `Аналитическая справка.xlsx`))
     );
   }
-
 }

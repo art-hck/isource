@@ -21,6 +21,7 @@ import { GridRowComponent } from "../../../../../shared/components/grid/grid-row
 import { ScrollPositionService } from "../../../../../shared/services/scroll-position.service";
 import { CommonProposal, CommonProposalByPosition, CommonProposalItem } from "../../../../common/models/common-proposal";
 import { ProposalSourceLabels } from "../../../../common/dictionaries/proposal-source-labels";
+import { ProposalHelperService } from "../../../../../shared/components/grid/proposal-helper.service";
 
 @Component({
   selector: 'app-common-proposal-view',
@@ -38,6 +39,7 @@ export class ProposalViewComponent implements OnDestroy, AfterViewInit, OnChange
   @ViewChildren('selectPopover') selectPopoverRef: QueryList<UxgPopoverComponent>;
   @Input() proposals: CommonProposal[];
   @Input() proposalsByPositions: CommonProposalByPosition[];
+  @Input() availablePositions: RequestPosition[];
   @Input() positions: RequestPosition[];
   @Input() procedures: Procedure[];
   @Input() status: StateStatus;
@@ -94,6 +96,7 @@ export class ProposalViewComponent implements OnDestroy, AfterViewInit, OnChange
     private cd: ChangeDetectorRef,
     public featureService: FeatureService,
     public scrollPositionService: ScrollPositionService,
+    public helper: ProposalHelperService
   ) {}
 
   ngOnChanges({ proposalsByPositions }: SimpleChanges) {
@@ -102,7 +105,13 @@ export class ProposalViewComponent implements OnDestroy, AfterViewInit, OnChange
         checked: false,
         positions: this.fb.array(this.proposalsByPositions.map(item => {
           const form = this.fb.group({ checked: false, item });
-          if (this.isReviewed(item) || this.isOnReview(item) || item.items.length === 0) {
+          if (
+            this.isReviewed(item) ||
+            this.isOnReview(item) ||
+            this.isPositionOnApprove(item) ||
+            (!this.isPositionOnProposalsPreparation(item) && this.source === 'COMMERCIAL_PROPOSAL') ||
+            item.items.length === 0
+          ) {
             form.get("checked").disable();
           }
           return form;
@@ -134,6 +143,8 @@ export class ProposalViewComponent implements OnDestroy, AfterViewInit, OnChange
   isOnReview = ({ items }: CommonProposalByPosition) => items.every(p => ['SENT_TO_REVIEW'].includes(p.status)) && items.length > 0;
   isSentToEdit = ({ items }: CommonProposalByPosition) => items.some(p => ['SENT_TO_EDIT'].includes(p.status)) && items.length > 0;
   isDraft = ({ items }: CommonProposalByPosition): boolean => items.every(p => ['NEW'].includes(p.status));
+  isPositionOnProposalsPreparation = ({ position }: CommonProposalByPosition): boolean => ['PROPOSALS_PREPARATION'].includes(position.status);
+  isPositionOnApprove = ({ position }: CommonProposalByPosition): boolean => position.status === 'ON_CUSTOMER_APPROVAL';
   allPositionsOnReview = () => this.proposalsByPositions.length > 0 && this.proposalsByPositions.every(
     item => (this.isOnReview(item) || this.isReviewed(item)) && item.items.length > 0
   )

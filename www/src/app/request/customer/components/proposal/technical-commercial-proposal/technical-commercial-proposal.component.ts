@@ -1,21 +1,17 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, Output, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { Uuid } from "../../../../../cart/models/uuid";
 import { Select, Store } from "@ngxs/store";
-import { TechnicalCommercialProposals } from "../../../actions/technical-commercial-proposal.actions";
 import { getCurrencySymbol } from "@angular/common";
 import { Observable, Subject } from "rxjs";
 import { UxgModalComponent } from "uxg";
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
 import { filter, finalize, takeUntil, tap } from "rxjs/operators";
 import { TechnicalCommercialProposalHelperService } from "../../../../common/services/technical-commercial-proposal-helper.service";
-import { TechnicalCommercialProposal } from "../../../../common/models/technical-commercial-proposal";
 import { TechnicalCommercialProposalPosition } from "../../../../common/models/technical-commercial-proposal-position";
 import { Position } from "../../../../../shared/components/grid/position";
 import { TechnicalCommercialProposalPositionStatus } from "../../../../common/enum/technical-commercial-proposal-position-status";
-import { TechnicalCommercialProposalByPosition } from "../../../../common/models/technical-commercial-proposal-by-position";
 import { TechnicalCommercialProposalState } from "../../../states/technical-commercial-proposal.state";
 import { StateStatus } from "../../../../common/models/state-status";
-import Review = TechnicalCommercialProposals.Review;
 import {
   CommonProposal,
   CommonProposalByPosition,
@@ -45,6 +41,7 @@ export class TechnicalCommercialProposalComponent implements OnChanges, OnDestro
   @Input() isLoading: boolean;
   @Input() source: ProposalSource;
   @Input() proposals: CommonProposal[];
+  @Input() proposalsByPos: CommonProposalByPosition[];
   @Input() positions: RequestPosition[];
   @Output() positionSelected = new EventEmitter();
   @Output() approve = new EventEmitter();
@@ -83,19 +80,12 @@ export class TechnicalCommercialProposalComponent implements OnChanges, OnDestro
     if (this.chooseBy$) {
       this.chooseBy$.pipe(
         tap(type => {
-          this.getNotReviewedPositionsByProposals(this.proposals).forEach((item) => {
-            const proposalsWithPosition = this.getAllProposalsWithPosition(item);
-            const position = this.getPosition(item);
-            const proposalToCheck = this.helper.chooseBy(type, position, proposalsWithPosition);
-            const proposalPositionToCheck = this.getTcpPositionByPositionAndProposal(position, proposalToCheck);
-
-            (this.form.get('positions') as FormArray).controls?.map(
-              (control) => {
-                if (proposalPositionToCheck && !control.disabled && control.value.position.id === proposalPositionToCheck.id) {
-                  control.get('checked').setValue(true);
-                }
-              }
-            );
+          (this.form.get('positions') as FormArray).controls?.forEach(c => c.get('checked').setValue(false));
+          this.proposalsByPos.forEach(proposalByPos => {
+            const item = this.helper.chooseBy(type, proposalByPos.position, proposalByPos.items);
+            (this.form.get('positions') as FormArray).controls
+            ?.filter(c => item && !c.disabled && c.value.position.id === item.id)
+            ?.forEach(c => c.get('checked').setValue(true));
           });
         }),
         takeUntil(this.destroy$)
@@ -140,46 +130,18 @@ export class TechnicalCommercialProposalComponent implements OnChanges, OnDestro
     ).subscribe();
   }
 
-  /**
-   * Имея в распоряжении позицию и ткп-предложение, получаем из последней ткп-позицию
-   */
-  getTcpPositionByPositionAndProposal(position, proposal): TechnicalCommercialProposalPosition {
-    return proposal?.positions?.find(pos => pos.position.id === position.position.id);
-  }
-
   getPosition = (proposal: CommonProposalItem): RequestPosition => {
     return this.positions.find(({ id }) => id === proposal.requestPositionId);
-  }
-
-  /**
-   * Получаем список всех позиций, по которым созданы ТКП
-   */
-  getNotReviewedPositionsByProposals(proposals: CommonProposal[]): CommonProposalItem[] {
-    const flatProposalsPositions = proposals?.map(({items}) => items) ?? [];
-
-    const allPositionsByProposals = flatProposalsPositions.reduce((acc, curr) => [...acc, ...curr], [])
-      .filter((position, index, array) =>
-      !array.filter((v, i) => position.requestPositionId === v.requestPositionId && i < index).length);
-
-    return allPositionsByProposals.filter(position => !this.isProposalPositionReviewed(position));
-  }
-
-  /**
-   * Получаем все ТКП, в которых участвует указанная позиция
-   */
-  getAllProposalsWithPosition(proposalPosition: CommonProposalItem): CommonProposal[] {
-    // Получаем все ТКП, в которых участвует указанная позиция
-    return this.proposals.filter(({ items }) => items.find(pos => pos.requestId === proposalPosition.requestPositionId));
   }
 
   // Функция сбрасывает чекбоксы во всех ТКП у тех позиций, которые становятся отмечены в другом ТКП
   refreshPositionsSelectedState(i, checkedProposalPositions: CommonProposalItem[]): void {
     if (this.technicalCommercialProposalIndex !== i) {
-      const checkedPositionsIds = checkedProposalPositions.map(({id}) => id);
+      const checkedPositionsIds = checkedProposalPositions.map(({requestPositionId}) => requestPositionId);
 
       (this.form.get('positions') as FormArray).controls?.forEach(
         (control) => {
-          const index = checkedPositionsIds.indexOf(control.value.id);
+          const index = checkedPositionsIds.indexOf(control.value.position.requestPositionId);
 
           if (index !== -1 && control.get('checked').value === true) {
             control.get('checked').setValue(false);

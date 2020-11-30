@@ -126,7 +126,6 @@
 </uxg-modal>
 
 <uxg-modal #uploadTemplateModal size="l" (stateChange)="$event && (files = [])">
-  <ng-container *ngIf="uploadTemplateModal.state">
     <h2 class="modal-title"><b>Загрузить {{sourceLabel[source]}} из шаблона</b></h2>
     <div class="app-secondary-color template">
       Вы можете создать {{sourceLabel[source]}} списком, если заполните шаблон xls таблицы (<a class="app-link" (click)="downloadTemplate.emit()"><b>скачать
@@ -134,19 +133,21 @@
     </div>
 
     <form appFormValidation [formGroup]="formTemplate">
-      <div class="app-control-wrap">
-        <input #name uxgInput lg formControlName="groupName">
-        <label class="app-control-label" (click)="name.focus()">Наименование {{sourceLabel[source]}}</label>
-        <div class="app-control-error" *ngIf="formTemplate.get('groupName').errors as e">
-          <span *ngIf="e.required">Обязательное поле</span>
+      <ng-container *ngIf="uploadTemplateModal.state">
+        <div class="app-control-wrap">
+          <input #name uxgInput lg formControlName="groupName">
+          <label class="app-control-label" (click)="name.focus()">Наименование {{sourceLabel[source]}}</label>
+          <div class="app-control-error" *ngIf="formTemplate.get('groupName').errors as e">
+            <span *ngIf="e.required">Обязательное поле</span>
+          </div>
         </div>
-      </div>
 
-      <div class="dragAndDropArea">
-        <app-template-upload
-          [invalid]="formTemplate.get('files').dirty && formTemplate.get('files').invalid"
-          (fileSelected)="selectFiles($event)"></app-template-upload>
-      </div>
+        <div class="dragAndDropArea">
+          <app-template-upload
+            [invalid]="formTemplate.get('files').dirty && formTemplate.get('files').invalid"
+            (fileSelected)="selectFiles($event)"></app-template-upload>
+        </div>
+      </ng-container>
 
       <div class="app-modal-footer">
         <div class="doc-error-message" *ngIf="formTemplate.get('files').dirty && formTemplate.get('files').invalid">Пожалуйста, загрузите необходимый шаблон</div>
@@ -155,7 +156,6 @@
         <button uxgButton primary lg (click)="submit()">Загрузить</button>
       </div>
     </form>
-  </ng-container>
 </uxg-modal>
 
 <!-- Из процедуры -->
@@ -171,6 +171,8 @@
       [action]="procedureModalPayload.action"
       [procedure]="procedureModalPayload.procedure"
       [procedureSource]="source"
+      [contragents]="contragentsWithTp"
+      (positionsSelected)="procedurePositionsSelected.emit($event)"
       (complete)="newProcedure.emit(); procedureModalPayload = null"
       (cancel)="procedureModalPayload = null"
     ></app-request-procedure-form>

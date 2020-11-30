@@ -107,7 +107,7 @@
         <div class="app-row app-align-items-center">
 
           <button
-            type="button" uxgButton secondary (click)="manufacturerModal.open()"
+            type="button" uxgButton secondary (click)="manufacturingNameModal.open()"
             [disabled]="form.get('positions').disabled || form.get('positions').value?.length <= 0">Заполнить
             наименования
           </button>
@@ -128,11 +128,11 @@
           {{positionWithName.position.name}}
         </div>
         <div class="app-col">
-          <ng-container *ngIf="positionWithName.manufacturingName as name; else manufactureError">
+          <ng-container *ngIf="positionWithName.manufacturingName as name; else manufacturingNameError">
             <span class="app-secondary-color">{{ name }}</span>
           </ng-container>
-          <ng-template #manufactureError>
-            <ng-container *ngIf="!isManufacturerPristine && form.get('positions').hasError('manufacturer_name_error')">
+          <ng-template #manufacturingNameError>
+            <ng-container *ngIf="!isManufacturingNamePristine && form.get('positions').hasError('manufacturing_name_error')">
               <span class="app-error-color app-bold">Необходимо заполнить!</span>
             </ng-container>
           </ng-template>
@@ -216,16 +216,16 @@
       </ng-container>
     </uxg-modal>
 
-    <uxg-modal #manufacturerModal size="l">
+    <uxg-modal #manufacturingNameModal size="l">
       <h2>Заполнение заводских наименований</h2>
-      <app-request-proposal-form-manufacturer
+      <app-request-proposal-form-manufacturing-name
         [source]="procedureSource.TECHNICAL_PROPOSAL"
-        (cancel)="manufacturerModal.close()"
-        (ngModelChange)="manufacturerModal.close()"
+        (cancel)="manufacturingNameModal.close()"
+        (ngModelChange)="manufacturingNameModal.close()"
         [disabledFn]="positionManufacturerNameDisabled"
         [showManufacturer]="false"
         formControlName="positions"
-      ></app-request-proposal-form-manufacturer>
+      ></app-request-proposal-form-manufacturing-name>
     </uxg-modal>
 
     <uxg-modal #uploadTemplateModal size="l">

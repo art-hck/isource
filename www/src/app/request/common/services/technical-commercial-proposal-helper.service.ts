@@ -16,16 +16,16 @@ export class TechnicalCommercialProposalHelperService {
   }
 
   isDateValid(proposalPosition: CommonProposalItem, position: RequestPosition): boolean {
-    return position.isDeliveryDateAsap ||
-      moment(proposalPosition.deliveryDate).isSameOrBefore(moment(position.deliveryDate));
+    return position?.isDeliveryDateAsap ||
+      moment(proposalPosition?.deliveryDate).isSameOrBefore(moment(position?.deliveryDate));
   }
 
   isQuantityValid(proposalPosition: CommonProposalItem, position: RequestPosition): boolean {
-    return proposalPosition.quantity === position.quantity;
+    return proposalPosition?.quantity === position?.quantity;
   }
 
   getRequestedQuantityLabel(proposalPosition: CommonProposalItem, position: RequestPosition): string {
-    return proposalPosition.quantity > position.quantity ?
+    return proposalPosition?.quantity > position?.quantity ?
       ' - Количество больше нужного' :
       ' - Количество меньше нужного';
   }
@@ -34,26 +34,24 @@ export class TechnicalCommercialProposalHelperService {
     return positions.map(position => position.priceWithoutVat * position.quantity).reduce((sum, priceWithoutVat) => sum + priceWithoutVat, 0);
   }
 
-  chooseBy(type: "date" | "price", position: RequestPosition, proposals: CommonProposal[]): CommonProposal {
-    return proposals?.reduce((prev, curr) => {
-      const prevPos = prev?.items?.find(pos => pos.id === position.id);
-      const currPos = curr?.items?.find(pos => pos.id === position.id);
+  chooseBy(type: "date" | "price", position: RequestPosition, items: CommonProposalItem[]): CommonProposalItem {
+    return items?.reduce((prev, curr) => {
 
       if (type === 'date') {
-        const prevValid = prevPos && this.isValid(prevPos, position);
-        const currValid = currPos && this.isValid(currPos, position);
+        const prevValid = prev && this.isValid(prev, position);
+        const currValid = curr && this.isValid(curr, position);
         if (prevValid && !currValid) { return prev; }
         if (!prevValid && currValid) { return curr; }
       }
 
       switch (type) {
         case "price":
-          return prevPos.priceWithoutVat <= currPos.priceWithoutVat ? prev : curr;
+          return prev?.priceWithoutVat <= curr?.priceWithoutVat ? prev : curr;
         case "date":
-          if (moment(prevPos.deliveryDate).isSame(currPos.deliveryDate)) {
-            return prevPos.priceWithoutVat <= currPos.priceWithoutVat ? prev : curr;
+          if (moment(prev?.deliveryDate).isSame(curr?.deliveryDate)) {
+            return prev?.priceWithoutVat <= curr?.priceWithoutVat ? prev : curr;
           } else {
-            return moment(prevPos.deliveryDate).isBefore(currPos.deliveryDate) ? prev : curr;
+            return moment(prev?.deliveryDate).isBefore(curr?.deliveryDate) ? prev : curr;
           }
       }
     }, null);

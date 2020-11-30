@@ -90,10 +90,17 @@
                 </button>
               </div>
             </div>
+
             <ng-container *ngIf="source === 'TECHNICAL_COMMERCIAL_PROPOSAL' || source === 'TECHNICAL_PROPOSAL'">
               <ng-container *ngIf="control.value[0]?.manufacturingName; else manufactureError">
                 <div *ngFor="let proposalPosition of control.value" class="position-info-item">
-                  {{ proposalPosition.manufacturingName }} | {{ proposalPosition?.manufacturer }}
+                  <ng-container *ngIf="proposalPosition.manufacturer; else notEnteredManufacturingName">
+                    {{ proposalPosition.manufacturingName }} | {{ proposalPosition?.manufacturer }}
+                  </ng-container>
+
+                  <ng-template #notEnteredManufacturingName>
+                    <span class="error-message">Заполните данные</span>
+                  </ng-template>
                 </div>
               </ng-container>
 
@@ -105,10 +112,17 @@
                 </ng-container>
               </ng-template>
             </ng-container>
+
             <ng-container *ngIf="source === 'COMMERCIAL_PROPOSAL'">
               <ng-container *ngIf="control.value[0]?.manufacturer; else manufactureError">
                 <div *ngFor="let proposalPosition of control.value" class="position-info-item">
-                  {{ proposalPosition.manufacturer }} | {{ proposalPosition?.standard }}
+                  <ng-container *ngIf="proposalPosition.manufacturer; else notEnteredManufacturer">
+                    {{ proposalPosition.manufacturer }} | {{ proposalPosition?.standard }}
+                  </ng-container>
+
+                  <ng-template #notEnteredManufacturer>
+                    <span class="error-message">Заполните данные</span>
+                  </ng-template>
                 </div>
               </ng-container>
 
@@ -341,12 +355,12 @@
       <h2>
         {{source === 'TECHNICAL_COMMERCIAL_PROPOSAL' ? 'Заполнение заводских наименований' : 'Заполнение изготовителей и стандартов'}}
       </h2>
-      <app-request-proposal-form-manufacturer
+      <app-request-proposal-form-manufacturing-name
         [source]="source"
         (cancel)="manufacturerModal.close()"
         (ngModelChange)="manufacturerModal.close()"
         formControlName="positions"
-      ></app-request-proposal-form-manufacturer>
+      ></app-request-proposal-form-manufacturing-name>
     </uxg-modal>
 
     <uxg-modal #parametersModal size="l">

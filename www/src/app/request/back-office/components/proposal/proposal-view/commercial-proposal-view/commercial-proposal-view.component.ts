@@ -47,7 +47,8 @@ import moment from "moment";
 export class CommercialProposalViewComponent implements OnInit, OnDestroy {
   @Select(CommercialProposalState.proposals) proposals$: Observable<CommonProposal[]>;
   @Select(CommercialProposalState.proposalsByPositions) proposalsByPositions$: Observable<CommonProposalByPosition[]>;
-  @Select(CommercialProposalState.availablePositions) positions$: Observable<RequestPosition[]>;
+  @Select(CommercialProposalState.positions) positions$: Observable<RequestPosition[]>;
+  @Select(CommercialProposalState.availablePositions) availablePositions$: Observable<RequestPosition[]>;
   @Select(CommercialProposalState.procedures) procedures$: Observable<Procedure[]>;
   @Select(CommercialProposalState.status) status$: Observable<StateStatus>;
   @Select(RequestState.request) request$: Observable<Request>;
@@ -57,19 +58,19 @@ export class CommercialProposalViewComponent implements OnInit, OnDestroy {
 
   readonly destroy$ = new Subject();
   readonly procedurePositionsSelected$ = new Subject<Uuid[]>();
-  readonly contragentsWithTp$ = this.route.params.pipe(
-    withLatestFrom(this.procedurePositionsSelected$),
-    switchMap(([{ id }, ids]) => this.service.getContragentsWithTp(id, ids))
+  readonly contragentsWithTp$ = this.procedurePositionsSelected$.pipe(
+    withLatestFrom(this.route.params),
+    switchMap(([ids, { id }]) => this.service.getContragentsWithTp(id, ids))
   );
   readonly procedureSource = ProposalSource.COMMERCIAL_PROPOSAL;
   readonly downloadTemplate = (requestId: Uuid, groupId: Uuid) => new DownloadTemplate(requestId, groupId);
   readonly uploadTemplate = (requestId: Uuid, groupId: Uuid, files: File[]) => new UploadTemplate(requestId, files, groupId);
   readonly downloadAnalyticalReport = (requestId: Uuid, groupId: Uuid) => new DownloadAnalyticalReport(requestId, groupId);
-  readonly publishPositions = (proposalPositions: CommonProposalByPosition[]) => new Publish(this.groupId, proposalPositions);
+  readonly publishPositions = (requestId: Uuid, groupId: Uuid, proposalPositions: CommonProposalByPosition[]) => new Publish(requestId, groupId, proposalPositions);
   readonly updateProcedures = (requestId: Uuid, groupId: Uuid) => [new RefreshProcedures(requestId, groupId), new FetchAvailablePositions(requestId, groupId)];
   readonly rollback = (requestId: Uuid, groupId: Uuid, { id }: RequestPosition) => new Rollback(requestId, groupId, id);
   readonly create = (requestId: Uuid, groupId: Uuid, payload: Partial<CommonProposal>, items?: CommonProposalItem[]) => new Create(requestId, groupId, payload, items);
-  readonly edit = (payload: Partial<CommonProposal> & { id: Uuid }, items?: CommonProposalItem[]) => new Update(payload, items);
+  readonly edit = (requestId: Uuid, groupId: Uuid, payload: Partial<CommonProposal> & { id: Uuid }, items?: CommonProposalItem[]) => new Update(requestId, groupId, payload, items);
   readonly canRollback = ({ status, statusChangedDate }: RequestPosition, rollbackDuration: number) => status === PositionStatus.RESULTS_AGREEMENT &&
     moment().diff(moment(statusChangedDate), 'seconds') < rollbackDuration
 

@@ -13,7 +13,7 @@ import { TechnicalProposalPositionStatus } from "../../../../common/enum/technic
 import { TechnicalProposalPosition } from "../../../../common/models/technical-proposal-position";
 import { RequestPosition } from "../../../../common/models/request-position";
 import { TechnicalProposalsStatus } from "../../../../common/enum/technical-proposals-status";
-import { proposalManufacturerValidator } from "../proposal-form-manufacturer/proposal-form-manufacturer.validator";
+import { proposalManufacturingNameValidator } from "../proposal-form-manufacturing-name/proposal-form-manufacturing-name.validator";
 import { ToastActions } from "../../../../../shared/actions/toast.actions";
 import { Store } from "@ngxs/store";
 import { AppFile } from "../../../../../shared/components/file/file";
@@ -53,7 +53,7 @@ export class TechnicalProposalFormComponent implements OnInit, OnDestroy {
     return this.form.get('documents') as FormArray;
   }
 
-  get isManufacturerPristine(): boolean {
+  get isManufacturingNamePristine(): boolean {
     return this.form.get("positions").value.filter(pos => pos.manufacturingName).length === 0;
   }
 
@@ -93,13 +93,13 @@ export class TechnicalProposalFormComponent implements OnInit, OnDestroy {
         }
       }
       if (this.form.get('positions').dirty && this.form.get('positions').value.length && docsCount === 0
-        && this.isManufacturerPristine && this.form.get('documents').dirty) {
+        && this.isManufacturingNamePristine && this.form.get('documents').dirty) {
         this.showErrorMessage = true;
       }
       this.form.get('positions').setValidators(
-        docsCount > 0 && this.isManufacturerPristine ?
+        docsCount > 0 && this.isManufacturingNamePristine ?
           [Validators.required] :
-          [Validators.required, proposalManufacturerValidator]
+          [Validators.required, proposalManufacturingNameValidator]
       );
 
       this.form.get('positions').updateValueAndValidity({ emitEvent: false });

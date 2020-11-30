@@ -8,7 +8,8 @@
         <uxg-icon shape="app-draft"></uxg-icon>
         <span>Черновик</span>
       </div>
-      <div class="app-ghost-color app-bold" *ngIf="!isReviewed && publishedCount > 0">
+      <div class="app-ghost-color app-bold"
+           *ngIf="!isReviewed && !isPartiallyReviewed && !isSentToEdit && publishedCount > 0">
         <uxg-icon shape="app-waiting" class="is-solid"></uxg-icon>
         <span>Отправлено {{ publishedCount }} из {{ proposal.items.length }}</span>
       </div>
@@ -16,7 +17,14 @@
         <uxg-icon shape="app-check"></uxg-icon>
         <span>Рассмотрено</span>
       </div>
-
+      <div class="app-warning-color app-bold" *ngIf="isPartiallyReviewed && !isReviewed">
+        <uxg-icon shape="app-warning"></uxg-icon>
+        <span>Частично рассмотрено</span>
+      </div>
+      <div class="app-warning-color app-bold" *ngIf="isSentToEdit">
+        <uxg-icon shape="app-warning"></uxg-icon>
+        <span>На доработке</span>
+      </div>
       <button uxgButton icon link (click)="state = 'edit'" [disabled]="!editable">
         <uxg-icon shape="app-pen"></uxg-icon>
       </button>
@@ -30,8 +38,13 @@
         <hr/>
         <div class="app-row app-uppercase app-ghost-color app-bold">
           <small class="app-col app-ellipsis name">Наименование позиции</small>
-          <small class="app-col app-ellipsis manufacturing-name">Заводское наименование</small>
+          <small class="app-col app-ellipsis manufacturing-name" *ngIf="source === 'TECHNICAL_COMMERCIAL_PROPOSAL'">
+            Заводское наименование
+          </small>
           <small class="app-col app-ellipsis manufacturer">Изготовитель</small>
+          <small class="app-col app-ellipsis manufacturing-name" *ngIf="source === 'COMMERCIAL_PROPOSAL'">
+            Стандарт
+          </small>
           <small class="app-col total">Сумма без НДС</small>
           <small class="app-col quantity">Количество</small>
           <small class="app-col price">Цена за ед. без НДС</small>
@@ -41,20 +54,32 @@
 
         <div class="app-row" *ngFor="let item of proposal.items">
           <div class="app-col app-ellipsis name">{{getPosition(item)?.name}}</div>
-          <div class="app-col app-ellipsis manufacturing-name">{{item.manufacturingName}}</div>
+          <div class="app-col app-ellipsis manufacturing-name" *ngIf="source === 'TECHNICAL_COMMERCIAL_PROPOSAL'">
+            {{item.manufacturingName}}
+          </div>
           <div class="app-col app-ellipsis manufacturer">{{item?.manufacturer}}</div>
+          <div class="app-col app-ellipsis manufacturing-name" *ngIf="source === 'COMMERCIAL_PROPOSAL'">
+            {{item?.standard}}
+          </div>
           <div class="app-col total">
             {{(item.priceWithoutVat * item.quantity) || null | number:'1.0-2'}}
             <span class="app-ghost-color">{{getCurrencySymbol(item.currency, "narrow")}}</span>
           </div>
-          <div class="app-col quantity">{{item.quantity}} <span class="app-ghost-color">{{item.measureUnit}}</span></div>
+          <div class="app-col quantity" [class.app-error-color]="!helper.isQuantityValid(item, getPosition(item))">
+            {{item.quantity}}
+            <span class="app-ghost-color" [class.app-error-color]="!helper.isQuantityValid(item, getPosition(item))">
+              {{item.measureUnit}}
+            </span>
+          </div>
 
           <div class="app-col price">
             {{item.priceWithoutVat | number:'1.0-2'}}
             <span class="app-ghost-color">{{getCurrencySymbol(item.currency, "narrow")}}</span>
           </div>
 
-          <div class="app-col date">{{item.deliveryDate | date:"dd.MM.yyyy"}}</div>
+          <div class="app-col date" [class.app-error-color]="!helper.isDateValid(item, getPosition(item))">
+            {{item.deliveryDate | date:"dd.MM.yyyy"}}
+          </div>
           <div class="status text-center"
                [class.app-ghost-color]="item.status !== 'APPROVED'"
                [class.app-success-color]="item.status === 'APPROVED'"
@@ -106,7 +131,7 @@
   <app-common-proposal-form
     *ngSwitchCase="'edit'"
     [proposal]="proposal"
-    [availablePositions]="positions"
+    [availablePositions]="availablePositions"
     [request]="request"
     [groupId]="groupId"
     [source]="source"

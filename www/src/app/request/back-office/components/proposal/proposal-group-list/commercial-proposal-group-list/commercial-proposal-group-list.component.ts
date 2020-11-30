@@ -23,6 +23,7 @@ import UploadTemplate = CommercialProposalsActions.UploadTemplate;
 import FetchProcedures = CommercialProposalsActions.FetchProcedures;
 import RefreshProcedures = CommercialProposalsActions.RefreshProcedures;
 import DownloadTemplate = CommercialProposalsActions.DownloadTemplate;
+import { CommercialProposalsService } from "../../../../services/commercial-proposals.service";
 
 @Component({
   selector: 'app-commercial-proposal-group-list',
@@ -43,6 +44,11 @@ export class CommercialProposalGroupListComponent implements OnInit, OnDestroy {
     commercialProposalGroupName: [null, [Validators.required]],
     fileTemplate: [null, [Validators.required]]
   });
+  readonly procedurePositionsSelected$ = new Subject<Uuid[]>();
+  readonly contragentsWithTp$ = this.procedurePositionsSelected$.pipe(
+    withLatestFrom(this.route.params),
+    switchMap(([ids, { id }]) => this.commercialProposalsService.getContragentsWithTp(id, ids))
+  );
 
   readonly groups$: Observable<ProposalGroup[]> = this.route.params.pipe(
     tap(({ id }) => this.requestId = id),
@@ -53,8 +59,6 @@ export class CommercialProposalGroupListComponent implements OnInit, OnDestroy {
       { label: `Заявка №${number}`, link: `/requests/backoffice/${id}` },
       { label: 'Согласование КП', link: `/requests/backoffice/${id}/commercial-proposals`},
     ]),
-    switchMap(() => this.filter$),
-    switchMap(filter => this.service.list(this.requestId, filter)),
     switchMap(groups => this.newGroup$.pipe(
       tap(g => g && this.store.dispatch(new FetchAvailablePositions(this.requestId))),
       scan((acc, group) => {
@@ -65,6 +69,8 @@ export class CommercialProposalGroupListComponent implements OnInit, OnDestroy {
 
       return acc;
     }, groups))),
+    switchMap(() => this.filter$),
+    switchMap(filter => this.service.list(this.requestId, filter)),
     shareReplay(1)
   );
 
@@ -81,7 +87,8 @@ export class CommercialProposalGroupListComponent implements OnInit, OnDestroy {
     private actions: Actions,
     public featureService: FeatureService,
     public store: Store,
-    public service: CommercialProposalGroupService
+    public service: CommercialProposalGroupService,
+    public commercialProposalsService: CommercialProposalsService,
   ) {}
 
   ngOnInit() {
@@ -93,7 +100,7 @@ export class CommercialProposalGroupListComponent implements OnInit, OnDestroy {
       const e = result.error as any;
       this.store.dispatch(e ?
         new ToastActions.Error(e && e.error.detail) :
-        new ToastActions.Success(`Группа ТКП успешно сохранена`));
+        new ToastActions.Success(`Группа КП успешно сохранена`));
       if (!e) { this.updateGroups(); }
     });
   }
