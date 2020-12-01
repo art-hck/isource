@@ -8,7 +8,7 @@ import { DashboardTaskItem } from "../../models/dashboard-task-item";
 })
 export class TasksBarComponent implements OnInit {
   @Input() totalCounter: number;
-  @Input() tasks: DashboardTaskItem[];
+  @Input() tasksBar: DashboardTaskItem[];
 
   constructor() { }
 
