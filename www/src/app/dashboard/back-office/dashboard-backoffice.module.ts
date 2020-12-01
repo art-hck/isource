@@ -10,8 +10,6 @@ import { TasksBarComponent } from './components/tasks-bar/tasks-bar.component';
 import { DashboardState } from "./states/dashboard.state";
 import { DashboardStatisticsComponent } from './components/dashboard-statistics/dashboard-statistics.component';
 import { PercentageBarComponent } from './components/dashboard-statistics/percentage-bar/percentage-bar.component';
-import { NgxsModule } from "@ngxs/store";
-import { DashboardState } from "./states/dashboard.state";
 
 @NgModule({
   declarations: [

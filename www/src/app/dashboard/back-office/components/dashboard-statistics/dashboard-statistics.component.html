@@ -30,9 +30,8 @@
 
     <br><br>
 
-    <div class="app-row">
+    <div class="app-row" *ngIf="stats.statusesList.length">
       <div class="statuses-and-sum-section app-col">
-
         <!-- Хедер -->
         <div class="app-row app-align-items-center header-row">
           <div class="status-col"></div>
@@ -46,7 +45,7 @@
           </div>
         </div>
 
-
+        <!-- Список статусов со статистикой -->
         <ng-container *ngFor="let item of stats.statusesList">
           <div class="app-row app-align-items-center status-row">
             <div class="status-col">
