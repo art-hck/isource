@@ -46,221 +46,31 @@
           </div>
         </div>
 
-        <!-- Черновики -->
-        <div class="app-row app-align-items-center status-row">
-          <div class="status-col">
-            <div class="app-position-status">
-              <span>Черновики</span>
-              <div class="app-position-status-icon DRAFT"></div>
+
+        <ng-container *ngFor="let item of stats.statusesList">
+          <div class="app-row app-align-items-center status-row">
+            <div class="status-col">
+              <div class="app-position-status">
+                <span>{{ item.statusGroupName }}</span>
+                <div class="app-position-status-icon {{ item.status }}"></div>
+              </div>
+            </div>
+
+            <div class="app-col">
+              <app-percentage-bar
+                [percentage]="item.quantityPercentage"
+                [count]="item.quantity">
+              </app-percentage-bar>
+            </div>
+
+            <div class="app-col">
+              <app-percentage-bar
+                [percentage]="item.sumPercentage"
+                [sum]="item.sum">
+              </app-percentage-bar>
             </div>
           </div>
-
-          <div class="app-col">
-            <app-percentage-bar
-            [percentage]="25"
-            [count]="1423">
-            </app-percentage-bar>
-          </div>
-
-          <div class="app-col">
-            <app-percentage-bar
-              [percentage]="25"
-              [sum]="13400">
-            </app-percentage-bar>
-          </div>
-        </div>
-
-        <!-- Новые -->
-        <div class="app-row app-align-items-center status-row">
-          <div class="status-col">
-            <div class="app-position-status">
-              <span>Новые</span>
-              <div class="app-position-status-icon NEW"></div>
-            </div>
-          </div>
-
-          <div class="app-col">
-            <app-percentage-bar
-              [percentage]="36"
-              [count]="1423">
-            </app-percentage-bar>
-          </div>
-
-          <div class="app-col">
-            <app-percentage-bar
-              [percentage]="36"
-              [sum]="18800">
-            </app-percentage-bar>
-          </div>
-        </div>
-
-        <!-- ТКП -->
-        <div class="app-row app-align-items-center status-row">
-          <div class="status-col">
-            <div class="app-position-status">
-              <span>ТКП</span>
-              <div class="app-position-status-icon TECHNICAL_COMMERCIAL_PROPOSALS_PREPARATION"></div>
-            </div>
-          </div>
-
-          <div class="app-col">
-            <app-percentage-bar
-              [percentage]="15"
-              [count]="1423">
-            </app-percentage-bar>
-          </div>
-
-          <div class="app-col">
-            <app-percentage-bar
-              [percentage]="15"
-              [sum]="73124">
-            </app-percentage-bar>
-          </div>
-        </div>
-
-        <!-- ТП -->
-        <div class="app-row app-align-items-center status-row">
-          <div class="status-col">
-            <div class="app-position-status">
-              <span>ТП</span>
-              <div class="app-position-status-icon TECHNICAL_PROPOSALS_PREPARATION"></div>
-            </div>
-          </div>
-
-          <div class="app-col">
-            <app-percentage-bar
-              [percentage]="8"
-              [count]="1423">
-            </app-percentage-bar>
-          </div>
-
-          <div class="app-col">
-            <app-percentage-bar
-              [percentage]="8"
-              [sum]="3572">
-            </app-percentage-bar>
-          </div>
-        </div>
-
-        <!-- КП -->
-        <div class="app-row app-align-items-center status-row">
-          <div class="status-col">
-            <div class="app-position-status">
-              <span>КП</span>
-              <div class="app-position-status-icon PROPOSALS_PREPARATION"></div>
-            </div>
-          </div>
-
-          <div class="app-col">
-            <app-percentage-bar
-              [percentage]="0"
-              [count]="0">
-            </app-percentage-bar>
-          </div>
-
-          <div class="app-col">
-            <app-percentage-bar
-              [percentage]="0"
-              [count]="0">
-            </app-percentage-bar>
-          </div>
-        </div>
-
-        <!-- Договор -->
-        <div class="app-row app-align-items-center status-row">
-          <div class="status-col">
-            <div class="app-position-status">
-              <span>Договор</span>
-              <div class="app-position-status-icon CONTRACT_AGREEMENT"></div>
-            </div>
-          </div>
-
-          <div class="app-col">
-            <app-percentage-bar
-              [percentage]="67"
-              [count]="1423">
-            </app-percentage-bar>
-          </div>
-
-          <div class="app-col">
-            <app-percentage-bar
-              [percentage]="67"
-              [sum]="7632">
-            </app-percentage-bar>
-          </div>
-        </div>
-
-        <!-- РКД -->
-        <div class="app-row app-align-items-center status-row">
-          <div class="status-col">
-            <div class="app-position-status">
-              <span>РКД</span>
-              <div class="app-position-status-icon RKD_AGREEMENT"></div>
-            </div>
-          </div>
-
-          <div class="app-col">
-            <app-percentage-bar
-              [percentage]="23"
-              [count]="1423">
-            </app-percentage-bar>
-          </div>
-
-          <div class="app-col">
-            <app-percentage-bar
-              [percentage]="23"
-              [sum]="7235">
-            </app-percentage-bar>
-          </div>
-        </div>
-
-        <!-- Доставка -->
-        <div class="app-row app-align-items-center status-row">
-          <div class="status-col">
-            <div class="app-position-status">
-              <span>Доставка</span>
-              <div class="app-position-status-icon DELIVERY"></div>
-            </div>
-          </div>
-
-          <div class="app-col">
-            <app-percentage-bar
-              [percentage]="2"
-              [count]="1423">
-            </app-percentage-bar>
-          </div>
-
-          <div class="app-col">
-            <app-percentage-bar
-              [percentage]="2"
-              [sum]="2423">
-            </app-percentage-bar>
-          </div>
-        </div>
-
-        <!-- Завершение -->
-        <div class="app-row app-align-items-center status-row">
-          <div class="status-col">
-            <div class="app-position-status">
-              <span>Завершение</span>
-              <div class="app-position-status-icon COMPLETED"></div>
-            </div>
-          </div>
-
-          <div class="app-col">
-            <app-percentage-bar
-              [percentage]="86"
-              [count]="1423">
-            </app-percentage-bar>
-          </div>
-
-          <div class="app-col">
-            <app-percentage-bar
-              [percentage]="86"
-              [sum]="342331">
-            </app-percentage-bar>
-          </div>
-        </div>
+        </ng-container>
       </div>
     </div>
   </ng-container>

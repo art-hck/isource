@@ -1,3 +1,5 @@
+import { DashboardStatusListItem } from "./dashboard-status-list-item";
+
 export class StatusesStatisticsInfo {
   requestsCount: number;
   positionsCount: number;
@@ -6,4 +8,5 @@ export class StatusesStatisticsInfo {
   responsibleUsersCount: number;
   positionsTotalSumWithoutVat: number;
   currency?: string;
+  statusesList: DashboardStatusListItem[];
 }
