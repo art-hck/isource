@@ -1,1 +1,53 @@
-<p>dashboard works!</p>
+<h2>Задачи или согласования по статусам</h2>
+<div class="app-row app-align-items-center">
+  <div class="app-col">
+    <span class="app-secondary-color">показать: </span>
+    <uxg-popover #viewPopover>
+      <button uxgButton uxgPopoverTrigger link clear [ngSwitch]="view">
+        <span *ngSwitchCase="'tasks'"><b>мои задачи</b></span>
+        <span *ngSwitchCase="'agreements'"><b>согласования заказчика</b></span>
+      </button>
+      <div *uxgPopoverContent>
+        <div>
+          <button uxgButton clear (click)="switchView('tasks')">мои задачи</button>
+        </div>
+        <div>
+          <button uxgButton clear (click)="switchView('agreements')">согласования заказчика</button>
+        </div>
+      </div>
+    </uxg-popover>
+  </div>
+  <div class="app-col"></div>
+  <div class="app-col-auto">
+    <div *ngIf="view === 'tasks'">
+      <a routerLink="/agreements/backoffice"><b>Все задачи ({{tasksTotalCount$ | async}})</b></a>
+    </div>
+    <div *ngIf="view === 'agreements'">
+      <a routerLink="/agreements/backoffice"><b>Все согласования ({{agreementsTotalCount$ | async}})</b></a>
+    </div>
+  </div>
+</div>
+
+<!--Мои задачи-->
+<ng-container *ngIf="view === 'tasks' && (tasks$ | async) as tasks">
+  <div class="stat-block">
+    <app-tasks-bar
+    [totalCounter]="tasksTotalCount$ | async"
+    [tasksBar]="tasksBar$ | async"></app-tasks-bar>
+  </div>
+  <app-agreements
+    [agreements]="tasks"
+    [dashboardView]="true">
+  </app-agreements>
+</ng-container>
+
+<!--Согласования заказчика-->
+<ng-container *ngIf="view === 'agreements' && (agreements$ | async) as agreements">
+  <div class="stat-block">
+    <app-tasks-bar></app-tasks-bar>
+  </div>
+  <app-agreements
+    [agreements]="agreements">
+  </app-agreements>
+</ng-container>
+

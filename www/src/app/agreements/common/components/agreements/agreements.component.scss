@@ -1,9 +1,18 @@
+@import "src/theme";
+
 .id {
   max-width: 100px;
 }
 
 .agreements-list {
   margin-bottom: 25px;
+}
+
+.dashboard-table {
+  & > .app-row:first-child {
+    border-top-right-radius: 0;
+    border-top-left-radius: 0;
+  }
 }
 
 .group-counter {
@@ -20,4 +29,10 @@ span.empty-list {
 .name {
   overflow: hidden;
   display: flex;
+}
+
+.dashboard-header {
+  background: #F4F6FB;
+  border-left: 1px solid uxg($theme, color-border);
+  border-right: 1px solid uxg($theme, color-border);
 }
