@@ -1,0 +1,11 @@
+@import "src/theme";
+.stat-bar {
+  height: 25px;
+  background-color: white;
+  margin: 0 0 0 15px;
+}
+
+.total {
+  color: uxg($theme, color-primary);
+  margin: 0 12px;
+}
