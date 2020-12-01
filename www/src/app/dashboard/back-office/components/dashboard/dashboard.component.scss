@@ -1,0 +1,11 @@
+@import "src/theme";
+.stat-block {
+  border-top-width: 1px;
+  border-top-style: solid;
+  border-left: 1px solid uxg($theme, color-border);
+  border-right: 1px solid uxg($theme, color-border);
+  background: #F4F6FB;
+  border-radius: uxg($theme, card-border-radius) uxg($theme, card-border-radius) 0 0;
+  padding: 27px 0 20px 50px;
+  margin-top: 16px;
+}
