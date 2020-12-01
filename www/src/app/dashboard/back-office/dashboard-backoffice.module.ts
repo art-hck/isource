@@ -6,16 +6,25 @@ import { AgreementsCommonModule } from "../../agreements/common/agreements-commo
 import { AgreementsService } from "../../agreements/customer/services/agreements.service";
 import { DashboardBackofficeRoutingModule } from "./dashboard-backoffice-routing.module";
 import { DashboardService } from "./services/dashboard.service";
+import { DashboardStatisticsComponent } from './components/dashboard-statistics/dashboard-statistics.component';
+import { PercentageBarComponent } from './components/dashboard-statistics/percentage-bar/percentage-bar.component';
+import { NgxsModule } from "@ngxs/store";
+import { DashboardState } from "./states/dashboard.state";
 
 @NgModule({
   declarations: [
     DashboardComponent,
+    DashboardStatisticsComponent,
+    PercentageBarComponent,
   ],
   imports: [
     AgreementsCommonModule,
     SharedModule,
     CommonModule,
-    DashboardBackofficeRoutingModule
+    DashboardBackofficeRoutingModule,
+    NgxsModule.forFeature([
+      DashboardState
+    ]),
   ],
   providers: [
     DashboardService,
