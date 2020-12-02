@@ -10,12 +10,12 @@
   </div>
 
   <div class="app-col-2 count-sum-col">
-    <ng-container *ngIf="count; else sumInfo">
+    <ng-container *ngIf="count >= 0; else sumInfo">
       <small class="count">{{ count }}</small>
     </ng-container>
 
     <ng-template #sumInfo>
-      <small class="sum">{{ sum || 0 | currency: 'RUB' :"symbol" : "1.0-2" }}</small>
+      <small class="sum">{{ sum | currency: 'RUB' :"symbol" : "1.0-2" }}</small>
     </ng-template>
   </div>
 </div>
