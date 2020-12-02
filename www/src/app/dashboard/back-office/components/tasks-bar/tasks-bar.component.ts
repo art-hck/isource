@@ -10,6 +10,8 @@ export class TasksBarComponent implements OnInit {
   @Input() totalCounter: number;
   @Input() tasksBar: DashboardTaskItem[];
 
+  folded = false;
+
   constructor() { }
 
   ngOnInit(): void {
