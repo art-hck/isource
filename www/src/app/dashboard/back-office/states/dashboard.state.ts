@@ -6,12 +6,15 @@ import FetchTasks = DashboardActions.FetchTasks;
 import { patch } from "@ngxs/store/operators";
 import { tap } from "rxjs/operators";
 import { DashboardService } from "../services/dashboard.service";
-import FetchAgreements = DashboardActions.FetchAgreements;
 import { DashboardTasks } from "../models/dashboard-tasks";
+import { StatusesStatisticsInfo } from "../models/statuses-statistics";
+import FetchAgreements = DashboardActions.FetchAgreements;
+import FetchStatusesStatistics = DashboardActions.FetchStatusesStatistics;
 
 export interface DashboardStateModel {
   tasks: DashboardTasks;
   agreements: DashboardTasks;
+  statusesStatistics: StatusesStatisticsInfo;
   status: StateStatus;
 }
 
@@ -20,7 +23,7 @@ type Context = StateContext<Model>;
 
 @State<Model>({
   name: 'BackofficeDashboard',
-  defaults: { tasks: null, agreements: null, status: "pristine" }
+  defaults: { tasks: null, agreements: null, statusesStatistics: null, status: "pristine" }
 })
 @Injectable()
 export class DashboardState {
@@ -45,6 +48,9 @@ export class DashboardState {
   static agreementsTotalCount({ agreements }: Model) { return agreements.totalCount; }
 
   @Selector()
+  static statusesStatistics({ statusesStatistics }: Model) { return statusesStatistics; }
+
+  @Selector()
   static status({ status }: Model) { return status; }
 
   @Action(FetchTasks) fetchTasks({setState}: Context) {
@@ -59,5 +65,12 @@ export class DashboardState {
     return this.rest.getAgreements().pipe(
       tap(agreements => setState(patch({ agreements, status: "received" as StateStatus }))),
     );
+  }
+
+  @Action(FetchStatusesStatistics)
+  fetchStatusesStatistics({ setState, dispatch }: Context, { filters }: FetchStatusesStatistics) {
+    setState(patch<Model>({ status: 'fetching', statusesStatistics: null }));
+
+    return this.rest.getStatusesStatistics(filters).pipe(tap(statusesStatistics => setState(patch<Model>({ statusesStatistics, status: "received" }))));
   }
 }

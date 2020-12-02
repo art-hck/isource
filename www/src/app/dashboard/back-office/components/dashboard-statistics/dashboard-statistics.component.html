@@ -1,0 +1,82 @@
+<div class="app-card">
+  <ng-container *ngIf="statusesStatistics as stats; else loading">
+    <div class="app-row">
+      <div class="statistics-filter-section app-col">
+        <!--  filter section    -->
+      </div>
+    </div>
+
+    <div class="app-row">
+      <div class="statistics-section app-col">
+        <div class="app-row app-ghost-color">
+          <div class="app-col">Заявок</div>
+          <div class="app-col">Позиций</div>
+          <div class="app-col">Заказчиков</div>
+          <div class="app-col">Требует действий БО</div>
+          <div class="app-col">Ответственных</div>
+          <div class="app-col sum-column">Сумма без НДС</div>
+        </div>
+
+        <div class="app-row">
+          <h2 class="app-col">{{ stats.requestsCount }} <span class="app-ghost-color">шт</span></h2>
+          <h2 class="app-col">{{ stats.positionsCount }} <span class="app-ghost-color">шт</span></h2>
+          <h2 class="app-col">{{ stats.customersCount }}</h2>
+          <h2 class="app-col">{{ stats.backofficeTasksCount }}</h2>
+          <h2 class="app-col">{{ stats.responsibleUsersCount }}</h2>
+          <h2 class="app-col sum-column">{{ stats.positionsTotalSumWithoutVat }} <span class="app-ghost-color">₽</span></h2>
+        </div>
+      </div>
+    </div>
+
+    <br><br>
+
+    <div class="app-row" *ngIf="stats.statusesList.length">
+      <div class="statuses-and-sum-section app-col">
+        <!-- Хедер -->
+        <div class="app-row app-align-items-center header-row">
+          <div class="status-col"></div>
+
+          <div class="app-col">
+            <h3>Статусы позиций</h3>
+          </div>
+
+          <div class="app-col">
+            <h3>Деньги (стоимость) по статуам</h3>
+          </div>
+        </div>
+
+        <!-- Список статусов со статистикой -->
+        <ng-container *ngFor="let item of stats.statusesList">
+          <div class="app-row app-align-items-center status-row">
+            <div class="status-col">
+              <div class="app-position-status">
+                <span>{{ item.statusGroupName }}</span>
+                <div class="app-position-status-icon {{ item.status }}"></div>
+              </div>
+            </div>
+
+            <div class="app-col">
+              <app-percentage-bar
+                [percentage]="item.quantityPercentage"
+                [count]="item.quantity">
+              </app-percentage-bar>
+            </div>
+
+            <div class="app-col">
+              <app-percentage-bar
+                [percentage]="item.sumPercentage"
+                [sum]="item.sum">
+              </app-percentage-bar>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-template #loading>
+    <div class="text-center">
+      <span class="spinner spinner-md"></span>
+    </div>
+  </ng-template>
+</div>

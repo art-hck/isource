@@ -1,0 +1,34 @@
+.statistics-section {
+  margin: 0 -20px;
+  padding: 16px 20px;
+  background: #F4F6FB;
+  box-sizing: content-box;
+
+  & h2 {
+    margin-top: 5px;
+    margin-bottom: 0;
+  }
+}
+
+.statuses-and-sum-section {
+  & .header-row {
+    margin-bottom: 15px;
+  }
+
+  & .status-row {
+    margin-bottom: 20px;
+  }
+}
+
+.app-position-status {
+  float: right;
+  padding-right: 45px;
+}
+
+.sum-column {
+  text-align: right;
+}
+
+.status-col {
+  min-width: 150px;
+}

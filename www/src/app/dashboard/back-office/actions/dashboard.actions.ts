@@ -8,4 +8,10 @@ export namespace DashboardActions {
     static readonly type = '[Dashboard Backoffice] FetchAgreements';
     constructor() {}
   }
+
+  export class FetchStatusesStatistics {
+    static readonly type = '[Dashboard Backoffice] FetchStatusesStatistics';
+
+    constructor(public filters: any) {}
+  }
 }
