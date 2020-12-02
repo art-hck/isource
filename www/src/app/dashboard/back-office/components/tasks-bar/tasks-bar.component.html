@@ -4,6 +4,15 @@
     <small class="total"><b> {{totalCounter}}</b></small>
     <small class="app-ghost-color"> 100%</small>
   </div>
-  <div class="app-col stat-bar"></div>
+  <div class="app-row app-col tasks-bar">
+    <ng-container *ngFor="let tasks of tasksBar">
+      <div class="app-col {{tasks.group}}" [style.width.%]="tasks.percent"></div>
+    </ng-container>
+  </div>
+  <div class="app-col extend-button">
+    <button uxgButton icon clear (click)="folded=!folded">
+      <uxg-icon shape="app-chevron" [attr.dir]="folded ? 'up' : 'down'"></uxg-icon>
+    </button>
+  </div>
 </div>
 

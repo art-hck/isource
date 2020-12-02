@@ -1,11 +1,44 @@
 @import "src/theme";
-.stat-bar {
-  height: 25px;
-  background-color: white;
-  margin: 0 0 0 15px;
+
+.TASK_GROUP_INIT {
+  background-color: #b3b3b3;
+}
+.TASK_GROUP_NEW {
+  background-color: #EB5757;
+}
+.TASK_GROUP_TCP {
+  background-color: #EE64E8;
+}
+.TASK_GROUP_TP {
+  background-color: #fb6a9e;
+}
+.TASK_GROUP_CP {
+  background-color: #f38b00;
+}
+.TASK_GROUP_CONTRACT {
+  background-color: #f2c94c;
+}
+.TASK_GROUP_RKD {
+  background-color: #56b9f2;
+}
+.TASK_GROUP_FINISH {
+  background-color: #9b51e0;
 }
 
 .total {
   color: uxg($theme, color-primary);
   margin: 0 12px;
+}
+
+.tasks-bar {
+  height: 25px;
+  margin-left: 15px;
+}
+
+.extend-button {
+  max-width: 59px;
+  background: white;
+  button {
+    width: 100%;
+  }
 }
