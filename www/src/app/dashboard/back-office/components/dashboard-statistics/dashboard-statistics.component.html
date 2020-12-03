@@ -17,7 +17,7 @@
             <div class="app-col-auto">
               <button uxgButton link clear (click)="filterRequestsListModal.open()">
                 <span><b>
-                  {{ selectedRequests.length ?
+                  {{ selectedRequests?.length ?
                   (selectedRequests.length | pluralize: "заявка" : "заявки" : "заявок") :
                   'все заявки' }}</b></span>
               </button>

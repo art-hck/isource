@@ -77,7 +77,9 @@ export class DashboardStatisticsComponent implements OnInit, OnDestroy {
       shipmentDateTo: this.form.get('shipmentDateTo').value,
     };
 
-    console.log(filters);
+    for (const [key, value] of Object.entries(filters)) {
+      if (!value?.length) { delete filters[key]; }
+    }
 
     this.store.dispatch(new FetchStatusesStatistics(filters));
   }
