@@ -17,6 +17,7 @@
   #itemsWrapper
   class="app-dropdown-items-wrapper"
   [class.hidden]="isHidden"
+  [class.invalid]="inputRef.classList.contains('invalid')"
   [class.app-dropdown-items-wrapper-up]="isDirectionUp"
 >
   <div class="app-dropdown-items">

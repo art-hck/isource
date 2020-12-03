@@ -28,5 +28,11 @@ export class SuggestionsDirective implements OnInit {
       flatMap(value => this.$.pipe(map(data => this.searchFn && this.searchFn(value, data)))),
       tap(() => this.dropdownInputComponent.toggle(true))
     );
+
+    this.dropdownInputComponent.focus.pipe(
+      filter(() => this.minLength === 0 && this.ngControl.pristine && !this.ngControl.value),
+      tap(() => this.dropdownInputComponent.isNotFromList = true),
+      tap(() => this.ngControl.control.setValue(this.ngControl.value))
+    ).subscribe();
   }
 }
