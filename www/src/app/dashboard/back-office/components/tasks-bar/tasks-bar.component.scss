@@ -91,6 +91,7 @@
 .bar-view {
   background-color: white;
   transition: 0.35s;
+  position: relative;
 }
 
 .bar-folded {
@@ -99,9 +100,10 @@
 
 .bar-item-folded {
   min-height: 25px;
-  position: absolute;
   transition: top 350ms;
   top: 218px;
+  flex-grow: 1;
+  position: relative;
 }
 
 .app-col-auto {
@@ -110,4 +112,10 @@
 
 .no-border {
   border: 0;
+}
+
+.bar-area {
+  position: absolute;
+  width: 100%;
+  display: flex;
 }
