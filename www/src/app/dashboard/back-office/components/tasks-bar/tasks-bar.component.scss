@@ -3,36 +3,59 @@
 .TASK_GROUP_INIT {
   background-color: #b3b3b3;
 }
+
 .TASK_GROUP_NEW {
   background-color: #EB5757;
 }
+
 .TASK_GROUP_TCP {
   background-color: #EE64E8;
 }
+
 .TASK_GROUP_TP {
   background-color: #fb6a9e;
 }
+
 .TASK_GROUP_CP {
   background-color: #f38b00;
 }
+
 .TASK_GROUP_CONTRACT {
   background-color: #f2c94c;
 }
+
 .TASK_GROUP_RKD {
   background-color: #56b9f2;
 }
+
 .TASK_GROUP_FINISH {
   background-color: #9b51e0;
 }
 
 .total {
   color: uxg($theme, color-primary);
-  margin: 0 12px;
+  width: 35px;
+  display: inline-flex;
+}
+
+.percent {
+  width: 45px;
+  display: inline-flex;
+}
+
+.task-name {
+  width: 106px;
+  display: inline-flex;
 }
 
 .tasks-bar {
   height: 25px;
   margin-left: 15px;
+  border-top: 1px dashed uxg($theme, color-border);
+  border-right: 1px dashed uxg($theme, color-border);
+  border-left: 1px solid uxg($theme, color-border);
+  transition: top 300ms;
+  position: relative;
 }
 
 .extend-button {
@@ -41,4 +64,51 @@
   button {
     width: 100%;
   }
+}
+
+.bar-item {
+  height: 25px;
+  &:hover {
+    background-color: #fff;
+  }
+  &:last-child {
+    & > .bar-grid:last-child {
+      border-bottom: 1px solid uxg($theme, color-border);
+    }
+  }
+}
+
+.bar-grid {
+  border-top: 1px dashed uxg($theme, color-border);
+  border-right: 1px dashed uxg($theme, color-border);
+  border-left: 1px solid uxg($theme, color-border);
+  margin: 0 59px 0 15px;
+  & > .app-col:not(:last-child) {
+    border-right: 1px dashed uxg($theme, color-border);
+  }
+}
+
+.bar-view {
+  background-color: white;
+  transition: 0.35s;
+}
+
+.bar-folded {
+  position: relative;
+}
+
+.bar-item-folded {
+  min-height: 25px;
+  position: absolute;
+  transition: top 350ms;
+  top: 218px;
+  left: 19%;
+}
+
+.app-col-auto {
+  align-self: center;
+}
+
+.no-border {
+  border: 0;
 }
