@@ -19,17 +19,10 @@ import { animate, style, transition, trigger } from "@angular/animations";
   ]
 })
 
-export class TasksBarComponent implements OnInit {
+export class TasksBarComponent {
   @Input() totalCounter: number;
   @Input() tasksBar: DashboardTaskItem[];
   @Input() isTasks = false;
 
-  showGrid = false;
-
-  constructor() {
-  }
-
-  ngOnInit(): void {
-  }
-
+  folded = true;
 }

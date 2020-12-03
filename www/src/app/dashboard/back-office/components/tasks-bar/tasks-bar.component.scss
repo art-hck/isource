@@ -3,24 +3,31 @@
 .TASK_GROUP_INIT {
   background-color: #b3b3b3;
 }
+
 .TASK_GROUP_NEW {
   background-color: #EB5757;
 }
+
 .TASK_GROUP_TCP {
   background-color: #EE64E8;
 }
+
 .TASK_GROUP_TP {
   background-color: #fb6a9e;
 }
+
 .TASK_GROUP_CP {
   background-color: #f38b00;
 }
+
 .TASK_GROUP_CONTRACT {
   background-color: #f2c94c;
 }
+
 .TASK_GROUP_RKD {
   background-color: #56b9f2;
 }
+
 .TASK_GROUP_FINISH {
   background-color: #9b51e0;
 }
@@ -30,10 +37,12 @@
   width: 35px;
   display: inline-flex;
 }
+
 .percent {
   width: 45px;
   display: inline-flex;
 }
+
 .task-name {
   width: 106px;
   display: inline-flex;
