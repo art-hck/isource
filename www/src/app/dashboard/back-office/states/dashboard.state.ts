@@ -10,6 +10,7 @@ import { DashboardTasks } from "../models/dashboard-tasks";
 import { StatusesStatisticsInfo } from "../models/statuses-statistics";
 import FetchAgreements = DashboardActions.FetchAgreements;
 import FetchStatusesStatistics = DashboardActions.FetchStatusesStatistics;
+import FetchAvailableFilters = DashboardActions.FetchAvailableFilters ;
 import { DashboardAvailableFilters } from "../models/dashboard-available-filters";
 
 export interface DashboardStateModel {
@@ -85,9 +86,9 @@ export class DashboardState {
     return this.rest.getStatusesStatistics(filters).pipe(tap(statusesStatistics => setState(patch<Model>({ statusesStatistics, status: "received" }))));
   }
 
-  @Action(FetchStatusesStatistics)
-  fetchAvailableFilters({ setState, dispatch }: Context, { filters }: FetchStatusesStatistics) {
-    setState(patch<Model>({ status: 'fetching', availableFilters: null }));
+  @Action(FetchAvailableFilters)
+  fetchAvailableFilters({ setState, dispatch }: Context, { filters }: FetchAvailableFilters) {
+    setState(patch<Model>({ status: 'fetching' }));
 
     return this.rest.getDashboardAvailableFilters(filters).pipe(tap(availableFilters => setState(patch<Model>({ availableFilters, status: "received" }))));
   }

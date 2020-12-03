@@ -1,4 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { getCurrencySymbol } from "@angular/common";
 import { StatusesStatisticsInfo } from "../../models/statuses-statistics";
 import { FormControl, FormGroup } from "@angular/forms";
 import { Select, Store } from "@ngxs/store";
@@ -13,7 +14,7 @@ import { map, takeUntil, tap, withLatestFrom } from "rxjs/operators";
 import { ActivatedRoute } from "@angular/router";
 import { DashboardActions } from "../../actions/dashboard.actions";
 import FetchStatusesStatistics = DashboardActions.FetchStatusesStatistics;
-import { getCurrencySymbol } from "@angular/common";
+import FetchAvailableFilters = DashboardActions.FetchAvailableFilters;
 
 @Component({
   selector: 'app-dashboard-statistics',
@@ -55,7 +56,7 @@ export class DashboardStatisticsComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.route.params.pipe(
-      tap(() => this.store.dispatch(new FetchStatusesStatistics({}))),
+      tap(() => this.store.dispatch([new FetchStatusesStatistics({}), new FetchAvailableFilters({})])),
       withLatestFrom(this.statusesStatistics$),
       takeUntil(this.destroy$)
     ).subscribe();
