@@ -80,7 +80,7 @@ export class DashboardState {
 
   @Action(FetchStatusesStatistics)
   fetchStatusesStatistics({ setState, dispatch }: Context, { filters }: FetchStatusesStatistics) {
-    setState(patch<Model>({ status: 'fetching', statusesStatistics: null }));
+    setState(patch<Model>({ status: 'fetching' }));
 
     return this.rest.getStatusesStatistics(filters).pipe(tap(statusesStatistics => setState(patch<Model>({ statusesStatistics, status: "received" }))));
   }

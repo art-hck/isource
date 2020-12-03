@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, Output } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { StatusesStatisticsInfo } from "../../models/statuses-statistics";
 import { FormControl, FormGroup } from "@angular/forms";
 import { Select, Store } from "@ngxs/store";
@@ -13,14 +13,14 @@ import { map, takeUntil, tap, withLatestFrom } from "rxjs/operators";
 import { ActivatedRoute } from "@angular/router";
 import { DashboardActions } from "../../actions/dashboard.actions";
 import FetchStatusesStatistics = DashboardActions.FetchStatusesStatistics;
+import { getCurrencySymbol } from "@angular/common";
 
 @Component({
   selector: 'app-dashboard-statistics',
   templateUrl: './dashboard-statistics.component.html',
   styleUrls: ['./dashboard-statistics.component.scss']
 })
-export class DashboardStatisticsComponent implements OnInit {
-
+export class DashboardStatisticsComponent implements OnInit, OnDestroy {
   @Select(DashboardState.statusesStatistics) statusesStatistics$: Observable<StatusesStatisticsInfo>;
   @Select(DashboardState.filterRequestList) filterRequestList$: Observable<DashboardAvailableFiltersRequestItem[]>;
   @Select(DashboardState.filterCustomerList) filterCustomerList$: Observable<DashboardAvailableFiltersCustomerItem[]>;
@@ -33,6 +33,12 @@ export class DashboardStatisticsComponent implements OnInit {
     shipmentDateFrom: new FormControl(null),
     shipmentDateTo: new FormControl(null),
   });
+
+  selectedRequests = [];
+  selectedCustomers = [];
+  selectedUsers = [];
+
+  getCurrencySymbol = getCurrencySymbol;
 
   readonly filters$: Observable<any> = this.form.valueChanges.pipe(
     map(data => {
@@ -58,10 +64,14 @@ export class DashboardStatisticsComponent implements OnInit {
   submitFilter() {
     console.log(this.form);
 
+    this.selectedRequests = this.form.get('requests').value?.map(request => request.id);
+    this.selectedCustomers = this.form.get('customers').value?.map(customer => customer.id);
+    this.selectedUsers = this.form.get('users').value?.map(user => user.id);
+
     const filters = {
-      requestIds: this.form.get('requests').value?.map(request => request.id),
-      customers: this.form.get('customers').value?.map(customer => customer.id),
-      userIds: this.form.get('users').value?.map(user => user.id),
+      requestIds: this.selectedRequests,
+      customers: this.selectedCustomers,
+      userIds: this.selectedUsers,
       shipmentDateFrom: this.form.get('shipmentDateFrom').value,
       shipmentDateTo: this.form.get('shipmentDateTo').value,
     };

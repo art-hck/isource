@@ -11,35 +11,53 @@
 
           <div class="app-row app-align-items-center">
             <div class="app-col-auto">
-              <span class="app-secondary-color">показать: </span>
-              <span (click)="filterRequestsListModal.open()">
-               <b>все заявки</b>
-              </span>
+              <span class="app-secondary-color">показать: </span>
+            </div>
+
+            <div class="app-col-auto">
+              <button uxgButton link clear (click)="filterRequestsListModal.open()">
+                <span><b>
+                  {{ selectedRequests.length ?
+                  (selectedRequests.length | pluralize: "заявка" : "заявки" : "заявок") :
+                  'все заявки' }}</b></span>
+              </button>
             </div>
 
             <div class="vertical-divider"></div>
 
             <div class="app-col-auto">
-              <span class="app-secondary-color">показать: </span>
-              <span (click)="filterCustomersListModal.open()">
-               <b>все заказчики</b>
-              </span>
+              <span class="app-secondary-color">показать: </span>
+            </div>
+
+            <div class="app-col-auto">
+              <button uxgButton link clear (click)="filterCustomersListModal.open()">
+                <span><b>
+                  {{ selectedCustomers?.length ?
+                    (selectedCustomers?.length | pluralize: "заказчик" : "заказчика" : "заказчиков") :
+                    'все заказчики' }}</b></span>
+              </button>
             </div>
 
             <div class="vertical-divider"></div>
 
             <div class="app-col-auto">
-              <span class="app-secondary-color">показать: </span>
-              <span (click)="filterResponsibleUserListModal.open()">
-               <b>все ответственные</b>
-              </span>
+              <span class="app-secondary-color">показать: </span>
+            </div>
+
+            <div class="app-col-auto">
+              <button uxgButton link clear (click)="filterResponsibleUserListModal.open()">
+                <span><b>
+                  {{ selectedUsers?.length ?
+                  (selectedUsers?.length | pluralize: "ответственный" : "ответственных" : "ответственных") :
+                  'все ответственные' }}</b></span>
+              </button>
             </div>
           </div>
 
           <div class="app-row app-align-items-center">
             <div class="app-row app-align-items-center">
               <div class="app-col-auto">
-                <span class="app-ghost-color">Интервал дат поставки позиций: </span>
+                <span class="app-ghost-color">Интервал дат поставки позиций:  </span>
               </div>
 
               <div class="app-col-3" [style.padding-right.px]="10">
@@ -48,7 +66,7 @@
                          #dateFromRef
                          formControlName="shipmentDateFrom"
                          minDate="today"
-                         dateFormat="d.m.Y H:i">
+                         dateFormat="d.m.Y">
 
                   <label class="app-control-label" (click)="dateFromRef.focus()">Дата с</label>
 
@@ -64,7 +82,7 @@
                          #dateTillRef
                          formControlName="shipmentDateTo"
                          minDate="today"
-                         dateFormat="d.m.Y H:i">
+                         dateFormat="d.m.Y">
 
                   <label class="app-control-label" (click)="dateTillRef.focus()">Дата по</label>
 
@@ -98,7 +116,9 @@
           <h2 class="app-col">{{ stats.customersCount }}</h2>
           <h2 class="app-col">{{ stats.backofficeTasksCount }}</h2>
           <h2 class="app-col">{{ stats.responsibleUsersCount }}</h2>
-          <h2 class="app-col sum-column">{{ stats.positionsTotalSumWithoutVat | currency: 'RUB' : "symbol" : "1.0-2" }}</h2>
+          <h2 class="app-col sum-column">
+            <b>{{ stats.positionsTotalSumWithoutVat | number: "1.0-2" }} <span class="app-ghost-color">{{ getCurrencySymbol('RUB', 'narrow') }}</span></b>
+          </h2>
         </div>
       </div>
     </div>
