@@ -61,10 +61,12 @@ export class DashboardStatisticsComponent implements OnInit, OnDestroy {
 
     this.form.get('shipmentDateFrom').valueChanges.pipe(
       map(() => this.submitFilter()),
+      takeUntil(this.destroy$)
     ).subscribe();
 
     this.form.get('shipmentDateTo').valueChanges.pipe(
       map(() => this.submitFilter()),
+      takeUntil(this.destroy$)
     ).subscribe();
   }
 
