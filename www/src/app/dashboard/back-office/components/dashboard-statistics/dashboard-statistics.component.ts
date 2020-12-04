@@ -42,11 +42,6 @@ export class DashboardStatisticsComponent implements OnInit, OnDestroy {
 
   getCurrencySymbol = getCurrencySymbol;
 
-  readonly filters$: Observable<any> = this.form.valueChanges.pipe(
-    map(data => {
-      console.log(data);
-    }),
-  );
   destroy$ = new Subject();
   readonly getDeliveryDate = (min, max): string => min === max ? min : min + " – " + max;
 
@@ -116,6 +111,21 @@ export class DashboardStatisticsComponent implements OnInit, OnDestroy {
 
   filterResponsibleUsers(q: string, user: DashboardAvailableFiltersResponsibleUserItem): boolean {
     return user?.fullName?.toLowerCase()?.indexOf(q.toLowerCase()) >= 0;
+  }
+
+  resetFilter(): void {
+    this.form.reset();
+    this.selectedCustomers = [];
+    this.selectedRequests = [];
+    this.selectedUsers = [];
+  }
+
+  filterIsFilled(): boolean {
+    return this.selectedCustomers?.length ||
+           this.selectedRequests?.length ||
+           this.selectedUsers?.length ||
+           this.form.get('shipmentDateFrom').value ||
+           this.form.get('shipmentDateTo').value;
   }
 
   trackByRequestId = (request: DashboardAvailableFiltersRequestItem) => request.id;

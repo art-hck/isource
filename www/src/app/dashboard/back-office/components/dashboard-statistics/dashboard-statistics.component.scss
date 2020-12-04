@@ -57,6 +57,10 @@
 }
 
 .statistics-filter-section {
+  h3 {
+    line-height: 26px;
+  }
+
   & .vertical-divider {
     width: 1px;
     height: 24px;
@@ -96,6 +100,14 @@
 
 .sum-column {
   text-align: right;
+}
+
+.status-row.disabled-row {
+  color: uxg($theme, color-font-ghost);
+
+  & .app-position-status-icon {
+    background-color: uxg($theme, color-control-disabled);
+  }
 }
 
 .status-col {
