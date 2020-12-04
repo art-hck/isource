@@ -87,7 +87,6 @@ export class DashboardStatisticsComponent implements OnInit, OnDestroy {
       if (!value?.length) { delete filters[key]; }
     }
 
-    // this.store.dispatch(new FetchAvailableFilters(filters));
     this.store.dispatch(new FetchStatusesStatistics(filters));
   }
 
