@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnChanges, OnInit, OnDestroy, SimpleChanges, ViewChildren, QueryList } from '@angular/core';
 import { DashboardView } from "../../models/dashboard-view";
 import { Select, Store } from "@ngxs/store";
 import FetchTasks = DashboardActions.FetchTasks;
@@ -9,6 +9,8 @@ import { DashboardState } from "../../states/dashboard.state";
 import { DashboardTaskItem } from "../../models/dashboard-task-item";
 import { Observable, Subject } from "rxjs";
 import { DashboardActions } from "../../actions/dashboard.actions";
+import FetchStatusesStatistics = DashboardActions.FetchStatusesStatistics;
+import { UxgPopoverComponent } from "uxg";
 
 @Component({
   selector: 'app-dashboard',
@@ -24,6 +26,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
   @Select(DashboardState.agreementsBar) agreementsBar$: Observable<DashboardTaskItem[]>;
   @Select(DashboardState.tasksBar) tasksBar$: Observable<DashboardTaskItem[]>;
 
+  @ViewChildren('viewPopover') viewPopover: QueryList<UxgPopoverComponent>;
+
   destroy$ = new Subject();
   view: DashboardView = "tasks";
 
@@ -37,6 +41,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   switchView(view: DashboardView) {
     view === 'tasks' ? this.store.dispatch(FetchTasks) : this.store.dispatch(FetchAgreements);
+    this.view = view;
+    this.viewPopover?.first.hide();
   }
 
   ngOnDestroy() {

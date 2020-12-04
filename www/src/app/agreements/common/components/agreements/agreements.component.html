@@ -7,7 +7,8 @@
         <small class="app-col-2 app-ghost-color customer" *ngIf="!userInfoService.isCustomer()"><b>ЗАКАЗЧИК</b></small>
         <small class="app-col-2 app-ghost-color date"><b>ПОСТУПЛЕНИЕ</b></small>
         <small class="app-col-2 app-ghost-color status"><b>СТАТУС</b></small>
-        <small class="app-col-2 app-ghost-color action"><b>ПЕРЕХОД К СОГЛАСОВАНИЮ</b></small>
+        <small class="app-col-2 app-ghost-color action">
+          <b>{{agreementsView ? 'ПЕРЕХОД К ВЫПОЛНЕНИЮ' : 'ПЕРЕХОД К СОГЛАСОВАНИЮ'}}</b></small>
       </div>
     </div>
 
@@ -40,7 +41,8 @@
             </ng-container>
           </div>
 
-          <span *ngIf="agreement.groupCounter > 0" class="app-ghost-color group-counter">({{agreement.groupCounter}})</span>
+          <span *ngIf="agreement.groupCounter > 0" class="app-ghost-color group-counter">({{agreement.groupCounter}}
+            )</span>
         </div>
 
         <div class="app-col-2 app-ellipsis customer" *ngIf="!userInfoService.isCustomer()">
@@ -56,9 +58,14 @@
                                [status]="agreement.positionsStatus.name">
           </app-position-status>
         </div>
-        <div class="app-col-2 action app-ellipsis">
+        <div *ngIf="!agreementsView" class="app-col-2 action app-ellipsis">
           <a [routerLink]="getRouterLink(agreement)">
             {{agreement.action.label }}
+          </a>
+        </div>
+        <div *ngIf="agreementsView" class="app-col-2 action app-ellipsis">
+          <a [routerLink]="['/im', agreement.request.id]">
+            Перейти в чат
           </a>
         </div>
       </div>

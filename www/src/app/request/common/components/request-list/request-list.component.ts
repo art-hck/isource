@@ -30,6 +30,7 @@ import moment from "moment";
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RequestListComponent implements OnInit, OnDestroy {
+  @ViewChild('allProgressTab') allProgressTab: UxgTabTitleComponent;
   @ViewChild('inProgressTab') inProgressTabElRef: UxgTabTitleComponent;
   @ViewChild('newTab') newTabElRef: UxgTabTitleComponent;
   @ViewChild('draftTab') draftTabElRef: UxgTabTitleComponent;
@@ -65,6 +66,7 @@ export class RequestListComponent implements OnInit, OnDestroy {
   readonly PositionStatusesLabels = PositionStatusesLabels;
   readonly getDeliveryDate = (min, max): string => min === max ? min : min + " – " + max;
   readonly calcPieChart = ({ requestData: d }: RequestsList) => (65 - (65 * d.completedPositionsCount / d.positionsCount * 100) / 100);
+  readonly totalCount = () => Object.values(this.statusCounters ?? {}).reduce((total, curr) => total += +curr, 0);
 
   constructor(
     private route: ActivatedRoute,
@@ -210,6 +212,10 @@ export class RequestListComponent implements OnInit, OnDestroy {
         } else {
           return false;
         }
+        break;
+      case null:
+          tabFilters = [];
+          this.allProgressTab.activate();
         break;
       default:
         return false;

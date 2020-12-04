@@ -33,7 +33,8 @@
   <div class="stat-block" [ngClass]="{'no-tasks': tasks.length === 0}">
     <app-tasks-bar
       [totalCounter]="tasksTotalCount$ | async"
-      [tasksBar]="tasksBar$ | async"></app-tasks-bar>
+      [tasksBar]="tasksBar$ | async">
+    </app-tasks-bar>
   </div>
   <ng-container *ngIf="tasks.length !== 0">
     <app-agreements
@@ -45,14 +46,18 @@
 
 <!--Согласования заказчика-->
 <ng-container *ngIf="view === 'agreements' && (agreements$ | async) as agreements">
-  <div class="stat-block">
-    <app-tasks-bar></app-tasks-bar>
+  <div class="stat-block" [ngClass]="{'no-tasks': agreements.length === 0}">
+    <app-tasks-bar
+      [totalCounter]="agreementsTotalCount$ | async"
+      [tasksBar]="agreementsBar$ | async"
+      [isTasks]="false"></app-tasks-bar>
   </div>
   <app-agreements
-    [agreements]="agreements">
+    [agreements]="agreements"
+    [dashboardView]="true"
+    [agreementsView]="true">
   </app-agreements>
 </ng-container>
-
 <br><br>
 
 <div class="app-row">

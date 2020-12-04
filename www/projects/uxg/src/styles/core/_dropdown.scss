@@ -104,6 +104,10 @@
       &.hidden {
         display: none;
       }
+
+      &.invalid {
+        border-color: uxg($theme, color-control-invalid);
+      }
     }
 
     @include scrollbar($theme);
