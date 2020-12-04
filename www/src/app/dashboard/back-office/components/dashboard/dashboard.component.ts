@@ -1,4 +1,4 @@
-import { Component, OnChanges, OnInit, OnDestroy, SimpleChanges, ViewChildren, QueryList } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChildren, QueryList } from '@angular/core';
 import { DashboardView } from "../../models/dashboard-view";
 import { Select, Store } from "@ngxs/store";
 import FetchTasks = DashboardActions.FetchTasks;
@@ -9,7 +9,6 @@ import { DashboardState } from "../../states/dashboard.state";
 import { DashboardTaskItem } from "../../models/dashboard-task-item";
 import { Observable, Subject } from "rxjs";
 import { DashboardActions } from "../../actions/dashboard.actions";
-import FetchStatusesStatistics = DashboardActions.FetchStatusesStatistics;
 import { UxgPopoverComponent } from "uxg";
 
 @Component({
