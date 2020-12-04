@@ -11,6 +11,7 @@ import { UserInfoService } from "../../../../user/service/user-info.service";
 export class AgreementsComponent {
   @Input() agreements: Agreement[];
   @Input() dashboardView = false;
+  @Input() agreementsView = false;
 
   constructor(public userInfoService: UserInfoService) {}
 
