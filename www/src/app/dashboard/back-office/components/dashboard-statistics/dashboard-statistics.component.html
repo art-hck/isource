@@ -38,20 +38,22 @@
               </button>
             </div>
 
-            <div class="vertical-divider"></div>
+            <ng-container *ngIf="user.isSeniorBackoffice()">
+              <div class="vertical-divider"></div>
 
-            <div class="app-col-auto">
-              <span class="app-secondary-color">показать: </span>
-            </div>
+              <div class="app-col-auto">
+                <span class="app-secondary-color">показать: </span>
+              </div>
 
-            <div class="app-col-auto">
-              <button uxgButton link clear (click)="filterResponsibleUserListModal.open()">
+              <div class="app-col-auto">
+                <button uxgButton link clear (click)="filterResponsibleUserListModal.open()">
                 <span><b>
                   {{ selectedUsers?.length ?
                   (selectedUsers?.length | pluralize: "ответственный" : "ответственных" : "ответственных") :
                   'все ответственные' }}</b></span>
-              </button>
-            </div>
+                </button>
+              </div>
+            </ng-container>
           </div>
 
           <div class="app-row app-align-items-center">
@@ -104,7 +106,7 @@
           <div class="app-col">Позиций</div>
           <div class="app-col">Заказчиков</div>
           <div class="app-col">Требует действий БО</div>
-          <div class="app-col">Ответственных</div>
+          <div class="app-col" *ngIf="user.isSeniorBackoffice()">Ответственных</div>
           <div class="app-col sum-column">Сумма без НДС</div>
         </div>
 
@@ -113,9 +115,9 @@
           <h2 class="app-col">{{ stats.positionsCount }} <span class="app-ghost-color">шт</span></h2>
           <h2 class="app-col">{{ stats.customersCount }}</h2>
           <h2 class="app-col">{{ stats.backofficeTasksCount }}</h2>
-          <h2 class="app-col">{{ stats.responsibleUsersCount }}</h2>
+          <h2 class="app-col" *ngIf="user.isSeniorBackoffice()">{{ stats.responsibleUsersCount }}</h2>
           <h2 class="app-col sum-column">
-            <b>{{ stats.positionsTotalSumWithoutVat | number: "1.0-2" }} <span class="app-ghost-color">{{ getCurrencySymbol('RUB', 'narrow') }}</span></b>
+            <b>{{ stats.positionsTotalSumWithoutVat | number: "1.0-2" }} <span class="app-ghost-color">{{ getCurrencySymbol('RUB', 'narrow') }}</span></b>
           </h2>
         </div>
       </div>
@@ -134,7 +136,7 @@
           </div>
 
           <div class="app-col">
-            <h3>Деньги (стоимость) по статуам</h3>
+            <h3>Деньги (стоимость) по статусам</h3>
           </div>
         </div>
 
@@ -197,9 +199,7 @@
               <uxg-checkbox formControlName="checked"></uxg-checkbox>
             </div>
 
-            <div class="app-col app-bold select-list-item-request-number">
-              <b>{{ request.number }}</b>
-            </div>
+            <div class="app-col app-bold select-list-item-request-number"><b>{{ request.number }}</b></div>
 
             <div class="app-col app-col-auto select-list-item-request-customer">{{ request.customerName }}</div>
 
@@ -234,7 +234,7 @@
 
       <ng-template #footerContentTpl>
         <div class="app-row select-list-item-footer app-uppercase app-ghost-color app-bold">
-          <div class="app-col app-grow-0"></div>
+          <div class="app-col-auto checkbox-space app-grow-0"></div>
           <div class="app-col app-bold select-list-item-request-number">Номер</div>
           <div class="app-col app-col-auto select-list-item-request-customer">Заказчик</div>
           <div class="app-col app-col-auto select-list-item-request-name">Наименование заявки</div>
@@ -273,9 +273,9 @@
               <b>{{ customer.contragentName }}</b>
             </div>
 
-            <div class="app-col app-col-auto select-list-item-customer-kpp">{{ customer.kpp }}</div>
+            <div class="app-col select-list-item-customer-kpp">{{ customer.kpp }}</div>
 
-            <div class="app-col app-col-auto select-list-item-customer-inn">{{ customer.inn }}</div>
+            <div class="app-col select-list-item-customer-inn">{{ customer.inn }}</div>
 
             <div class="app-col app-col-auto select-list-item-customer-group">{{ customer.groupName }}</div>
           </div>
@@ -284,11 +284,11 @@
 
       <ng-template #footerContentTpl>
         <div class="app-row select-list-item-footer app-uppercase app-ghost-color app-bold">
-          <div class="app-col app-grow-0"></div>
-          <div class="app-col app-bold select-list-item-number">Номер</div>
-          <div class="app-col app-col-auto select-list-item-customer">Заказчик</div>
-          <div class="app-col app-col-auto select-list-item-name">Наименование заявки</div>
-          <div class="app-col select-list-item-date">Дата поставки</div>
+          <div class="app-col-auto checkbox-space app-grow-0"></div>
+          <div class="app-col app-bold select-list-item-customer-contragent">Наименование</div>
+          <div class="app-col select-list-item-customer-kpp">КПП</div>
+          <div class="app-col select-list-item-customer-inn">ИНН</div>
+          <div class="app-col app-col-auto select-list-item-customer-group">Группа</div>
         </div>
       </ng-template>
     </select-items-with-search>
@@ -304,7 +304,7 @@
     <h2>Выбор ответственных</h2>
 
     <select-items-with-search
-      *ngIf="(filterRequestList$ | async) as users else loading"
+      *ngIf="(filterResponsibleUsersList$ | async) as users else loading"
       class="select-list select-list-users"
       formControlName="users"
       placeholder="ФИО сотрудника"
@@ -321,7 +321,9 @@
 
             <div class="app-col app-bold select-list-item-user-name"><b>{{ user.fullName }}</b></div>
 
-            <div class="app-col app-col-auto select-list-item-user-email">{{ user.email }}</div>
+            <div class="app-col app-col-auto select-list-item-user-email">
+              <a href="mailto:{{ user.email }}">{{ user.email }}</a>
+            </div>
 
             <div class="app-col app-col-auto select-list-item-user-phone">{{ user.phone }}</div>
 
@@ -332,7 +334,7 @@
 
       <ng-template #footerContentTpl>
         <div class="app-row select-list-item-footer app-uppercase app-ghost-color app-bold">
-          <div class="app-col app-grow-0"></div>
+          <div class="app-col-auto checkbox-space app-grow-0"></div>
           <div class="app-col app-bold select-list-item-user-name">Имя сотрудника</div>
           <div class="app-col app-col-auto select-list-item-user-email">E-mail</div>
           <div class="app-col app-col-auto select-list-item-user-phone">Телефон</div>

@@ -4,6 +4,7 @@ export class DashboardAvailableFilters {
   requests: DashboardAvailableFiltersRequestItem[];
   customers: any;
   responsibleUsers: any;
+  totalCount: number;
 }
 
 export class DashboardAvailableFiltersRequestItem {

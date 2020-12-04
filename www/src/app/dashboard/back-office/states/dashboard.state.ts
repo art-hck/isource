@@ -90,6 +90,8 @@ export class DashboardState {
   fetchAvailableFilters({ setState, dispatch }: Context, { filters }: FetchAvailableFilters) {
     setState(patch<Model>({ status: 'fetching' }));
 
-    return this.rest.getDashboardAvailableFilters(filters).pipe(tap(availableFilters => setState(patch<Model>({ availableFilters, status: "received" }))));
+    return this.rest.getDashboardAvailableFilters(filters).pipe(tap(availableFilters => {
+      setState(patch<Model>({ availableFilters, status: "received" }));
+    }));
   }
 }

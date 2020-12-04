@@ -15,6 +15,7 @@ import { ActivatedRoute } from "@angular/router";
 import { DashboardActions } from "../../actions/dashboard.actions";
 import FetchStatusesStatistics = DashboardActions.FetchStatusesStatistics;
 import FetchAvailableFilters = DashboardActions.FetchAvailableFilters;
+import { UserInfoService } from "../../../../user/service/user-info.service";
 
 @Component({
   selector: 'app-dashboard-statistics',
@@ -51,7 +52,8 @@ export class DashboardStatisticsComponent implements OnInit, OnDestroy {
 
   constructor(
     private route: ActivatedRoute,
-    public store: Store
+    public store: Store,
+    public user: UserInfoService
   ) { }
 
   ngOnInit() {
@@ -60,11 +62,18 @@ export class DashboardStatisticsComponent implements OnInit, OnDestroy {
       withLatestFrom(this.statusesStatistics$),
       takeUntil(this.destroy$)
     ).subscribe();
+
+
+    this.form.get('shipmentDateFrom').valueChanges.pipe(
+      map(() => this.submitFilter()),
+    ).subscribe();
+
+    this.form.get('shipmentDateTo').valueChanges.pipe(
+      map(() => this.submitFilter()),
+    ).subscribe();
   }
 
   submitFilter() {
-    console.log(this.form);
-
     this.selectedRequests = this.form.get('requests').value?.map(request => request.id);
     this.selectedCustomers = this.form.get('customers').value?.map(customer => customer.id);
     this.selectedUsers = this.form.get('users').value?.map(user => user.id);
@@ -81,6 +90,7 @@ export class DashboardStatisticsComponent implements OnInit, OnDestroy {
       if (!value?.length) { delete filters[key]; }
     }
 
+    // this.store.dispatch(new FetchAvailableFilters(filters));
     this.store.dispatch(new FetchStatusesStatistics(filters));
   }
 
