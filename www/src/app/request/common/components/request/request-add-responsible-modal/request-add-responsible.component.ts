@@ -6,7 +6,8 @@ import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { UserService } from "../../../../../user/service/user.service";
 import { User } from "../../../../../user/models/user";
 import { RequestService } from "../../../../back-office/services/request.service";
-import { finalize } from "rxjs/operators";
+import { finalize, shareReplay } from "rxjs/operators";
+import { searchUsers } from "../../../../../shared/helpers/search";
 
 @Component({
   selector: 'app-request-add-responsible',
@@ -25,13 +26,16 @@ export class RequestAddResponsibleComponent implements OnInit, OnDestroy {
     user: new FormControl(null, Validators.required)
   });
 
+  readonly searchUsers = searchUsers;
+  readonly getUserName = ({ fullName, shortName }: User) => fullName ?? shortName;
+
   constructor(
     private userService: UserService,
     private requestService: RequestService
   ) {}
 
   ngOnInit() {
-    this.regularBackofficeUsers$ = this.userService.getRegularBackofficeUsers(this.request.contragentId);
+    this.regularBackofficeUsers$ = this.userService.getRegularBackofficeUsers(this.request.contragentId).pipe(shareReplay(1));
   }
 
   submit() {

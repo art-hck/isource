@@ -147,7 +147,7 @@ export class UxgDropdownInputComponent implements OnInit, AfterViewInit, OnDestr
 
     this.items.changes.pipe(
       startWith(this.items),
-      tap((items) => this.toggle(this.value && items.length > 0)),
+      tap((items) => this.toggle(items.length > 0)),
       flatMap(items => items.map(item => item.onSelect)),
       mergeAll<UxgDropdownItem>(),
       takeUntil(this.destroy$)

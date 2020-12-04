@@ -1,9 +1,19 @@
 <form [formGroup]="form" (ngSubmit)="submit()" *ngIf="!isLoading; else loading">
   <p class="app-secondary-color">Вы можете назначить позиции на закупщиков, у которых есть компетенции в соответствующих категориях МТР</p>
   <br/>
-  <uxg-dropdown lg placeholder="Выберите на кого назначить" formControlName="user">
-    <div uxgDropdownItem [value]="user" *ngFor="let user of regularBackofficeUsers$ | async">{{ user.fullName || user.shortName }}</div>
-  </uxg-dropdown>
+  <uxg-dropdown-input
+    formControlName="user" placeholder="Выберите на кого назначить" appSuggestions #sug="appSuggestions"
+    [$]="regularBackofficeUsers$" lg [strictMode]="true" [searchFn]="searchUsers" [displayByFn]="getUserName"
+    [minLength]="0"
+  >
+    <div uxgDropdownItem [value]="user" *ngFor="let user of sug.suggestions$ | async">{{ user.fullName }}</div>
+    <ng-template #errors>
+      <div class="app-control-error" *ngIf="form.get('user').errors as e">
+        <span *ngIf="e.required">Обязательное поле</span>
+        <span *ngIf="e.notFromList">Выберите пользователя из списка</span>
+      </div>
+    </ng-template>
+  </uxg-dropdown-input>
 
   <div class="app-modal-footer app-row app-justify-content-end">
     <button uxgButton secondary lg type="button" (click)="close.emit()">Отмена</button>

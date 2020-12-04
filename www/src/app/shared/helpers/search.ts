@@ -12,8 +12,8 @@ export function searchContragent(q: string, contragent: ContragentInfo | Contrag
   return contragent.shortName.toLowerCase().indexOf(q.toLowerCase()) > -1 || contragent.inn.indexOf(q) > -1;
 }
 
-export function searchUsers(q: string, user: User[]) {
-  return user.filter(c => c.shortName.toLowerCase().indexOf(q.toLowerCase()) > -1);
+export function searchUsers(q: string, users: User[]) {
+  return users.filter(c => !q || c.shortName.toLowerCase().indexOf(q.toLowerCase()) > -1 || c.fullName.toLowerCase().indexOf(q.toLowerCase()) > -1);
 }
 
 export function searchPosition(q: string, position: RequestPosition): boolean {
