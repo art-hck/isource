@@ -18,13 +18,13 @@ export class SuggestionsDirective implements OnInit {
 
   ngOnInit() {
     this.suggestions$ = this.ngControl.valueChanges.pipe(
-      debounceTime(300),
+      debounceTime(100),
       tap(value => {
-        if (value?.length < this.minLength) {
+        if (value?.length ?? 0 < this.minLength) {
           this.dropdownInputComponent.toggle(false);
         }
       }),
-      filter(value => value?.length >= this.minLength && this.dropdownInputComponent.isNotFromList),
+      filter(value => (value?.length ?? 0) >= this.minLength && this.dropdownInputComponent.isNotFromList),
       flatMap(value => this.$.pipe(map(data => this.searchFn && this.searchFn(value, data)))),
       tap(() => this.dropdownInputComponent.toggle(true))
     );
@@ -32,7 +32,7 @@ export class SuggestionsDirective implements OnInit {
     this.dropdownInputComponent.focus.pipe(
       filter(() => this.minLength === 0 && this.ngControl.pristine && !this.ngControl.value),
       tap(() => this.dropdownInputComponent.isNotFromList = true),
-      tap(() => this.ngControl.control.setValue(this.ngControl.value))
+      tap(() => this.ngControl.control.updateValueAndValidity())
     ).subscribe();
   }
 }
