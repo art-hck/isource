@@ -2,8 +2,8 @@ import { Uuid } from "../../../cart/models/uuid";
 
 export class DashboardAvailableFilters {
   requests: DashboardAvailableFiltersRequestItem[];
-  customers: any;
-  responsibleUsers: any;
+  customers: DashboardAvailableFiltersCustomerItem[];
+  responsibleUsers: DashboardAvailableFiltersResponsibleUserItem[];
   totalCount: number;
 }
 
