@@ -46,7 +46,7 @@
 
 <!--Согласования заказчика-->
 <ng-container *ngIf="view === 'agreements' && (agreements$ | async) as agreements">
-  <div class="stat-block">
+  <div class="stat-block" [ngClass]="{'no-tasks': tasks.length === 0}">
     <app-tasks-bar
       [totalCounter]="agreementsTotalCount$ | async"
       [tasksBar]="agreementsBar$ | async"

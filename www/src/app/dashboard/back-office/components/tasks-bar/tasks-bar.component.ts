@@ -22,7 +22,7 @@ import { animate, style, transition, trigger } from "@angular/animations";
 export class TasksBarComponent {
   @Input() totalCounter: number;
   @Input() tasksBar: DashboardTaskItem[];
-  @Input() isTasks = false;
+  @Input() isTasks = true;
 
   folded = true;
 }
