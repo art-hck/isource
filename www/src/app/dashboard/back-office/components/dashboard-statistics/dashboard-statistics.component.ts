@@ -13,9 +13,9 @@ import {
 import { map, takeUntil, tap, withLatestFrom } from "rxjs/operators";
 import { ActivatedRoute } from "@angular/router";
 import { DashboardActions } from "../../actions/dashboard.actions";
+import { UserInfoService } from "../../../../user/service/user-info.service";
 import FetchStatusesStatistics = DashboardActions.FetchStatusesStatistics;
 import FetchAvailableFilters = DashboardActions.FetchAvailableFilters;
-import { UserInfoService } from "../../../../user/service/user-info.service";
 
 @Component({
   selector: 'app-dashboard-statistics',
