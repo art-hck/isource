@@ -48,6 +48,7 @@ export class UxgDropdownComponent implements AfterViewInit, OnDestroy, AfterView
   @Input() placeholder = "";
   @Input() disabled: boolean;
   @Input() direction: "up" | "down";
+  @Input() compareFn: (item1, item2) => boolean;
 
   public value = null;
   private _isHidden = true;
@@ -89,7 +90,9 @@ export class UxgDropdownComponent implements AfterViewInit, OnDestroy, AfterView
   }
 
   get selected(): UxgDropdownItemDirective | null {
-    return this.items ? this.items.find(item => item.value === this.value) : null;
+    return this.items ? this.items.find(
+      item => (this.compareFn && this.compareFn(item.value, this.value)) ?? item.value === this.value
+    ) : null;
   }
 
   get isHidden(): boolean {
