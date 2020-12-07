@@ -201,6 +201,7 @@
       class="select-list select-list-requests"
       formControlName="requests"
       placeholder="Наименование заявки"
+      [liveUpdate]="false"
       [filterFn]="filterRequests"
       [trackBy]="trackByRequestId"
       [items]="requests">
@@ -272,6 +273,7 @@
       class="select-list select-list-customers"
       formControlName="customers"
       placeholder="Наименование контрагентов"
+      [liveUpdate]="false"
       [filterFn]="filterCustomers"
       [trackBy]="trackByCustomerId"
       [items]="customers">
@@ -323,6 +325,7 @@
       class="select-list select-list-users"
       formControlName="users"
       placeholder="ФИО сотрудника"
+      [liveUpdate]="false"
       [filterFn]="filterResponsibleUsers"
       [trackBy]="trackByResponsibleUserId"
       [items]="users">

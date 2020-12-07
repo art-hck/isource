@@ -76,9 +76,7 @@ export class DashboardStatisticsComponent implements OnInit, OnDestroy {
   }
 
   submitFilter() {
-    this.selectedRequests = this.form.get('requests').value?.map(request => request.id);
-    this.selectedCustomers = this.form.get('customers').value?.map(customer => customer.id);
-    this.selectedUsers = this.form.get('users').value?.map(user => user.id);
+    this.updateSelectedItemsCount();
 
     const filters = {
       requestIds: this.selectedRequests,
@@ -92,8 +90,20 @@ export class DashboardStatisticsComponent implements OnInit, OnDestroy {
       if (!value?.length) { delete filters[key]; }
     }
 
-    this.store.dispatch(new FetchAvailableFilters(filters));
     this.store.dispatch(new FetchStatusesStatistics(filters));
+    this.store.dispatch(new FetchAvailableFilters(filters)).subscribe(() => {
+      this.updateSelectedItemsCount();
+    });
+  }
+
+  updateSelectedItemsCount(): void {
+    this.requestsSelectList.submit();
+    this.customersSelectList.submit();
+    this.usersSelectList.submit();
+
+    this.selectedRequests = this.form.get('requests').value?.map(request => request.id);
+    this.selectedCustomers = this.form.get('customers').value?.map(customer => customer.id);
+    this.selectedUsers = this.form.get('users').value?.map(user => user.id);
   }
 
   toRequestItem(request: any): DashboardAvailableFiltersRequestItem {
