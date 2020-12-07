@@ -89,12 +89,23 @@ export const PositionStatusesGroupsInfo: PositionStatusesGroupInfo[] = [
     counterField: "contractAgreement"
   },
   {
+    url: "element",
+    label: "Нормализация позиций",
+    statuses: PositionStatusGroups.DELIVERY,
+    positions: [],
+    shortName: "Нормализация позиций",
+    hasActions: false,
+    color: "#5066ff",
+    availabilityField: "isNormalizationAvailable",
+    counterField: "normalization"
+  },
+  {
     url: "delivery",
     label: "Доставка и оплата",
     statuses: PositionStatusGroups.DELIVERY,
     positions: [],
     shortName: "Доставка и оплата",
-    hasActions: false,
+    hasActions: true,
     color: "#9b51e0"
   },
   {
