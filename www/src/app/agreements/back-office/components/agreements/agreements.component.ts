@@ -1,11 +1,11 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { Select, Store } from "@ngxs/store";
 import { AgreementListState } from "../../states/agreement-list.state";
-import { Observable } from "rxjs";
+import { Observable, Subject } from "rxjs";
 import { StateStatus } from "../../../../request/common/models/state-status";
 import Fetch = AgreementListActions.Fetch;
 import { ActivatedRoute, Router } from "@angular/router";
-import { map } from "rxjs/operators";
+import { map, takeUntil } from "rxjs/operators";
 import { AgreementListActions } from "../../actions/agreement-list.actions";
 import { Agreement } from "../../../common/models/Agreement";
 import { FormControl, FormGroup } from "@angular/forms";
@@ -16,13 +16,14 @@ import { AgreementAction } from "../../enum/agreement-action";
   templateUrl: './agreements.component.html',
   styleUrls: ['./agreements.component.scss']
 })
-export class AgreementsComponent implements OnInit {
+export class AgreementsComponent implements OnInit, OnDestroy {
   @Select(AgreementListState.agreements) agreements$: Observable<Agreement[]>;
   @Select(AgreementListState.status) status$: Observable<StateStatus>;
   @Select(AgreementListState.totalCount) totalCount$: Observable<number>;
 
   readonly pageSize = 10;
   readonly actions: {type: AgreementAction[], label: string}[] = AgreementActionFilters;
+  readonly destroy$ = new Subject();
   pages$: Observable<number>;
 
   form = new FormGroup({
@@ -37,16 +38,32 @@ export class AgreementsComponent implements OnInit {
 
   ngOnInit() {
     this.pages$ = this.route.queryParams.pipe(map(params => +params["page"]));
-    this.form.valueChanges.subscribe(
+    this.form.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(
       () => {
-        this.router.navigate(["."], {relativeTo: this.route, queryParams: null});
-        const action = this.form.value;
-        this.store.dispatch(new Fetch(action, 0, this.pageSize));
+        this.store.dispatch(new Fetch({actions: JSON.parse(this.form.value.actions)}, 0, this.pageSize));
       }
     );
+    if (this.route.snapshot.queryParams.actions) {
+      this.form.get('actions').setValue(this.route.snapshot.queryParams.actions);
+    }
+    this.form.valueChanges.subscribe(
+      () => {
+        this.router.navigate(["."], {relativeTo: this.route, queryParams: {actions: this.form.value.actions}});
+      });
   }
 
   loadPage(page: number) {
-    this.store.dispatch(new Fetch(this.form.value, (page - 1) * this.pageSize, this.pageSize));
+    this.store.dispatch(
+      new Fetch({actions: JSON.parse(this.form.value.actions)}, (page - 1) * this.pageSize, this.pageSize)
+    );
+  }
+
+  stringifyActions(actions: AgreementAction[]) {
+    return JSON.stringify(actions);
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

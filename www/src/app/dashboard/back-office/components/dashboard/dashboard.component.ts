@@ -10,6 +10,7 @@ import { DashboardTaskItem } from "../../models/dashboard-task-item";
 import { Observable, Subject } from "rxjs";
 import { DashboardActions } from "../../actions/dashboard.actions";
 import { UxgPopoverComponent } from "uxg";
+import { AgreementActionFilters } from "../../../../agreements/back-office/dictionaries/agreement-action-label";
 
 @Component({
   selector: 'app-dashboard',
@@ -42,6 +43,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
     view === 'tasks' ? this.store.dispatch(FetchTasks) : this.store.dispatch(FetchAgreements);
     this.view = view;
     this.viewPopover?.first.hide();
+  }
+
+  getQueryParams() {
+    return {actions: JSON.stringify(AgreementActionFilters[18].type)};
   }
 
   ngOnDestroy() {

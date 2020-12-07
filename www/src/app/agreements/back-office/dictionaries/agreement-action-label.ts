@@ -19,4 +19,7 @@ export const AgreementActionFilters: {type: AgreementAction[], label: string}[] 
   { type: [AgreementAction.CONTROL_MANUFACTURING_AND_SHIPMENT], label: "Контроль изготовления и отгрузки"},
   { type: [AgreementAction.CONTROL_DELIVERY], label: "Контроль доставки"},
   { type: [AgreementAction.COMPLETED], label: "Завершение работы"},
+  { type: [AgreementAction.COMPLETE_REQUEST, AgreementAction.REQUEST_AGREEMENT,
+    AgreementAction.REVIEW_TP, AgreementAction.RESULTS_AGREEMENT_CP,
+    AgreementAction.RESULTS_AGREEMENT_TCP, AgreementAction.REVIEW_CONTRACT, AgreementAction.REVIEW_RKD], label: "Задачи на согласовании заказчика"}
 ];
