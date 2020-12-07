@@ -10,6 +10,7 @@ import { TasksBarComponent } from './components/tasks-bar/tasks-bar.component';
 import { DashboardState } from "./states/dashboard.state";
 import { DashboardStatisticsComponent } from './components/dashboard-statistics/dashboard-statistics.component';
 import { PercentageBarComponent } from './components/dashboard-statistics/percentage-bar/percentage-bar.component';
+import { ReactiveFormsModule } from "@angular/forms";
 
 @NgModule({
   declarations: [
@@ -26,6 +27,7 @@ import { PercentageBarComponent } from './components/dashboard-statistics/percen
     NgxsModule.forFeature([
       DashboardState
     ]),
+    ReactiveFormsModule,
   ],
   providers: [
     DashboardService

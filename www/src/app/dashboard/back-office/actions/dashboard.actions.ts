@@ -14,4 +14,10 @@ export namespace DashboardActions {
 
     constructor(public filters: any) {}
   }
+
+  export class FetchAvailableFilters {
+    static readonly type = '[Dashboard Backoffice] FetchAvailableFilters';
+
+    constructor(public filters: any) {}
+  }
 }

@@ -10,11 +10,14 @@ import { DashboardTasks } from "../models/dashboard-tasks";
 import { StatusesStatisticsInfo } from "../models/statuses-statistics";
 import FetchAgreements = DashboardActions.FetchAgreements;
 import FetchStatusesStatistics = DashboardActions.FetchStatusesStatistics;
+import FetchAvailableFilters = DashboardActions.FetchAvailableFilters ;
+import { DashboardAvailableFilters } from "../models/dashboard-available-filters";
 
 export interface DashboardStateModel {
   tasks: DashboardTasks;
   agreements: DashboardTasks;
   statusesStatistics: StatusesStatisticsInfo;
+  availableFilters: DashboardAvailableFilters;
   status: StateStatus;
 }
 
@@ -23,7 +26,7 @@ type Context = StateContext<Model>;
 
 @State<Model>({
   name: 'BackofficeDashboard',
-  defaults: { tasks: null, agreements: null, statusesStatistics: null, status: "pristine" }
+  defaults: { tasks: null, agreements: null, statusesStatistics: null, availableFilters: null, status: "pristine" }
 })
 @Injectable()
 export class DashboardState {
@@ -51,6 +54,15 @@ export class DashboardState {
   static statusesStatistics({ statusesStatistics }: Model) { return statusesStatistics; }
 
   @Selector()
+  static filterRequestList({ availableFilters }: Model) { return availableFilters.requests; }
+
+  @Selector()
+  static filterCustomerList({ availableFilters }: Model) { return availableFilters.customers; }
+
+  @Selector()
+  static filterResponsibleUsersList({ availableFilters }: Model) { return availableFilters.responsibleUsers; }
+
+  @Selector()
   static status({ status }: Model) { return status; }
 
   @Action(FetchTasks) fetchTasks({setState}: Context) {
@@ -69,8 +81,17 @@ export class DashboardState {
 
   @Action(FetchStatusesStatistics)
   fetchStatusesStatistics({ setState, dispatch }: Context, { filters }: FetchStatusesStatistics) {
-    setState(patch<Model>({ status: 'fetching', statusesStatistics: null }));
+    setState(patch<Model>({ status: 'fetching' }));
 
     return this.rest.getStatusesStatistics(filters).pipe(tap(statusesStatistics => setState(patch<Model>({ statusesStatistics, status: "received" }))));
+  }
+
+  @Action(FetchAvailableFilters)
+  fetchAvailableFilters({ setState, dispatch }: Context, { filters }: FetchAvailableFilters) {
+    setState(patch<Model>({ status: 'fetching' }));
+
+    return this.rest.getDashboardAvailableFilters(filters).pipe(tap(availableFilters => {
+      setState(patch<Model>({ availableFilters, status: "received" }));
+    }));
   }
 }

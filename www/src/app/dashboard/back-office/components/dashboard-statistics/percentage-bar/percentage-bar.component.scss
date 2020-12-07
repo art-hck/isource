@@ -6,6 +6,7 @@
   height: 8px;
   background: uxg($theme, color-control-disabled);
   border-radius: 10px;
+  overflow: hidden;
 
   &-filler {
     position: absolute;
