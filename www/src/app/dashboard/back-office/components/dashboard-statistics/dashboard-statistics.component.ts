@@ -83,7 +83,7 @@ export class DashboardStatisticsComponent implements OnInit, OnDestroy {
     const filters = {
       requestIds: this.selectedRequests,
       customers: this.selectedCustomers,
-      userIds: this.selectedUsers,
+      responsibleUsersIds: this.selectedUsers,
       shipmentDateFrom: this.form.get('shipmentDateFrom').value,
       shipmentDateTo: this.form.get('shipmentDateTo').value,
     };
