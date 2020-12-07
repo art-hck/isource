@@ -121,14 +121,24 @@ export class DashboardStatisticsComponent implements OnInit, OnDestroy {
   }
 
   resetFilter(): void {
-    this.form.reset();
-    this.requestsSelectList.form.get('checked').reset();
-    this.customersSelectList.form.get('checked').reset();
-    this.usersSelectList.form.get('checked').reset();
+    this.form.reset({
+      requests: null,
+      customers: null,
+      users: null,
+      shipmentDateFrom: null,
+      shipmentDateTo: null,
+    }, {emitEvent: false});
+
+    this.requestsSelectList.form.get('checked').reset(null, {emitEvent: false});
+    this.customersSelectList.form.get('checked').reset(null, {emitEvent: false});
+    this.usersSelectList.form.get('checked').reset(null, {emitEvent: false});
 
     this.selectedCustomers = [];
     this.selectedRequests = [];
     this.selectedUsers = [];
+
+    this.store.dispatch(new FetchAvailableFilters({}));
+    this.store.dispatch(new FetchStatusesStatistics({}));
   }
 
   filterIsFilled(): boolean {
