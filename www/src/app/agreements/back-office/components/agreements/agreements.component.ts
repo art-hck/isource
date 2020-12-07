@@ -39,14 +39,25 @@ export class AgreementsComponent implements OnInit {
     this.pages$ = this.route.queryParams.pipe(map(params => +params["page"]));
     this.form.valueChanges.subscribe(
       () => {
-        this.router.navigate(["."], {relativeTo: this.route, queryParams: null});
-        const action = this.form.value;
-        this.store.dispatch(new Fetch(action, 0, this.pageSize));
+        this.store.dispatch(new Fetch({actions: JSON.parse(this.form.value.actions)}, 0, this.pageSize));
       }
     );
+    if (this.route.snapshot.queryParams.actions) {
+      this.form.get('actions').setValue(this.route.snapshot.queryParams.actions);
+    }
+    this.form.valueChanges.subscribe(
+      () => {
+        this.router.navigate(["."], {relativeTo: this.route, queryParams: {actions: this.form.value.actions}});
+      });
   }
 
   loadPage(page: number) {
-    this.store.dispatch(new Fetch(this.form.value, (page - 1) * this.pageSize, this.pageSize));
+    this.store.dispatch(
+      new Fetch({actions: JSON.parse(this.form.value.actions)}, (page - 1) * this.pageSize, this.pageSize)
+    );
+  }
+
+  stringifyActions(actions: AgreementAction[]) {
+    return JSON.stringify(actions);
   }
 }

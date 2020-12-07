@@ -58,6 +58,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.viewPopover?.first.hide();
   }
 
+  getAgreementsLink() {
+    return ['/agreements/backoffice'];
+  }
+
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();

@@ -23,7 +23,7 @@
       <a routerLink="/agreements/backoffice"><b>Все задачи ({{tasksTotalCount$ | async}})</b></a>
     </div>
     <div *ngIf="view === 'agreements'">
-      <a routerLink="/agreements/backoffice"><b>Все согласования ({{agreementsTotalCount$ | async}})</b></a>
+      <a routerLink="getAgreementsLink()"><b>Все согласования ({{agreementsTotalCount$ | async}})</b></a>
     </div>
   </div>
 </div>

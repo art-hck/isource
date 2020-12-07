@@ -58,14 +58,9 @@
                                [status]="agreement.positionsStatus.name">
           </app-position-status>
         </div>
-        <div *ngIf="!agreementsView" class="app-col-2 action app-ellipsis">
+        <div class="app-col-2 action app-ellipsis">
           <a [routerLink]="getRouterLink(agreement)">
             {{agreement.action.label }}
-          </a>
-        </div>
-        <div *ngIf="agreementsView" class="app-col-2 action app-ellipsis">
-          <a [routerLink]="['/im', agreement.request.id]">
-            Перейти в чат
           </a>
         </div>
       </div>
