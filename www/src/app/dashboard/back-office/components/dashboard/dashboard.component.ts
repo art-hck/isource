@@ -15,6 +15,7 @@ import { ActivatedRoute } from "@angular/router";
 import { DashboardActions } from "../../actions/dashboard.actions";
 import FetchStatusesStatistics = DashboardActions.FetchStatusesStatistics;
 import { UxgPopoverComponent } from "uxg";
+import { AgreementActionFilters } from "../../../../agreements/back-office/dictionaries/agreement-action-label";
 
 @Component({
   selector: 'app-dashboard',
@@ -58,8 +59,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.viewPopover?.first.hide();
   }
 
-  getAgreementsLink() {
-    return ['/agreements/backoffice'];
+  getQueryParams() {
+    return {actions: JSON.stringify(AgreementActionFilters[18].type)};
   }
 
   ngOnDestroy() {
