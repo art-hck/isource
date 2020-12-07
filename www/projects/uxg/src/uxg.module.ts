@@ -17,6 +17,7 @@ import { UxgWizzardModule } from "./modules/wizzard/uxg-wizzard.module";
 import { UxgIconModule } from "./modules/icon/uxg-icon.module";
 import { UxgDatepickerModule } from "./modules/datepicker/uxg-datepicker.module";
 import { UxgModalModule } from "./modules/modal/uxg-modal.module";
+import { UxgPaginationModule } from "./modules/pagination/uxg-pagination.module";
 
 
 @NgModule({
@@ -32,6 +33,7 @@ import { UxgModalModule } from "./modules/modal/uxg-modal.module";
     UxgIconModule,
     UxgInputModule,
     UxgModalModule,
+    UxgPaginationModule,
     UxgPopoverModule,
     UxgRadioModule,
     UxgSwitcherModule,
@@ -50,6 +52,7 @@ import { UxgModalModule } from "./modules/modal/uxg-modal.module";
     UxgIconModule,
     UxgInputModule,
     UxgModalModule,
+    UxgPaginationModule,
     UxgPopoverModule,
     UxgRadioModule,
     UxgSwitcherModule,
