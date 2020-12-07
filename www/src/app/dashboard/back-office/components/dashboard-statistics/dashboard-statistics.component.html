@@ -196,6 +196,7 @@
     <h2>Выбор заявок для отображения</h2>
 
     <select-items-with-search
+      #requestsSelectList
       *ngIf="(filterRequestList$ | async) as requests else loading"
       class="select-list select-list-requests"
       formControlName="requests"
@@ -266,6 +267,7 @@
     <h2>Выбор заказчиков</h2>
 
     <select-items-with-search
+      #customersSelectList
       *ngIf="(filterCustomerList$ | async) as customers else loading"
       class="select-list select-list-customers"
       formControlName="customers"
@@ -316,6 +318,7 @@
     <h2>Выбор ответственных</h2>
 
     <select-items-with-search
+      #usersSelectList
       *ngIf="(filterResponsibleUsersList$ | async) as users else loading"
       class="select-list select-list-users"
       formControlName="users"

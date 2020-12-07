@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { getCurrencySymbol } from "@angular/common";
 import { StatusesStatisticsInfo } from "../../models/statuses-statistics";
 import { FormControl, FormGroup } from "@angular/forms";
@@ -16,6 +16,7 @@ import { DashboardActions } from "../../actions/dashboard.actions";
 import { UserInfoService } from "../../../../user/service/user-info.service";
 import FetchStatusesStatistics = DashboardActions.FetchStatusesStatistics;
 import FetchAvailableFilters = DashboardActions.FetchAvailableFilters;
+import { SelectItemsWithSearchComponent } from "../../../../shared/components/select-items-with-search/select-items-with-search.component";
 
 @Component({
   selector: 'app-dashboard-statistics',
@@ -23,6 +24,10 @@ import FetchAvailableFilters = DashboardActions.FetchAvailableFilters;
   styleUrls: ['./dashboard-statistics.component.scss']
 })
 export class DashboardStatisticsComponent implements OnInit, OnDestroy {
+  @ViewChild('requestsSelectList') requestsSelectList: SelectItemsWithSearchComponent;
+  @ViewChild('customersSelectList') customersSelectList: SelectItemsWithSearchComponent;
+  @ViewChild('usersSelectList') usersSelectList: SelectItemsWithSearchComponent;
+
   @Select(DashboardState.statusesStatistics) statusesStatistics$: Observable<StatusesStatisticsInfo>;
   @Select(DashboardState.filterRequestList) filterRequestList$: Observable<DashboardAvailableFiltersRequestItem[]>;
   @Select(DashboardState.filterCustomerList) filterCustomerList$: Observable<DashboardAvailableFiltersCustomerItem[]>;
@@ -116,6 +121,10 @@ export class DashboardStatisticsComponent implements OnInit, OnDestroy {
 
   resetFilter(): void {
     this.form.reset();
+    this.requestsSelectList.form.get('checked').reset();
+    this.customersSelectList.form.get('checked').reset();
+    this.usersSelectList.form.get('checked').reset();
+
     this.selectedCustomers = [];
     this.selectedRequests = [];
     this.selectedUsers = [];
