@@ -36,9 +36,9 @@
 
     &-user {
       &-name { min-width: 220px; max-width: 220px;text-align: left; }
-      &-email { min-width: 200px; max-width: 200px; text-align: left; }
+      &-email { min-width: 240px; max-width: 240px; text-align: left; }
       &-phone { min-width: 130px; max-width: 130px; text-align: left; }
-      &-group { min-width: 120px; text-align: right; }
+      &-group { text-align: right; }
     }
 
     &-footer {
