@@ -124,6 +124,15 @@ export class ContragentRegistrationComponent implements OnInit {
         email: ['', CustomValidators.emailOptional],
         phone: ['', CustomValidators.phoneOptional],
         responsible: ['', Validators.required]
+      }),
+      contragentContractData: this.fb.group({
+        contractSignerFio: ['', [CustomValidators.simpleText]],
+        contractSignerPosition: ['', [CustomValidators.simpleText]],
+        authorizingDocument: ['', [CustomValidators.simpleText]],
+        agencyContract: ['', [CustomValidators.simpleText]],
+        agencyContractCreatedDate: ['', [CustomValidators.pastDate()]],
+        letterOfAuthority: ['', [CustomValidators.simpleText]],
+        letterOfAuthorityCreatedDate: ['', [CustomValidators.pastDate()]],
       })
     });
 
