@@ -76,14 +76,12 @@ export class DashboardStatisticsComponent implements OnInit, OnDestroy {
   }
 
   submitFilter() {
-    this.selectedRequests = this.form.get('requests').value?.map(request => request.id);
-    this.selectedCustomers = this.form.get('customers').value?.map(customer => customer.id);
-    this.selectedUsers = this.form.get('users').value?.map(user => user.id);
+    this.updateSelectedItemsCount();
 
     const filters = {
       requestIds: this.selectedRequests,
       customers: this.selectedCustomers,
-      userIds: this.selectedUsers,
+      responsibleUsersIds: this.selectedUsers,
       shipmentDateFrom: this.form.get('shipmentDateFrom').value,
       shipmentDateTo: this.form.get('shipmentDateTo').value,
     };
@@ -93,6 +91,19 @@ export class DashboardStatisticsComponent implements OnInit, OnDestroy {
     }
 
     this.store.dispatch(new FetchStatusesStatistics(filters));
+    this.store.dispatch(new FetchAvailableFilters(filters)).subscribe(() => {
+      this.updateSelectedItemsCount();
+    });
+  }
+
+  updateSelectedItemsCount(): void {
+    this.requestsSelectList.submit();
+    this.customersSelectList.submit();
+    this.usersSelectList.submit();
+
+    this.selectedRequests = this.form.get('requests').value?.map(request => request.id);
+    this.selectedCustomers = this.form.get('customers').value?.map(customer => customer.id);
+    this.selectedUsers = this.form.get('users').value?.map(user => user.id);
   }
 
   toRequestItem(request: any): DashboardAvailableFiltersRequestItem {
@@ -120,14 +131,24 @@ export class DashboardStatisticsComponent implements OnInit, OnDestroy {
   }
 
   resetFilter(): void {
-    this.form.reset();
-    this.requestsSelectList.form.get('checked').reset();
-    this.customersSelectList.form.get('checked').reset();
-    this.usersSelectList.form.get('checked').reset();
+    this.form.reset({
+      requests: null,
+      customers: null,
+      users: null,
+      shipmentDateFrom: null,
+      shipmentDateTo: null,
+    }, {emitEvent: false});
+
+    this.requestsSelectList.form.get('checked').reset(null, {emitEvent: false});
+    this.customersSelectList.form.get('checked').reset(null, {emitEvent: false});
+    this.usersSelectList.form.get('checked').reset(null, {emitEvent: false});
 
     this.selectedCustomers = [];
     this.selectedRequests = [];
     this.selectedUsers = [];
+
+    this.store.dispatch(new FetchAvailableFilters({}));
+    this.store.dispatch(new FetchStatusesStatistics({}));
   }
 
   filterIsFilled(): boolean {
