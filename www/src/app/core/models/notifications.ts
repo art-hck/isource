@@ -32,6 +32,7 @@ export class NotificationInfo {
   requestTpPositionStatus?: string;
   requestOfferPositionStatus?: string;
   requestTcpPositionStatus?: string;
+  requestContractStatus?: string;
   requestUrl: string;
   webUrl?: string;
   requestPositions?: NotificationPositionInfo[];
