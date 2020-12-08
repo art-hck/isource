@@ -1,4 +1,5 @@
 import { Uuid } from "../../cart/models/uuid";
+import { PositionStatus } from "../../request/common/enum/position-status";
 
 export class Notifications {
   items: NotificationItem[];
@@ -51,6 +52,8 @@ export class NotificationPositionInfo {
   measureUnit: string;
   name: string;
   quantity: string;
+  status?: PositionStatus;
+  statusLabel?: string;
 }
 
 export class NotificationPositionList {
