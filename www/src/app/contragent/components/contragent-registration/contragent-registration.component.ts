@@ -126,13 +126,13 @@ export class ContragentRegistrationComponent implements OnInit {
         responsible: ['', Validators.required]
       }),
       contragentContractData: this.fb.group({
-        contractSignerFio: ['', [CustomValidators.simpleText]],
-        contractSignerPosition: ['', [CustomValidators.simpleText]],
-        authorizingDocument: ['', [CustomValidators.simpleText]],
-        agencyContract: ['', [CustomValidators.simpleText]],
-        agencyContractCreatedDate: ['', [CustomValidators.pastDate()]],
-        letterOfAuthority: ['', [CustomValidators.simpleText]],
-        letterOfAuthorityCreatedDate: ['', [CustomValidators.pastDate()]],
+        contractSignerFio: [''],
+        contractSignerPosition: [''],
+        authorizingDocument: [''],
+        agencyContract: [''],
+        agencyContractCreatedDate: [''],
+        letterOfAuthority: [''],
+        letterOfAuthorityCreatedDate: [''],
       })
     });
 
@@ -237,8 +237,15 @@ export class ContragentRegistrationComponent implements OnInit {
         this.form.get('contragentContact').get('responsible').patchValue(contragent.responsible);
         this.form.get('contragent').get('taxAuthorityRegistrationDate').patchValue(
           moment(new Date(contragent.taxAuthorityRegistrationDate)).format('DD.MM.YYYY'));
+        this.form.get('contragentContractData').patchValue(contragent.contractData || {});
+        this.form.get('contragentContractData').get('agencyContractCreatedDate').patchValue(
+          moment(new Date(contragent.contractData.agencyContractCreatedDate)).format('DD.MM.YYYY'));
       })
     );
+  }
+
+  isFutureDate(date: Date): boolean {
+    return moment(new Date(date)).isAfter();
   }
 
   // Фейковый подсчёт рейтинга надёжности контрагента.

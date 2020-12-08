@@ -289,7 +289,9 @@
 
             <div class="app-col app-col-3">
               <div class="app-control-wrap">
-                <input #agencyContractCreatedDate uxgInput lg uxgDatepicker formControlName="agencyContractCreatedDate"/>
+                <input #agencyContractCreatedDate uxgInput lg uxgDatepicker
+                       [disable]="[isFutureDate]"
+                       formControlName="agencyContractCreatedDate"/>
                 <label class="app-control-label" (click)="agencyContractCreatedDate.focus()">Дата агентского договора</label>
                 <label class="app-control-icon" (click)="agencyContractCreatedDate.focus()">
                   <uxg-icon shape="app-calendar-big" size="24"></uxg-icon>
@@ -309,7 +311,9 @@
 
             <div class="app-col app-col-3">
               <div class="app-control-wrap">
-                <input #letterOfAuthorityCreatedDate uxgInput lg uxgDatepicker formControlName="letterOfAuthorityCreatedDate"/>
+                <input #letterOfAuthorityCreatedDate uxgInput lg uxgDatepicker
+                       [disable]="[isFutureDate]"
+                       formControlName="letterOfAuthorityCreatedDate"/>
                 <label class="app-control-label" (click)="letterOfAuthorityCreatedDate.focus()">Дата доверенности</label>
                 <label class="app-control-icon" (click)="letterOfAuthorityCreatedDate.focus()">
                   <uxg-icon shape="app-calendar-big" size="24"></uxg-icon>
