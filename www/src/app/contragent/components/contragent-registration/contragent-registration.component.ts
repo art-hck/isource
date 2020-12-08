@@ -240,6 +240,8 @@ export class ContragentRegistrationComponent implements OnInit {
         this.form.get('contragentContractData').patchValue(contragent.contractData || {});
         this.form.get('contragentContractData').get('agencyContractCreatedDate').patchValue(
           moment(new Date(contragent.contractData.agencyContractCreatedDate)).format('DD.MM.YYYY'));
+        this.form.get('contragentContractData').get('letterOfAuthorityCreatedDate').patchValue(
+          moment(new Date(contragent.contractData.letterOfAuthorityCreatedDate)).format('DD.MM.YYYY'));
       })
     );
   }
