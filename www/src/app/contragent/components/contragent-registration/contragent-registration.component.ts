@@ -188,10 +188,10 @@ export class ContragentRegistrationComponent implements OnInit {
 
       const body: ContragentRegistrationRequest = this.form.getRawValue();
 
-      // Переданные пустые строки во вложенных формах заменяем на null
-      for (const [key, value] of Object.entries(body)) {
-        for (const [k, val] of Object.entries(value)) {
-          if (val === '') { delete value[k]; }
+      // Очищаем во вложенных формах поля, в которых переданы пустые строки
+      for (const [k, nestedFields] of Object.entries(body)) {
+        for (const [key, val] of Object.entries(nestedFields)) {
+          if (val === '') { nestedFields[key] = null; }
         }
       }
 
