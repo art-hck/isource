@@ -16,6 +16,17 @@ export interface PositionStatusesGroupInfo {
 
 export const PositionStatusesGroupsInfo: PositionStatusesGroupInfo[] = [
   {
+    url: "element",
+    label: "Нормализация позиций",
+    statuses: PositionStatusGroups.TECHNICAL_PROPOSALS,
+    positions: [],
+    shortName: "Нормализация позиций",
+    hasActions: true,
+    color: "#5066ff",
+    availabilityField: "isMtrAvailable",
+    counterField: "mtrPositions"
+  },
+  {
     url: "draft",
     label: "Черновик",
     statuses: PositionStatusGroups.DRAFT,
@@ -87,17 +98,6 @@ export const PositionStatusesGroupsInfo: PositionStatusesGroupInfo[] = [
     color: "#f2c94c",
     availabilityField: "isContractAvailable",
     counterField: "contractAgreement"
-  },
-  {
-    url: "element",
-    label: "Нормализация позиций",
-    statuses: PositionStatusGroups.DELIVERY,
-    positions: [],
-    shortName: "Нормализация позиций",
-    hasActions: false,
-    color: "#5066ff",
-    availabilityField: "isNormalizationAvailable",
-    counterField: "normalization"
   },
   {
     url: "delivery",

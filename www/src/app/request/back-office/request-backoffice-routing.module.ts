@@ -71,7 +71,8 @@ const routes: Routes = [
         data: { title: "Процедура" }
       },
       { path: 'element', canActivate: [AppAuthGuard],
-        loadChildren: () => import('isource-element').then(m => m.ElementModule)},
+        loadChildren: () => import('isource-element').then(m => m.ElementModule)
+      },
       {
         path: ':position-id',
         component: PositionComponent

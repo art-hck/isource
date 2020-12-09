@@ -20,7 +20,10 @@
       "dom"
     ],
     "paths": {
-      "uxg": ["dist/uxg"]
+      "@angular/*": ["./node_modules/@angular/*"],
+      "@ngxs/*": ["./node_modules/@ngxs/*"],
+      "uxg": ["projects/uxg/src/public-api.ts"],
+      "isource-element": ["../../isource-element-front/projects/element/src/public-api.ts"]
     }
   }
 }
