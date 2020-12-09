@@ -40,6 +40,7 @@ export class RequestComponent implements OnChanges {
   @Output() publishPositions = new EventEmitter();
   @Output() approvePositions = new EventEmitter();
   @Output() rejectPositions = new EventEmitter();
+  @Output() attachDocuments = new EventEmitter();
   @Output() uploadFromTemplate = new EventEmitter();
 
   readonly popoverDir = UxgPopoverContentDirection;
@@ -198,12 +199,17 @@ export class RequestComponent implements OnChanges {
     this.rejectPositions.emit({positionIds, rejectionMessage});
   }
 
+  onAttachDocumentsToPositions(files) {
+    const positionIds = this.checkedPositions.map(item => item.id);
+    this.attachDocuments.emit({positionIds, files});
+  }
+
   resetSelectedPositions() {
     this.formPositionsFlat.filter(formGroup => formGroup.get("checked").setValue(false));
   }
 
   private fetchForm(positions: RequestPositionList[], position?: RequestPositionList) {
-    const formGroup = this.fb.group({ checked: false, folded: false });
+    const formGroup = this.fb.group({ checked: false, folded: false, documents: null });
 
     if (positions) {
       formGroup.addControl("positions", this.fb.array(

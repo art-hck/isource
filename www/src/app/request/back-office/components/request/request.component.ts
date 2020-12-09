@@ -20,6 +20,7 @@ import RefreshPositions = RequestActions.RefreshPositions;
 import Refresh = RequestActions.Refresh;
 import Fetch = RequestActions.Fetch;
 import FetchPositions = RequestActions.FetchPositions;
+import AttachDocuments = RequestActions.AttachDocuments;
 
 @Component({
   templateUrl: './request.component.html',
@@ -35,6 +36,7 @@ export class RequestComponent implements OnInit, OnDestroy {
   readonly destroy$ = new Subject();
   readonly refresh = id => new Refresh(id);
   readonly refreshPositions = id => new RefreshPositions(id);
+  readonly attachDocuments = ({positionIds, files}) => new AttachDocuments(this.requestId, positionIds, files);
   readonly publish = (id, positions) => new Publish(id, true, positions.map(position => position.id));
   readonly uploadFromTemplate = ({files}) => new UploadFromTemplate(this.requestId, files);
   readonly sendOnApprove = (position: RequestPosition): Observable<RequestPosition> => this.store
@@ -66,14 +68,21 @@ export class RequestComponent implements OnInit, OnDestroy {
     ).subscribe();
 
     this.actions.pipe(
-      ofActionCompleted(Publish),
+      ofActionCompleted(Publish, AttachDocuments),
       takeUntil(this.destroy$)
     ).subscribe(({result, action}) => {
       const e = result.error as any;
+      let text = "";
+
+      if (action instanceof Publish) {
+        text = action.positions.length > 1 ? action.positions.length + ' позиции отправлено на согласование' : 'Позиция отправлена на согласование';
+      } else if (action instanceof AttachDocuments) {
+        text = 'Файлы успешно прикреплены к выбранным позициям';
+      }
+
       this.store.dispatch(e ?
         new ToastActions.Error(e && e.error.detail) :
-        new ToastActions.Success(action.positions.length > 1 ? action.positions.length + '  позиции отправлено на согласование' :
-          'Позиция отправлена на согласование')
+        new ToastActions.Success(text)
       );
     });
   }

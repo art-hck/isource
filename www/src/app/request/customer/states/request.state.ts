@@ -21,6 +21,7 @@ import PublishPositions = RequestActions.PublishPositions;
 import ApprovePositions = RequestActions.ApprovePositions;
 import RejectPositions = RequestActions.RejectPositions;
 import CreateTemplate = RequestActions.CreateTemplate;
+import AttachDocuments = RequestActions.AttachDocuments;
 
 export interface RequestStateStateModel {
   request: Request;
@@ -125,6 +126,13 @@ export class RequestState {
   @Action(RejectPositions) rejectPositions({setState, dispatch}: Context, {requestId, positionIds, rejectionMessage}: RejectPositions) {
     setState(patch({ status: "updating" as StateStatus }));
     return this.rest.rejectPositions(requestId, positionIds, rejectionMessage).pipe(
+      switchMap(() => dispatch([new Refresh(requestId), new RefreshPositions(requestId)]))
+    );
+  }
+
+  @Action(AttachDocuments) attachDocuments({setState, dispatch}: Context, {requestId, positionIds, files}: AttachDocuments) {
+    setState(patch({ status: "updating" as StateStatus }));
+    return this.rest.attachDocuments(requestId, positionIds, files).pipe(
       switchMap(() => dispatch([new Refresh(requestId), new RefreshPositions(requestId)]))
     );
   }

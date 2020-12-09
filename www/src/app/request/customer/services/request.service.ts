@@ -139,6 +139,16 @@ export class RequestService {
     return this.api.post(url, { positions: positionIds, rejectionMessage });
   }
 
+  attachDocuments(id: Uuid, positionIds: Uuid[], files: File[]) {
+    const formData = new FormData();
+    files.forEach(file => {
+      formData.append('files[]', file, file.name);
+    });
+
+    const url = `requests/${id}/positions/attach-documents-batch`;
+    return this.api.post(url, this.formDataService.toFormData({ positions: positionIds, files }));
+  }
+
   choiceWinner(offerWinnerId: Uuid, positionId: Uuid, id: Uuid) {
     const url = `requests/customer/${id}/positions/${positionId}/choose-winner`;
     return this.api.post(url, {

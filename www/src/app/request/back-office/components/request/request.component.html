@@ -12,6 +12,7 @@
       (changeStatus)="store.dispatch([refreshPositions(requestId), refresh(requestId)])"
       (addResponsible)="store.dispatch(refreshPositions(requestId))"
       (uploadFromTemplate)="store.dispatch(uploadFromTemplate($event))"
+      (attachDocuments)="store.dispatch(attachDocuments($event))"
     ></app-request>
   </ng-container>
 </ng-container>
