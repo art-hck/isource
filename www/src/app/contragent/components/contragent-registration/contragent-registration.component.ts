@@ -130,9 +130,9 @@ export class ContragentRegistrationComponent implements OnInit {
         contractSignerPosition: [''],
         authorizingDocument: [''],
         agencyContract: [''],
-        agencyContractCreatedDate: [''],
+        agencyContractCreatedDate: [null],
         letterOfAuthority: [''],
-        letterOfAuthorityCreatedDate: [''],
+        letterOfAuthorityCreatedDate: [null],
       })
     });
 
@@ -187,6 +187,14 @@ export class ContragentRegistrationComponent implements OnInit {
       this.isLoading = true;
 
       const body: ContragentRegistrationRequest = this.form.getRawValue();
+
+      // Переданные пустые строки во вложенных формах заменяем на null
+      for (const [key, value] of Object.entries(body)) {
+        for (const [k, val] of Object.entries(value)) {
+          if (val === '') { delete value[k]; }
+        }
+      }
+
       if (!this.isEditing) {
         this.subscription.add(
           this.contragentService.registration(body).pipe(
