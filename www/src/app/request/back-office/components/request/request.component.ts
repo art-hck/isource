@@ -77,7 +77,9 @@ export class RequestComponent implements OnInit, OnDestroy {
       if (action instanceof Publish) {
         text = action.positions.length > 1 ? action.positions.length + ' позиции отправлено на согласование' : 'Позиция отправлена на согласование';
       } else if (action instanceof AttachDocuments) {
-        text = 'Файлы успешно прикреплены к выбранным позициям';
+        const pluralizedFilesTextPart = action.files.length > 1 ? 'Файлы успешно прикреплены ' : 'Файл успешно прикреплён ';
+        const pluralizedPositionsTextPart = action.positionIds.length > 1 ? 'к выбранным позициям' : 'к выбранной позиции';
+        text = pluralizedFilesTextPart + pluralizedPositionsTextPart;
       }
 
       this.store.dispatch(e ?

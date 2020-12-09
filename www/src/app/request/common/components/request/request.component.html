@@ -301,7 +301,8 @@
         <ng-container *ngFor="let formGroup of formPositions.controls">
           <!-- Позиция -->
           <ng-container *ngIf="asPosition(formGroup.get('position').value) as position">
-            <a [href]="getPositionUrl(position)"
+            <a appUploadFile hoverClass="upload-area-hover" (dropFile)="onDragAndDropDocumentsToPosition(position.id, $event)"
+               [href]="getPositionUrl(position)"
                (click)="navigateToPosition(position, $event)"
                class="app-row app-link-no-color"
                [ngClass]="{'canceled' : position.status === 'NOT_RELEVANT' || position.status === 'CANCELED'}">

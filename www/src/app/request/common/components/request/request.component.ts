@@ -201,6 +201,13 @@ export class RequestComponent implements OnChanges {
 
   onAttachDocumentsToPositions(files) {
     const positionIds = this.checkedPositions.map(item => item.id);
+
+    this.attachDocuments.emit({positionIds, files});
+  }
+
+  onDragAndDropDocumentsToPosition(positionId, files: File[]) {
+    const positionIds = [positionId];
+
     this.attachDocuments.emit({positionIds, files});
   }
 
