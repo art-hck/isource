@@ -3,6 +3,25 @@
     <h3>Страницы согласований</h3>
   </div>
   <div class="app-accordion-body">
+   <!-- Счетчик нормализации -->
+    <ng-container *ngIf="!user.isCustomer()">
+      <div [class.app-ghost-color]="!request.dashboard.isNotMtrAvailable">
+        <div class="app-row app-section app-bold">
+          <div class="app-col">
+            <ng-container *ngIf="request.dashboard.isNotMtrAvailable; else statusLabelSpan">
+              <a routerLink="../element">Нормализация позиций</a>
+            </ng-container>
+            <ng-template #statusLabelSpan>Нормализация позиций</ng-template>
+          </div>
+          <div class="app-col app-grow-0">
+            <div class="app-position-status">
+              <span>{{ request.dashboard.notMtrPositions }}</span>
+              <div class="app-position-status-icon"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
     <!-- Счетчики статусов -->
     <ng-container *ngFor="let statusCounter of statusCounters">
       <div [class.app-ghost-color]="!request.dashboard[statusCounter.availabilityField]">
@@ -59,7 +78,8 @@
     </div>
     <div class="app-section" *ngIf="request.documents.length">
       <div class="app-ghost-color">Документы заявки</div>
-      <app-document-simple-list [documents]="request.documents" [enableUpload]="false" [size]="'s'"></app-document-simple-list>
+      <app-document-simple-list [documents]="request.documents" [enableUpload]="false"
+                                [size]="'s'"></app-document-simple-list>
     </div>
     <div class="app-section" *ngIf="request.comment">
       <div class="app-ghost-color">Комментарий</div>
@@ -87,7 +107,8 @@
 <hr class="divider"/>
 <ng-container *ngIf="!user.isCustomer()">
   <div class="app-row app-align-items-center">
-    <uxg-checkbox class="app-control" [formControl]="isChecked" (ngModelChange)="onChangeHiddenContragents($event)"></uxg-checkbox>
+    <uxg-checkbox class="app-control" [formControl]="isChecked"
+                  (ngModelChange)="onChangeHiddenContragents($event)"></uxg-checkbox>
     <label>&nbsp; Скрывать поставщиков</label>
   </div>
   <hr class="divider"/>

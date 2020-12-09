@@ -1,6 +1,7 @@
 import { RequestPosition } from "../models/request-position";
 import { PositionStatusGroups } from "./position-statuses-groups";
 import { PositionStatus } from "../enum/position-status";
+import { UserRole } from "../../../user/models/user-role";
 
 export interface PositionStatusesGroupInfo {
   url: string;
@@ -12,20 +13,10 @@ export interface PositionStatusesGroupInfo {
   color?: string;
   availabilityField?: string;
   counterField?: string;
+  roles?: UserRole[];
 }
 
 export const PositionStatusesGroupsInfo: PositionStatusesGroupInfo[] = [
-  {
-    url: "element",
-    label: "Нормализация позиций",
-    statuses: PositionStatusGroups.TECHNICAL_PROPOSALS,
-    positions: [],
-    shortName: "Нормализация позиций",
-    hasActions: true,
-    color: "#5066ff",
-    availabilityField: "isMtrAvailable",
-    counterField: "mtrPositions"
-  },
   {
     url: "draft",
     label: "Черновик",
