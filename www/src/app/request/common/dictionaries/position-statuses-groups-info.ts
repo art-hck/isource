@@ -1,7 +1,6 @@
 import { RequestPosition } from "../models/request-position";
 import { PositionStatusGroups } from "./position-statuses-groups";
 import { PositionStatus } from "../enum/position-status";
-import { UserRole } from "../../../user/models/user-role";
 
 export interface PositionStatusesGroupInfo {
   url: string;
@@ -13,7 +12,6 @@ export interface PositionStatusesGroupInfo {
   color?: string;
   availabilityField?: string;
   counterField?: string;
-  roles?: UserRole[];
 }
 
 export const PositionStatusesGroupsInfo: PositionStatusesGroupInfo[] = [
