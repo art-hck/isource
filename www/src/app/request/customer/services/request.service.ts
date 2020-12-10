@@ -140,11 +140,6 @@ export class RequestService {
   }
 
   attachDocuments(id: Uuid, positionIds: Uuid[], files: File[]) {
-    const formData = new FormData();
-    files.forEach(file => {
-      formData.append('files[]', file, file.name);
-    });
-
     const url = `requests/${id}/positions/attach-documents-batch`;
     return this.api.post(url, this.formDataService.toFormData({ positions: positionIds, files }));
   }
