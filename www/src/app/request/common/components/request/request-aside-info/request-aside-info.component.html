@@ -4,7 +4,7 @@
   </div>
   <div class="app-accordion-body">
    <!-- Счетчик нормализации -->
-    <ng-container *ngIf="!user.isCustomer()">
+    <ng-container *ngIf="featureService.authorize('normalization')">
       <div [class.app-ghost-color]="!request.dashboard.isNotMtrAvailable">
         <div class="app-row app-section app-bold">
           <div class="app-col">
