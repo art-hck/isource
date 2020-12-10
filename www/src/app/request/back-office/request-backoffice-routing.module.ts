@@ -14,6 +14,7 @@ import { ProcedureViewComponent } from "./components/procedure/procedure-view/pr
 import { TechnicalCommercialProposalGroupListComponent } from "./components/proposal/proposal-group-list/technical-commercial-proposal-group-list/technical-commercial-proposal-group-list.component";
 import { ContractListComponent } from "./components/contract-list/contract-list.component";
 import { CommercialProposalGroupListComponent } from "./components/proposal/proposal-group-list/commercial-proposal-group-list/commercial-proposal-group-list.component";
+import { AppAuthGuard } from "../../auth/app-auth.guard";
 
 const routes: Routes = [
   {
@@ -68,6 +69,9 @@ const routes: Routes = [
         path: 'procedure',
         component: ProcedureViewComponent,
         data: { title: "Процедура" }
+      },
+      { path: 'element', canActivate: [AppAuthGuard],
+        loadChildren: () => import('isource-element').then(m => m.ElementModule)
       },
       {
         path: ':position-id',

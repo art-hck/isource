@@ -22,6 +22,7 @@ export class AgreementsComponent implements OnInit, OnDestroy {
   @Select(AgreementListState.totalCount) totalCount$: Observable<number>;
 
   readonly pageSize = 10;
+  readonly destroy$ = new Subject();
   readonly actions: {type: AgreementAction[], label: string}[] = AgreementActionFilters;
   readonly destroy$ = new Subject();
   pages$: Observable<number>;
@@ -60,6 +61,11 @@ export class AgreementsComponent implements OnInit, OnDestroy {
 
   stringifyActions(actions: AgreementAction[]) {
     return JSON.stringify(actions);
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   ngOnDestroy() {
