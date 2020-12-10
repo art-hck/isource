@@ -4,7 +4,7 @@
       {{ request.name }} 
       <ng-container *ngIf="!(status && status !== 'received'); else requestLoader">
         <button *ngIf="canEditRequestName()"
-                (click)="editRequestNameModal.open()"
+                (click)="openRequestNameEditModal()"
                 class="title-edit" uxgButton icon secondary>
           <uxg-icon shape="app-pen" size="16"></uxg-icon>
         </button>
@@ -547,7 +547,7 @@
         <input #requestName uxgInput lg formControlName="requestName" />
         <label class="app-control-label" (click)="requestName.focus()">Наименование заявки</label>
         <div class="app-control-error" *ngIf="requestNameForm.get('requestName').errors as e">
-          <span *ngIf="e.required">Обязательное поле</span>
+          <span *ngIf="e.empty">Обязательное поле</span>
         </div>
       </div>
 

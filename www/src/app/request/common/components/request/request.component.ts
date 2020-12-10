@@ -1,5 +1,6 @@
 import { ActivatedRoute, Router, UrlTree } from "@angular/router";
 import {
+  AfterViewInit,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
@@ -26,6 +27,7 @@ import { RequestPositionStatusService } from "../../services/request-position-st
 import { StateStatus } from "../../models/state-status";
 import { debounceTime } from "rxjs/operators";
 import { UxgModalComponent, UxgPopoverContentDirection } from "uxg";
+import { CustomValidators } from "../../../../shared/forms/custom.validators";
 
 @Component({
   selector: "app-request",
@@ -33,7 +35,7 @@ import { UxgModalComponent, UxgPopoverContentDirection } from "uxg";
   styleUrls: ["./request.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class RequestComponent implements OnChanges, OnInit {
+export class RequestComponent implements OnChanges {
   @ViewChild('editRequestNameModal') editRequestNameModal: UxgModalComponent;
 
   @Input() request: Request;
@@ -69,7 +71,7 @@ export class RequestComponent implements OnChanges, OnInit {
   canPublish: boolean;
 
   requestNameForm = new FormGroup({
-    requestName: new FormControl('', [Validators.required, Validators.maxLength(250)]),
+    requestName: new FormControl('', [CustomValidators.requiredNotEmpty, Validators.maxLength(250)]),
   });
 
   get formPositions(): FormArray {
@@ -130,10 +132,6 @@ export class RequestComponent implements OnChanges, OnInit {
     public user: UserInfoService,
     public featureService: FeatureService
   ) {}
-
-  ngOnInit() {
-    this.requestNameForm.get('requestName').setValue(this.request.name);
-  }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.positions) {
@@ -222,6 +220,11 @@ export class RequestComponent implements OnChanges, OnInit {
     const positionIds = this.checkedPositions.map(item => item.id);
 
     this.rejectPositions.emit({positionIds, rejectionMessage});
+  }
+
+  openRequestNameEditModal() {
+    this.requestNameForm.get('requestName').setValue(this.request.name);
+    this.editRequestNameModal.open();
   }
 
   onSaveRequestName() {
