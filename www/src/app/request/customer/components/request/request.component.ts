@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Observable, Subject } from "rxjs";
 import { Request } from "../../../common/models/request";
 import { RequestPositionList } from "../../../common/models/request-position-list";
@@ -12,6 +12,7 @@ import { Uuid } from "../../../../cart/models/uuid";
 import { RequestActions } from "../../actions/request.actions";
 import { RequestState } from "../../states/request.state";
 import { StateStatus } from "../../../common/models/state-status";
+import { RequestComponent as CommonRequestComponent } from "../../../common/components/request/request.component";
 import UploadFromTemplate = RequestActions.UploadFromTemplate;
 import Publish = RequestActions.Publish;
 import RefreshPositions = RequestActions.RefreshPositions;
@@ -33,6 +34,7 @@ import { ToastActions } from "../../../../shared/actions/toast.actions";
 })
 export class RequestComponent implements OnInit, OnDestroy {
   requestId: Uuid;
+  @ViewChild('commonRequestComponent') commonRequestComponent: CommonRequestComponent;
   @Select(RequestState.request) request$: Observable<Request>;
   @Select(RequestState.positions) positions$: Observable<RequestPositionList[]>;
   @Select(RequestState.status) status$: Observable<StateStatus>;
@@ -81,6 +83,8 @@ export class RequestComponent implements OnInit, OnDestroy {
         new ToastActions.Error(e && e.error.detail) :
         new ToastActions.Success('Файлы успешно прикреплены к выбранным позициям')
       );
+
+      this.commonRequestComponent.resetSelectedPositions();
     });
   }
 

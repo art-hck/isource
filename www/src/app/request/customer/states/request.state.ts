@@ -133,7 +133,7 @@ export class RequestState {
   @Action(AttachDocuments) attachDocuments({setState, dispatch}: Context, {requestId, positionIds, files}: AttachDocuments) {
     setState(patch({ status: "updating" as StateStatus }));
     return this.rest.attachDocuments(requestId, positionIds, files).pipe(
-      switchMap(() => dispatch([new Refresh(requestId), new RefreshPositions(requestId)]))
+      tap(() => setState(patch({ status: "received" as StateStatus})))
     );
   }
 
