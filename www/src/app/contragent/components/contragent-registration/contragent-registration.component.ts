@@ -130,9 +130,9 @@ export class ContragentRegistrationComponent implements OnInit {
         contractSignerPosition: [''],
         authorizingDocument: [''],
         agencyContract: [''],
-        agencyContractCreatedDate: [''],
+        agencyContractCreatedDate: [null],
         letterOfAuthority: [''],
-        letterOfAuthorityCreatedDate: [''],
+        letterOfAuthorityCreatedDate: [null],
       })
     });
 
@@ -187,6 +187,14 @@ export class ContragentRegistrationComponent implements OnInit {
       this.isLoading = true;
 
       const body: ContragentRegistrationRequest = this.form.getRawValue();
+
+      // Очищаем во вложенных формах поля, в которых переданы пустые строки
+      for (const [k, nestedFields] of Object.entries(body)) {
+        for (const [key, val] of Object.entries(nestedFields)) {
+          if (val === '') { nestedFields[key] = null; }
+        }
+      }
+
       if (!this.isEditing) {
         this.subscription.add(
           this.contragentService.registration(body).pipe(
@@ -239,11 +247,11 @@ export class ContragentRegistrationComponent implements OnInit {
           moment(new Date(contragent.taxAuthorityRegistrationDate)).format('DD.MM.YYYY'));
         this.form.get('contragentContractData').patchValue(contragent.contractData || {});
 
-        if (contragent.contractData.agencyContractCreatedDate) {
+        if (contragent.contractData?.agencyContractCreatedDate) {
           this.form.get('contragentContractData').get('agencyContractCreatedDate').patchValue(
             moment(new Date(contragent.contractData.agencyContractCreatedDate)).format('DD.MM.YYYY'));
         }
-        if (contragent.contractData.letterOfAuthorityCreatedDate) {
+        if (contragent.contractData?.letterOfAuthorityCreatedDate) {
           this.form.get('contragentContractData').get('letterOfAuthorityCreatedDate').patchValue(
             moment(new Date(contragent.contractData.letterOfAuthorityCreatedDate)).format('DD.MM.YYYY'));
         }
