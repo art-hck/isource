@@ -63,6 +63,11 @@ export class RequestService {
     return this.api.post(url, {positions});
   }
 
+  editRequestName(requestId: Uuid, requestName: string) {
+    const url = `requests/${requestId}/edit-name`;
+    return this.api.post(url, { id: requestId, name: requestName });
+  }
+
   changeStatus(id: Uuid, positionId: Uuid, status: string) {
     const url = `requests/backoffice/${id}/positions/${positionId}/change-status`;
     return this.api.post<{status: PositionStatus, statusLabel: string, availableStatuses: string[]}>(url, {
