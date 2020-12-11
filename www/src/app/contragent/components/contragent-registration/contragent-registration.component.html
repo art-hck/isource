@@ -222,6 +222,7 @@
             </div>
           </div>
         </ng-container>
+        <br/>
 
         <h3>Контактная информация и ответственный</h3>
         <p class="app-secondary-color">Поля «E-mail контрагента» и «Телефон контрагента» заполняются если есть и не являются обязательными.</p>
@@ -251,7 +252,82 @@
           </div>
         </ng-container>
         <br/>
+
+        <h3>Подписание документов</h3>
+        <p class="app-secondary-color">Поля заполняются если есть и не являются обязательными.</p>
+        <ng-container formGroupName="contragentContractData">
+          <div class="app-row">
+            <div class="app-col app-col-4">
+              <div class="app-control-wrap">
+                <input #contractSignerPosition uxgInput lg formControlName="contractSignerPosition"/>
+                <label class="app-control-label" (click)="contractSignerPosition.focus()">Должность подписанта</label>
+              </div>
+            </div>
+
+            <div class="app-col app-col-4">
+              <div class="app-control-wrap">
+                <input #contractSignerFio uxgInput lg formControlName="contractSignerFio"/>
+                <label class="app-control-label" (click)="contractSignerFio.focus()">ФИО подписанта (полностью)</label>
+              </div>
+            </div>
+
+            <div class="app-col app-col-4">
+              <div class="app-control-wrap">
+                <input #authorizingDocument uxgInput lg formControlName="authorizingDocument"/>
+                <label class="app-control-label" (click)="authorizingDocument.focus()">Документ, дающий право на подпись</label>
+              </div>
+            </div>
+          </div>
+
+          <div class="app-row">
+            <div class="app-col app-col-3">
+              <div class="app-control-wrap">
+                <input #agencyContract uxgInput lg formControlName="agencyContract"/>
+                <label class="app-control-label" (click)="agencyContract.focus()">Номер агентского договора</label>
+              </div>
+            </div>
+
+            <div class="app-col app-col-3">
+              <div class="app-control-wrap">
+                <input #agencyContractCreatedDate uxgInput lg uxgDatepicker
+                       [disable]="[isFutureDate]"
+                       formControlName="agencyContractCreatedDate"/>
+                <label class="app-control-label" (click)="agencyContractCreatedDate.focus()">Дата агентского договора</label>
+                <label class="app-control-icon" (click)="agencyContractCreatedDate.focus()">
+                  <uxg-icon shape="app-calendar-big" size="24"></uxg-icon>
+                </label>
+                <div class="app-control-error" *ngIf="form.get('contragentContractData').get('agencyContractCreatedDate').errors as e">
+                  <span *ngIf="e.required">Некорректная дата</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="app-col app-col-3">
+              <div class="app-control-wrap">
+                <input #letterOfAuthority uxgInput lg formControlName="letterOfAuthority" />
+                <label class="app-control-label" (click)="letterOfAuthority.focus()">Номер доверенности</label>
+              </div>
+            </div>
+
+            <div class="app-col app-col-3">
+              <div class="app-control-wrap">
+                <input #letterOfAuthorityCreatedDate uxgInput lg uxgDatepicker
+                       [disable]="[isFutureDate]"
+                       formControlName="letterOfAuthorityCreatedDate"/>
+                <label class="app-control-label" (click)="letterOfAuthorityCreatedDate.focus()">Дата доверенности</label>
+                <label class="app-control-icon" (click)="letterOfAuthorityCreatedDate.focus()">
+                  <uxg-icon shape="app-calendar-big" size="24"></uxg-icon>
+                </label>
+                <div class="app-control-error" *ngIf="form.get('contragentContractData').get('letterOfAuthorityCreatedDate').errors as e">
+                  <span *ngIf="e.required">Некорректная дата</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+        <br/>
       </div>
+
       <div class="app-row app-align-items-center app-justify-content-end add-contragent">
         <div>
           <span *ngIf="isLoading" class="spinner spinner-inline"></span>

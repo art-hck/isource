@@ -21,6 +21,11 @@ export namespace RequestActions {
     constructor(public requestId: Uuid) {}
   }
 
+  export class EditRequestName {
+    static readonly type = '[Request Backoffice] EditRequestName';
+    constructor(public requestId: Uuid, public requestName: string) {}
+  }
+
   export class Publish {
     static readonly type = '[Request Backoffice] Publish';
     constructor(public requestId: Uuid, public refresh = true, public positions: [string]) {}

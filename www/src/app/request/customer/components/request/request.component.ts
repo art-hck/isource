@@ -27,6 +27,7 @@ import AttachDocuments = RequestActions.AttachDocuments;
 import Reject = RequestActions.Reject;
 import CreateTemplate = RequestActions.CreateTemplate;
 import { ToastActions } from "../../../../shared/actions/toast.actions";
+import EditRequestName = RequestActions.EditRequestName;
 
 @Component({
   templateUrl: './request.component.html',
@@ -48,6 +49,7 @@ export class RequestComponent implements OnInit, OnDestroy {
   readonly approvePositions = positions => new ApprovePositions(this.requestId, positions);
   readonly rejectPositions = data => new RejectPositions(this.requestId, data.positionIds, data.rejectionMessage);
   readonly attachDocuments = ({positionIds, files}) => new AttachDocuments(this.requestId, positionIds, files);
+  readonly saveRequestName = data => new EditRequestName(this.requestId, data);
   readonly reject = id => new Reject(id);
   readonly createTemplate = (positions, title, tag?) => new CreateTemplate(this.requestId, positions.map(position => position.id), title, tag);
   readonly uploadFromTemplate = ({files}) => new UploadFromTemplate(this.requestId, files);

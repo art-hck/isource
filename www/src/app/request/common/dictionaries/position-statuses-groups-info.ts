@@ -94,7 +94,7 @@ export const PositionStatusesGroupsInfo: PositionStatusesGroupInfo[] = [
     statuses: PositionStatusGroups.DELIVERY,
     positions: [],
     shortName: "Доставка и оплата",
-    hasActions: false,
+    hasActions: true,
     color: "#9b51e0"
   },
   {
