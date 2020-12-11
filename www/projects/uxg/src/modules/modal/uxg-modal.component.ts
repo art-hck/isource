@@ -1,4 +1,4 @@
-import { Component, ContentChild, ElementRef, EventEmitter, HostListener, Inject, Input, OnDestroy, Output, Renderer2, TemplateRef } from '@angular/core';
+import { Component, ContentChild, ElementRef, EventEmitter, HostListener, Inject, InjectionToken, Input, OnChanges, OnDestroy, Output, PLATFORM_ID, Renderer2, SimpleChanges, TemplateRef } from '@angular/core';
 import { UxgModalFooterDirective } from "./uxg-modal-footer.directive";
 import { DOCUMENT, isPlatformBrowser } from "@angular/common";
 
@@ -6,7 +6,7 @@ import { DOCUMENT, isPlatformBrowser } from "@angular/common";
   selector: 'uxg-modal',
   templateUrl: './uxg-modal.component.html',
 })
-export class UxgModalComponent implements OnDestroy {
+export class UxgModalComponent implements OnDestroy, OnChanges {
   @ContentChild(UxgModalFooterDirective, { read: TemplateRef }) footerTpl: TemplateRef<ElementRef>;
   @Input() state;
   @Input() noBackdrop: boolean;
@@ -26,25 +26,35 @@ export class UxgModalComponent implements OnDestroy {
 
   is = (prop?: boolean | string) => prop !== undefined && prop !== false && prop !== null;
 
-  open() {
-    if (this.hideScrollContainer) {
-      this.renderer.addClass(this.scrollContainerElement, "modal-open");
-      this.scrollContainerElement.style.paddingRight = this.scrollbarWidth + "px";
+  ngOnChanges({ state }: SimpleChanges) {
+    if (state) {
+      this.toggleContainerHostClass();
     }
+  }
 
+  open() {
     this.state = true;
+    this.toggleContainerHostClass();
     this.stateChange.emit(true);
   }
 
   @HostListener('document:keyup.esc')
   close() {
-    if (this.hideScrollContainer) {
-      this.renderer.removeClass(this.scrollContainerElement, "modal-open");
-      this.scrollContainerElement.style.paddingRight = null;
-    }
-
     this.state = false;
+    this.toggleContainerHostClass();
     this.stateChange.emit(false);
+  }
+
+  toggleContainerHostClass() {
+    if (this.hideScrollContainer && this.scrollContainerElement) {
+      if (this.is(this.state)) {
+        this.renderer.addClass(this.scrollContainerElement, "modal-open");
+        this.scrollContainerElement.style.paddingRight = this.scrollbarWidth + "px";
+      } else {
+        this.renderer.removeClass(this.scrollContainerElement, "modal-open");
+        this.scrollContainerElement.style.paddingRight = null;
+      }
+    }
   }
 
   private get scrollbarWidth() {
