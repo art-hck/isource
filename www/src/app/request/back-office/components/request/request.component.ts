@@ -20,6 +20,7 @@ import RefreshPositions = RequestActions.RefreshPositions;
 import Refresh = RequestActions.Refresh;
 import Fetch = RequestActions.Fetch;
 import FetchPositions = RequestActions.FetchPositions;
+import EditRequestName = RequestActions.EditRequestName;
 
 @Component({
   templateUrl: './request.component.html',
@@ -35,6 +36,7 @@ export class RequestComponent implements OnInit, OnDestroy {
   readonly destroy$ = new Subject();
   readonly refresh = id => new Refresh(id);
   readonly refreshPositions = id => new RefreshPositions(id);
+  readonly saveRequestName = data => new EditRequestName(this.requestId, data);
   readonly publish = (id, positions) => new Publish(id, true, positions.map(position => position.id));
   readonly uploadFromTemplate = ({files}) => new UploadFromTemplate(this.requestId, files);
   readonly sendOnApprove = (position: RequestPosition): Observable<RequestPosition> => this.store

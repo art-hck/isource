@@ -21,7 +21,7 @@ const routes: Routes = [
     path: '',
     component: RequestListComponent,
     canActivate: [CanActivateFeatureGuard],
-    data: { title: "Заявки", hideTitle: true, feature: "backofficeRequest" }
+    data: { title: "Заявки", feature: "backofficeRequest" }
   },
   {
     path: ':id',
@@ -31,6 +31,7 @@ const routes: Routes = [
       {
         path: '',
         component: BackOfficeRequestComponent,
+        data: { hideTitle: true }
       },
       {
         path: 'commercial-proposals',

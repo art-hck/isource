@@ -1,6 +1,17 @@
 import { ActivatedRoute, Router, UrlTree } from "@angular/router";
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from "@angular/core";
-import { AbstractControl, FormArray, FormBuilder, FormGroup } from "@angular/forms";
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+  SimpleChanges, ViewChild
+} from "@angular/core";
+import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
 import { Observable } from "rxjs";
 import { PositionStatusesLabels } from "../../dictionaries/position-statuses-labels";
 import { Request } from "../../models/request";
@@ -15,7 +26,8 @@ import { PermissionType } from "../../../../auth/enum/permission-type";
 import { RequestPositionStatusService } from "../../services/request-position-status.service";
 import { StateStatus } from "../../models/state-status";
 import { debounceTime } from "rxjs/operators";
-import { UxgPopoverContentDirection } from "uxg";
+import { UxgModalComponent, UxgPopoverContentDirection } from "uxg";
+import { CustomValidators } from "../../../../shared/forms/custom.validators";
 
 @Component({
   selector: "app-request",
@@ -24,6 +36,8 @@ import { UxgPopoverContentDirection } from "uxg";
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RequestComponent implements OnChanges {
+  @ViewChild('editRequestNameModal') editRequestNameModal: UxgModalComponent;
+
   @Input() request: Request;
   @Input() positions: RequestPositionList[];
   @Input() onDrafted: (position: RequestPosition) => Observable<RequestPosition>;
@@ -40,6 +54,7 @@ export class RequestComponent implements OnChanges {
   @Output() publishPositions = new EventEmitter();
   @Output() approvePositions = new EventEmitter();
   @Output() rejectPositions = new EventEmitter();
+  @Output() saveRequestName = new EventEmitter();
   @Output() uploadFromTemplate = new EventEmitter();
 
   readonly popoverDir = UxgPopoverContentDirection;
@@ -54,6 +69,10 @@ export class RequestComponent implements OnChanges {
   groups: RequestGroup[];
   canChangeStatuses: boolean;
   canPublish: boolean;
+
+  requestNameForm = new FormGroup({
+    requestName: new FormControl('', [CustomValidators.requiredNotEmpty, Validators.maxLength(250)]),
+  });
 
   get formPositions(): FormArray {
     return this.form.get("positions") as FormArray;
@@ -80,6 +99,11 @@ export class RequestComponent implements OnChanges {
 
   private get hasOnApprovalPositions(): RequestPositionList[] {
     return this.flatPositions.filter(position => position.status === PositionStatus.ON_CUSTOMER_APPROVAL);
+  }
+
+  canEditRequestName(): boolean {
+    return (this.user.isCustomer() && ['DRAFT', 'NEW', 'ON_CUSTOMER_APPROVAL'].indexOf(this.request.status) !== -1) ||
+           (this.user.isBackOffice() && ['NEW', 'IN_PROGRESS'].indexOf(this.request.status) !== -1);
   }
 
   everyPositionHasStatus(positions: RequestPosition[], status: string): boolean {
@@ -196,6 +220,18 @@ export class RequestComponent implements OnChanges {
     const positionIds = this.checkedPositions.map(item => item.id);
 
     this.rejectPositions.emit({positionIds, rejectionMessage});
+  }
+
+  openRequestNameEditModal() {
+    this.requestNameForm.get('requestName').setValue(this.request.name);
+    this.editRequestNameModal.open();
+  }
+
+  onSaveRequestName() {
+    if (this.requestNameForm.valid) {
+      this.saveRequestName.emit(this.requestNameForm.get('requestName').value);
+      this.editRequestNameModal.close();
+    }
   }
 
   resetSelectedPositions() {

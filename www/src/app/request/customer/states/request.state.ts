@@ -21,6 +21,7 @@ import PublishPositions = RequestActions.PublishPositions;
 import ApprovePositions = RequestActions.ApprovePositions;
 import RejectPositions = RequestActions.RejectPositions;
 import CreateTemplate = RequestActions.CreateTemplate;
+import EditRequestName = RequestActions.EditRequestName;
 
 export interface RequestStateStateModel {
   request: Request;
@@ -126,6 +127,13 @@ export class RequestState {
     setState(patch({ status: "updating" as StateStatus }));
     return this.rest.rejectPositions(requestId, positionIds, rejectionMessage).pipe(
       switchMap(() => dispatch([new Refresh(requestId), new RefreshPositions(requestId)]))
+    );
+  }
+
+  @Action(EditRequestName) editRequestName({setState, dispatch}: Context, {requestId, requestName}: EditRequestName) {
+    setState(patch({ status: "updating" as StateStatus }));
+    return this.rest.editRequestName(requestId, requestName).pipe(
+      switchMap(() => dispatch([new Refresh(requestId)])),
     );
   }
 

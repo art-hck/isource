@@ -15,6 +15,7 @@ import RefreshPositions = RequestActions.RefreshPositions;
 import Refresh = RequestActions.Refresh;
 import UploadFromTemplate = RequestActions.UploadFromTemplate;
 import { ToastActions } from "../../../shared/actions/toast.actions";
+import EditRequestName = RequestActions.EditRequestName;
 
 export interface RequestStateStateModel {
   request: Request;
@@ -86,6 +87,13 @@ export class RequestState {
   @Action(Publish) publish({setState, dispatch}: Context, {requestId, positions, refresh}: Publish) {
     return this.rest.publishRequest(requestId, positions).pipe(
       switchMap(() => dispatch(refresh ? [new Refresh(requestId), new RefreshPositions(requestId)] : []))
+    );
+  }
+
+  @Action(EditRequestName) editRequestName({setState, dispatch}: Context, {requestId, requestName}: EditRequestName) {
+    setState(patch({ status: "updating" as StateStatus }));
+    return this.rest.editRequestName(requestId, requestName).pipe(
+      switchMap(() => dispatch([new Refresh(requestId)])),
     );
   }
 

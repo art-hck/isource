@@ -16,6 +16,11 @@ export namespace RequestActions {
     constructor(public requestId: Uuid, public useCache = true, public clearState = true) {}
   }
 
+  export class EditRequestName {
+    static readonly type = '[Request Customer] EditRequestName';
+    constructor(public requestId: Uuid, public requestName: string) {}
+  }
+
   export class RefreshPositions {
     static readonly type = '[Request Customer] Refresh Positions';
     constructor(public requestId: Uuid) {}

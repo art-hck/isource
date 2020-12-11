@@ -24,6 +24,7 @@ import ApprovePositions = RequestActions.ApprovePositions;
 import RejectPositions = RequestActions.RejectPositions;
 import Reject = RequestActions.Reject;
 import CreateTemplate = RequestActions.CreateTemplate;
+import EditRequestName = RequestActions.EditRequestName;
 
 @Component({
   templateUrl: './request.component.html',
@@ -43,6 +44,7 @@ export class RequestComponent implements OnInit, OnDestroy {
   readonly publishPositions = positions => new PublishPositions(this.requestId, positions);
   readonly approvePositions = positions => new ApprovePositions(this.requestId, positions);
   readonly rejectPositions = data => new RejectPositions(this.requestId, data.positionIds, data.rejectionMessage);
+  readonly saveRequestName = data => new EditRequestName(this.requestId, data);
   readonly reject = id => new Reject(id);
   readonly createTemplate = (positions, title, tag?) => new CreateTemplate(this.requestId, positions.map(position => position.id), title, tag);
   readonly uploadFromTemplate = ({files}) => new UploadFromTemplate(this.requestId, files);
