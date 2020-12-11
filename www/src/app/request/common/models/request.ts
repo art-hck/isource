@@ -18,6 +18,7 @@ export class Request extends BaseModel {
   documents?: RequestDocument[];
   comment?: string;
   type?: string;
+  elementMappingId: Uuid;
   dashboard: DashboardInfo;
   isOlderTwoWeeks?: boolean;
   hideContragent?: boolean;

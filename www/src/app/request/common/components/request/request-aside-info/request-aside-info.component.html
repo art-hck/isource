@@ -9,7 +9,7 @@
         <div class="app-row app-section app-bold">
           <div class="app-col">
             <ng-container *ngIf="request.dashboard.isNotMtrAvailable; else statusLabelSpan">
-              <a routerLink="../element">Нормализация позиций</a>
+              <a routerLink="../element/{{request.elementMappingId}}">Нормализация позиций</a>
             </ng-container>
             <ng-template #statusLabelSpan>Нормализация позиций</ng-template>
           </div>
