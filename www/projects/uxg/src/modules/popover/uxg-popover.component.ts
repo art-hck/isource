@@ -1,8 +1,8 @@
-import { ChangeDetectionStrategy, Component, ContentChild, ElementRef, HostBinding, Inject, Input, NgZone, OnDestroy, OnInit } from "@angular/core";
+import { ChangeDetectionStrategy, Component, ContentChild, ElementRef, HostBinding, Inject, InjectionToken, Input, NgZone, OnDestroy, OnInit, PLATFORM_ID } from "@angular/core";
 import { Subject, timer } from "rxjs";
 import { distinctUntilChanged, takeUntil, tap } from "rxjs/operators";
 import { UxgPopoverTriggerDirective } from "./uxg-popover-trigger.directive";
-import { DOCUMENT } from "@angular/common";
+import { DOCUMENT, isPlatformBrowser } from "@angular/common";
 
 @Component({
   selector: 'uxg-popover',
@@ -22,18 +22,25 @@ export class UxgPopoverComponent implements OnInit, OnDestroy {
   readonly show = () => this.toggle(true, this.openDelay);
   readonly hide = () => this.toggle(false, this.hideDelay);
 
-  constructor(private el: ElementRef, private ngZone: NgZone, @Inject(DOCUMENT) private document: Document) {}
+  constructor(
+    @Inject(PLATFORM_ID) private platformId: InjectionToken<Object>,
+    @Inject(DOCUMENT) private document,
+    private el: ElementRef,
+    private ngZone: NgZone,
+  ) {}
 
   ngOnInit() {
-    this.ngZone.runOutsideAngular(() => {
-      if (this.openOnHover && !/iPad/i.test(navigator.userAgent)) {
-        this.el.nativeElement.addEventListener('mouseenter', this.show);
-        this.el.nativeElement.addEventListener('mouseleave', this.hide);
-      } else {
-        this.el.nativeElement.addEventListener('click', this.click);
-        this.document.addEventListener('click', this.clickOut);
-      }
-    });
+    if (isPlatformBrowser(this.platformId)) {
+      this.ngZone.runOutsideAngular(() => {
+        if (this.openOnHover && !/iPad/i.test(navigator.userAgent)) {
+          this.el.nativeElement.addEventListener('mouseenter', this.show);
+          this.el.nativeElement.addEventListener('mouseleave', this.hide);
+        } else {
+          this.el.nativeElement.addEventListener('click', this.click);
+          this.document.addEventListener('click', this.clickOut);
+        }
+      });
+    }
   }
 
   click = (e) => this.triggerEl && this.triggerEl.nativeElement.contains(e.target) && this.show();
@@ -47,10 +54,12 @@ export class UxgPopoverComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.el.nativeElement.removeEventListener('mouseenter', this.show);
-    this.el.nativeElement.removeEventListener('mouseleave', this.hide);
-    this.document.removeEventListener('click', this.clickOut);
-    this.el.nativeElement.removeEventListener('click', this.click);
+    if (!isPlatformBrowser(this.platformId)) {
+      this.el.nativeElement.removeEventListener('mouseenter', this.show);
+      this.el.nativeElement.removeEventListener('mouseleave', this.hide);
+      this.document.removeEventListener('click', this.clickOut);
+      this.el.nativeElement.removeEventListener('click', this.click);
+    }
     this.endTimer$.next();
     this.endTimer$.complete();
   }

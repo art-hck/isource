@@ -1,6 +1,6 @@
 import { Component, ContentChild, ElementRef, EventEmitter, HostListener, Inject, Input, OnDestroy, Output, Renderer2, TemplateRef } from '@angular/core';
 import { UxgModalFooterDirective } from "./uxg-modal-footer.directive";
-import { DOCUMENT } from "@angular/common";
+import { DOCUMENT, isPlatformBrowser } from "@angular/common";
 
 @Component({
   selector: 'uxg-modal',
@@ -14,12 +14,15 @@ export class UxgModalComponent implements OnDestroy {
   @Input() closable = true;
   @Input() size: 'auto' | 's' | 'm' | 'l' = 'm';
   @Input() fullHeight: boolean;
-  @Input() scrollContainerElement: HTMLElement = this.document.body;
+  @Input() scrollContainerElement: HTMLElement = isPlatformBrowser(this.platformId) ? this.document.body : null;
   @Input() hideScrollContainer = true;
   @Output() stateChange = new EventEmitter();
 
-  constructor(@Inject(DOCUMENT) private document: Document, private renderer: Renderer2) {
-  }
+  constructor(
+    @Inject(DOCUMENT) private document,
+    @Inject(PLATFORM_ID) private platformId: InjectionToken<Object>,
+    private renderer: Renderer2
+  ) {}
 
   is = (prop?: boolean | string) => prop !== undefined && prop !== false && prop !== null;
 
@@ -45,6 +48,10 @@ export class UxgModalComponent implements OnDestroy {
   }
 
   private get scrollbarWidth() {
+    if (!isPlatformBrowser(this.platformId)) {
+      return 0;
+    }
+
     const outer = this.renderer.createElement('div');
     const inner = this.renderer.createElement('div');
 
