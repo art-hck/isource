@@ -1,3 +1,25 @@
+<div class="app-row">
+  <div class="app-col-auto">
+    <h1>
+      {{ request.name }} 
+      <ng-container *ngIf="!(status && status !== 'received'); else requestLoader">
+        <button *ngIf="canEditRequestName()"
+                (click)="openRequestNameEditModal()"
+                class="title-edit" uxgButton icon secondary>
+          <uxg-icon shape="app-pen" size="16"></uxg-icon>
+        </button>
+      </ng-container>
+
+      <ng-template #requestLoader>
+        <div class="title-loader">
+          <span class="spinner spinner-inline"></span>
+        </div>
+      </ng-template>
+    </h1>
+  </div>
+</div>
+
+
 <form [formGroup]="form">
   <div class="app-row" *ngIf="positions.length !== 0">
     <!-- Контролы управления позициями -->
@@ -526,6 +548,33 @@
     (success)="addGroup.emit($event)"
     (close)="moveGroupModal.close()"
   ></app-request-move-group-modal>
+</uxg-modal>
+
+
+<uxg-modal #editRequestNameModal size="l">
+  <ng-container *ngIf="editRequestNameModal.state" >
+    <h2>Изменить наименование</h2>
+    <div class="app-section app-secondary-color">
+      Вы можете изменить название для текущей заявки. После изменения, старое наименование не сохраняется.
+      Наименование заявки изменится во всех разделах.
+    </div>
+
+    <form appFormValidation [formGroup]="requestNameForm" (ngSubmit)="onSaveRequestName()">
+      <div class="app-control-wrap">
+        <input #requestName uxgInput lg formControlName="requestName" />
+        <label class="app-control-label" (click)="requestName.focus()">Наименование заявки</label>
+        <div class="app-control-error" *ngIf="requestNameForm.get('requestName').errors as e">
+          <span *ngIf="e.empty">Обязательное поле</span>
+        </div>
+      </div>
+
+      <ng-template uxgModalFooter>
+        <button uxgButton secondary lg uxgModalClose (click)="editRequestNameModal.close()">Отмена</button>
+        <button uxgButton primary lg (click)="onSaveRequestName()">Сохранить</button>
+      </ng-template>
+    </form>
+
+  </ng-container>
 </uxg-modal>
 
 <!-- Модальное окно прикрепления документа к позициям -->

@@ -5,6 +5,7 @@ import { PositionStatusesGroupInfo, PositionStatusesGroupsInfo } from "../../../
 import { UserInfoService } from "../../../../../user/service/user-info.service";
 import { RequestService } from "../../../../back-office/services/request.service";
 import { FormControl } from "@angular/forms";
+import { FeatureService } from "../../../../../core/services/feature.service";
 
 @Component({
   selector: 'app-request-aside-info',
@@ -22,7 +23,8 @@ export class RequestAsideInfoComponent implements OnChanges {
 
   constructor(
     public user: UserInfoService,
-    private requestService: RequestService
+    private requestService: RequestService,
+    public featureService: FeatureService
   ) {
   }
 

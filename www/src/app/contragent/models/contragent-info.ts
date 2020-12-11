@@ -3,6 +3,7 @@ import { ContragentInfoAddresses } from "./contragent-info-address";
 import { ContragentInfoBankRequisites } from "./contragent-info-bank-requisites";
 import { User } from "../../user/models/user";
 import { UsersGroup } from "../../core/models/users-group";
+import { ContragentInfoContactData } from "./contragent-info-contract-data";
 
 export class ContragentInfo {
   id: Uuid;
@@ -21,6 +22,7 @@ export class ContragentInfo {
   updatedDate: Date;
   addresses?: ContragentInfoAddresses[];
   bankRequisites?: ContragentInfoBankRequisites[];
+  contractData?: ContragentInfoContactData;
   responsible?: User;
   usersGroupId?: Uuid;
   usersGroup?: UsersGroup;

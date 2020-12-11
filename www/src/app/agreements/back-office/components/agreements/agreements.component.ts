@@ -22,8 +22,8 @@ export class AgreementsComponent implements OnInit, OnDestroy {
   @Select(AgreementListState.totalCount) totalCount$: Observable<number>;
 
   readonly pageSize = 10;
-  readonly actions: {type: AgreementAction[], label: string}[] = AgreementActionFilters;
   readonly destroy$ = new Subject();
+  readonly actions: {type: AgreementAction[], label: string}[] = AgreementActionFilters;
   pages$: Observable<number>;
 
   form = new FormGroup({

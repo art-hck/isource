@@ -20,7 +20,7 @@ const routes: Routes = [
     path: '',
     component: RequestListComponent,
     canActivate: [CanActivateFeatureGuard],
-    data: { title: "Заявки", hideTitle: true, feature: "customerRequest" },
+    data: { title: "Заявки", feature: "customerRequest" },
   },
   {
     path: 'create',
@@ -35,6 +35,7 @@ const routes: Routes = [
       {
         path: '',
         component: CustomerRequestComponent,
+        data: { hideTitle: true }
       },
       {
         path: 'contracts',

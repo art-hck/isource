@@ -151,6 +151,11 @@ export class RequestService {
     });
   }
 
+  editRequestName(requestId: Uuid, requestName: string) {
+    const url = `requests/${requestId}/edit-name`;
+    return this.api.post(url, { id: requestId, name: requestName });
+  }
+
   uploadDocuments(requestPosition: RequestPosition, files: File[]): Observable<RequestDocument[]> {
     const formData = new FormData();
     files.forEach(file => {

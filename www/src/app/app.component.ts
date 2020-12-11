@@ -20,6 +20,9 @@ import { FeatureService } from "./core/services/feature.service";
 import { APP_CONFIG, GpnmarketConfigInterface } from "./core/config/gpnmarket-config.interface";
 import { DOCUMENT, isPlatformBrowser } from "@angular/common";
 import { NotificationListComponent } from "./core/components/notification-list/notification-list.component";
+import { NotificationService } from "isource-element";
+import { Store } from "@ngxs/store";
+import { ToastActions } from "./shared/actions/toast.actions";
 
 @Component({
   selector: 'app-root',
@@ -47,10 +50,12 @@ export class AppComponent implements OnInit, OnDestroy {
     public user: UserInfoService,
     public titleService: Title,
     public authService: AuthService,
+    public elementNotification: NotificationService,
     private renderer: Renderer2,
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private cartStoreService: CartStoreService,
+    private store: Store,
     private cd: ChangeDetectorRef,
   ) {
 
@@ -127,6 +132,9 @@ export class AppComponent implements OnInit, OnDestroy {
           this.cartStoreService.cartItems = [];
         }));
     }
+
+    this.subscription.add(this.elementNotification.notify$
+      .subscribe(text => this.store.dispatch(new ToastActions.Success(text))));
   }
 
   ngOnDestroy() {
