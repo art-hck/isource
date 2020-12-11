@@ -51,6 +51,11 @@ export namespace RequestActions {
     constructor(public requestId: Uuid, public positionIds: Uuid[], public rejectionMessage: string) {}
   }
 
+  export class AttachDocuments {
+    static readonly type = '[Request Customer] AttachDocuments';
+    constructor(public requestId: Uuid, public positionIds: Uuid[], public files: File[]) {}
+  }
+
   export class Reject {
     static readonly type = '[Request Customer] Reject';
     constructor(public requestId: Uuid) {}

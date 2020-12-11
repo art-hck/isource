@@ -63,6 +63,11 @@ export class RequestService {
     return this.api.post(url, {positions});
   }
 
+  attachDocuments(id: Uuid, positionIds: Uuid[], files: File[]) {
+    const url = `requests/${id}/positions/attach-documents-batch`;
+    return this.api.post(url, this.formDataService.toFormData({ positions: positionIds, files }));
+  }
+
   editRequestName(requestId: Uuid, requestName: string) {
     const url = `requests/${requestId}/edit-name`;
     return this.api.post(url, { id: requestId, name: requestName });

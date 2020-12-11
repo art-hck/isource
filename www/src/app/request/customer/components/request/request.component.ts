@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Observable, Subject } from "rxjs";
 import { Request } from "../../../common/models/request";
 import { RequestPositionList } from "../../../common/models/request-position-list";
@@ -7,11 +7,12 @@ import { ActivatedRoute } from "@angular/router";
 import { filter, switchMap, takeUntil, tap } from "rxjs/operators";
 import { Title } from "@angular/platform-browser";
 import { UxgBreadcrumbsService } from "uxg";
-import { Select, Store } from "@ngxs/store";
+import { Actions, ofActionCompleted, Select, Store } from "@ngxs/store";
 import { Uuid } from "../../../../cart/models/uuid";
 import { RequestActions } from "../../actions/request.actions";
 import { RequestState } from "../../states/request.state";
 import { StateStatus } from "../../../common/models/state-status";
+import { RequestComponent as CommonRequestComponent } from "../../../common/components/request/request.component";
 import UploadFromTemplate = RequestActions.UploadFromTemplate;
 import Publish = RequestActions.Publish;
 import RefreshPositions = RequestActions.RefreshPositions;
@@ -22,8 +23,10 @@ import Approve = RequestActions.Approve;
 import PublishPositions = RequestActions.PublishPositions;
 import ApprovePositions = RequestActions.ApprovePositions;
 import RejectPositions = RequestActions.RejectPositions;
+import AttachDocuments = RequestActions.AttachDocuments;
 import Reject = RequestActions.Reject;
 import CreateTemplate = RequestActions.CreateTemplate;
+import { ToastActions } from "../../../../shared/actions/toast.actions";
 import EditRequestName = RequestActions.EditRequestName;
 
 @Component({
@@ -32,6 +35,7 @@ import EditRequestName = RequestActions.EditRequestName;
 })
 export class RequestComponent implements OnInit, OnDestroy {
   requestId: Uuid;
+  @ViewChild('commonRequestComponent') commonRequestComponent: CommonRequestComponent;
   @Select(RequestState.request) request$: Observable<Request>;
   @Select(RequestState.positions) positions$: Observable<RequestPositionList[]>;
   @Select(RequestState.status) status$: Observable<StateStatus>;
@@ -44,6 +48,7 @@ export class RequestComponent implements OnInit, OnDestroy {
   readonly publishPositions = positions => new PublishPositions(this.requestId, positions);
   readonly approvePositions = positions => new ApprovePositions(this.requestId, positions);
   readonly rejectPositions = data => new RejectPositions(this.requestId, data.positionIds, data.rejectionMessage);
+  readonly attachDocuments = ({positionIds, files}) => new AttachDocuments(this.requestId, positionIds, files);
   readonly saveRequestName = data => new EditRequestName(this.requestId, data);
   readonly reject = id => new Reject(id);
   readonly createTemplate = (positions, title, tag?) => new CreateTemplate(this.requestId, positions.map(position => position.id), title, tag);
@@ -52,6 +57,7 @@ export class RequestComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private requestService: RequestService,
     private bc: UxgBreadcrumbsService,
+    private actions: Actions,
     public store: Store,
     private title: Title
   ) {}
@@ -69,6 +75,19 @@ export class RequestComponent implements OnInit, OnDestroy {
       ]),
       takeUntil(this.destroy$),
     ).subscribe();
+
+    this.actions.pipe(
+      ofActionCompleted(AttachDocuments),
+      takeUntil(this.destroy$)
+    ).subscribe(({result}) => {
+      const e = result.error as any;
+      this.store.dispatch(e ?
+        new ToastActions.Error(e && e.error.detail) :
+        new ToastActions.Success('Файлы успешно прикреплены к выбранным позициям')
+      );
+
+      this.commonRequestComponent.resetSelectedPositions();
+    });
   }
 
   ngOnDestroy() {

@@ -148,7 +148,15 @@
 
             <div *uxgPopoverContent (click)="more.hide()">
               <ng-container *ngIf="user.isBackOffice()">
-                <!-- Назначиь ответственного -->
+
+                <!-- Загрузить документы в выбранные позиции -->
+                <div>
+                  <button uxgButton clear [disabled]="checkedPositions.length === 0"
+                          (click)="addDocumentsModal.open()">Загрузить документы
+                  </button>
+                </div>
+
+                <!-- Назначить ответственного -->
                 <div *ngIf="user.hasPermission(permissionType.POSITIONS_DISTRIBUTION_BETWEEN_BACKOFFICE_BUYERS)">
                   <button uxgButton clear [disabled]="checkedPositions.length === 0"
                           (click)="addResponsibleModal.open()">Назначить
@@ -181,6 +189,14 @@
                     Отправить в работу
                   </button>
                 </div>
+
+                <!-- Загрузить документы в выбранные позиции -->
+                <div class="app-col app-col-auto">
+                  <button uxgButton clear [disabled]="checkedPositions.length === 0"
+                          (click)="addDocumentsModal.open()">Загрузить документы
+                  </button>
+                </div>
+
                 <ng-container *ngIf="featureService.authorize('createTemplate')">
                   <!-- Создать шаблон -->
                   <div class="app-col app-col-auto">
@@ -558,4 +574,29 @@
     </form>
 
   </ng-container>
+</uxg-modal>
+
+<!-- Модальное окно прикрепления документа к позициям -->
+<uxg-modal #addDocumentsModal size="l">
+  <h2>Загрузить документы для выбранных позиций <span class="app-ghost-color">({{ checkedPositions.length }})</span></h2>
+
+  <div class="app-section app-secondary-color">
+    Загруженные документы будут прикреплены ко вем выбранным в завке позициям.
+    Отдельно к позиции документы можно загружать на вкладке документы страницы позиции.
+  </div>
+  <br>
+
+  <app-document-upload-list
+    *ngIf="addDocumentsModal.state"
+    [dragAndDropAvailable]="true"
+    (fileSelected)="form.get('documents').setValue($event)">
+  </app-document-upload-list>
+
+  <ng-template uxgModalFooter>
+    <button type="button" uxgButton secondary lg uxgModalClose>Отмена</button>
+    <button uxgButton primary lg
+            (click)="onAttachDocumentsToPositions(form.get('documents').value); addDocumentsModal.close()">
+      Загрузить
+    </button>
+  </ng-template>
 </uxg-modal>

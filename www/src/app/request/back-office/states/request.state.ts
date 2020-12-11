@@ -13,6 +13,7 @@ import Publish = RequestActions.Publish;
 import FetchPositions = RequestActions.FetchPositions;
 import RefreshPositions = RequestActions.RefreshPositions;
 import Refresh = RequestActions.Refresh;
+import AttachDocuments = RequestActions.AttachDocuments;
 import UploadFromTemplate = RequestActions.UploadFromTemplate;
 import { ToastActions } from "../../../shared/actions/toast.actions";
 import EditRequestName = RequestActions.EditRequestName;
@@ -87,6 +88,13 @@ export class RequestState {
   @Action(Publish) publish({setState, dispatch}: Context, {requestId, positions, refresh}: Publish) {
     return this.rest.publishRequest(requestId, positions).pipe(
       switchMap(() => dispatch(refresh ? [new Refresh(requestId), new RefreshPositions(requestId)] : []))
+    );
+  }
+
+  @Action(AttachDocuments) attachDocuments({setState, dispatch}: Context, {requestId, positionIds, files}: AttachDocuments) {
+    setState(patch({ status: "updating" as StateStatus }));
+    return this.rest.attachDocuments(requestId, positionIds, files).pipe(
+      tap(() => setState(patch({ status: "received" as StateStatus})))
     );
   }
 

@@ -13,6 +13,7 @@
       (approvePositions)="store.dispatch(approvePositions($event))"
       (rejectPositions)="store.dispatch(rejectPositions($event))"
       (saveRequestName)="store.dispatch(saveRequestName($event))"
+      (attachDocuments)="store.dispatch(attachDocuments($event))"
       (createTemplate)="store.dispatch(createTemplate($event.positions, $event.title, $event?.tag))"
       (uploadFromTemplate)="store.dispatch(uploadFromTemplate($event))"
     ></app-request>
