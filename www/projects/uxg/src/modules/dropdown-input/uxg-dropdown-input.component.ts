@@ -125,7 +125,7 @@ export class UxgDropdownInputComponent implements OnInit, AfterViewInit, OnDestr
   }
 
   constructor(
-    @Inject(DOCUMENT) private document: Document,
+    @Inject(DOCUMENT) private document,
     @Inject(PLATFORM_ID) private platformId: InjectionToken<Object>,
     private renderer: Renderer2,
     private ngZone: NgZone,
@@ -133,8 +133,10 @@ export class UxgDropdownInputComponent implements OnInit, AfterViewInit, OnDestr
     public el: ElementRef) {}
 
   ngOnInit() {
-    this.ngZone.runOutsideAngular(() => this.document.addEventListener('click', this.clickOut));
-    this.ngZone.runOutsideAngular(() => this.document.addEventListener('keydown', this.keyDown));
+    if (isPlatformBrowser(this.platformId)) {
+      this.ngZone.runOutsideAngular(() => this.document.addEventListener('click', this.clickOut));
+      this.ngZone.runOutsideAngular(() => this.document.addEventListener('keydown', this.keyDown));
+    }
   }
 
 
@@ -143,7 +145,9 @@ export class UxgDropdownInputComponent implements OnInit, AfterViewInit, OnDestr
   }
 
   ngAfterViewInit() {
-    this.document.body.appendChild(this.itemsWrapper);
+    if (isPlatformBrowser(this.platformId)) {
+      this.document.body.appendChild(this.itemsWrapper);
+    }
 
     this.items.changes.pipe(
       startWith(this.items),
@@ -215,9 +219,9 @@ export class UxgDropdownInputComponent implements OnInit, AfterViewInit, OnDestr
   }
 
   ngOnDestroy() {
-    this.document.removeEventListener('click', this.clickOut);
-    this.document.removeEventListener('keydown', this.keyDown);
     if (isPlatformBrowser(this.platformId)) {
+      this.document.removeEventListener('click', this.clickOut);
+      this.document.removeEventListener('keydown', this.keyDown);
       this.itemsWrapper.remove();
     }
 

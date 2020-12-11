@@ -1,5 +1,5 @@
-import { Directive, ElementRef, Inject, Input, OnDestroy, OnInit } from '@angular/core';
-import { DOCUMENT } from "@angular/common";
+import { Directive, ElementRef, Inject, InjectionToken, Input, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from "@angular/common";
 import { Subject } from "rxjs";
 import { throttleTime } from "rxjs/operators";
 import { Instance } from "flatpickr/dist/types/instance";
@@ -40,13 +40,16 @@ export class UxgDatepickerDirective implements OnInit, OnDestroy, Options {
   readonly onScroll$ = new Subject();
   readonly onScrollFn = () => this.onScroll$.next();
 
-  constructor(@Inject(DOCUMENT) private document: Document, private el: ElementRef) {}
+  constructor(
+    @Inject(PLATFORM_ID) private platformId: InjectionToken<Object>,
+    private el: ElementRef
+  ) {}
 
   ngOnInit() {
     this.flatpickr = flatpickr(this.el.nativeElement, {
       ...this,
-      onOpen: () => window.addEventListener('scroll', this.onScrollFn, true),
-      onClose: () => window.removeEventListener('scroll', this.onScrollFn, true)
+      onOpen: () => isPlatformBrowser(this.platformId) ? window.addEventListener('scroll', this.onScrollFn, true) : null,
+      onClose: () => isPlatformBrowser(this.platformId) ? window.removeEventListener('scroll', this.onScrollFn, true) : null
     });
     this.open = this.flatpickr.open;
     this.close = this.flatpickr.close;
