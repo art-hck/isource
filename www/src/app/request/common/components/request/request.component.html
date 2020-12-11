@@ -152,7 +152,7 @@
                 <!-- Загрузить документы в выбранные позиции -->
                 <div>
                   <button uxgButton clear [disabled]="checkedPositions.length === 0"
-                          (click)="addDocumentsModal.open()">Загрузить документы
+                          (click)="openFileUploadToPositionsModal()">Загрузить документы
                   </button>
                 </div>
 
@@ -193,7 +193,7 @@
                 <!-- Загрузить документы в выбранные позиции -->
                 <div class="app-col app-col-auto">
                   <button uxgButton clear [disabled]="checkedPositions.length === 0"
-                          (click)="addDocumentsModal.open()">Загрузить документы
+                          (click)="openFileUploadToPositionsModal()">Загрузить документы
                   </button>
                 </div>
 
@@ -589,13 +589,15 @@
   <app-document-upload-list
     *ngIf="addDocumentsModal.state"
     [dragAndDropAvailable]="true"
-    (fileSelected)="form.get('documents').setValue($event)">
+    (fileSelected)="form.get('documents').setValue($event); invalidUploadDocument = false">
   </app-document-upload-list>
 
   <ng-template uxgModalFooter>
+    <div class="doc-error-message" *ngIf="invalidUploadDocument">Пожалуйста, выберите документ</div>
+
     <button type="button" uxgButton secondary lg uxgModalClose>Отмена</button>
     <button uxgButton primary lg
-            (click)="onAttachDocumentsToPositions(form.get('documents').value); addDocumentsModal.close()">
+            (click)="onAttachDocumentsToPositions()">
       Загрузить
     </button>
   </ng-template>
