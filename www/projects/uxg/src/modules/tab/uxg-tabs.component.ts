@@ -39,7 +39,7 @@ export class UxgTabsComponent implements AfterViewInit, OnDestroy {
       startWith<QueryList<UxgTabTitleComponent>>(this.tabTitleList),
       flatMap((tabs: QueryList<UxgTabTitleComponent>) => tabs.map(tab => tab.disabledChanges.pipe(mapTo(tab)))),
       mergeAll(),
-      filter(() => this.activeTab.disabled),
+      filter(() => this.activeTab?.disabled),
       takeUntil(this.destroy$)
     ).subscribe(() => {
         this.tabTitleList.find(item => item.disabled === false)?.activate();
