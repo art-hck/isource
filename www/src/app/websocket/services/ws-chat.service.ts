@@ -19,6 +19,7 @@ import { config } from "./ws-config-token";
 import { BehaviorSubject, merge, ReplaySubject, Subject, timer } from "rxjs";
 import { KeycloakService } from "keycloak-angular";
 import { User } from "../../user/models/user";
+import { UserInfoService } from "../../user/service/user-info.service";
 
 @Injectable({
   providedIn: 'root'
@@ -29,7 +30,8 @@ export class WsChatService implements IWebsocketService {
   readonly send$ = new ReplaySubject<WsChatMessage<unknown>>();
   readonly received$ = new Subject<unknown>();
 
-  constructor(@Inject(config) private wsConfig: WsConfig, private keycloakService: KeycloakService) {
+  constructor(@Inject(config) private wsConfig: WsConfig, private keycloakService: KeycloakService, private user: UserInfoService) {
+    if (!user.isAuth()) { return; }
 
     this.keycloakService.getToken().then(accessToken => {
       if (!accessToken) { return; }
