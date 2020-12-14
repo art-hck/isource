@@ -71,8 +71,9 @@ const routes: Routes = [
         component: ProcedureViewComponent,
         data: { title: "Процедура" }
       },
-      { path: 'element', canActivate: [AppAuthGuard],
-        loadChildren: () => import('isource-element').then(m => m.ElementModule)
+      {
+        path: 'element', canActivate: [AppAuthGuard],
+        loadChildren: () => import('./element-lazy.module').then(m => m.ElementLazyModule)
       },
       {
         path: ':position-id',
