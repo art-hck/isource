@@ -49,6 +49,15 @@
   opacity: .5;
 }
 
+a.app-row.upload-area-hover {
+  border: 1px dashed rgba(uxg($theme, color-control-primary), .6);
+  background: uxg($theme, color-list-hover);
+
+  &:not(:first-child) {
+    margin-top: -1px;
+  }
+}
+
 .app-table > .app-row {
   &-group {
     background: #F4F6FB;

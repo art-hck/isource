@@ -255,6 +255,12 @@ export class RequestComponent implements OnChanges {
     }
   }
 
+  onDragAndDropDocumentsToPosition(positionId, files: File[]) {
+    const positionIds = [positionId];
+
+    this.attachDocuments.emit({positionIds, files});
+  }
+
   resetSelectedPositions() {
     this.formPositionsFlat.filter(formGroup => formGroup.get("checked").setValue(false));
   }

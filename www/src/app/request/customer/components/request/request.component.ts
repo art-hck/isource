@@ -79,11 +79,16 @@ export class RequestComponent implements OnInit, OnDestroy {
     this.actions.pipe(
       ofActionCompleted(AttachDocuments),
       takeUntil(this.destroy$)
-    ).subscribe(({result}) => {
+    ).subscribe(({result, action}) => {
       const e = result.error as any;
+
+      const pluralizedFilesTextPart = action.files.length > 1 ? 'Файлы успешно прикреплены ' : 'Файл успешно прикреплён ';
+      const pluralizedPositionsTextPart = action.positionIds.length > 1 ? 'к выбранным позициям' : 'к выбранной позиции';
+      const text = pluralizedFilesTextPart + pluralizedPositionsTextPart;
+
       this.store.dispatch(e ?
         new ToastActions.Error(e && e.error.detail) :
-        new ToastActions.Success('Файлы успешно прикреплены к выбранным позициям')
+        new ToastActions.Success(text)
       );
 
       this.commonRequestComponent.resetSelectedPositions();
