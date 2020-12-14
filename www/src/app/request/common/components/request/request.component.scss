@@ -132,3 +132,11 @@ a.canceled {
     border-top: 0;
   }
 }
+
+.doc-error-message {
+  text-align: right;
+  font-weight: bold;
+  margin-right: 10px;
+  color: uxg($theme, color-control-invalid);
+  line-height: 40px;
+}

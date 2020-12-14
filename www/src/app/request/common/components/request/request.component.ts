@@ -37,6 +37,7 @@ import { CustomValidators } from "../../../../shared/forms/custom.validators";
 })
 export class RequestComponent implements OnChanges {
   @ViewChild('editRequestNameModal') editRequestNameModal: UxgModalComponent;
+  @ViewChild('addDocumentsModal') addDocumentsModal: UxgModalComponent;
 
   @Input() request: Request;
   @Input() positions: RequestPositionList[];
@@ -70,6 +71,7 @@ export class RequestComponent implements OnChanges {
   groups: RequestGroup[];
   canChangeStatuses: boolean;
   canPublish: boolean;
+  invalidUploadDocument: boolean;
 
   requestNameForm = new FormGroup({
     requestName: new FormControl('', [CustomValidators.requiredNotEmpty, Validators.maxLength(250)]),
@@ -223,10 +225,22 @@ export class RequestComponent implements OnChanges {
     this.rejectPositions.emit({positionIds, rejectionMessage});
   }
 
-  onAttachDocumentsToPositions(files) {
+  onAttachDocumentsToPositions() {
+    const files = this.form.get('documents').value;
     const positionIds = this.checkedPositions.map(item => item.id);
 
-    this.attachDocuments.emit({positionIds, files});
+    if (files?.length) {
+      this.attachDocuments.emit({positionIds, files});
+      this.addDocumentsModal.close();
+    } else {
+      this.invalidUploadDocument = true;
+    }
+  }
+
+  openFileUploadToPositionsModal() {
+    this.form.get('documents').setValue(null);
+    this.invalidUploadDocument = false;
+    this.addDocumentsModal.open();
   }
 
   openRequestNameEditModal() {
