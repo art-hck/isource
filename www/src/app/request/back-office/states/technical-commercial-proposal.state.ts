@@ -135,7 +135,7 @@ export class TechnicalCommercialProposalState {
   publish({ setState, dispatch }: Context, { requestId, groupId, proposalsByPositions }: Publish) {
     setState(patch<Model>({ status: "updating" }));
 
-    return this.rest.publish(groupId, proposalsByPositions.reduce((ids, { items }) => [...ids, ...items.map(({ id }) => id)], [])).pipe(
+    return this.rest.publish(requestId, groupId, proposalsByPositions.reduce((ids, { items }) => [...ids, ...items.map(({ id }) => id)], [])).pipe(
       delayWhen(() => dispatch(new FetchAvailablePositions(requestId, groupId))),
       tap(data => setState(insertOrUpdateProposals(data)))
     );

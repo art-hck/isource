@@ -36,9 +36,9 @@ export class TechnicalCommercialProposalService {
     return this.api.post<RequestPosition[]>(url, { groupId });
   }
 
-  publish(groupId: Uuid, positionIds: Uuid[]) {
+  publish(requestId: Uuid, groupId: Uuid, positionIds: Uuid[]) {
     const url = `requests/backoffice/technical-commercial-proposals/send-positions-to-review`;
-    return this.api.post<CommonProposalPayload>(url, { groupId, positionIds });
+    return this.api.post<CommonProposalPayload>(url, { requestId, groupId, positionIds });
   }
 
   downloadTemplate(requestId: Uuid, groupId: Uuid) {
