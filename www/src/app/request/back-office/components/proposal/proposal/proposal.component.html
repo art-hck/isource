@@ -62,8 +62,7 @@
             {{item?.standard}}
           </div>
           <div class="app-col total">
-            {{(item.priceWithoutVat * item.quantity) || null | number:'1.0-2'}}
-            <span class="app-ghost-color">{{getCurrencySymbol(item.currency, "narrow")}}</span>
+            {{(item.priceWithoutVat * item.quantity) || null | number:'1.0-2'}} <span class="app-ghost-color">{{getCurrencySymbol(item.currency, "narrow")}}</span>
           </div>
           <div class="app-col quantity" [class.app-error-color]="!helper.isQuantityValid(item, getPosition(item))">
             {{item.quantity}}

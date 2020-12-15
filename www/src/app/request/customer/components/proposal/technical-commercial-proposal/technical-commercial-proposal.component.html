@@ -50,7 +50,7 @@
             <small class="app-col app-ellipsis manufacturing-name" *ngIf="source === 'COMMERCIAL_PROPOSAL'">
               Стандарт
             </small>
-            <small class="app-col total">Сумма</small>
+            <small class="app-col total">Сумма без НДС</small>
             <small class="app-col quantity">Количество</small>
             <small class="app-col price">Цена за ед.</small>
             <small class="app-col date">Срок пост.</small>
@@ -77,8 +77,7 @@
                 {{item?.standard}}
               </div>
               <div class="app-col total">
-                {{(item.priceWithoutVat * item.quantity) || null | number:'1.0-2'}}
-                <span class="app-ghost-color">{{getCurrencySymbol(item.currency, "narrow")}}</span>
+                {{(item.priceWithoutVat * item.quantity) || null | number:'1.0-2'}} <span class="app-ghost-color">{{getCurrencySymbol(item.currency, "narrow")}}</span>
               </div>
               <div class="app-col quantity" [class.app-error-color]="!helper.isQuantityValid(item, getPosition(item))">
                 {{item.quantity}}
