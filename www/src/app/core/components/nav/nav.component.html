@@ -3,6 +3,7 @@
     <!-- Лого -->
     <a routerLink="/"><img class="app-menu-logo" src="assets/images/logo.svg"/></a>
 
+    <ng-container *ngIf="user.isAuth()">
     <!-- Пункты меню -->
     <ng-container *ngFor="let link of menu">
       <a *ngIf="!link.base" class="app-link-no-color app-menu-item" [routerLink]="link.path" routerLinkActive="active">{{ link.text }}</a>
@@ -58,6 +59,7 @@
         </div>
       </uxg-popover>
     </div>
+    </ng-container>
   </div>
 </nav>
 

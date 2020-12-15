@@ -14,6 +14,7 @@ const routes: Routes = [
   { path: 'notifications', canActivate: [AppAuthGuard], loadChildren: () => import('./notification/notification.module').then(m => m.NotificationModule)},
   { path: 'kim', canActivate: [AppAuthGuard], loadChildren: () => import('./kim/kim.module').then(m => m.KimModule)},
   { path: 'agreements', canActivate: [AppAuthGuard], loadChildren: () => import('./agreements/agreements.module').then(m => m.AgreementsModule)},
+  { path: 'contracts-sign', loadChildren: () => import('./contract-sign/contract-sign.module').then(m => m.ContractSignModule)},
   { path: '', canActivate: [AppAuthGuard], component: WelcomeComponent, pathMatch: 'full' },
   { path: '', loadChildren: () => import('./pages/pages.module').then(m => m.PagesModule)},
   { path: '**', redirectTo: '/not-found' }
