@@ -32,6 +32,7 @@
     "@sentry/browser": "^5.15.5",
     "@webcomponents/custom-elements": "^1.4.1",
     "angular2-text-mask": "^9.0.0",
+    "crypto-pro": "^2.1.0",
     "file-saver": "^2.0.2",
     "flatpickr": "^4.6.3",
     "guid-typescript": "^1.0.9",
