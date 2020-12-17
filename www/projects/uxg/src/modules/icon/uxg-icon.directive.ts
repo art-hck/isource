@@ -1,6 +1,7 @@
-import { Directive, ElementRef, Input, NgZone, OnDestroy, OnInit } from '@angular/core';
+import { Directive, ElementRef, Inject, InjectionToken, Input, NgZone, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
 import { UxgIcons } from "./uxg-icons";
 import { UxgIconService } from "./uxg-icon.service";
+import { isPlatformBrowser } from "@angular/common";
 
 @Directive({
   // tslint:disable-next-line:directive-selector
@@ -13,13 +14,19 @@ export class UxgIconDirective implements OnInit, OnDestroy {
   @Input() shape: keyof typeof UxgIcons;
   @Input() size;
   private svg: SVGSVGElement;
-  private readonly mutation$ = new MutationObserver(() => this.update());
+  private readonly mutation$ = isPlatformBrowser(this.platformId) && new MutationObserver(() => this.update());
 
-  constructor(private el: ElementRef,  private service: UxgIconService, private zone: NgZone) {}
+  constructor(
+    @Inject(PLATFORM_ID) private platformId: InjectionToken<Object>,
+    private el: ElementRef,
+    private service: UxgIconService, private zone: NgZone
+  ) {}
 
   ngOnInit() {
-    this.update();
-    this.mutation$.observe(this.el.nativeElement, { attributes: true });
+    if(isPlatformBrowser(this.platformId)) {
+      this.update();
+      this.mutation$.observe(this.el.nativeElement, { attributes: true });
+    }
   }
 
   private update() {
@@ -50,6 +57,8 @@ export class UxgIconDirective implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.mutation$.disconnect();
+    if(isPlatformBrowser(this.platformId)) {
+      this.mutation$.disconnect();
+    }
   }
 }
