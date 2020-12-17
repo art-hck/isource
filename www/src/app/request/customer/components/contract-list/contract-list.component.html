@@ -19,6 +19,18 @@
             </ng-container>
           </uxg-tab-title>
 
+          <uxg-tab-title #contractsPendingSignTab [disabled]="(contractsPendingSign$ | async).length === 0">
+            <ng-container *ngIf="(contractsPendingSign$ | async) as contracts">
+              Ожидают подписи поставщика <span class="counter">({{ contracts?.length }})</span>
+            </ng-container>
+          </uxg-tab-title>
+
+          <uxg-tab-title #contractsSignedBySupplierTab [disabled]="(contractsSignedBySupplier$ | async).length === 0">
+            <ng-container *ngIf="(contractsSignedBySupplier$ | async) as contracts">
+              Подписаны поставщиком <span class="counter">({{ contracts?.length }})</span>
+            </ng-container>
+          </uxg-tab-title>
+
           <uxg-tab-title #reviewedTab [disabled]="(contractsReviewed$ | async).length === 0">
             <ng-container *ngIf="(contractsReviewed$ | async) as contracts">
               Рассмотренные <span class="counter">({{ contracts?.length }})</span>
@@ -36,12 +48,18 @@
   <br/>
 
   <!-- list -->
-  <div class="app-row" *ngIf="(reviewedTab.active ? contractsReviewed$ : sentToReviewTab.active ? contractsSentToReview$ : contractsSendToEdit$) | async as contracts">
+  <div class="app-row" *ngIf="(reviewedTab.active ?
+                                contractsReviewed$ :
+                                (sentToReviewTab.active ?
+                                  contractsSentToReview$ :
+                                  (contractsPendingSignTab.active ? contractsPendingSign$ :
+                                    contractsSignedBySupplierTab.active ? contractsSignedBySupplier$ : contractsSendToEdit$))) | async as contracts">
     <div class="app-col">
       <app-contract-list-item
         *ngFor="let contract of contracts"
         [contract]="contract"
         [status]="status$ | async"
+        (signDocument)="store.dispatch(signDocument(contract.id, $event));"
         (approve)="store.dispatch(approve(request, contract))"
         (reject)="store.dispatch(reject(request, contract, $event.files, $event.comment))"
       ></app-contract-list-item>

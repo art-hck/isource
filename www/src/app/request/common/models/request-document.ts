@@ -10,4 +10,15 @@ export class RequestDocument {
   mime: string;
   size: number;
   comments?: string;
+  hash?: string;
+  documentSignatures?: {
+    certNumber: string;
+    contragentId: Uuid;
+    hash: string;
+    id: Uuid;
+    issuerName: string;
+    ownerName: string;
+    signature: string;
+    signedDate: string;
+  }[];
 }

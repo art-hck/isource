@@ -6,5 +6,7 @@ export const ContractStatusLabels: Record<ContractStatus, string> = {
   [ContractStatus.REJECTED]: "На доработке",
   [ContractStatus.APPROVED]: "Согласовано",
   [ContractStatus.SIGNED]: "Подписано",
+  [ContractStatus.SIGNED_BY_CUSTOMER]: "Подписано заказчиком",
+  [ContractStatus.SIGNED_BY_SUPPLIER]: "Подписано поставщиком",
   [ContractStatus.ARCHIVE]: "Архив",
 };

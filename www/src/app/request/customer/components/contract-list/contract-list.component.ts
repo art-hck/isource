@@ -11,7 +11,7 @@ import { ActivatedRoute } from "@angular/router";
 import { RequestActions } from "../../actions/request.actions";
 import { UxgBreadcrumbsService } from "uxg";
 import { Contract } from "../../../common/models/contract";
-import { FormBuilder } from "@angular/forms";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { ContractFilter } from "../../../common/models/contract-filter";
 import { ContractStatusLabels } from "../../../common/dictionaries/contract-status-labels";
 import { ContractStatus } from "../../../common/enum/contract-status";
@@ -24,7 +24,9 @@ import Download = ContractActions.Download;
 import Reject = ContractActions.Reject;
 import Approve = ContractActions.Approve;
 import Filter = ContractActions.Filter;
+import SignDocument = ContractActions.SignDocument;
 import FetchAvailibleFilters = ContractActions.FetchAvailibleFilters;
+import { RequestDocument } from "../../../common/models/request-document";
 
 @Component({
   selector: 'app-contract-list',
@@ -39,8 +41,24 @@ export class ContractListComponent implements OnInit, OnDestroy {
   @Select(ContractState.contracts([ContractStatus.ON_APPROVAL])) contractsSentToReview$: Observable<Contract[]>;
   @Select(ContractState.contracts([ContractStatus.REJECTED])) contractsSendToEdit$: Observable<Contract[]>;
   @Select(ContractState.contracts([ContractStatus.APPROVED, ContractStatus.SIGNED])) contractsReviewed$: Observable<Contract[]>;
+  @Select(ContractState.contracts([ContractStatus.SIGNED_BY_CUSTOMER])) contractsPendingSign$: Observable<Contract[]>;
+  @Select(ContractState.contracts([ContractStatus.SIGNED_BY_SUPPLIER])) contractsSignedBySupplier$: Observable<Contract[]>;
   @Select(ContractState.status) status$: Observable<StateStatus>;
+
+  certificates: {
+    data: any,
+    ownerInfo: any,
+    issuerInfo: any,
+  }[];
+  certificateListError: string = null;
+  contract: Contract;
+  contractId: Uuid;
+  documentsToSign: RequestDocument[];
+
   readonly form = this.fb.group({ positionName: "", suppliers: [], statuses: [] });
+  readonly certForm: FormGroup = this.fb.group({
+    thumbprint: [null, Validators.required]
+  });
   readonly destroy$ = new Subject();
   readonly suppliersSearch$ = new BehaviorSubject<string>("");
 
@@ -53,6 +71,7 @@ export class ContractListComponent implements OnInit, OnDestroy {
   readonly download = (contract: Contract) => new Download(contract);
   readonly reject = (request: Request, contract: Contract, files: File[], comment?: string) => new Reject(request.id, contract, files, comment);
   readonly approve = (request: Request, contract: Contract) => new Approve(request.id, contract);
+  readonly signDocument = (contractId, data) => new SignDocument(contractId, data.data, data.requestId);
   readonly filter = (request: Request, value: ContractFilter<Uuid>) => new Filter(request.id, value);
 
   constructor(

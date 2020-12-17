@@ -51,7 +51,7 @@ export class ContractListComponent implements OnInit, OnDestroy {
     map(([q, f]) => searchContragents(q, f?.suppliers ?? []).map((c) => ({ label: c.shortName, value: c.id })))
   );
   readonly contractStatusesItems$: Observable<FilterCheckboxList<ContractStatus>> = this.availibleFilters$.pipe(
-    map(({ statuses }) => statuses.map(value => ({ label: ContractStatusLabels[value], value }))),
+    map(({ statuses }) => statuses?.map(value => ({ label: ContractStatusLabels[value], value }))),
   );
   readonly send = (request: Request, contract: Contract, files?: File[], comment?: string) => new Send(request.id, contract, files, comment);
   readonly sign = (request: Request, contract: Contract) => new Sign(request.id, contract);
