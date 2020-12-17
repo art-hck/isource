@@ -28,7 +28,9 @@ export class ContractFormComponent implements AfterViewInit {
   constructor(public store: Store, private fb: FormBuilder, private cd: ChangeDetectorRef) {}
 
   ngAfterViewInit() {
-    this.form.get('contragentId').setValue(this.suppliers[0]?.supplier.id);
+    if (this.suppliers) {
+      this.form.get('contragentId').setValue(this.suppliers[0]?.supplier.id);
+    }
     this.cd.detectChanges();
   }
 

@@ -37,4 +37,9 @@ export namespace ContractActions {
     static readonly type = '[Contract Customer] Download';
     constructor(public contract: Contract) {}
   }
+
+  export class SignDocument {
+    static readonly type = '[Contract Customer] SignDocument';
+    constructor(public contractId: Uuid, public data: any, public requestId: Uuid) {}
+  }
 }

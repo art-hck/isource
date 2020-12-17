@@ -40,4 +40,9 @@ export class ContractService {
     const url = `requests/contracts/${contractId}/generate`;
     return this.api.post(url, {}, { responseType: 'blob' });
   }
+
+  signDocument(contractId, data) {
+    const url = `requests/customer/contracts/${contractId}/sign-with-signature`;
+    return this.api.post<Contract>(url, data);
+  }
 }

@@ -18,6 +18,7 @@ import Upload = ContractActions.Upload;
 import Download = ContractActions.Download;
 import Filter = ContractActions.Filter;
 import FetchAvailibleFilters = ContractActions.FetchAvailibleFilters;
+import SignDocument = ContractActions.SignDocument;
 
 export interface ContractStateStateModel {
   contracts: Contract[];
@@ -97,5 +98,21 @@ export class ContractState {
   @Action(Download)
   download({ setState }: Context, { contract }: Download) {
     return this.rest.download(contract.id).pipe(tap(data => saveAs(data, `Договор c ${ contract.supplier.shortName }.docx`)));
+  }
+
+  @Action(SignDocument)
+  signDocument({ setState, dispatch }: Context, { contractId, data, requestId }: SignDocument) {
+     return this.rest.signDocument(contractId, data).pipe(
+       tap(c => setState(patch({ contracts: updateItem(({ id }) => c.id === id, c) }))),
+       tap(() => setState(patch<Model>({ status: "received" }))),
+       tap(() => dispatch([
+         new FetchAvailibleFilters(requestId),
+         new ToastActions.Success('Договор успешно подписан')
+       ])),
+       catchError(e => {
+         setState(patch<Model>({status: "error"}));
+         return dispatch(new ToastActions.Error(e?.error?.detail ?? "Неизвестная ошибка"));
+       })
+     );
   }
 }
