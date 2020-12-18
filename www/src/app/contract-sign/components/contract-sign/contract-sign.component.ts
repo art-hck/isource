@@ -104,7 +104,7 @@ export class ContractSignComponent implements OnInit, OnDestroy {
 
           if (docsSigned === this.contract.documents.length) {
             const data = {
-              certNumber: "random_string",
+              certNumber: selectedCertificate.serialNumber,
               certOwnerName: selectedCertificate.ownerInfo['Владелец'],
               certIssuerName: selectedCertificate.issuerInfo['Компания'],
               documentSignatures
@@ -139,7 +139,13 @@ export class ContractSignComponent implements OnInit, OnDestroy {
       data: {},
       ownerInfo: {},
       issuerInfo: {},
+      serialNumber: null
     };
+
+    // Получаем серийный номер сертификата
+    certificate.getCadesProp("SerialNumber").then(r => {
+      certInfo['serialNumber'] = r;
+    });
 
     // Получаем информацию о владельце
     certificate.getOwnerInfo().then(r => {

@@ -45,6 +45,7 @@ export class ContractListItemComponent implements OnChanges {
     data: any,
     ownerInfo: any,
     issuerInfo: any,
+    serialNumber: string,
   }[];
   certificateListError: string = null;
   contractId: Uuid;
@@ -153,7 +154,7 @@ export class ContractListItemComponent implements OnChanges {
 
           if (docsSigned === this.contract.documents.length) {
             const data = {
-              certNumber: "random_string",
+              certNumber: selectedCertificate.serialNumber,
               certOwnerName: selectedCertificate.ownerInfo['Владелец'],
               certIssuerName: selectedCertificate.issuerInfo['Компания'],
               documentSignatures
@@ -186,8 +187,14 @@ export class ContractListItemComponent implements OnChanges {
     const certInfo = {
       data: {},
       ownerInfo: {},
-      issuerInfo: {}
+      issuerInfo: {},
+      serialNumber: null
     };
+
+    // Получаем серийный номер сертификата
+    certificate.getCadesProp("SerialNumber").then(r => {
+      certInfo['serialNumber'] = r;
+    });
 
     // Получаем информацию о владельце
     certificate.getOwnerInfo().then(r => {
