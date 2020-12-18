@@ -23,7 +23,7 @@ export class UxgIconDirective implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    if(isPlatformBrowser(this.platformId)) {
+    if (isPlatformBrowser(this.platformId)) {
       this.update();
       this.mutation$.observe(this.el.nativeElement, { attributes: true });
     }
@@ -57,7 +57,7 @@ export class UxgIconDirective implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    if(isPlatformBrowser(this.platformId)) {
+    if (isPlatformBrowser(this.platformId)) {
       this.mutation$.disconnect();
     }
   }
