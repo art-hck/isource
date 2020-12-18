@@ -394,8 +394,7 @@
         <div>Инспекционный контроль</div>
       </div>
     </uxg-popover>
-    <uxg-icon *ngIf="position.beforeNormalizedName" shape="app-element" class="app-ghost-color"></uxg-icon>
-    <uxg-icon *ngIf="!position.beforeNormalizedName" shape="app-element" class="app-link-color"></uxg-icon>
+    <uxg-icon shape="app-element" [class]="position.mtrPositionId ? 'app-ghost-color' : 'app-link-color'"></uxg-icon>
   </div>
 
 </ng-template>
