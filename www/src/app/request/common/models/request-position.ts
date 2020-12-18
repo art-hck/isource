@@ -58,4 +58,5 @@ export class RequestPosition extends RequestPositionList {
   nameTemplate?: string;
   availableStatuses?: string[];
   availableEditFields?: string[];
+  beforeNormalizedName: string;
 }

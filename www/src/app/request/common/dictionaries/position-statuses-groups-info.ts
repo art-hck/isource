@@ -22,7 +22,7 @@ export const PositionStatusesGroupsInfo: PositionStatusesGroupInfo[] = [
     positions: [],
     shortName: "Черновик",
     hasActions: false,
-    color: "#c4c4c4"
+    color: "#C4C4C4"
   },
   {
     url: "new",
@@ -31,7 +31,7 @@ export const PositionStatusesGroupsInfo: PositionStatusesGroupInfo[] = [
     positions: [],
     shortName: "Новая",
     hasActions: false,
-    color: "#EB5757"
+    color: "#BE3A3A"
   },
   {
     url: "technical-proposals",
@@ -40,7 +40,7 @@ export const PositionStatusesGroupsInfo: PositionStatusesGroupInfo[] = [
     positions: [],
     shortName: "ТП",
     hasActions: true,
-    color: "#fb6a9e",
+    color: "#ED9254",
     availabilityField: "isTpAvailable",
     counterField: "tp"
   },
@@ -51,7 +51,7 @@ export const PositionStatusesGroupsInfo: PositionStatusesGroupInfo[] = [
     positions: [],
     shortName: "КП",
     hasActions: true,
-    color: "#f38b00",
+    color: "#F9C74F",
     availabilityField: "isCpAvailable",
     counterField: "kp"
   },
@@ -62,7 +62,7 @@ export const PositionStatusesGroupsInfo: PositionStatusesGroupInfo[] = [
     positions: [],
     shortName: "ТКП",
     hasActions: true,
-    color: "#EE64E8",
+    color: "#F35C6C",
     availabilityField: "isTcpAvailable",
     counterField: "tcp"
   },
@@ -84,7 +84,7 @@ export const PositionStatusesGroupsInfo: PositionStatusesGroupInfo[] = [
     positions: [],
     shortName: "Договор",
     hasActions: true,
-    color: "#f2c94c",
+    color: "#00AA5F",
     availabilityField: "isContractAvailable",
     counterField: "contractAgreement"
   },
@@ -94,7 +94,7 @@ export const PositionStatusesGroupsInfo: PositionStatusesGroupInfo[] = [
     statuses: PositionStatusGroups.DELIVERY,
     positions: [],
     shortName: "Доставка и оплата",
-    hasActions: true,
+    hasActions: false,
     color: "#9b51e0"
   },
   {
@@ -104,7 +104,7 @@ export const PositionStatusesGroupsInfo: PositionStatusesGroupInfo[] = [
     positions: [],
     shortName: "Завершено",
     hasActions: false,
-    color: "#20b55f"
+    color: "#1400DC"
   },
   {
     url: "canceled",
