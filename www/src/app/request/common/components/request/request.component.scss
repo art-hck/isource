@@ -149,3 +149,8 @@ a.canceled {
   color: uxg($theme, color-control-invalid);
   line-height: 40px;
 }
+
+.item-attribute-icon {
+  min-width: 40px;
+  text-align: end;
+}
