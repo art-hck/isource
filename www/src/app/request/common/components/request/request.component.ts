@@ -258,7 +258,9 @@ export class RequestComponent implements OnChanges {
   onDragAndDropDocumentsToPosition(positionId, files: File[]) {
     const positionIds = [positionId];
 
-    this.attachDocuments.emit({positionIds, files});
+    if (files.filter(f => f.type).length) {
+      this.attachDocuments.emit({ positionIds, files: files.filter(f => f.type) });
+    }
   }
 
   resetSelectedPositions() {
