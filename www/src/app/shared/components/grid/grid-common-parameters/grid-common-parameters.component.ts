@@ -42,4 +42,9 @@ export class GridCommonParametersComponent implements OnInit {
   getPosition(id: Uuid) {
     return this.positions.find(p => p.id === id);
   }
+
+  canEditCommonParams() {
+    return this.positions.every((position: RequestPosition) => ['RESULTS_AGREEMENT', 'TECHNICAL_COMMERCIAL_PROPOSALS_AGREEMENT',
+      'WINNER_SELECTED', 'TCP_WINNER_SELECTED'].includes(position.status));
+}
 }
