@@ -50,8 +50,6 @@ export class ProposalItemFormComponent implements OnInit {
   ngOnInit(): void {
     const { id, ...position }: RequestPosition = this.position;
 
-
-
     this.form.patchValue({
       ...{
         requestPositionId: id,
@@ -66,7 +64,7 @@ export class ProposalItemFormComponent implements OnInit {
     this.form.get('currency').disable();
 
     if (this.source === 'TECHNICAL_COMMERCIAL_PROPOSAL') {
-      this.form.addControl('manufacturingName', this.fb.control(this.position.name, Validators.required));
+      this.form.addControl('manufacturingName', this.fb.control(this.proposalItem?.manufacturingName, Validators.required));
     }
   }
 
