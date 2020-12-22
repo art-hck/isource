@@ -71,7 +71,7 @@
       padding: 0 14px;
     }
 
-    input.app-control#{&} + &-icon {
+    input.app-control#{&} ~ &-icon {
       position: absolute;
       top: 50%;
       margin-top: -12px;
