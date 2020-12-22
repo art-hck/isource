@@ -426,11 +426,14 @@
     <!-- Позиции группы -->
     <div class="positions" *ngIf="!folded.value">
       <ng-container *ngFor="let childformGroup of asFormArray(formGroup.get('positions')).controls">
-        <div class="app-row">
-          <ng-container *ngTemplateOutlet="positionItem; context:{
-              position: childformGroup.get('position').value,
-              formGroup: childformGroup
-          }"></ng-container>
+        <div class="group-position-item"
+             appUploadFile hoverClass="upload-area-hover" (dropFile)="onDragAndDropDocumentsToPosition(childformGroup.get('position').value.id, $event)">
+          <div class="app-row">
+            <ng-container *ngTemplateOutlet="positionItem; context:{
+                position: childformGroup.get('position').value,
+                formGroup: childformGroup
+            }"></ng-container>
+          </div>
         </div>
       </ng-container>
     </div>
