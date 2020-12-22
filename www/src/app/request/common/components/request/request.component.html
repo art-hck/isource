@@ -230,7 +230,7 @@
           <uxg-popover #more [openOnHover]="true">
             <button uxgButton secondary iconText
                     uxgPopoverTrigger
-                    *ngIf="request.status !== 'COMPLETED' || request.status !== 'NOT_RELEVANT'"
+                    *ngIf="request.status !== 'COMPLETED' && request.status !== 'NOT_RELEVANT'"
                     [disabled]="request.isOlderTwoWeeks" (click)="addPositionModal.open()">
               <uxg-icon shape="app-plus"></uxg-icon>
               <span>Новая позиция</span>
