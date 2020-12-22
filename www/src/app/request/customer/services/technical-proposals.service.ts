@@ -6,6 +6,8 @@ import { TechnicalProposal } from "../../common/models/technical-proposal";
 import { Observable } from "rxjs";
 import { TechnicalProposalFilter } from "../../common/models/technical-proposal-filter";
 import { TechnicalProposalsStatus } from "../../common/enum/technical-proposals-status";
+import { ContragentInfo } from "../../../contragent/models/contragent-info";
+import { map } from "rxjs/operators";
 
 @Injectable({
   providedIn: "root"
@@ -19,11 +21,12 @@ export class TechnicalProposalsService {
     return this.api.post<TechnicalProposal[]>(url, { filters });
   }
 
-  // @TODO: ждём реализацию на бэкенде (gpn_market-2870)
-  // availableFilters(requestId: Uuid) {
-  //   const url = `requests/customer/${requestId}/technical-proposals/available-filters`;
-  //   return this.api.get<TechnicalProposalFilter>(url);
-  // }
+  availableFilters(requestId: Uuid): Observable<TechnicalProposalFilter> {
+    const url = `requests/customer/${requestId}/technical-proposals/available-filters`;
+    return this.api.get<{ statuses: TechnicalProposalsStatus[], suppliers: ContragentInfo[] }>(url).pipe(
+      map(({ statuses: tpStatus, suppliers: contragents }) => ({ contragents, tpStatus }))
+    );
+  }
 
   accept(requestId: Uuid, technicalProposalId: Uuid, technicalProposalsPositions: TechnicalProposalPosition[]) {
     const url = `requests/customer/${requestId}/technical-proposals/${technicalProposalId}/accept`;
