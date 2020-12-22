@@ -23,33 +23,33 @@
 </div>
 
 <ng-template #startSearch>
-  <div class="app-row app-justify-content-center">
-    <div class="start-search-block">
-      <h1>Поиск по справочнику товаров</h1>
-      <div class="app-row">
-        <form (ngSubmit)="router.navigate(['/kim','customer', 'items-dictionary', searchText.value])">
-          <div class="app-col start-search">
-            <div class="app-control-wrap">
-              <input #search uxgInput lg [formControl]="searchText"/>
-              <label class="app-control-label" (click)="search.focus()">Поиск по справочнику товаров</label>
-            </div>
-          </div>
-          <div class="app-col search">
-            <button uxgButton icon primary lg
-                    [disabled]="!searchText.value">
-              <uxg-icon shape="app-search"></uxg-icon>
-            </button>
-          </div>
-        </form>
-      </div>
+  <div class="start-search-block">
+    <h1>Поиск по справочнику товаров</h1>
 
+    <form (ngSubmit)="router.navigate(['/kim','customer', 'items-dictionary', searchText.value])">
       <div class="app-row app-justify-content-center">
-        <div class="app-col">
-          <span class="app-ghost-color start-desc">
-          Если вы не нашли нужный товар в каталоге, его можно поискать по классификатору,
-          если он будет найден вы можете добавить его в корзину и создать по нему ценовой запрос.
-          </span>
+        <div class="app-col start-search">
+          <div class="app-control-wrap">
+            <input #search uxgInput lg [formControl]="searchText"/>
+            <label class="app-control-label" (click)="search.focus()">Поиск по справочнику товаров</label>
+          </div>
         </div>
+
+        <div class="app-col search">
+          <button uxgButton icon primary lg
+                  [disabled]="!searchText.value">
+            <uxg-icon shape="app-search"></uxg-icon>
+          </button>
+        </div>
+      </div>
+    </form>
+
+    <div class="app-row app-justify-content-center">
+      <div class="app-col">
+        <span class="app-ghost-color start-desc">
+        Если вы не нашли нужный товар в каталоге, его можно поискать по классификатору,
+        если он будет найден вы можете добавить его в корзину и создать по нему ценовой запрос.
+        </span>
       </div>
     </div>
   </div>
