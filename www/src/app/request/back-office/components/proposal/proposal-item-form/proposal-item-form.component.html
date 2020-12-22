@@ -96,6 +96,11 @@
     <div class="app-col">
       <uxg-dropdown-input formControlName="paymentTerms" placeholder="Условия оплаты" lg>
         <div uxgDropdownItem *ngFor="let term of paymentTerms" [value]="term[0]">{{ term[1] }}</div>
+        <ng-template #errors>
+          <div class="app-control-error" *ngIf="form.get('paymentTerms').errors as e">
+            <span *ngIf="e.required">Обязательное поле</span>
+          </div>
+        </ng-template>
       </uxg-dropdown-input>
     </div>
   </div>
