@@ -4,6 +4,7 @@ import { AgreementsResponse } from "../../../../agreements/common/models/agreeme
 import { Observable } from "rxjs";
 import { NotificationService } from "../../../../notification/services/notification.service";
 import { NotificationsResponse } from "../../../../notification/models/notifications-response";
+import { UserInfoService } from "../../../../user/service/user-info.service";
 
 @Component({
   templateUrl: './dashboard.component.html',
@@ -14,6 +15,7 @@ export class DashboardComponent implements OnInit {
   notifications$: Observable<NotificationsResponse>;
 
   constructor(
+    public user: UserInfoService,
     private agreementsService: AgreementsService,
     private notificationService: NotificationService
   ) {}
