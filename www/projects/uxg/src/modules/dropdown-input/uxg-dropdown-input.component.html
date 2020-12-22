@@ -11,6 +11,9 @@
        [class.app-dropdown-handler-up]="isDirectionUp"
        [attr.placeholder]="!appControlWrap && placeholder || null"
 />
+<div class="app-dropdown-handler-icon">
+  <uxg-icon shape="app-triangle" [attr.dir]="isHidden ? 'down':'up'"></uxg-icon>
+</div>
 <label *ngIf="placeholder && appControlWrap" class="app-control-label" (click)="inputRef.focus()">{{ placeholder }}</label>
 <ng-container *ngTemplateOutlet="errors"></ng-container>
 <div
