@@ -108,7 +108,7 @@ export class RequestState {
   @Action(UploadFromTemplate) uploadFromTemplate(ctx: Context, {requestId, files}: UploadFromTemplate) {
     return this.rest.addPositionsFromExcel(requestId, files).pipe(
       catchError(e => ctx.dispatch(new ToastActions.Error('Ошибка в шаблоне ' + (e && e.error && e.error.detail || "")))),
-      switchMap(() => ctx.dispatch(new RefreshPositions(requestId)))
+      switchMap(() => ctx.dispatch([new RefreshPositions(requestId), new Refresh(requestId)]))
     );
   }
 }
