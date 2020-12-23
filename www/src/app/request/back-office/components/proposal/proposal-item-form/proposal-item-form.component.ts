@@ -64,7 +64,7 @@ export class ProposalItemFormComponent implements OnInit {
     this.form.get('currency').disable();
 
     if (this.source === 'TECHNICAL_COMMERCIAL_PROPOSAL') {
-      this.form.addControl('manufacturingName', this.fb.control(this.proposalItem?.manufacturingName, Validators.required));
+      this.form.addControl('manufacturingName', this.fb.control(this.proposalItem?.manufacturingName ?? this.position.name, Validators.required));
     }
   }
 
