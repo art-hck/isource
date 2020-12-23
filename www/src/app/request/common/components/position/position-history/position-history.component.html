@@ -7,12 +7,9 @@
   <ng-template #historyList>
     <div class="activity-block app-row" *ngFor="let activityItem of history">
       <div class="status-pie">
-        <div class="{{getNewStatusClass(activityItem)}}">
-        </div>
-        <div class="{{getCurrentStatusClass(activityItem)}}">
-        </div>
-        <div class="white-circle">
-        </div>
+        <div [class]="getNewStatusClass(activityItem)"></div>
+        <div [class]="getCurrentStatusClass(activityItem)"></div>
+        <div class="white-circle"></div>
       </div>
       <div class="app-col timeline">
         <span class="activity-date">{{activityItem.createdDate | date: 'd LLLL в H:mm'}}</span>
@@ -46,10 +43,12 @@
           <ng-container *ngIf="isStatusChangeAction(activityItem)">
             <div class="position-status-change">
               <app-position-status [label]="activityItem.data.oldStatusLabel"
-                                   [status]="activityItem.data.oldStatus"></app-position-status>
+                                   [status]="activityItem.data.oldStatus"
+                                   [type]="activityItem.type"></app-position-status>
               <uxg-icon shape="app-top" dir="right"></uxg-icon>
               <app-position-status [label]="activityItem.data.newStatusLabel"
-                                   [status]="activityItem.data.newStatus"></app-position-status>
+                                   [status]="activityItem.data.newStatus"
+                                   [type]="activityItem.type"></app-position-status>
             </div>
           </ng-container>
 

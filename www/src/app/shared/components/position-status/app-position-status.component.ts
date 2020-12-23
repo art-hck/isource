@@ -7,6 +7,7 @@ import { PositionStatus } from "../../../request/common/enum/position-status";
 })
 export class AppPositionStatusComponent {
   @Input() status: PositionStatus;
+  @Input() type?: string;
   @Input() label: string;
   @Input() count: number;
   @Input() textAlign: "left" | "right" = "right";
