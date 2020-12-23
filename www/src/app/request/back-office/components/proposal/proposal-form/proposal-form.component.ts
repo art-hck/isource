@@ -75,11 +75,15 @@ export class ProposalFormComponent implements OnInit, OnDestroy, OnChanges {
   proposalPositions: { position: RequestPosition }[];
 
   get isManufacturingNamePristine(): boolean {
-    return this.form.get("positions").value.filter(pos => pos.manufacturingName).length === 0;
+    return this.form.get("positions").value.every(pos => !pos.manufacturingName);
   }
 
   get isManufacturerPristine(): boolean {
-    return this.form.get("positions").value.filter(pos => pos.manufacturer).length === 0;
+    return this.form.get("positions").value.every(pos => !pos.manufacturer);
+  }
+
+  get isParamsPristine(): boolean {
+    return this.form.get("positions").value.every(pos => !pos.priceWithoutVat);
   }
 
   constructor(
