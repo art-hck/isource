@@ -18,6 +18,7 @@ export class GridCommonParametersComponent implements OnInit {
   @HostBinding('class.app-flex-column') appFlexColumn = true;
   @HostBinding('class.has-analogs')
   @Input() hasAnalogs = false;
+  @Input() isWinner = false;
   @Input() positions: RequestPosition[];
   @Input() proposal: CommonProposal;
   @Output() close = new EventEmitter();
@@ -44,7 +45,11 @@ export class GridCommonParametersComponent implements OnInit {
   }
 
   canEditCommonParams() {
-    return this.positions.every((position: RequestPosition) => ['RESULTS_AGREEMENT', 'TECHNICAL_COMMERCIAL_PROPOSALS_AGREEMENT',
-      'WINNER_SELECTED', 'TCP_WINNER_SELECTED'].includes(position.status));
-}
+    return this.isWinner || this.positions.every((position: RequestPosition) => [
+      'RESULTS_AGREEMENT',
+      'TECHNICAL_COMMERCIAL_PROPOSALS_AGREEMENT',
+      'WINNER_SELECTED',
+      'TCP_WINNER_SELECTED'
+    ].includes(position.status));
+  }
 }

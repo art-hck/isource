@@ -90,6 +90,10 @@ export class GridContragentsComponent implements AfterViewInit, OnChanges, After
     return suppliers.some(supplier => supplier.hasAnalogs);
   }
 
+  isWinner(proposal): boolean {
+    return proposal.items.some(item => item.status === "APPROVED");
+  }
+
   getUniqueSupplierIndex(supplierId: Uuid): number {
     const uniqueProposalsSuppliers = this.suppliers.filter((supplier, index, array) =>
       !array.filter((v, i) => JSON.stringify(supplier.id) === JSON.stringify(v.id) && i < index).length);
