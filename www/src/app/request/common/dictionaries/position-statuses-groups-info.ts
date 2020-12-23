@@ -95,7 +95,7 @@ export const PositionStatusesGroupsInfo: PositionStatusesGroupInfo[] = [
     positions: [],
     shortName: "Доставка и оплата",
     hasActions: false,
-    color: "#9b51e0"
+    color: "#1400DC"
   },
   {
     url: "completed",
@@ -104,7 +104,7 @@ export const PositionStatusesGroupsInfo: PositionStatusesGroupInfo[] = [
     positions: [],
     shortName: "Завершено",
     hasActions: false,
-    color: "#1400DC"
+    color: "#9b51e0"
   },
   {
     url: "canceled",

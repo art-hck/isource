@@ -9,8 +9,8 @@
       <ng-container *ngFor="let tasks of tasksBar; index as i">
         <div class="app-col {{tasks.group}} bar-item-folded"
              [style.top.px]="!folded ? 25*(i+1)+1 : 0"
-             [style.min-width.%]="tasks.percent"
-             [style.max-width.%]="tasks.percent"></div>
+             [style.min-width.%]="tasks.percentReal"
+             [style.max-width.%]="tasks.percentReal"></div>
       </ng-container>
     </div>
   </div>
@@ -26,7 +26,7 @@
       <div class="app-col-auto">
         <small class="task-name app-justify-content-end">{{tasks.groupLabel}}</small>
         <small class="total app-justify-content-end">{{tasks.count}}</small>
-        <small class="app-ghost-color percent app-justify-content-end">{{tasks.percent}}%</small>
+        <small class="app-ghost-color percent app-justify-content-end">{{tasks.percent || '< 1'}}%</small>
       </div>
       <div class="app-row app-col bar-grid">
         <div class="app-col"></div>
