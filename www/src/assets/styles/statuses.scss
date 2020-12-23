@@ -6,8 +6,6 @@ $statuses: (
   NEW: #BE3A3A, // Новый
   TECHNICAL_PROPOSALS_PREPARATION: #ED9254, // Подготовка ТП
   TECHNICAL_PROPOSALS_AGREEMENT: #ED9254, // Согласование ТП
-  // временное решение для истории
-  ACCEPTED: #ED9254,
   REVIEW: #ED9254,
   SENT_TO_EDIT: #ED9254,
   DECLINED: #ED9254,
@@ -17,20 +15,14 @@ $statuses: (
   TCP_WINNER_SELECTED: #00AA5F, // Выбран победитель ТКП
 
   PROPOSALS_PREPARATION: #F9C74F, // Подготовка КП
-  // временное решение для истории
-  ARCHIVE: #F9C74F,
-  SENT_TO_REVIEW: #F9C74F, // Добавлено новое КП (в истории позиции)
   RESULTS_AGREEMENT: #F9C74F, // Выбор победителя
   WINNER_SELECTED: #00AA5F, // Выбран победитель
   CONTRACT_AGREEMENT: #00AA5F, // Согласование договора
   CONTRACT_SIGNING: #00AA5F, // Подписание договора
-  // временное решение для истории
-  ON_APPROVAL: #00AA5F,
   IN_PROGRESS: #00AA5F,
   REJECTED: #00AA5F,
   APPROVED: #00AA5F,
 
-  SIGNED: #00AA5F, // Подписано (в истории позиции)
   CONTRACTED: #00AA5F, // Законтрактовано
   RKD_AGREEMENT: #56B9F2, // Согласование РКД
   MANUFACTURING: #56b9f2, // Изготовление
@@ -41,6 +33,13 @@ $statuses: (
   PAID: #1400DC, // Оплачено
   WARRANTY: #1400DC, // Гарантийные обязательства
   COMPLETED: #9255CE, // Завершено
+
+  // todo Статусы вынесены для корректного отображения индикаторов в истории позиции
+  SENT_TO_REVIEW: #F9C74F, // Добавлено новое КП
+  ARCHIVE: #F9C74F, // Архив
+  ACCEPTED: #ED9254, // Согласовано
+  SIGNED: #00AA5F, // Подписано
+  ON_APPROVAL: #00AA5F, // На согласовании
 );
 
 
