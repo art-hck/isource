@@ -22,7 +22,7 @@
         </div>
       </div>
 
-      <div class="app-row" *ngFor="let position of notification?.body?.requestPositions.slice(0,2)">
+      <div class="app-row position-item" *ngFor="let position of notification?.body?.requestPositions.slice(0,2)">
         <div class="app-col app-secondary-color app-ellipsis"> {{position.name}} {{position.quantity}} {{position.measureUnit}} </div>
       </div>
     </ng-container>
@@ -73,7 +73,7 @@
         </div>
       </div>
 
-      <div class="app-row" *ngFor="let position of notification?.body?.requestPositions.slice(0,2)">
+      <div class="app-row position-item" *ngFor="let position of notification?.body?.requestPositions.slice(0,2)">
         <div class="app-col app-secondary-color app-ellipsis"> {{position.name}} {{position.quantity}} {{position.measureUnit}} </div>
       </div>
     </ng-container>
@@ -90,7 +90,7 @@
         </div>
       </div>
 
-      <div class="app-row" *ngFor="let position of notification?.body?.requestPositions.slice(0,2)">
+      <div class="app-row position-item" *ngFor="let position of notification?.body?.requestPositions.slice(0,2)">
         <div class="app-col app-secondary-color app-ellipsis"> {{position.name}} {{position.quantity}} {{position.measureUnit}} </div>
       </div>
     </ng-container>
@@ -126,7 +126,7 @@
         </div>
       </div>
 
-      <div class="app-row" *ngFor="let position of notification?.body?.items.slice(0,2)">
+      <div class="app-row position-item" *ngFor="let position of notification?.body?.items.slice(0,2)">
         <div class="app-col app-secondary-color app-ellipsis"> {{ position.requestPositionName }} </div>
       </div>
     </ng-container>
@@ -169,12 +169,12 @@
       </div>
 
       <div class="app-row notification-card-request app-secondary-color">
-        <div class="app-col app-ellipsis"  title="{{ notification?.body?.requestName }}">
+        <div class="app-col app-ellipsis" title="{{ notification?.body?.requestName }}">
           № {{ notification?.body?.requestNumber }} | {{ notification?.body?.requestName }}
         </div>
       </div>
 
-      <div class="app-row" *ngFor="let position of notification?.body?.requestPositions.slice(0,2)">
+      <div class="app-row position-item" *ngFor="let position of notification?.body?.requestPositions.slice(0,2)">
         <div class="app-col app-secondary-color app-ellipsis"> {{ position.name }} </div>
       </div>
     </ng-container>
@@ -199,7 +199,7 @@
         </div>
       </div>
 
-      <div class="app-row" *ngFor="let position of notification?.body?.requestPositions.slice(0,2)">
+      <div class="app-row position-item" *ngFor="let position of notification?.body?.requestPositions.slice(0,2)">
         <div class="app-col app-secondary-color app-ellipsis"> {{ position.name }} </div>
       </div>
     </ng-container>
@@ -220,7 +220,7 @@
         </div>
       </div>
 
-      <div class="app-row" *ngFor="let position of notification?.body?.requestPositions.slice(0,2)">
+      <div class="app-row position-item" *ngFor="let position of notification?.body?.requestPositions.slice(0,2)">
         <div class="app-col app-secondary-color app-ellipsis"> {{ position.name }} </div>
       </div>
     </ng-container>
@@ -254,7 +254,7 @@
         </div>
       </div>
 
-      <div class="app-row" *ngFor="let position of notification?.body?.requestPositions.slice(0,2)">
+      <div class="app-row position-item" *ngFor="let position of notification?.body?.requestPositions.slice(0,2)">
         <div class="app-col app-secondary-color app-ellipsis"> {{ position.name }} </div>
       </div>
     </ng-container>
