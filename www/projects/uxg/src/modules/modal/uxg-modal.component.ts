@@ -1,4 +1,4 @@
-import { Component, ContentChild, ElementRef, EventEmitter, HostListener, Inject, InjectionToken, Input, OnChanges, OnDestroy, Output, PLATFORM_ID, Renderer2, SimpleChanges, TemplateRef } from '@angular/core';
+import { Component, ContentChild, ElementRef, EventEmitter, HostListener, Inject, InjectionToken, Input, OnChanges, OnDestroy, OnInit, Output, PLATFORM_ID, Renderer2, SimpleChanges, TemplateRef } from '@angular/core';
 import { UxgModalFooterDirective } from "./uxg-modal-footer.directive";
 import { DOCUMENT, isPlatformBrowser } from "@angular/common";
 
@@ -6,7 +6,7 @@ import { DOCUMENT, isPlatformBrowser } from "@angular/common";
   selector: 'uxg-modal',
   templateUrl: './uxg-modal.component.html',
 })
-export class UxgModalComponent implements OnDestroy, OnChanges {
+export class UxgModalComponent implements OnDestroy, OnChanges, OnInit {
   @ContentChild(UxgModalFooterDirective, { read: TemplateRef }) footerTpl: TemplateRef<ElementRef>;
   @Input() state;
   @Input() noBackdrop: boolean;
@@ -15,13 +15,15 @@ export class UxgModalComponent implements OnDestroy, OnChanges {
   @Input() size: 'auto' | 's' | 'm' | 'l' = 'm';
   @Input() fullHeight: boolean;
   @Input() scrollContainerElement: HTMLElement = isPlatformBrowser(this.platformId) ? this.document.body : null;
+  @Input() appendToBody = true;
   @Input() hideScrollContainer = true;
   @Output() stateChange = new EventEmitter();
 
   constructor(
     @Inject(DOCUMENT) private document,
     @Inject(PLATFORM_ID) private platformId: InjectionToken<Object>,
-    private renderer: Renderer2
+    private renderer: Renderer2,
+    private el: ElementRef
   ) {}
 
   is = (prop?: boolean | string) => prop !== undefined && prop !== false && prop !== null;
@@ -29,6 +31,12 @@ export class UxgModalComponent implements OnDestroy, OnChanges {
   ngOnChanges({ state }: SimpleChanges) {
     if (state) {
       this.toggleContainerHostClass();
+    }
+  }
+
+  ngOnInit() {
+    if (this.appendToBody) {
+      this.document.body.appendChild(this.el.nativeElement);
     }
   }
 
@@ -78,5 +86,6 @@ export class UxgModalComponent implements OnDestroy, OnChanges {
 
   ngOnDestroy() {
     this.close();
+    this.el.nativeElement.remove();
   }
 }

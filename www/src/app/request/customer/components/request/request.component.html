@@ -7,7 +7,7 @@
       [status]="status$ | async"
       [positionsStatus]="positionsStatus$ | async"
       (publish)="store.dispatch(publish(requestId))"
-      (addPosition)="store.dispatch(refreshPositions(requestId))"
+      (addPosition)="store.dispatch([refreshPositions(requestId), refresh(requestId)])"
       (reject)="store.dispatch(reject(requestId))"
       (approve)="store.dispatch(approve(requestId))"
       (publishPositions)="store.dispatch(publishPositions($event))"
