@@ -36,7 +36,7 @@
     "file-saver": "^2.0.2",
     "flatpickr": "^4.6.3",
     "guid-typescript": "^1.0.9",
-    "isource-element": "1.0.5",
+    "isource-element": "1.0.8",
     "uxg": "^1.0.8",
     "jasmine-allure-reporter": "^1.0.2",
     "keycloak-angular": "^7.3.1",
