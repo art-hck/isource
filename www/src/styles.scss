@@ -86,6 +86,15 @@ a, a:hover, a:visited, [routerlink]:hover, [ng-reflect-router-link]:hover {
   }
 }
 
+.activity-type {
+  &-OFFER_STATUS {
+    background-color: map-get($statuses, PROPOSALS_PREPARATION) !important;
+  }
+  &-POSITION_TECHNICAL_COMMERCIAL_PROPOSAL_STATUS {
+    background-color: map-get($statuses, TECHNICAL_COMMERCIAL_PROPOSALS_PREPARATION) !important;
+  }
+}
+
 .placeholder {
   background: #F2F2F2;
   margin-bottom: 24px;
