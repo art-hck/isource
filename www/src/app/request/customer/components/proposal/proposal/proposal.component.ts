@@ -21,13 +21,13 @@ import { RequestPosition } from "../../../../common/models/request-position";
 import { ProposalSource } from "../../../../back-office/enum/proposal-source";
 
 @Component({
-  selector: "app-request-technical-commercial-proposal",
-  templateUrl: './technical-commercial-proposal.component.html',
-  styleUrls: ['technical-commercial-proposal.component.scss'],
+  selector: "app-common-proposal",
+  templateUrl: './proposal.component.html',
+  styleUrls: ['proposal.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-export class TechnicalCommercialProposalComponent implements OnChanges, OnDestroy {
+export class ProposalComponent implements OnChanges, OnDestroy {
   @Select(TechnicalCommercialProposalState.status)
   readonly stateStatus$: Observable<StateStatus>;
 

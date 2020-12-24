@@ -13,7 +13,7 @@ import { TechnicalCommercialProposalViewComponent } from './components/proposal/
 import { TechnicalCommercialProposalService } from "./services/technical-commercial-proposal.service";
 import { NgxsModule } from "@ngxs/store";
 import { TechnicalCommercialProposalState } from "./states/technical-commercial-proposal.state";
-import { TechnicalCommercialProposalComponent } from "./components/proposal/technical-commercial-proposal/technical-commercial-proposal.component";
+import { ProposalComponent } from "./components/proposal/proposal/proposal.component";
 import { RequestFormComponent } from "./components/request-form/request-form.component";
 import { RequestFormFreeComponent } from "./components/request-form-free/request-form-free.component";
 import { RequestState } from "./states/request.state";
@@ -42,7 +42,7 @@ import { CommercialProposalsService } from "./services/commercial-proposals.serv
     CommercialProposalViewComponent,
     CommercialProposalGroupListComponent,
     TechnicalCommercialProposalViewComponent,
-    TechnicalCommercialProposalComponent,
+    ProposalComponent,
     RequestListComponent,
     TechnicalCommercialProposalGroupListComponent,
     ProposalConfirmComponent,
