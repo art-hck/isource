@@ -214,6 +214,7 @@
         (close)="showForm = false"
         [availablePositions]="availablePositions"
         [source]="source"
+        [selectedContragents]="getContragents(proposals)"
         (create)="create.emit($event)"
       ></app-common-proposal-form>
       <ng-container *ngFor="let procedure of procedures; trackBy: trackById">
@@ -225,15 +226,16 @@
         ></app-request-procedure>
       </ng-container>
       <ng-container *ngFor="let proposal of proposals; trackBy: trackById">
-        <app-request-technical-commercial-proposal
+        <app-common-proposal
           [request]="request"
           [groupId]="groupId"
           [source]="source"
           [positions]="positions"
           [availablePositions]="availablePositions"
           [proposal]="proposal"
+          [selectedContragents]="getContragents(proposals)"
           (edit)="edit.emit($event)"
-        ></app-request-technical-commercial-proposal>
+        ></app-common-proposal>
       </ng-container>
     </div>
     <div class="app-col-aside detachable">

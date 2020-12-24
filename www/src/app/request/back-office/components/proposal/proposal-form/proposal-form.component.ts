@@ -35,6 +35,7 @@ import { searchContragents } from "../../../../../shared/helpers/search";
 import { CommonProposal, CommonProposalItem } from "../../../../common/models/common-proposal";
 import { ProposalSource } from "../../../enum/proposal-source";
 import { proposalManufacturerValidator } from "./proposal-form-manufacturer.validator";
+import { ContragentShortInfo } from "../../../../../contragent/models/contragent-short-info";
 
 @Component({
   selector: 'app-common-proposal-form',
@@ -51,6 +52,7 @@ export class ProposalFormComponent implements OnInit, OnDestroy, OnChanges {
   @Input() closable = true;
   @Input() source: ProposalSource;
   @Input() availablePositions: RequestPosition[];
+  @Input() selectedContragents: ContragentShortInfo[];
   @Output() close = new EventEmitter();
   @Output() create = new EventEmitter<{ proposal: Partial<CommonProposal>, items: CommonProposalItem[] }>();
   @Output() edit = new EventEmitter<{ proposal: Partial<CommonProposal> & { id: Uuid }, items: CommonProposalItem[] }>();
@@ -191,6 +193,10 @@ export class ProposalFormComponent implements OnInit, OnDestroy, OnChanges {
 
   searchPosition(q: string, {position}: { position: RequestPosition }) {
     return position.name.toLowerCase().indexOf(q.toLowerCase()) >= 0;
+  }
+
+  contragentExists(contragent) {
+    return this.selectedContragents.some(({id}) => id === contragent.id);
   }
 
   defaultValue = (field: keyof TechnicalCommercialProposal, defaultValue: any = "") => this.proposal && this.proposal[field] || defaultValue;

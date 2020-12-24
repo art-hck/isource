@@ -28,10 +28,12 @@
             [searchFn]="searchContragents">
 
             <ng-container *ngIf="(sug.suggestions$ | async) as contragents">
-              <div uxgDropdownItem *ngFor="let contragent of contragents" [value]="contragent">
-                {{contragent.shortName || contragent.fullName}}
-                <span class="app-ghost-color">{{contragent.inn | splitNumber}}</span>
-              </div>
+              <ng-container *ngFor="let contragent of contragents">
+                <div uxgDropdownItem *ngIf="!contragentExists(contragent)" [value]="contragent">
+                  {{contragent.shortName || contragent.fullName}}
+                  <span class="app-ghost-color">{{contragent.inn | splitNumber}}</span>
+                </div>
+              </ng-container>
             </ng-container>
             <ng-template #errors>
               <div class="app-control-error" *ngIf="form.get('supplier').errors as e">
