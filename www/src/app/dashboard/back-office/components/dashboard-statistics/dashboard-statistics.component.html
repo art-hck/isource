@@ -68,39 +68,37 @@
           </div>
 
           <div class="app-row app-align-items-center">
-            <div class="app-row app-align-items-center">
-              <div class="app-col-auto">
-                <span class="app-ghost-color">Интервал дат поставки позиций:  </span>
+            <div class="app-col-auto">
+              <span class="app-ghost-color">Интервал дат поставки позиций:  </span>
+            </div>
+
+            <div class="app-col-auto" [style.padding-right.px]="10">
+              <div class="app-control-wrap">
+                <input uxgInput lg uxgDatepicker
+                       #dateFromRef
+                       formControlName="shipmentDateFrom"
+                       dateFormat="d.m.Y">
+
+                <label class="app-control-label" (click)="dateFromRef.focus()">Дата с</label>
+
+                <label class="app-control-icon" (click)="dateFromRef.focus()">
+                  <uxg-icon shape="app-calendar-big" size="24"></uxg-icon>
+                </label>
               </div>
+            </div>
 
-              <div class="app-col-3" [style.padding-right.px]="10">
-                <div class="app-control-wrap">
-                  <input uxgInput lg uxgDatepicker
-                         #dateFromRef
-                         formControlName="shipmentDateFrom"
-                         dateFormat="d.m.Y">
+            <div class="app-col-auto" [style.padding-left.px]="10">
+              <div class="app-control-wrap">
+                <input uxgInput lg uxgDatepicker
+                       #dateTillRef
+                       formControlName="shipmentDateTo"
+                       dateFormat="d.m.Y">
 
-                  <label class="app-control-label" (click)="dateFromRef.focus()">Дата с</label>
+                <label class="app-control-label" (click)="dateTillRef.focus()">Дата по</label>
 
-                  <label class="app-control-icon" (click)="dateFromRef.focus()">
-                    <uxg-icon shape="app-calendar-big" size="24"></uxg-icon>
-                  </label>
-                </div>
-              </div>
-
-              <div class="app-col-3" [style.padding-left.px]="10">
-                <div class="app-control-wrap">
-                  <input uxgInput lg uxgDatepicker
-                         #dateTillRef
-                         formControlName="shipmentDateTo"
-                         dateFormat="d.m.Y">
-
-                  <label class="app-control-label" (click)="dateTillRef.focus()">Дата по</label>
-
-                  <label class="app-control-icon" (click)="dateTillRef.focus()">
-                    <uxg-icon shape="app-calendar-big" size="24"></uxg-icon>
-                  </label>
-                </div>
+                <label class="app-control-icon" (click)="dateTillRef.focus()">
+                  <uxg-icon shape="app-calendar-big" size="24"></uxg-icon>
+                </label>
               </div>
             </div>
           </div>
