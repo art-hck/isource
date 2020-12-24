@@ -28,7 +28,7 @@
             *ngIf="getProposalBySupplier(supplier, proposals) as proposal"
             [proposal]="proposal"
             [hasAnalogs]="supplier.hasAnalogs"
-            [isWinner]="isWinner(proposal)"
+            [hasWinnerFn]="hasWinnerFn"
             [showDocs]="showDocsControl.value"
             [positions]="positions"
             (close)="showCommonParams = false"

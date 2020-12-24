@@ -27,6 +27,7 @@ export class GridContragentsComponent implements AfterViewInit, OnChanges, After
   @Input() positions: RequestPosition[];
   @Input() proposals: ProposalWithCommonInfo[];
   @Input() showParams = false;
+  @Input() hasWinnerFn: (proposal) => boolean;
   @Output() scrollUpdated = new EventEmitter<{ canScrollRight: boolean, canScrollLeft: boolean }>();
   @Output() edit = new EventEmitter();
   @Output() selectBySupplier = new EventEmitter();
@@ -88,10 +89,6 @@ export class GridContragentsComponent implements AfterViewInit, OnChanges, After
 
   hasSupplierWithAnalogs(suppliers): boolean {
     return suppliers.some(supplier => supplier.hasAnalogs);
-  }
-
-  isWinner(proposal): boolean {
-    return proposal.items.some(item => item.status === "APPROVED");
   }
 
   getUniqueSupplierIndex(supplierId: Uuid): number {

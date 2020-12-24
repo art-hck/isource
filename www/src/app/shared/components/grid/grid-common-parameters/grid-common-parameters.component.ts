@@ -18,7 +18,8 @@ export class GridCommonParametersComponent implements OnInit {
   @HostBinding('class.app-flex-column') appFlexColumn = true;
   @HostBinding('class.has-analogs')
   @Input() hasAnalogs = false;
-  @Input() isWinner = false;
+  @Input() isWinner;
+  @Input() hasWinnerFn: (proposal) => boolean;
   @Input() positions: RequestPosition[];
   @Input() proposal: CommonProposal;
   @Output() close = new EventEmitter();
@@ -33,6 +34,7 @@ export class GridCommonParametersComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.isWinner = this.hasWinnerFn ? this.hasWinnerFn(this.proposal) : null;
   }
 
   edit(proposal: ProposalWithCommonInfo) {

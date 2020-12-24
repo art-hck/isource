@@ -76,6 +76,8 @@ export class ProposalViewComponent implements AfterViewInit, OnChanges, OnDestro
     }[]
   };
 
+  hasWinnerFunction = (proposal): boolean => proposal.items?.some(item => item.status === "APPROVED");
+
   get total() {
     return this.proposalsOnReview?.reduce((total, curr) => {
       const proposalPosition: CommonProposalItem = curr.selectedProposal.value;

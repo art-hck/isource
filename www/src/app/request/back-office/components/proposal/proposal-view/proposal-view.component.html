@@ -99,6 +99,7 @@
         [suppliers]="suppliers(proposals)"
         [proposals]="proposals"
         [showParams]="true"
+        [hasWinnerFn]="hasWinnerFunction"
         (openCommonParams)="gridTable.scrollIntoView()"
         (edit)="addContragentModal.open(); editingProposal = $event"
         (scrollUpdated)="stickedPosition = $event.canScrollLeft"
