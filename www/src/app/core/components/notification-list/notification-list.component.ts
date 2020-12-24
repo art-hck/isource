@@ -72,9 +72,8 @@ export class NotificationListComponent {
   markAllNotificationsAsRead() {
     const notificationsIds = [];
 
-    this.notificationsService.getNotifications(this.notificationsCount).subscribe(notifications => {
+    this.notificationsService.getNotifications(this.notificationsCount, true).subscribe(notifications => {
       notifications.items
-        .filter(item => item.status !== "STATUS_SEEN")
         .map(item => notificationsIds.push(+item.id));
 
       if (notificationsIds.length > 0) {

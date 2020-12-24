@@ -58,9 +58,11 @@ export class NotificationsService {
     this.onNotificationRead().subscribe(() => this.unreadCount());
   }
 
-  getNotifications(limit) {
+  getNotifications(limit, onlyUnread = false) {
     const url = `#notifications#`;
-    return this.api.get<Notifications>(url, {params: {limit: limit, channel: '1'}}).pipe(map(
+    const status = onlyUnread ? '3' : '0';
+
+    return this.api.get<Notifications>(url, {params: {limit: limit, channel: '1', status: status}}).pipe(map(
       notifications => {
         notifications.items = notifications.items.map(item => {
           item.body = JSON.parse(item.body as string);
