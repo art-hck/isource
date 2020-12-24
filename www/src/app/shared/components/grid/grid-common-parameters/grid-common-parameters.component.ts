@@ -45,8 +45,9 @@ export class GridCommonParametersComponent implements OnInit {
   }
 
   canEditCommonParams() {
-    return this.isWinner || this.positions.every((position: RequestPosition) => [
+    return !this.isWinner && !this.positions.every((position: RequestPosition) => [
       'RESULTS_AGREEMENT',
+      'CONTRACT_AGREEMENT',
       'TECHNICAL_COMMERCIAL_PROPOSALS_AGREEMENT',
       'WINNER_SELECTED',
       'TCP_WINNER_SELECTED'
