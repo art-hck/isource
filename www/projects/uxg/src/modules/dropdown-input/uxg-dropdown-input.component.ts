@@ -110,6 +110,11 @@ export class UxgDropdownInputComponent implements OnInit, AfterViewInit, OnDestr
     }
   }
 
+  focusInput(e) {
+    e.stopPropagation();
+    this.toggle(this.isHidden);
+  }
+
   keyDown = (e: KeyboardEvent) => {
     if (!this.isHidden && this.isInside(e.target) && this.keysActions[e.key]) {
       e.preventDefault();

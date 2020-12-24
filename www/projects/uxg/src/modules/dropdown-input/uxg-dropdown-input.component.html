@@ -12,9 +12,10 @@
        [attr.placeholder]="!appControlWrap && placeholder || null"
 />
 <label *ngIf="placeholder && appControlWrap" class="app-control-label" (click)="inputRef.focus()">{{ placeholder }}</label>
-<div class="app-dropdown-handler-icon" *ngIf="!strictMode">
+<div class="app-dropdown-handler-icon" *ngIf="!strictMode" (click)="focusInput($event)">
   <uxg-icon shape="app-triangle" [attr.dir]="isHidden ? 'down':'up'"></uxg-icon>
 </div>
+
 <ng-container *ngTemplateOutlet="errors"></ng-container>
 <div
   #itemsWrapper
