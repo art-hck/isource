@@ -210,14 +210,14 @@ export class CustomValidators {
   }
 
   static emailOptional(control: FormControl): any {
-    if (control.value === '') {
+    if (!control.value || control.value === '') {
       return null;
     }
     return CustomValidators.email(control);
   }
 
   static phoneOptional(control: FormControl): any {
-    if (control.value === '') {
+    if (!control.value || control.value === '') {
       return null;
     }
     return CustomValidators.phone(control);
