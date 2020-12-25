@@ -8,7 +8,7 @@
   <ng-container>
     <ng-container *ngIf="view === 'list'">
       <h3 class="total-sum">
-        <span class="app-ghost-color app-font-normal">Общая сумма: </span>
+        <span class="app-ghost-color app-font-normal">Общая сумма без НДС: </span>
         <span>
           {{ getSummaryPriceByPositions(selectedPositions) | number: "1.0-2" }} <span class="app-ghost-color">{{ getCurrencySymbol('RUB', 'narrow') }}</span>
         </span>
@@ -24,7 +24,7 @@
 
     <ng-container *ngIf="view !== 'list'">
       <h3  class="total-sum">
-        <span class="app-ghost-color app-font-normal">Общая сумма: </span>
+        <span class="app-ghost-color app-font-normal">Общая сумма без НДС: </span>
         <span>
           {{ total | number: "1.0-2" }} <span class="app-ghost-color">{{ getCurrencySymbol('RUB', 'narrow') }}</span>
         </span>
