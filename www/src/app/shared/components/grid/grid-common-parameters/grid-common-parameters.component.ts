@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, HostBinding, Input, OnInit, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, HostBinding, Input, Output } from '@angular/core';
 import { ProposalHelperService } from "../proposal-helper.service";
 import { getCurrencySymbol } from "@angular/common";
 import { UserInfoService } from "../../../../user/service/user-info.service";
@@ -13,11 +13,12 @@ import { Uuid } from "../../../../cart/models/uuid";
   styleUrls: ['./grid-common-parameters.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class GridCommonParametersComponent implements OnInit {
+export class GridCommonParametersComponent {
   @HostBinding('class.app-row') appRow = true;
   @HostBinding('class.app-flex-column') appFlexColumn = true;
   @HostBinding('class.has-analogs')
   @Input() hasAnalogs = false;
+  @Input() hasWinnerFn: (proposal) => boolean;
   @Input() positions: RequestPosition[];
   @Input() proposal: CommonProposal;
   @Output() close = new EventEmitter();
@@ -31,9 +32,6 @@ export class GridCommonParametersComponent implements OnInit {
     public userInfoService: UserInfoService
   ) { }
 
-  ngOnInit(): void {
-  }
-
   edit(proposal: ProposalWithCommonInfo) {
     this.close.emit();
     this.openEditModal.emit(proposal);
@@ -44,7 +42,12 @@ export class GridCommonParametersComponent implements OnInit {
   }
 
   canEditCommonParams() {
-    return this.positions.every((position: RequestPosition) => ['RESULTS_AGREEMENT', 'TECHNICAL_COMMERCIAL_PROPOSALS_AGREEMENT',
-      'WINNER_SELECTED', 'TCP_WINNER_SELECTED'].includes(position.status));
-}
+    return (!this.hasWinnerFn || !this.hasWinnerFn(this.proposal)) && !this.positions.every((position: RequestPosition) => [
+      'RESULTS_AGREEMENT',
+      'CONTRACT_AGREEMENT',
+      'TECHNICAL_COMMERCIAL_PROPOSALS_AGREEMENT',
+      'WINNER_SELECTED',
+      'TCP_WINNER_SELECTED'
+    ].includes(position.status));
+  }
 }
