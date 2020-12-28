@@ -38,6 +38,11 @@ form {
       &:last-child { padding-right: 0; }
     }
   }
+
+  & p.empty-list {
+    margin: 40px 0;
+    text-align: center;
+  }
 }
 
 .select-list {

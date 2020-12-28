@@ -63,7 +63,7 @@
                 <uxg-icon shape="app-calendar-big" size="24"></uxg-icon>
               </label>
               <div class="app-control-error" *ngIf="form.get('deliveryDate').errors as e">
-                <span *ngIf="e.required">Обязательное поле</span>
+                <span *ngIf="e.field">Неверная дата</span>
               </div>
             </div>
           </div>

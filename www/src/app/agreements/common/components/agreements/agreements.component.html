@@ -1,17 +1,18 @@
 <ng-container *ngIf="agreements; else loading">
   <ng-container *ngIf="agreements.length > 0; else emptyAgreementsList">
     <div class="app-table app-no-border">
-      <div class="app-row">
+      <div class="app-row" [ngClass]="{'dashboard-header': dashboardView}">
         <small class="app-col-1 app-ghost-color id"><b>№ ЗАЯВКИ</b></small>
         <small class="app-col-3 app-ghost-color name"><b>НАИМЕНОВАНИЕ ПОЗИЦИИ/ГРУППЫ</b></small>
         <small class="app-col-2 app-ghost-color customer" *ngIf="!userInfoService.isCustomer()"><b>ЗАКАЗЧИК</b></small>
         <small class="app-col-2 app-ghost-color date"><b>ПОСТУПЛЕНИЕ</b></small>
         <small class="app-col-2 app-ghost-color status"><b>СТАТУС</b></small>
-        <small class="app-col-2 app-ghost-color action"><b>ПЕРЕХОД К СОГЛАСОВАНИЮ</b></small>
+        <small class="app-col-2 app-ghost-color action">
+          <b>{{agreementsView ? 'ПЕРЕХОД К ВЫПОЛНЕНИЮ' : 'ПЕРЕХОД К СОГЛАСОВАНИЮ'}}</b></small>
       </div>
     </div>
 
-    <div class="app-table agreements-list">
+    <div class="app-table agreements-list" [ngClass]="{'dashboard-table': dashboardView}">
       <div class="app-row app-align-items-center" *ngFor="let agreement of agreements">
         <div class="app-col-1 id">{{ agreement.request.number}}</div>
         <div class="app-col-3 name">

@@ -1,5 +1,5 @@
 <div class="app-container">
-  <app-nav (openModal)="notificationModal.open()" class="app-header" [class.no-stick]="noHeaderStick" *ngIf="authService.isAuth()"></app-nav>
+  <app-nav (openModal)="notificationModal.open()" class="app-header" [class.no-stick]="noHeaderStick"></app-nav>
   <app-notification-list #notificationModal></app-notification-list>
   <div class="app-content-wrap">
     <div class="app-content">

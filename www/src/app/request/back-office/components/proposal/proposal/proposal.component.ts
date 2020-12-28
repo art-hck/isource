@@ -6,9 +6,10 @@ import { ProposalSource } from "../../../enum/proposal-source";
 import { CommonProposal, CommonProposalItem } from "../../../../common/models/common-proposal";
 import { RequestPosition } from "../../../../common/models/request-position";
 import { TechnicalCommercialProposalHelperService } from "../../../../common/services/technical-commercial-proposal-helper.service";
+import { ContragentShortInfo } from "../../../../../contragent/models/contragent-short-info";
 
 @Component({
-  selector: 'app-request-technical-commercial-proposal',
+  selector: 'app-common-proposal',
   templateUrl: './proposal.component.html',
   styleUrls: ['proposal.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -20,6 +21,7 @@ export class ProposalComponent {
   @Input() positions: RequestPosition[];
   @Input() availablePositions: RequestPosition[];
   @Input() source: ProposalSource;
+  @Input() selectedContragents: ContragentShortInfo[];
   @Output() edit = new EventEmitter<{ proposal: Partial<CommonProposal> & { id: Uuid }, items: CommonProposalItem[] }>();
 
   state: "view" | "edit" = "view";

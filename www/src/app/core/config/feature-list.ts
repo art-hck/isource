@@ -2,7 +2,8 @@ import { UserRole } from "../../user/models/user-role";
 import { Feature } from "../models/feature";
 
 export interface IFeatureList {
-  dashboard;
+  backofficeDashboard;
+  customerDashboard;
   registration;
   customerRequest;
   createRequest;
@@ -33,10 +34,12 @@ export interface IFeatureList {
   customerProfile;
   customerIntelplan;
   createTemplate;
+  normalization;
 }
 
 export const FeatureList: { [key in keyof IFeatureList]: Feature } = {
-  dashboard: { roles: [UserRole.CUSTOMER] },
+  backofficeDashboard: { roles: [UserRole.SENIOR_BACKOFFICE, UserRole.BACKOFFICE] },
+  customerDashboard: { roles: [UserRole.CUSTOMER] },
   registration: {},
   customerRequest: { roles: [UserRole.CUSTOMER] },
   createRequest: { roles: [UserRole.CUSTOMER] },
@@ -66,5 +69,6 @@ export const FeatureList: { [key in keyof IFeatureList]: Feature } = {
   backofficeIntelplan: { roles: [UserRole.BACKOFFICE] },
   customerProfile: { roles: [UserRole.CUSTOMER] },
   customerIntelplan: { roles: [UserRole.CUSTOMER] },
-  createTemplate: { roles: [UserRole.CUSTOMER] }
+  createTemplate: { roles: [UserRole.CUSTOMER] },
+  normalization: { roles: [UserRole.SENIOR_BACKOFFICE, UserRole.BACKOFFICE]}
 };

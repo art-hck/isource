@@ -1,6 +1,7 @@
 <ng-container *ngIf="(request$ | async) as request; else loading">
   <ng-container *ngIf="(positions$ | async) as positions; else loading">
     <app-request
+      #commonRequestComponent
       [positions]="positions"
       [request]="request"
       [onDrafted]="sendOnApprove"
@@ -10,8 +11,10 @@
       (addPosition)="store.dispatch(refreshPositions(requestId))"
       (addGroup)="store.dispatch(refreshPositions(requestId))"
       (changeStatus)="store.dispatch([refreshPositions(requestId), refresh(requestId)])"
+      (saveRequestName)="store.dispatch(saveRequestName($event))"
       (addResponsible)="store.dispatch(refreshPositions(requestId))"
       (uploadFromTemplate)="store.dispatch(uploadFromTemplate($event))"
+      (attachDocuments)="store.dispatch(attachDocuments($event))"
     ></app-request>
   </ng-container>
 </ng-container>

@@ -13,8 +13,10 @@ import Publish = RequestActions.Publish;
 import FetchPositions = RequestActions.FetchPositions;
 import RefreshPositions = RequestActions.RefreshPositions;
 import Refresh = RequestActions.Refresh;
+import AttachDocuments = RequestActions.AttachDocuments;
 import UploadFromTemplate = RequestActions.UploadFromTemplate;
 import { ToastActions } from "../../../shared/actions/toast.actions";
+import EditRequestName = RequestActions.EditRequestName;
 
 export interface RequestStateStateModel {
   request: Request;
@@ -89,10 +91,24 @@ export class RequestState {
     );
   }
 
+  @Action(AttachDocuments) attachDocuments({setState, dispatch}: Context, {requestId, positionIds, files}: AttachDocuments) {
+    setState(patch({ status: "updating" as StateStatus }));
+    return this.rest.attachDocuments(requestId, positionIds, files).pipe(
+      tap(() => setState(patch({ status: "received" as StateStatus})))
+    );
+  }
+
+  @Action(EditRequestName) editRequestName({setState, dispatch}: Context, {requestId, requestName}: EditRequestName) {
+    setState(patch({ status: "updating" as StateStatus }));
+    return this.rest.editRequestName(requestId, requestName).pipe(
+      switchMap(() => dispatch([new Refresh(requestId)])),
+    );
+  }
+
   @Action(UploadFromTemplate) uploadFromTemplate(ctx: Context, {requestId, files}: UploadFromTemplate) {
     return this.rest.addPositionsFromExcel(requestId, files).pipe(
       catchError(e => ctx.dispatch(new ToastActions.Error('Ошибка в шаблоне ' + (e && e.error && e.error.detail || "")))),
-      switchMap(() => ctx.dispatch(new RefreshPositions(requestId)))
+      switchMap(() => ctx.dispatch([new RefreshPositions(requestId), new Refresh(requestId)]))
     );
   }
 }

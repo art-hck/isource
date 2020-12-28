@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { Observable, Subject } from "rxjs";
 import { Request } from "../../../common/models/request";
 import { RequestPositionList } from "../../../common/models/request-position-list";
@@ -14,12 +14,15 @@ import { RequestActions } from "../../actions/request.actions";
 import { RequestState } from "../../states/request.state";
 import { StateStatus } from "../../../common/models/state-status";
 import { ToastActions } from "../../../../shared/actions/toast.actions";
+import { RequestComponent as CommonRequestComponent } from "../../../common/components/request/request.component";
 import UploadFromTemplate = RequestActions.UploadFromTemplate;
 import Publish = RequestActions.Publish;
 import RefreshPositions = RequestActions.RefreshPositions;
 import Refresh = RequestActions.Refresh;
 import Fetch = RequestActions.Fetch;
 import FetchPositions = RequestActions.FetchPositions;
+import AttachDocuments = RequestActions.AttachDocuments;
+import EditRequestName = RequestActions.EditRequestName;
 
 @Component({
   templateUrl: './request.component.html',
@@ -28,6 +31,7 @@ import FetchPositions = RequestActions.FetchPositions;
 export class RequestComponent implements OnInit, OnDestroy {
   requestId: Uuid;
   positions: RequestPosition[];
+  @ViewChild('commonRequestComponent') commonRequestComponent: CommonRequestComponent;
   @Select(RequestState.request) request$: Observable<Request>;
   @Select(RequestState.positions) positions$: Observable<RequestPositionList[]>;
   @Select(RequestState.status) status$: Observable<StateStatus>;
@@ -35,6 +39,8 @@ export class RequestComponent implements OnInit, OnDestroy {
   readonly destroy$ = new Subject();
   readonly refresh = id => new Refresh(id);
   readonly refreshPositions = id => new RefreshPositions(id);
+  readonly saveRequestName = data => new EditRequestName(this.requestId, data);
+  readonly attachDocuments = ({positionIds, files}) => new AttachDocuments(this.requestId, positionIds, files);
   readonly publish = (id, positions) => new Publish(id, true, positions.map(position => position.id));
   readonly uploadFromTemplate = ({files}) => new UploadFromTemplate(this.requestId, files);
   readonly sendOnApprove = (position: RequestPosition): Observable<RequestPosition> => this.store
@@ -66,15 +72,26 @@ export class RequestComponent implements OnInit, OnDestroy {
     ).subscribe();
 
     this.actions.pipe(
-      ofActionCompleted(Publish),
+      ofActionCompleted(Publish, AttachDocuments),
       takeUntil(this.destroy$)
     ).subscribe(({result, action}) => {
       const e = result.error as any;
+      let text = "";
+
+      if (action instanceof Publish) {
+        text = action.positions.length > 1 ? action.positions.length + ' позиции отправлено на согласование' : 'Позиция отправлена на согласование';
+      } else if (action instanceof AttachDocuments) {
+        const pluralizedFilesTextPart = action.files.length > 1 ? 'Файлы успешно прикреплены ' : 'Файл успешно прикреплён ';
+        const pluralizedPositionsTextPart = action.positionIds.length > 1 ? 'к выбранным позициям' : 'к выбранной позиции';
+        text = pluralizedFilesTextPart + pluralizedPositionsTextPart;
+      }
+
       this.store.dispatch(e ?
         new ToastActions.Error(e && e.error.detail) :
-        new ToastActions.Success(action.positions.length > 1 ? action.positions.length + '  позиции отправлено на согласование' :
-          'Позиция отправлена на согласование')
+        new ToastActions.Success(text)
       );
+
+      this.commonRequestComponent.resetSelectedPositions();
     });
   }
 

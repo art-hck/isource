@@ -85,6 +85,8 @@ export class ProposalViewComponent implements OnDestroy, AfterViewInit, OnChange
   readonly getCurrencySymbol = getCurrencySymbol;
   readonly sourceLabels = ProposalSourceLabels;
 
+  hasWinnerFunction = (proposal): boolean => proposal.items?.some(item => item.status === "APPROVED");
+
   get selectedPositions(): CommonProposalByPosition[] {
     return (this.form.get('positions') as FormArray).controls
       ?.filter(({ value }) => value.checked)

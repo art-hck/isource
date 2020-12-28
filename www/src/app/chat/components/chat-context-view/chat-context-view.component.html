@@ -85,9 +85,9 @@
       <ng-container *ngIf="!conversationLoading; else loading">
         <ng-container *ngFor="let message of messages$ | async; trackBy: trackById">
           <div #messageEl class="im-messages-item" [class.im-messages-item-own]="isOwn(message)">
-            <div class="app-col">
+            <div class="app-col im-messages-item-body">
               <div class="app-bold">{{message.author.fullName}}</div>
-              <div class="im-messages-item-attachment" *ngFor="let attachment of message.attachments" (click)="attachmentsService.download(attachment).subscribe()">
+              <div class="im-messages-item-attachment app-ellipsis" *ngFor="let attachment of message.attachments" (click)="attachmentsService.download(attachment).subscribe()">
                 <document-icon [name]="attachment.originalFilename" size="s"></document-icon>
                 <span>{{attachment.originalFilename}}</span>
               </div>

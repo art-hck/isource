@@ -51,19 +51,9 @@ export class TechnicalProposalState {
     );
   }
 
-  // @TODO: ждём реализацию на бэкенде (gpn_market-2870)
   @Action(FetchAvailableFilters)
   fetchAvailableFilters({ setState, getState }: Context, { requestId }: FetchAvailableFilters) {
-    return this.rest.list(requestId, {}).pipe(
-      map(proposals => proposals.reduce<TechnicalProposalFilter>((acc, curr, i, arr) => ({
-        ...acc,
-        contragents: arr.findIndex(({ supplierContragent: c }) => c && c === curr.supplierContragent) === i ?
-          [...acc.contragents ?? [], curr.supplierContragent] : acc.contragents,
-        tpStatus: arr.findIndex(({ status }) => status === curr.status) === i ?
-          [...acc.tpStatus ?? [], curr.status] : acc.tpStatus
-      }), {})),
-      tap(availableFilters => setState(patch({ availableFilters })))
-    );
+    return this.rest.availableFilters(requestId).pipe(tap(availableFilters => setState(patch({ availableFilters }))));
   }
 
   @Action(Approve)

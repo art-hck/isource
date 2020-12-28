@@ -1,0 +1,52 @@
+<ng-container *ngIf="user.getContragentId()">
+  <div class="app-row">
+    <div class="app-col">
+      <ng-container *ngTemplateOutlet="agreements; context: {$implicit: agreements$ | async}"></ng-container>
+      <ng-template #agreements let-agreements>
+        <div class="app-row app-align-items-center">
+          <h2 class="app-col">Согласования</h2>
+          <div><a routerLink="/agreements/customer"><b>Все согласования ({{ agreements?.totalCount }})</b></a></div>
+        </div>
+        <app-agreements [agreements]="agreements?.entities">
+        </app-agreements>
+      </ng-template>
+    </div>
+  </div>
+  <br/>
+  <br/>
+  <div class="app-row"><br/>
+    <div class="app-col">
+      <ng-container *ngTemplateOutlet="notifications; context: {$implicit: notifications$ | async}"></ng-container>
+      <ng-template #notifications let-notifications>
+        <div class="app-row app-align-items-center">
+          <h2 class="app-col">Последние уведомления</h2>
+          <div><a routerLink="/notifications"><b>Все уведомления</b></a></div>
+        </div>
+        <app-dashboard-notification [notifications]="notifications?.entities" [total]="notifications?.totalCount">
+        </app-dashboard-notification>
+      </ng-template>
+    </div>
+    <div class="app-col app-row flex-column">
+      <h2>Статистика</h2>
+      <app-dashboard-statistic class="app-col app-row flex-column"></app-dashboard-statistic>
+    </div>
+  </div>
+</ng-container>
+
+<div class="app-card" style="background: none" *ngIf="!user.getContragentId()">
+  <div class="app-row app-align-items-center">
+    <div class="app-col-3 app-row app-justify-content-center">
+      <uxg-icon shape="app-check" size="270" [style.opacity]="0.1" [style.padding]="'50px 0'"></uxg-icon>
+    </div>
+
+    <div class="app-col-9">
+      <h1 class="app-ghost-color">Добро пожаловать</h1>
+      <div class="app-section">
+        <p>Добро пожаловать на платформу для оказания услуг аутсорсинга коммерческих закупок полного цикла Processor.<br/>
+          Для начала работы необходимо зарегистрироваться как представитель контрагента.<br/>
+          Для этого напишите нам на e-mail: <a href="mailto:processor@isource.ru">processor@isource.ru</a> свой логин и ИНН контрагента
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

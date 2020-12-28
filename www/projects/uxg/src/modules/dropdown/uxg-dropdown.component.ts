@@ -48,6 +48,7 @@ export class UxgDropdownComponent implements AfterViewInit, OnDestroy, AfterView
   @Input() placeholder = "";
   @Input() disabled: boolean;
   @Input() direction: "up" | "down";
+  @Input() compareFn: (item1, item2) => boolean;
 
   public value = null;
   private _isHidden = true;
@@ -89,7 +90,9 @@ export class UxgDropdownComponent implements AfterViewInit, OnDestroy, AfterView
   }
 
   get selected(): UxgDropdownItemDirective | null {
-    return this.items ? this.items.find(item => item.value === this.value) : null;
+    return this.items ? this.items.find(
+      item => (this.compareFn && this.compareFn(item.value, this.value)) ?? item.value === this.value
+    ) : null;
   }
 
   get isHidden(): boolean {
@@ -110,7 +113,7 @@ export class UxgDropdownComponent implements AfterViewInit, OnDestroy, AfterView
   }
 
   constructor(
-    @Inject(DOCUMENT) private document: Document,
+    @Inject(DOCUMENT) private document,
     @Inject(PLATFORM_ID) private platformId: InjectionToken<Object>,
     private renderer: Renderer2, public el: ElementRef,
     private cdr: ChangeDetectorRef,
@@ -118,7 +121,9 @@ export class UxgDropdownComponent implements AfterViewInit, OnDestroy, AfterView
   ) {}
 
   ngOnInit() {
-    this.ngZone.runOutsideAngular(() => this.document.addEventListener('click', this.clickOut));
+    if (isPlatformBrowser(this.platformId)) {
+      this.ngZone.runOutsideAngular(() => this.document.addEventListener('click', this.clickOut));
+    }
   }
 
   ngAfterViewChecked() {
@@ -126,7 +131,9 @@ export class UxgDropdownComponent implements AfterViewInit, OnDestroy, AfterView
   }
 
   ngAfterViewInit() {
-    this.document.body.appendChild(this.itemsWrapper);
+    if (isPlatformBrowser(this.platformId)) {
+      this.document.body.appendChild(this.itemsWrapper);
+    }
 
     this.items.changes.pipe(
       startWith(this.items),
@@ -176,8 +183,8 @@ export class UxgDropdownComponent implements AfterViewInit, OnDestroy, AfterView
   }
 
   ngOnDestroy() {
-    this.document.removeEventListener('click', this.clickOut);
     if (isPlatformBrowser(this.platformId)) {
+      this.document.removeEventListener('click', this.clickOut);
       this.itemsWrapper.remove();
     }
 

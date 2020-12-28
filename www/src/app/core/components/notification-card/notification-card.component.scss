@@ -16,6 +16,10 @@
   &-request {
     font-weight: 500;
     margin-bottom: 5px;
+
+    & .position-item {
+      max-width: 290px;
+    }
   }
 
   &-footer {
@@ -93,17 +97,6 @@ div.notification-card-header:before {
   div[class*="status-#{$status}-badge"] {
     &:before {
       border-color: $color;
-    }
-
-    // todo Будет убрано после реализации gpn_market-3191
-    &.TP-badge:before {
-      border-color: #fb6a9e;
-    }
-    &.CP-badge:before {
-      border-color: #f38b00;
-    }
-    &.TCP-badge:before {
-      border-color: #ee64e8;
     }
   }
 }

@@ -20,6 +20,10 @@
 
   <hr/>
   <div class="app-table app-no-border scroll-area">
+    <ng-container *ngIf="!items?.length">
+      <p class="empty-list app-ghost-color">Список пуст</p>
+    </ng-container>
+
     <ng-container *ngFor="let formGroup of formItems?.controls; index as i">
       <ng-container *ngIf="!filterFn || filterFn(form.get('search').value, formGroup.get('item').value)">
         <ng-container *ngTemplateOutlet="rowTplRef; context:{formGroup: formGroup, item: formGroup.get('item').value}">

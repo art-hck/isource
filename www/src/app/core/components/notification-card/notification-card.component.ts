@@ -26,7 +26,7 @@ export class NotificationCardComponent {
       (body?.rows[0].webUrl ? body?.rows[0].webUrl : body?.rows[0].requestUrl) :
       (body?.webUrl ? body?.webUrl : body?.requestUrl);
 
-    return url.replace(/https?\:\/\/.*?\//, '/');
+    return url?.replace(/https?\:\/\/.*?\//, '/');
   }
 
   getNotificationHeaderTitle(item): string {

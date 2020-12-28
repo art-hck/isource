@@ -2,7 +2,7 @@
   <form [formGroup]="form">
     <uxg-dropdown lg class="action-select" formControlName="actions">
       <div uxgDropdownItem [value]="null">Все задачи</div>
-      <div uxgDropdownItem [value]="action.type"
+      <div uxgDropdownItem [value]="stringifyActions(action.type)"
            *ngFor="let action of actions"
       >{{ action.label }}</div>
     </uxg-dropdown>

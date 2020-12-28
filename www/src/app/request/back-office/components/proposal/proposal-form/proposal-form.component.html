@@ -28,10 +28,12 @@
             [searchFn]="searchContragents">
 
             <ng-container *ngIf="(sug.suggestions$ | async) as contragents">
-              <div uxgDropdownItem *ngFor="let contragent of contragents" [value]="contragent">
-                {{contragent.shortName || contragent.fullName}}
-                <span class="app-ghost-color">{{contragent.inn | splitNumber}}</span>
-              </div>
+              <ng-container *ngFor="let contragent of contragents">
+                <div uxgDropdownItem *ngIf="!contragentExists(contragent)" [value]="contragent">
+                  {{contragent.shortName || contragent.fullName}}
+                  <span class="app-ghost-color">{{contragent.inn | splitNumber}}</span>
+                </div>
+              </ng-container>
             </ng-container>
             <ng-template #errors>
               <div class="app-control-error" *ngIf="form.get('supplier').errors as e">
@@ -63,7 +65,7 @@
                 <button type="button" uxgButton secondary (click)="positionsModal.open()">Выбрать позиции</button>
               </div>
 
-              <ng-container *ngIf="this.form.get('positions').dirty && this.form.get('positions').touched">
+              <ng-container *ngIf="form.get('positions').dirty && form.get('positions').touched">
                 <div class="app-control-error" *ngIf="form.get('positions').errors as e">
                   <span class="error-message" *ngIf="e.required">Выберите позиции для создания предложения</span>
                 </div>
@@ -84,56 +86,39 @@
 
             <div class="app-row">
               <div class="app-col-auto">
-                <button type="button" uxgButton secondary (click)="manufacturerModal.open()"
-                        [disabled]="!control.value?.length">
+                <button type="button" uxgButton secondary (click)="manufacturerModal.open()" [disabled]="!control.value?.length">
                   Заполнить наименования
                 </button>
               </div>
             </div>
 
-            <ng-container *ngIf="source === 'TECHNICAL_COMMERCIAL_PROPOSAL' || source === 'TECHNICAL_PROPOSAL'">
-              <ng-container *ngIf="control.value[0]?.manufacturingName; else manufactureError">
-                <div *ngFor="let proposalPosition of control.value" class="position-info-item">
-                  <ng-container *ngIf="proposalPosition.manufacturer; else notEnteredManufacturingName">
+            <ng-container *ngIf="control.value.length; else manufacturerError">
+              <div *ngFor="let proposalPosition of control.value" class="position-info-item">
+                <ng-container *ngIf="source === 'TECHNICAL_COMMERCIAL_PROPOSAL' || source === 'TECHNICAL_PROPOSAL'">
+                  <ng-container *ngIf="proposalPosition.manufacturingName; else manufacturerItemError">
                     {{ proposalPosition.manufacturingName }} | {{ proposalPosition?.manufacturer }}
                   </ng-container>
-
-                  <ng-template #notEnteredManufacturingName>
-                    <span class="error-message">Заполните данные</span>
-                  </ng-template>
-                </div>
-              </ng-container>
-
-              <ng-template #manufactureError>
-                <ng-container *ngIf="manufactureErrorMessage">
-                  <div class="app-control-error">
-                    <span class="error-message">Заполните наименования для каждой позиции</span>
-                  </div>
                 </ng-container>
-              </ng-template>
-            </ng-container>
-
-            <ng-container *ngIf="source === 'COMMERCIAL_PROPOSAL'">
-              <ng-container *ngIf="control.value[0]?.manufacturer; else manufactureError">
-                <div *ngFor="let proposalPosition of control.value" class="position-info-item">
-                  <ng-container *ngIf="proposalPosition.manufacturer; else notEnteredManufacturer">
+                <ng-container *ngIf="source === 'COMMERCIAL_PROPOSAL'">
+                  <ng-container *ngIf="proposalPosition.manufacturer; else manufacturerItemError">
                     {{ proposalPosition.manufacturer }} | {{ proposalPosition?.standard }}
                   </ng-container>
-
-                  <ng-template #notEnteredManufacturer>
-                    <span class="error-message">Заполните данные</span>
-                  </ng-template>
-                </div>
-              </ng-container>
-
-              <ng-template #manufactureError>
-                <ng-container *ngIf="manufactureErrorMessage">
-                  <div class="app-control-error">
-                    <span class="error-message">Заполните изготовителя и стандарт для каждой позиции</span>
-                  </div>
                 </ng-container>
-              </ng-template>
+              </div>
             </ng-container>
+
+            <ng-template #manufacturerError>
+              <div class="position-info-item" *ngIf="form.get('positions').dirty && form.get('positions').touched">
+                <div class="app-control-error">
+                  <span class="error-message">Заполните наименования для каждой позиции</span>
+                </div>
+              </div>
+            </ng-template>
+            <ng-template #manufacturerItemError>
+              <ng-container *ngIf="(!isManufacturingNamePristine && !isManufacturerPristine) || form.get('positions').dirty && form.get('positions').touched">
+                <span class="error-message">Заполните данные</span>
+              </ng-container>
+            </ng-template>
           </div>
         </div>
       </div>
@@ -151,10 +136,10 @@
           </button>
         </div>
 
-        <ng-container *ngIf="control.value[0]?.priceWithoutVat; else parameterError">
+        <ng-container *ngIf="control.value.length; else parameterError">
           <div class="position-info-item app-row" *ngFor="let pos of control.value">
             <ng-container
-              *ngIf="pos.priceWithoutVat && pos.quantity && pos.measureUnit && pos.currency && pos.deliveryDate; else parameterError">
+              *ngIf="pos.priceWithoutVat && pos.quantity && pos.measureUnit && pos.currency && pos.deliveryDate; else parameterItemError">
               <div class="app-col">
                 {{ pos.quantity * pos.priceWithoutVat | number:'1.0-2' }}
                 <span class="app-ghost-color">{{ getCurrencySymbol(pos.currency, "narrow")}}</span>
@@ -176,10 +161,15 @@
         </ng-container>
 
         <ng-template #parameterError>
-          <ng-container *ngIf="parameterErrorMessage">
+          <div class="position-info-item" *ngIf="form.get('positions').dirty && form.get('positions').touched">
             <div class="app-control-error">
-              <span class="error-message">Заполните параметры для позиций</span>
+              <span class="error-message">Заполните наименования для каждой позиции</span>
             </div>
+          </div>
+        </ng-template>
+        <ng-template #parameterItemError>
+          <ng-container *ngIf="!isParamsPristine || form.get('positions').dirty && form.get('positions').touched">
+            <span class="error-message">Заполните параметры для позиций</span>
           </ng-container>
         </ng-template>
       </div>

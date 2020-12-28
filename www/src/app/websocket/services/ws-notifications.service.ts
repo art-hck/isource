@@ -19,6 +19,7 @@ import { KeycloakService } from "keycloak-angular";
 import { User } from "../../user/models/user";
 import { WsNotification } from "../models/ws-notification";
 import { WsNotificationTypes } from "../enum/ws-notification-types";
+import { UserInfoService } from "../../user/service/user-info.service";
 
 @Injectable({
    providedIn: 'root'
@@ -29,7 +30,8 @@ export class WsNotificationsService implements IWebsocketService {
   readonly send$ = new ReplaySubject<WsNotification<unknown>>();
   readonly received$ = new Subject<unknown>();
 
-  constructor(@Inject(config) private wsConfig: WsConfig, private keycloakService: KeycloakService) {
+  constructor(@Inject(config) private wsConfig: WsConfig, private keycloakService: KeycloakService, private user: UserInfoService) {
+    if (!user.isAuth()) { return; }
 
     this.keycloakService.getToken().then(accessToken => {
         if (!accessToken) { return; }

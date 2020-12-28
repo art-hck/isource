@@ -16,10 +16,12 @@
       </div>
     </div>
   </div>
-  <ng-container *ngIf="documents.length !== 0">
-    <small class="app-ghost-color app-bold">ЗАГРУЖЕННЫЕ ДОКУМЕНТЫ</small>
-  </ng-container>
 </ng-container>
+
+<ng-container *ngIf="appFiles.length !== 0">
+  <small class="app-ghost-color app-bold">ЗАГРУЖЕННЫЕ ДОКУМЕНТЫ</small>
+</ng-container>
+
 <ul class="list-unstyled">
   <li class="document-item" *ngFor="let appFile of appFiles">
     <app-file [appFile]="appFile" (delete)="removeAppFile(appFile)"></app-file>

@@ -48,6 +48,9 @@ export class TechnicalCommercialProposalHelperService {
         case "price":
           return prev?.priceWithoutVat <= curr?.priceWithoutVat ? prev : curr;
         case "date":
+          if (!prev) { return curr; }
+          if (!curr) { return prev; }
+
           if (moment(prev?.deliveryDate).isSame(curr?.deliveryDate)) {
             return prev?.priceWithoutVat <= curr?.priceWithoutVat ? prev : curr;
           } else {

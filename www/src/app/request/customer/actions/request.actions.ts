@@ -16,6 +16,11 @@ export namespace RequestActions {
     constructor(public requestId: Uuid, public useCache = true, public clearState = true) {}
   }
 
+  export class EditRequestName {
+    static readonly type = '[Request Customer] EditRequestName';
+    constructor(public requestId: Uuid, public requestName: string) {}
+  }
+
   export class RefreshPositions {
     static readonly type = '[Request Customer] Refresh Positions';
     constructor(public requestId: Uuid) {}
@@ -44,6 +49,11 @@ export namespace RequestActions {
   export class RejectPositions {
     static readonly type = '[Request Customer] RejectPositions';
     constructor(public requestId: Uuid, public positionIds: Uuid[], public rejectionMessage: string) {}
+  }
+
+  export class AttachDocuments {
+    static readonly type = '[Request Customer] AttachDocuments';
+    constructor(public requestId: Uuid, public positionIds: Uuid[], public files: File[]) {}
   }
 
   export class Reject {

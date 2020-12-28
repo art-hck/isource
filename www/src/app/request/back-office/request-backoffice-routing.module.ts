@@ -14,13 +14,14 @@ import { ProcedureViewComponent } from "./components/procedure/procedure-view/pr
 import { TechnicalCommercialProposalGroupListComponent } from "./components/proposal/proposal-group-list/technical-commercial-proposal-group-list/technical-commercial-proposal-group-list.component";
 import { ContractListComponent } from "./components/contract-list/contract-list.component";
 import { CommercialProposalGroupListComponent } from "./components/proposal/proposal-group-list/commercial-proposal-group-list/commercial-proposal-group-list.component";
+import { AppAuthGuard } from "../../auth/app-auth.guard";
 
 const routes: Routes = [
   {
     path: '',
     component: RequestListComponent,
     canActivate: [CanActivateFeatureGuard],
-    data: { title: "Заявки", hideTitle: true, feature: "backofficeRequest" }
+    data: { title: "Заявки", feature: "backofficeRequest" }
   },
   {
     path: ':id',
@@ -30,6 +31,7 @@ const routes: Routes = [
       {
         path: '',
         component: BackOfficeRequestComponent,
+        data: { hideTitle: true }
       },
       {
         path: 'commercial-proposals',
@@ -68,6 +70,10 @@ const routes: Routes = [
         path: 'procedure',
         component: ProcedureViewComponent,
         data: { title: "Процедура" }
+      },
+      {
+        path: 'element', canActivate: [AppAuthGuard],
+        loadChildren: () => import('./element-lazy.module').then(m => m.ElementLazyModule)
       },
       {
         path: ':position-id',

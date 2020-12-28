@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, Output, QueryList } from '@angular/core
 import { getCurrencySymbol } from "@angular/common";
 import { ContragentShortInfo } from "../../../../../contragent/models/contragent-short-info";
 import { Proposal } from "../../../../../shared/components/grid/proposal";
-import { TechnicalCommercialProposalComponent } from "../technical-commercial-proposal/technical-commercial-proposal.component";
+import { ProposalComponent } from "../proposal/proposal.component";
 import { GridRowComponent } from "../../../../../shared/components/grid/grid-row/grid-row.component";
 import { Uuid } from "../../../../../cart/models/uuid";
 import { CommonProposalItem } from "../../../../common/models/common-proposal";
@@ -18,7 +18,7 @@ export class ProposalConfirmComponent {
   @Input() requestId: Uuid;
   @Input() groupId: Uuid;
   @Input() positions: RequestPosition[];
-  @Input() proposalsOnReview: QueryList<TechnicalCommercialProposalComponent | GridRowComponent>;
+  @Input() proposalsOnReview: QueryList<ProposalComponent | GridRowComponent>;
   @Input() approvalModalData: {
     counters: {
       totalCounter: number,

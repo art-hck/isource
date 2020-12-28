@@ -3,4 +3,6 @@ export class DashboardInfo {
   kp: number;
   rkd: number;
   contractAgreement: number;
+  notMtrPositions: number;
+  isNotMtrAvailable: boolean;
 }

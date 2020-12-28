@@ -37,6 +37,8 @@ export * from './modules/popover/uxg-popover.module';
 export * from './modules/popover/uxg-popover.component';
 export * from './modules/popover/uxg-popover-trigger.directive';
 export * from './modules/popover/uxg-popover-content.directive';
+export * from './modules/pagination/uxg-pagination.component';
+export * from './modules/pagination/uxg-pagination.module';
 
 export * from './modules/tab/uxg-tab.module';
 export * from './modules/tab/uxg-tab.directive';

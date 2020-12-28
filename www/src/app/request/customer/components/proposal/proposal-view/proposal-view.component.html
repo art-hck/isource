@@ -56,6 +56,7 @@
             [showParams]="true"
             [proposals]="proposals"
             [positions]="positions"
+            [hasWinnerFn]="hasWinnerFunction"
             (openCommonParams)="gridTable.scrollIntoView()"
             (selectBySupplier)="selectSupplierProposal($event)"
             (scrollUpdated)="stickedPosition = $event.canScrollLeft"
@@ -127,7 +128,7 @@
             sentToReviewTab.active ?
                 proposalsSentToReview :
                 proposalsSendToEdit) as proposals">
-            <app-request-technical-commercial-proposal
+            <app-common-proposal
               #tcpComponent
               *ngFor="let proposal of proposals; let i = index; trackBy: trackById"
               [technicalCommercialProposalIndex]="i"
@@ -141,7 +142,7 @@
               (positionSelected)="onPositionSelected($event)"
               (approve)="approveFromListView()"
               (sendToEdit)="sendToEditFromListView()">
-            </app-request-technical-commercial-proposal>
+            </app-common-proposal>
           </ng-container>
         </ng-container>
 

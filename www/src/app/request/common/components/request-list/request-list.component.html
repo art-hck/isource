@@ -23,7 +23,8 @@
 
     <div class="app-row app-align-items-center">
       <uxg-tabs class="app-col">
-        <uxg-tab-title #inProgressTab [active]="true"
+        <uxg-tab-title #allProgressTab [active]="true" (click)="clickOnTab(null)">Все ({{totalCount()}})</uxg-tab-title>
+        <uxg-tab-title #inProgressTab
                        (click)="clickOnTab(RequestStatus.IN_PROGRESS)"
                        [disabled]="statusCounters?.inProgressRequestsCount === 0">
           В обработке <span class="counter">({{statusCounters?.inProgressRequestsCount}})</span>

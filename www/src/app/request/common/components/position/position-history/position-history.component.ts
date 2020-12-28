@@ -119,15 +119,19 @@ export class PositionHistoryComponent implements OnInit, OnChanges {
   getCurrentStatusClass(activityItem: History) {
     const positionStatus = this.isStatusChangeAction(activityItem) ?
       activityItem.data.oldStatus : activityItem.status;
+    const activityType = activityItem.type || '';
 
-    return 'position-current-status-' + positionStatus;
+    console.log('position-current-status-' + positionStatus + ' activity-type-' + activityType);
+    return 'position-current-status-' + positionStatus + ' activity-type-' + activityType;
   }
 
   getNewStatusClass(activityItem: History) {
     const positionStatus = this.isStatusChangeAction(activityItem) ?
       activityItem.data.newStatus : activityItem.status;
+    const activityType = activityItem.type || '';
 
-    return 'position-new-status-' + positionStatus;
+    console.log('position-new-status-' + positionStatus + ' activity-type-' + activityType);
+    return 'position-new-status-' + positionStatus + ' activity-type-' + activityType;
   }
 
   /**

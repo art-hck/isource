@@ -12,11 +12,16 @@
        [attr.placeholder]="!appControlWrap && placeholder || null"
 />
 <label *ngIf="placeholder && appControlWrap" class="app-control-label" (click)="inputRef.focus()">{{ placeholder }}</label>
+<div class="app-dropdown-handler-icon" *ngIf="!strictMode" (click)="$event.stopPropagation(); toggle(isHidden)">
+  <uxg-icon shape="app-triangle" [attr.dir]="isHidden ? 'down':'up'"></uxg-icon>
+</div>
+
 <ng-container *ngTemplateOutlet="errors"></ng-container>
 <div
   #itemsWrapper
   class="app-dropdown-items-wrapper"
   [class.hidden]="isHidden"
+  [class.invalid]="inputRef.classList.contains('invalid')"
   [class.app-dropdown-items-wrapper-up]="isDirectionUp"
 >
   <div class="app-dropdown-items">

@@ -81,7 +81,7 @@
 <div *ngIf="userInfoService.isCustomer()">
   <button uxgButton outline (click)="selectAll.emit(proposal); close.emit()">Выбрать все</button>
 </div>
-<div *ngIf="!showDocs && !userInfoService.isCustomer()">
+<div *ngIf="!showDocs && !userInfoService.isCustomer() && canEditCommonParams()">
   <button uxgButton iconText secondary (click)="edit(proposal)">
     <uxg-icon shape="app-pen"></uxg-icon>
     Редактировать

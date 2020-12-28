@@ -31,14 +31,23 @@ hr {
 
 .name,
 .manufacturing-name,
-.manufacturer{
+.manufacturer {
   flex-grow: .3;
   min-width: 160px;
 }
 
+.manufacturing-name,
+.manufacturer {
+  max-width: 200px;
+}
+
 .total,
+.price {
+  min-width: 125px;
+  flex-grow: 0.1;
+}
+
 .quantity,
-.price,
 .date {
   min-width: 82px;
   flex-grow: 0.1;

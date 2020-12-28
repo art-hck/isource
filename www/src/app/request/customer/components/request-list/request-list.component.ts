@@ -65,9 +65,9 @@ export class RequestListComponent implements OnInit, OnDestroy {
           this.router.navigate(["."], { relativeTo: this.route, queryParams: null });
         }
       }),
-      scan(({ filters: prev, sort: prevSort}, { page = 1, filters: curr , sort: currSort}) => ({ page, filters: { ...prev, ...curr } , sort: {...prevSort, ...currSort}}), {
-        filters: {requestListStatusesFilter: [RequestStatus.IN_PROGRESS]}
-      } as { page?: number, filters?: RequestsListFilter, sort?: RequestsListSort } ),
+      scan(({ filters: prev, sort: prevSort }, { page = 1, filters: curr, sort: currSort }) => ({ page, filters: { ...prev, ...curr }, sort: { ...prevSort, ...currSort } }), {
+        filters: { requestListStatusesFilter: [] }
+      } as { page?: number, filters?: RequestsListFilter, sort?: RequestsListSort }),
       switchMap(data => this.store.dispatch(new Fetch((data.page - 1) * this.pageSize, this.pageSize, data.filters, data.sort))),
       takeUntil(this.destroy$)
     ).subscribe(({ CustomerRequestList }) => this.requestListComponent.switchToPrioritizedTab(CustomerRequestList.requests));

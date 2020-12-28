@@ -1,3 +1,25 @@
+<div class="app-row">
+  <div class="app-col-auto">
+    <h1>
+      {{ request.name }} 
+      <ng-container *ngIf="!(status && status !== 'received'); else requestLoader">
+        <button *ngIf="canEditRequestName()"
+                (click)="openRequestNameEditModal()"
+                class="title-edit" uxgButton icon secondary>
+          <uxg-icon shape="app-pen" size="16"></uxg-icon>
+        </button>
+      </ng-container>
+
+      <ng-template #requestLoader>
+        <div class="title-loader">
+          <span class="spinner spinner-inline"></span>
+        </div>
+      </ng-template>
+    </h1>
+  </div>
+</div>
+
+
 <form [formGroup]="form">
   <div class="app-row" *ngIf="positions.length !== 0">
     <!-- Контролы управления позициями -->
@@ -126,7 +148,15 @@
 
             <div *uxgPopoverContent (click)="more.hide()">
               <ng-container *ngIf="user.isBackOffice()">
-                <!-- Назначиь ответственного -->
+
+                <!-- Загрузить документы в выбранные позиции -->
+                <div>
+                  <button uxgButton clear [disabled]="checkedPositions.length === 0"
+                          (click)="openFileUploadToPositionsModal()">Загрузить документы
+                  </button>
+                </div>
+
+                <!-- Назначить ответственного -->
                 <div *ngIf="user.hasPermission(permissionType.POSITIONS_DISTRIBUTION_BETWEEN_BACKOFFICE_BUYERS)">
                   <button uxgButton clear [disabled]="checkedPositions.length === 0"
                           (click)="addResponsibleModal.open()">Назначить
@@ -159,6 +189,14 @@
                     Отправить в работу
                   </button>
                 </div>
+
+                <!-- Загрузить документы в выбранные позиции -->
+                <div class="app-col app-col-auto">
+                  <button uxgButton clear [disabled]="checkedPositions.length === 0"
+                          (click)="openFileUploadToPositionsModal()">Загрузить документы
+                  </button>
+                </div>
+
                 <ng-container *ngIf="featureService.authorize('createTemplate')">
                   <!-- Создать шаблон -->
                   <div class="app-col app-col-auto">
@@ -192,6 +230,7 @@
           <uxg-popover #more [openOnHover]="true">
             <button uxgButton secondary iconText
                     uxgPopoverTrigger
+                    *ngIf="request.status !== 'COMPLETED' && request.status !== 'NOT_RELEVANT'"
                     [disabled]="request.isOlderTwoWeeks" (click)="addPositionModal.open()">
               <uxg-icon shape="app-plus"></uxg-icon>
               <span>Новая позиция</span>
@@ -285,7 +324,8 @@
         <ng-container *ngFor="let formGroup of formPositions.controls">
           <!-- Позиция -->
           <ng-container *ngIf="asPosition(formGroup.get('position').value) as position">
-            <a [href]="getPositionUrl(position)"
+            <a appUploadFile hoverClass="upload-area-hover" (dropFile)="onDragAndDropDocumentsToPosition(position.id, $event)"
+               [href]="getPositionUrl(position)"
                (click)="navigateToPosition(position, $event)"
                class="app-row app-link-no-color"
                [ngClass]="{'canceled' : position.status === 'NOT_RELEVANT' || position.status === 'CANCELED'}">
@@ -355,6 +395,7 @@
         <div>Инспекционный контроль</div>
       </div>
     </uxg-popover>
+    <uxg-icon shape="app-element" [class]="position.mtrPositionId ? 'app-ghost-color' : 'app-link-color'"></uxg-icon>
   </div>
 
 </ng-template>
@@ -385,11 +426,14 @@
     <!-- Позиции группы -->
     <div class="positions" *ngIf="!folded.value">
       <ng-container *ngFor="let childformGroup of asFormArray(formGroup.get('positions')).controls">
-        <div class="app-row">
-          <ng-container *ngTemplateOutlet="positionItem; context:{
-              position: childformGroup.get('position').value,
-              formGroup: childformGroup
-          }"></ng-container>
+        <div class="group-position-item"
+             appUploadFile hoverClass="upload-area-hover" (dropFile)="onDragAndDropDocumentsToPosition(childformGroup.get('position').value.id, $event)">
+          <div class="app-row">
+            <ng-container *ngTemplateOutlet="positionItem; context:{
+                position: childformGroup.get('position').value,
+                formGroup: childformGroup
+            }"></ng-container>
+          </div>
         </div>
       </ng-container>
     </div>
@@ -509,4 +553,58 @@
     (success)="addGroup.emit($event)"
     (close)="moveGroupModal.close()"
   ></app-request-move-group-modal>
+</uxg-modal>
+
+
+<uxg-modal #editRequestNameModal size="l">
+  <ng-container *ngIf="editRequestNameModal.state" >
+    <h2>Изменить наименование</h2>
+    <div class="app-section app-secondary-color">
+      Вы можете изменить название для текущей заявки. После изменения, старое наименование не сохраняется.
+      Наименование заявки изменится во всех разделах.
+    </div>
+
+    <form appFormValidation [formGroup]="requestNameForm" (ngSubmit)="onSaveRequestName()">
+      <div class="app-control-wrap">
+        <input #requestName uxgInput lg formControlName="requestName" />
+        <label class="app-control-label" (click)="requestName.focus()">Наименование заявки</label>
+        <div class="app-control-error" *ngIf="requestNameForm.get('requestName').errors as e">
+          <span *ngIf="e.empty">Обязательное поле</span>
+        </div>
+      </div>
+
+      <ng-template uxgModalFooter>
+        <button uxgButton secondary lg uxgModalClose (click)="editRequestNameModal.close()">Отмена</button>
+        <button uxgButton primary lg (click)="onSaveRequestName()">Сохранить</button>
+      </ng-template>
+    </form>
+
+  </ng-container>
+</uxg-modal>
+
+<!-- Модальное окно прикрепления документа к позициям -->
+<uxg-modal #addDocumentsModal size="l">
+  <h2>Загрузить документы для выбранных позиций <span class="app-ghost-color">({{ checkedPositions.length }})</span></h2>
+
+  <div class="app-section app-secondary-color">
+    Загруженные документы будут прикреплены ко всем выбранным в завке позициям.
+    Отдельно к позиции документы можно загружать на вкладке «Документы» на странице позиции.
+  </div>
+  <br>
+
+  <app-document-upload-list
+    *ngIf="addDocumentsModal.state"
+    [dragAndDropAvailable]="true"
+    (fileSelected)="form.get('documents').setValue($event); invalidUploadDocument = false">
+  </app-document-upload-list>
+
+  <ng-template uxgModalFooter>
+    <div class="doc-error-message" *ngIf="invalidUploadDocument">Пожалуйста, выберите документ</div>
+
+    <button type="button" uxgButton secondary lg uxgModalClose>Отмена</button>
+    <button uxgButton primary lg
+            (click)="onAttachDocumentsToPositions()">
+      Загрузить
+    </button>
+  </ng-template>
 </uxg-modal>

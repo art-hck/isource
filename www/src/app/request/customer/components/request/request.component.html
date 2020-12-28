@@ -1,17 +1,20 @@
 <ng-container *ngIf="(request$ | async) as request; else loading">
   <ng-container *ngIf="(positions$ | async) as positions; else loading">
     <app-request
+      #commonRequestComponent
       [positions]="positions"
       [request]="request"
       [status]="status$ | async"
       [positionsStatus]="positionsStatus$ | async"
       (publish)="store.dispatch(publish(requestId))"
-      (addPosition)="store.dispatch(refreshPositions(requestId))"
+      (addPosition)="store.dispatch([refreshPositions(requestId), refresh(requestId)])"
       (reject)="store.dispatch(reject(requestId))"
       (approve)="store.dispatch(approve(requestId))"
       (publishPositions)="store.dispatch(publishPositions($event))"
       (approvePositions)="store.dispatch(approvePositions($event))"
       (rejectPositions)="store.dispatch(rejectPositions($event))"
+      (saveRequestName)="store.dispatch(saveRequestName($event))"
+      (attachDocuments)="store.dispatch(attachDocuments($event))"
       (createTemplate)="store.dispatch(createTemplate($event.positions, $event.title, $event?.tag))"
       (uploadFromTemplate)="store.dispatch(uploadFromTemplate($event))"
     ></app-request>

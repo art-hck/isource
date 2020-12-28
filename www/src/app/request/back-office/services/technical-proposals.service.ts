@@ -10,6 +10,7 @@ import { TechnicalProposalFilter } from "../../common/models/technical-proposal-
 import { FormDataService } from "../../../shared/services/form-data.service";
 import { TechnicalProposalWithPositions } from "../models/technical-proposal-with-positions";
 import { map } from "rxjs/operators";
+import { ContragentInfo } from "../../../contragent/models/contragent-info";
 
 @Injectable()
 export class TechnicalProposalsService {
@@ -21,23 +22,11 @@ export class TechnicalProposalsService {
     return this.api.post<TechnicalProposal[]>(url, { filters });
   }
 
-  // @TODO: ждём реализацию на бэкенде (gpn_market-2870)
   availableFilters(requestId: Uuid): Observable<TechnicalProposalFilter> {
-    const url = `requests/backoffice/${requestId}/technical-proposals`;
-    return this.api.get<TechnicalProposal[]>(url).pipe(
-      map(proposals => proposals.reduce<TechnicalProposalFilter>((acc, curr, i, arr) => ({
-        ...acc,
-        contragents: arr.findIndex(({ supplierContragent }) => supplierContragent === curr.supplierContragent) === i ?
-          [...acc.contragents ?? [], curr.supplierContragent] : acc.contragents,
-        tpStatus: arr.findIndex(({ status }) => status === curr.status) === i ?
-          [...acc.tpStatus ?? [], curr.status] : acc.tpStatus
-      }), {})
-    ));
-  }
-
-  availableStatuses(requestId: Uuid, filters: TechnicalProposalFilter<Uuid>) {
-    const url = `requests/backoffice/${requestId}/technical-proposals/available-statuses`;
-    return this.api.post<TechnicalProposalsStatus[]>(url, { filters });
+    const url = `requests/backoffice/${requestId}/technical-proposals/available-filters`;
+    return this.api.get<{ statuses: TechnicalProposalsStatus[], suppliers: ContragentInfo[] }>(url).pipe(
+      map(({ statuses: tpStatus, suppliers: contragents }) => ({ contragents, tpStatus }))
+    );
   }
 
   positions(id: Uuid) {

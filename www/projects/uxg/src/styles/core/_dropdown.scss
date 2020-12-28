@@ -70,6 +70,13 @@
       height: 24px;
       padding: 0 14px;
     }
+
+    input.app-control#{&} ~ &-icon {
+      position: absolute;
+      top: 50%;
+      margin-top: -12px;
+      right: 0;
+    }
   }
 
   &-items {
@@ -103,6 +110,10 @@
 
       &.hidden {
         display: none;
+      }
+
+      &.invalid {
+        border-color: uxg($theme, color-control-invalid);
       }
     }
 

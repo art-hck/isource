@@ -1,0 +1,95 @@
+<ng-container *ngIf="(contractSignInfo$ | async) as contractSignInfo; else loader">
+  <div class="app-section">
+    <span class="app-ghost-color">Запрос подписания копманией:</span> {{ contractSignInfo?.customer.shortName }}
+    <span class="app-ghost-color"> | </span>
+    <span class="app-ghost-color">Подписант:</span> {{ signerName }}
+  </div>
+
+  <div class="app-card" style="background: none">
+    <div class="app-row app-align-items-center">
+      <div class="app-col-3 app-row app-justify-content-end">
+        <uxg-icon shape="app-doc" size="270" [style.opacity]="0.1" [style.padding]="'50px 0'"></uxg-icon>
+      </div>
+
+      <div class="app-col-9">
+        <h2 class="app-ghost-color">{{
+          contract.status !== 'SIGNED_BY_SUPPLIER' ?
+            'Заказчик подписал согласованный им договор' :
+            'Договор уже подписан заказчиком и поставщиком'
+          }}</h2>
+
+        <!-- todo Временный компонент для отображения файлов, позволяющий скачивать доки без авторизации -->
+        <app-contract-documents-list
+          [contractId]="contractSignInfo.id"
+          [gridable]="false"
+          [enableUpload]="false"
+          [documents]="contractSignInfo?.documents">
+        </app-contract-documents-list>
+
+        <div class="app-section">
+          <p>{{
+            contract.status !== 'SIGNED_BY_SUPPLIER' ?
+            'Пожалуйста, ознакомьтесь с договором и, если он вас устраивает, подпишите его со своей стороны с помощью электронной цифровой подписи.' :
+            'Договор уже подписан'
+            }}</p>
+        </div>
+
+        <div class="app-section" *ngIf="contract.status !== 'SIGNED_BY_SUPPLIER'">
+          <!-- <button uxgButton secondary lg>Отказаться от подписания</button> -->
+          <button uxgButton primary lg (click)="openSignDocumentModal()">Подписать ЭЦП</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</ng-container>
+
+<ng-template #loader>
+  <span class="spinner spinner-md"></span>
+</ng-template>
+
+
+<!-- TODO Перенести в общий компонент, т.к. переиспользуется! -->
+<uxg-modal #certificatesListModal size="m" class="certificates-list-modal">
+
+  <h3>Выбор подписи ЭЦП</h3>
+  <br/>
+
+  <form appFormValidation [formGroup]="certForm" (ngSubmit)="onSignDocument()">
+    <div class="app-section">
+      <div class="app-row app-secondary-color app-section">
+        Выберите Электронную цифровую подпись. <br>
+        Вы можете выбрать только одну подпись для одного документа
+      </div>
+
+      <ng-container *ngIf="certificates?.length; else loader">
+        <div class="certificates-list">
+          <div class="app-row app-align-items-top cert-item" *ngFor="let certificate of certificates">
+            <div class="app-col-auto">
+              <uxg-radio-item class="app-control" formControlName="thumbprint"
+                              value="{{ certificate.data.thumbprint }}">
+              </uxg-radio-item>
+            </div>
+
+            <div class="cert-info">
+              <div class="name app-bold">{{ certificate.data.name }}</div>
+              <div class="brief">
+                <span><span class="app-ghost-color">ИНН:</span> {{ certificate.ownerInfo['ИНН'] }}, </span>
+                <span><span class="app-ghost-color">Действует до:</span> {{ certificate.data.validTo | date : "dd.MM.yyyy" }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+
+      <ng-template #loader>
+        <span class="spinner spinner-md"></span>
+      </ng-template>
+
+      <ng-template uxgModalFooter>
+        <button class="app-col-auto" uxgButton secondary lg type="button" (click)="certificatesListModal.close()">Отмена</button>
+        <button uxgButton primary lg (click)="onSignDocument(); certificatesListModal.close()">Подписать ЭЦП</button>
+      </ng-template>
+    </div>
+  </form>
+</uxg-modal>
