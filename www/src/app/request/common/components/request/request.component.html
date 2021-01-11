@@ -159,8 +159,12 @@
                 <!-- Назначить ответственного -->
                 <div *ngIf="user.hasPermission(permissionType.POSITIONS_DISTRIBUTION_BETWEEN_BACKOFFICE_BUYERS)">
                   <button uxgButton clear [disabled]="checkedPositions.length === 0"
-                          (click)="addResponsibleModal.open()">Назначить
+                          (click)="addResponsiblePositionModal.open()">Назначить позиции
                   </button>
+                </div>
+
+                <div *ngIf="user.hasPermission(permissionType.POSITIONS_DISTRIBUTION_BETWEEN_BACKOFFICE_BUYERS)">
+                  <button uxgButton clear (click)="addResponsibleRequestModal.open()">Назначить всю завку</button>
                 </div>
 
                 <div>
@@ -292,6 +296,13 @@
                   </div>
                 </ng-container>
               </uxg-popover>
+
+              <button uxgButton secondary
+                      *ngIf="request.status !== 'COMPLETED' && request.status !== 'NOT_RELEVANT'"
+                      (click)="addResponsibleRequestModal.open()">
+                <span>Назначить заявку</span>
+              </button>
+
             </div>
           </ng-container>
         </div>
@@ -449,15 +460,27 @@
   (cancel)="addPositionModal.close()"
 ></app-request-add-position-modal>
 
-<!-- Модальное окно для назначения ответственного -->
-<uxg-modal #addResponsibleModal size="s">
+<!-- Модальное окно для назначения ответственного позциям -->
+<uxg-modal #addResponsiblePositionModal size="s">
   <h2>Назначить позиции <span class="app-font-normal app-ghost-color">({{ checkedPositions?.length }})</span></h2>
-  <div *ngIf="addResponsibleModal.state">
+  <div *ngIf="addResponsiblePositionModal.state">
     <app-request-add-responsible
       [request]="request"
       [positions]="checkedPositions"
-      (success)="addResponsible.emit($event)"
-      (close)="addResponsibleModal.close()"
+      (setResponsibleUser)="addResponsiblePositions.emit({ positions: checkedPositions, user: $event })"
+      (close)="addResponsiblePositionModal.close()"
+    ></app-request-add-responsible>
+  </div>
+</uxg-modal>
+
+<!-- Модальное окно для назначения ответственного по заявке -->
+<uxg-modal #addResponsibleRequestModal size="s">
+  <h2>Назначить всю заявку</h2>
+  <div *ngIf="addResponsibleRequestModal.state">
+    <app-request-add-responsible
+      [request]="request"
+      (setResponsibleUser)="addResponsibleRequest.emit($event)"
+      (close)="addResponsibleRequestModal.close()"
     ></app-request-add-responsible>
   </div>
 </uxg-modal>

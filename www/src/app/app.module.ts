@@ -19,6 +19,7 @@ import { KeycloakService, KeycloakAngularModule } from "keycloak-angular";
 import { AuthService } from "./auth/services/auth.service";
 import { ApplicationRef } from "@angular/core";
 import { CartStoreService } from "./cart/services/cart-store.service";
+import { ElementBearerService } from "isource-element";
 
 registerLocaleData(localeRu, 'ru');
 
@@ -44,7 +45,8 @@ const keycloakService = new KeycloakService();
     { provide: APP_CONFIG, useValue: AppConfig },
     { provide: LOCALE_ID, useValue: 'ru' },
     { provide: ErrorHandler, useClass: SentryErrorHandler },
-    { provide: KeycloakService, useValue: keycloakService }
+    { provide: KeycloakService, useValue: keycloakService },
+    ElementBearerService
   ],
   entryComponents: [AppComponent]
 })
