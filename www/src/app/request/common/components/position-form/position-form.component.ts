@@ -128,6 +128,7 @@ export class PositionFormComponent implements OnInit, ControlValueAccessor, Vali
       isPnrRequired: [p?.isPnrRequired || false],
       isShmrRequired: [p?.isShmrRequired || false],
       measureUnit: [p?.measureUnit, Validators.required],
+      okeiCode: [p?.okeiCode],
       paymentTerms: [p?.paymentTerms || '30 дней по факту поставки', Validators.required],
       productionDocument: [p?.productionDocument, Validators.required],
       quantity: [p?.quantity, [Validators.required, Validators.pattern("^[.0-9]+$"), Validators.min(0.0001)]],
@@ -138,6 +139,13 @@ export class PositionFormComponent implements OnInit, ControlValueAccessor, Vali
     if (this.position?.id) {
       Object.keys(form.controls).filter(key => !this.position.availableEditFields.includes(key)).forEach(key => form.get(key).disable());
     }
+
+    form.get('measureUnit').valueChanges.subscribe(() => {
+      this.subscription.add(this.okeiList$.subscribe(okeiList => {
+        const okeiCode = okeiList.filter(item => item.symbol === form.get('measureUnit').value);
+        this.form.get('okeiCode').setValue(okeiCode[0].code);
+      }));
+    });
 
     form.get('isDeliveryDateAsap').valueChanges
       .pipe(
@@ -241,6 +249,13 @@ export class PositionFormComponent implements OnInit, ControlValueAccessor, Vali
 
   setRecommendedQuantity() {
     this.form.get('quantity').setValue(this.quantityRecommendation);
+  }
+
+  getOkeiCode(measureUnit: string) {
+    const unit = this.okeiList$.subscribe(data => {
+      data?.filter(item => item.symbol === measureUnit);
+    });
+    console.log(unit);
   }
 
   filterEnteredText(event: KeyboardEvent): boolean {
