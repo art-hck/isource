@@ -251,13 +251,6 @@ export class PositionFormComponent implements OnInit, ControlValueAccessor, Vali
     this.form.get('quantity').setValue(this.quantityRecommendation);
   }
 
-  getOkeiCode(measureUnit: string) {
-    const unit = this.okeiList$.subscribe(data => {
-      data?.filter(item => item.symbol === measureUnit);
-    });
-    console.log(unit);
-  }
-
   filterEnteredText(event: KeyboardEvent): boolean {
     return event.key !== "-" && event.key !== "+";
   }
