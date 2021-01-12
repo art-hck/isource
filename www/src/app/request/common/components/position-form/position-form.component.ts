@@ -177,6 +177,7 @@ export class PositionFormComponent implements OnInit, ControlValueAccessor, Vali
         ...this.form.value,
         measureUnit: this.form.value.measureUnit.symbol,
         okeiCode: this.form.value.measureUnit.code};
+
       if (this.position.id) {
         // Проверяем, есть ли правки для сохранения или данные в форме остались без изменений
         // Если изменений нет, эмитим событие для закрытия окна и прерываем сабмит
