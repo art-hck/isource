@@ -140,13 +140,6 @@ export class PositionFormComponent implements OnInit, ControlValueAccessor, Vali
       Object.keys(form.controls).filter(key => !this.position.availableEditFields.includes(key)).forEach(key => form.get(key).disable());
     }
 
-    form.get('measureUnit').valueChanges.subscribe(() => {
-      this.subscription.add(this.okeiList$.subscribe(okeiList => {
-        const okeiCode = okeiList.filter(item => item.symbol === form.get('measureUnit').value);
-        this.form.get('okeiCode').setValue(okeiCode[0].code);
-      }));
-    });
-
     form.get('isDeliveryDateAsap').valueChanges
       .pipe(
         startWith(<{}>form.get('isDeliveryDateAsap').value),
@@ -180,7 +173,10 @@ export class PositionFormComponent implements OnInit, ControlValueAccessor, Vali
       return;
     } else {
       let submit$: Observable<RequestPosition>;
-
+      const body = {
+        ...this.form.value,
+        measureUnit: this.form.value.measureUnit.symbol,
+        okeiCode: this.form.value.measureUnit.code};
       if (this.position.id) {
         // Проверяем, есть ли правки для сохранения или данные в форме остались без изменений
         // Если изменений нет, эмитим событие для закрытия окна и прерываем сабмит
@@ -189,9 +185,9 @@ export class PositionFormComponent implements OnInit, ControlValueAccessor, Vali
           return;
         }
 
-        submit$ = this.positionService.updatePosition(this.position.id, this.form.value);
+        submit$ = this.positionService.updatePosition(this.position.id, body);
       } else {
-        submit$ = this.positionService.addPosition(this.requestId, [this.form.value])
+        submit$ = this.positionService.addPosition(this.requestId, [body])
           .pipe(map(positions => positions[0]));
       }
 
@@ -255,6 +251,7 @@ export class PositionFormComponent implements OnInit, ControlValueAccessor, Vali
     return event.key !== "-" && event.key !== "+";
   }
 
+  getOkeiSymbol = ({symbol}: Okei) => symbol?.toLowerCase();
   registerOnChange = (fn: any) => this.onChange = fn;
   registerOnTouched = (fn: any) => this.onTouched = fn;
   writeValue = (value) => this.value = value;
