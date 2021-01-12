@@ -15,6 +15,7 @@ export class Request extends BaseModel {
   status: string;
   statusLabel: string;
   user: User;
+  responsibleUser: User;
   documents?: RequestDocument[];
   comment?: string;
   type?: string;
