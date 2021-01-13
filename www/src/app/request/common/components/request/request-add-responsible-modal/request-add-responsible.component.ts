@@ -6,7 +6,7 @@ import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { UserService } from "../../../../../user/service/user.service";
 import { User } from "../../../../../user/models/user";
 import { RequestService } from "../../../../back-office/services/request.service";
-import { finalize, shareReplay } from "rxjs/operators";
+import { shareReplay } from "rxjs/operators";
 import { searchUsers } from "../../../../../shared/helpers/search";
 
 @Component({
@@ -16,7 +16,7 @@ import { searchUsers } from "../../../../../shared/helpers/search";
 export class RequestAddResponsibleComponent implements OnInit, OnDestroy {
   @Input() positions: RequestPosition[] = [];
   @Input() request: Request;
-  @Output() success = new EventEmitter<User>();
+  @Output() setResponsibleUser = new EventEmitter<User>();
   @Output() close = new EventEmitter<User>();
   subscription = new Subscription();
   isLoading: boolean;
@@ -29,26 +29,15 @@ export class RequestAddResponsibleComponent implements OnInit, OnDestroy {
   readonly searchUsers = searchUsers;
   readonly getUserName = ({ fullName, shortName }: User) => fullName ?? shortName;
 
-  constructor(
-    private userService: UserService,
-    private requestService: RequestService
-  ) {}
+  constructor(private userService: UserService) {}
 
   ngOnInit() {
     this.regularBackofficeUsers$ = this.userService.getRegularBackofficeUsers(this.request.contragentId).pipe(shareReplay(1));
   }
 
   submit() {
-    this.isLoading = true;
-    this.subscription.add(
-      this.requestService.setResponsibleUser(this.request.id, this.form.get('user').value, this.positions).pipe(
-        finalize(() => this.isLoading = false)
-      ).subscribe(() => {
-          this.success.emit(this.form.get('user').value);
-          this.close.emit();
-        }
-      )
-    );
+    this.setResponsibleUser.emit(this.form.get('user').value);
+    this.close.emit();
   }
 
   ngOnDestroy() {

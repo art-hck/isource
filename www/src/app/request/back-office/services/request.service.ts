@@ -93,10 +93,14 @@ export class RequestService {
     );
   }
 
-  setResponsibleUser(id: Uuid, user: User, positions: RequestPosition[]) {
+  changeResponsibleUser(id: Uuid, user: Uuid) {
     const url = `requests/backoffice/${id}/change-responsible-user`;
-    const body = {user: user.id, positions: positions.map(position => position.id)};
-    return this.api.post(url, body);
+    return this.api.post(url, { user });
+  }
+
+  changeResponsibleUserPositions(id: Uuid, user: Uuid, positions: Uuid[]) {
+    const url = `requests/backoffice/${id}/positions/change-responsible-user`;
+    return this.api.post(url, { user, positions });
   }
 
   addPositionsFromExcel(requestId: Uuid, files: File[]): Observable<any> {

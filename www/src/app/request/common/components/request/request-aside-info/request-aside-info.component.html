@@ -68,6 +68,10 @@
       <div class="app-ghost-color">Заказчик</div>
       <div class="contragent-name">{{ request.contragent.shortName }}</div>
     </div>
+    <div class="app-section" *ngIf="request.responsibleUser">
+      <div class="app-ghost-color">Отвественный БО</div>
+      <div class="contragent-name">{{ request.responsibleUser.shortName }}</div>
+    </div>
     <div class="app-section">
       <div class="app-ghost-color">Контактное лицо (e-mail)</div>
       <a target="_blank" class="contragent-contact" href="mailto:{{request.user.email }}">

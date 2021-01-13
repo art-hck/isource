@@ -1,13 +1,4 @@
-import {
-  ChangeDetectorRef,
-  Component, ElementRef,
-  Inject,
-  OnDestroy,
-  OnInit,
-  PLATFORM_ID,
-  Renderer2,
-  ViewChild
-} from '@angular/core';
+import { ChangeDetectorRef, Component, Inject, OnDestroy, OnInit, PLATFORM_ID, Renderer2, ViewChild } from '@angular/core';
 import { filter, map, mergeMap, tap } from "rxjs/operators";
 import { ActivatedRoute, NavigationEnd, Router } from "@angular/router";
 import { Title } from "@angular/platform-browser";
@@ -20,9 +11,10 @@ import { FeatureService } from "./core/services/feature.service";
 import { APP_CONFIG, GpnmarketConfigInterface } from "./core/config/gpnmarket-config.interface";
 import { DOCUMENT, isPlatformBrowser } from "@angular/common";
 import { NotificationListComponent } from "./core/components/notification-list/notification-list.component";
-import { NotificationService } from "isource-element";
+import { ElementBearerService, NotificationService } from "isource-element";
 import { Store } from "@ngxs/store";
 import { ToastActions } from "./shared/actions/toast.actions";
+import { KeycloakService } from "keycloak-angular";
 
 @Component({
   selector: 'app-root',
@@ -57,8 +49,9 @@ export class AppComponent implements OnInit, OnDestroy {
     private cartStoreService: CartStoreService,
     private store: Store,
     private cd: ChangeDetectorRef,
+    private bearerService: ElementBearerService,
+    private keycloakService: KeycloakService,
   ) {
-
     // GA & Yandex Metrika
     if (isPlatformBrowser(this.platform)) {
       const ym = window['ym'];
@@ -124,6 +117,8 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.keycloakService.getToken().then(token => this.bearerService.token = token);
+
     if (this.user.isCustomer()) {
       // Выгружаем корзину при логауте
       this.subscription

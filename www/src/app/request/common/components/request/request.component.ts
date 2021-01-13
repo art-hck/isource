@@ -17,6 +17,7 @@ import { StateStatus } from "../../models/state-status";
 import { debounceTime } from "rxjs/operators";
 import { UxgModalComponent, UxgPopoverContentDirection } from "uxg";
 import { CustomValidators } from "../../../../shared/forms/custom.validators";
+import { User } from "../../../../user/models/user";
 
 @Component({
   selector: "app-request",
@@ -36,7 +37,8 @@ export class RequestComponent implements OnChanges {
   @Output() addGroup = new EventEmitter();
   @Output() addPosition = new EventEmitter();
   @Output() changeStatus = new EventEmitter();
-  @Output() addResponsible = new EventEmitter();
+  @Output() addResponsiblePositions = new EventEmitter<{ positions: RequestPosition[], user: User }>();
+  @Output() addResponsibleRequest = new EventEmitter<User>();
   @Output() createTemplate = new EventEmitter();
   @Output() publish = new EventEmitter();
   @Output() reject = new EventEmitter();
