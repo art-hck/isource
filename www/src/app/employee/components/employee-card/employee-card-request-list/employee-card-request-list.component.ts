@@ -18,8 +18,8 @@ export class EmployeeCardRequestListComponent {
   constructor(private router: Router) {}
 
   calcPieChart(request: any): number {
-    const completedItems =  request.completedCount / request.positionCount * 100;
-    return (65 - (65 * completedItems) / 100);
+    const completedItems =  (request.completedCount) / (request.positionCount) * 100;
+    return (65 - (65 * (completedItems || 0)) / 100);
   }
 
   onRowClick(request: EmployeeInfoRequestItem): void {

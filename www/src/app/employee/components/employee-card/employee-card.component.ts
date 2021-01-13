@@ -46,7 +46,7 @@ export class EmployeeCardComponent implements OnInit {
 
   getEmployeeInfo(id: Uuid): void {
     const subscription = this.employeeService.getEmployeeInfo(id).subscribe(employeeInfo => {
-      this.requestList = employeeInfo.requests;
+      this.requestList = employeeInfo.requestsWithResponsiblePositions;
       this.responsibleRequestList = employeeInfo.responsibleRequests;
       this.positionsList = employeeInfo.positions;
       this.employee = employeeInfo.user;
