@@ -11,50 +11,48 @@
       <div class="app-col employee-card-content">
         <uxg-tabs class="app-section">
           <uxg-tab-title #requestsTab [active]="true">
-            Заявки
+            Назначенные заявки
             <ng-container *ngIf="requestList; else employeeCardCountLoader">
               <span class="counter">({{ requestList.length }})</span>
             </ng-container>
-
-            <ng-template #employeeCardCountLoader>
-              <span class="employee-card-count-loader spinner spinner-md"></span>
-            </ng-template>
+          </uxg-tab-title>
+          <uxg-tab-title #requests2Tab>
+            Частично назначенные заявки
+            <ng-container *ngIf="requestList; else employeeCardCountLoader">
+              <span class="counter">({{ requestList.length }})</span>
+            </ng-container>
           </uxg-tab-title>
           <uxg-tab-title #positionsTab>
             Позиции
             <ng-container *ngIf="positionsList; else employeeCardCountLoader">
               <span class="counter">({{ positionsList.length }})</span>
             </ng-container>
-
-            <ng-template #employeeCardCountLoader>
-              <span class="employee-card-count-loader spinner spinner-md"></span>
-            </ng-template>
           </uxg-tab-title>
         </uxg-tabs>
+        <ng-template #employeeCardCountLoader>
+          <span class="employee-card-count-loader spinner spinner-md"></span>
+        </ng-template>
 
-        <ng-container *ngIf="requestsTab.active">
-          <ng-container *ngIf="requestList.length > 0; else emptyRequestList">
-            <app-employee-card-request-list
-              [requests]="requestList">
-            </app-employee-card-request-list>
-          </ng-container>
-
-          <ng-template #emptyRequestList>
-            <span class="empty-list">Список заявок пуст</span>
-          </ng-template>
+        <ng-container *uxgTab="requestsTab">
+          <app-employee-card-request-list
+            *ngIf="responsibleRequestList.length > 0; else emptyRequestList"
+            (setResponsibleUser)="setResponsibleUser($event.requestId, $event.userId)"
+            [requests]="responsibleRequestList">
+          </app-employee-card-request-list>
         </ng-container>
 
-        <ng-container *ngIf="positionsTab.active">
-          <ng-container *ngIf="positionsList.length > 0; else emptyPositionsList">
-            <app-employee-card-position-list
-              [positions]="positionsList">
-            </app-employee-card-position-list>
-          </ng-container>
-
-          <ng-template #emptyPositionsList>
-            <span class="empty-list">Список позиций пуст</span>
-          </ng-template>
+        <ng-container *uxgTab="requests2Tab">
+          <app-employee-card-request-list *ngIf="requestList.length > 0; else emptyRequestList" [requests]="requestList">
+          </app-employee-card-request-list>
         </ng-container>
+
+        <ng-container *uxgTab="positionsTab">
+          <app-employee-card-position-list *ngIf="positionsList.length > 0; else emptyPositionsList" [positions]="positionsList">
+          </app-employee-card-position-list>
+        </ng-container>
+
+        <ng-template #emptyRequestList><span class="empty-list">Список заявок пуст</span></ng-template>
+        <ng-template #emptyPositionsList><span class="empty-list">Список позиций пуст</span></ng-template>
       </div>
 
       <!-- Сайдбар с информацией -->

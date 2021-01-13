@@ -1,21 +1,19 @@
 <div class="app-table requests-list-datagrid">
 
   <a class="app-row app-link-no-color app-align-items-center" *ngFor="let request of requests" [routerLink]="['/requests', 'backoffice', request.request.id]">
-    <div class="request-number clr-col-1">
+    <div class="request-number app-col-1">
       <b>{{ request.request?.number }}</b>
     </div>
 
-    <div class="customer-name clr-col-3"
-                 title="{{ request.request.contragent?.shortName }}">
+    <div class="customer-name app-col-3" title="{{ request.request.contragent?.shortName }}">
       {{ request.request.contragent?.shortName }}
     </div>
 
-    <div class="request-name app-col"
-                 title="{{ request.request.name }}">
+    <div class="request-name app-col" title="{{ request.request.name }}">
       {{ request.request.name }}
     </div>
 
-    <div class="request-completed clr-col-1">
+    <div class="request-completed app-col-auto">
       <div class="pie-chart">
         <svg width="20" height="20" class="chart">
           <circle r="10" cx="10" cy="10" class="pie" />
@@ -30,6 +28,23 @@
         </div>
       </div>
     </div>
+    <div class="app-col-auto" *ngIf="setResponsibleUser.observers.length">
+      <button uxgButton icon secondary (click)="$event.preventDefault(); $event.stopPropagation(); responsibleModalPayload = request.request">
+        <uxg-icon shape="app-sort-arrows" [attr.dir]="'left'"></uxg-icon>
+      </button>
+    </div>
   </a>
 
 </div>
+
+<!-- Модальное окно для назначения ответственного по заявке -->
+<uxg-modal [(state)]="responsibleModalPayload" size="s">
+  <h2>Переназначить всю заявку</h2>
+  <div *ngIf="responsibleModalPayload">
+    <app-select-responsible-form
+      [contragentId]="responsibleModalPayload.contragent.id"
+      (setResponsibleUser)="setResponsibleUser.emit({userId: responsibleModalPayload.id, requestId: $event.id})"
+      (close)="responsibleModalPayload = null"
+    ></app-select-responsible-form>
+  </div>
+</uxg-modal>

@@ -1,21 +1,20 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
-import { RequestPosition } from "../../../models/request-position";
-import { Request } from "../../../models/request";
+import { RequestPosition } from "../../../request/common/models/request-position";
 import { Observable, Subscription } from "rxjs";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
-import { UserService } from "../../../../../user/service/user.service";
-import { User } from "../../../../../user/models/user";
-import { RequestService } from "../../../../back-office/services/request.service";
+import { UserService } from "../../../user/service/user.service";
+import { User } from "../../../user/models/user";
 import { shareReplay } from "rxjs/operators";
-import { searchUsers } from "../../../../../shared/helpers/search";
+import { searchUsers } from "../../helpers/search";
+import { Uuid } from "../../../cart/models/uuid";
 
 @Component({
-  selector: 'app-request-add-responsible',
-  templateUrl: './request-add-responsible.component.html'
+  selector: 'app-select-responsible-form',
+  templateUrl: './select-responsible-form.component.html'
 })
-export class RequestAddResponsibleComponent implements OnInit, OnDestroy {
+export class SelectResponsibleFormComponent implements OnInit, OnDestroy {
   @Input() positions: RequestPosition[] = [];
-  @Input() request: Request;
+  @Input() contragentId: Uuid;
   @Output() setResponsibleUser = new EventEmitter<User>();
   @Output() close = new EventEmitter<User>();
   subscription = new Subscription();
@@ -32,7 +31,7 @@ export class RequestAddResponsibleComponent implements OnInit, OnDestroy {
   constructor(private userService: UserService) {}
 
   ngOnInit() {
-    this.regularBackofficeUsers$ = this.userService.getRegularBackofficeUsers(this.request.contragentId).pipe(shareReplay(1));
+    this.regularBackofficeUsers$ = this.userService.getRegularBackofficeUsers(this.contragentId).pipe(shareReplay(1));
   }
 
   submit() {

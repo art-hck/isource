@@ -7,6 +7,7 @@ import { User } from "../../user/models/user";
 
 export class EmployeeInfo {
   requests: EmployeeInfoRequestItem[];
+  responsibleRequests: EmployeeInfoRequestItem[];
   positions: EmployeeListRequestPosition[];
   user: EmployeeInfoBrief;
 
