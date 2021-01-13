@@ -35,8 +35,9 @@ export class ContractSignState {
     );
   }
 
-  @Action(SignDocument)
-  signDocument({ setState, dispatch }: Context, { contractId, data }: SignDocument) {
-    return this.rest.signDocument(contractId, data);
+  @Action(SignDocument) signDocument({ setState, dispatch }: Context, { contractId, data }: SignDocument) {
+    return this.rest.signDocument(contractId, data).pipe(
+      tap(() => dispatch(new Fetch(contractId))),
+    );
   }
 }

@@ -14,6 +14,8 @@
         <span *ngIf="canApprove">Необходимо рассмотреть</span>
       </div>
       <div class="app-warning-color app-bold" *ngSwitchCase="'REJECTED'"><uxg-icon shape="app-warning"></uxg-icon><span>На доработке</span></div>
+      <div class="app-ghost-color app-bold" *ngSwitchCase="'SIGNED_BY_CUSTOMER'"><uxg-icon shape="app-waiting"></uxg-icon><span>Ожидает подписания поставщиком</span></div>
+      <div class="app-ghost-color app-bold" *ngSwitchCase="'SIGNED_BY_SUPPLIER'"><uxg-icon shape="app-waiting"></uxg-icon><span>Подписан поставщиком</span></div>
       <div class="app-success-color app-bold" *ngSwitchCase="'APPROVED'"><uxg-icon shape="app-check"></uxg-icon><span>Согласован</span></div>
       <div class="app-success-color app-bold" *ngSwitchCase="'SIGNED'"><uxg-icon shape="app-check"></uxg-icon><span>Подписан</span></div>
       <div class="app-ghost-color app-bold" *ngSwitchCase="'ARCHIVE'"><uxg-icon shape="app-draft"></uxg-icon><span>Архив</span></div>
@@ -111,6 +113,7 @@
             [documents]="files"
             (fileSelected)="selectFiles($event)"
             [uploadAvailable]="false"
+            [hideUploadedListTitle]="true"
           ></app-document-upload-list>
 
           <ng-template #uploadFile>
@@ -206,12 +209,9 @@
   </div>
 </uxg-modal>
 
-
-<!-- TODO Перенести в общий компонент, т.к. переиспользуется! -->
 <uxg-modal #certificatesListModal size="m" class="certificates-list-modal">
-
   <h3>Выбор подписи ЭЦП</h3>
-  <br/>
+  <br>
 
   <form appFormValidation [formGroup]="certForm" (ngSubmit)="onSignDocument()">
     <div class="app-section">
@@ -220,33 +220,17 @@
         Вы можете выбрать только одну подпись для одного документа
       </div>
 
-      <ng-container *ngIf="certificates?.length; else loader">
-        <div class="certificates-list">
-          <div class="app-row app-align-items-top cert-item" *ngFor="let certificate of certificates">
-            <div class="app-col-auto">
-              <uxg-radio-item class="app-control" formControlName="thumbprint"
-                              value="{{ certificate.data.thumbprint }}">
-              </uxg-radio-item>
-            </div>
-
-            <div class="cert-info">
-              <div class="name app-bold">{{ certificate.data.name }}</div>
-              <div class="brief">
-                <span><span class="app-ghost-color">ИНН:</span> {{ certificate.ownerInfo['ИНН'] }}, </span>
-                <span><span class="app-ghost-color">Действует до:</span> {{ certificate.data.validTo | date : "dd.MM.yyyy" }}</span>
-              </div>
-            </div>
-          </div>
-        </div>
+      <ng-container *ngIf="certificatesListModal.state">
+        <app-digital-signature-list formControlName="certificate"></app-digital-signature-list>
       </ng-container>
 
-      <ng-template #loader>
-        <span class="spinner spinner-md"></span>
-      </ng-template>
-
       <ng-template uxgModalFooter>
-        <button class="app-col-auto" uxgButton secondary lg type="button" (click)="certificatesListModal.close()">Отмена</button>
-        <button uxgButton primary lg (click)="onSignDocument(); certificatesListModal.close()">Подписать</button>
+        <div class="app-row app-align-items-center app-justify-content-end">
+          <div *ngIf="signingStatus"><span class="spinner spinner-inline"></span></div>
+
+          <button class="app-col-auto" uxgButton secondary lg type="button" (click)="certificatesListModal.close()">Отмена</button>
+          <button uxgButton primary lg [disabled]="signingStatus" (click)="onSignDocument()">Подписать</button>
+        </div>
       </ng-template>
     </div>
   </form>

@@ -8,9 +8,7 @@ import { patch, updateItem } from "@ngxs/store/operators";
 import { catchError, switchMap, tap } from "rxjs/operators";
 import { saveAs } from 'file-saver/src/FileSaver';
 import { ToastActions } from "../../../shared/actions/toast.actions";
-import { ContractStatusLabels } from "../../common/dictionaries/contract-status-labels";
 import { ContractFilter } from "../../common/models/contract-filter";
-import { ContractStatus } from "../../common/enum/contract-status";
 import Fetch = ContractActions.Fetch;
 import Reject = ContractActions.Reject;
 import Approve = ContractActions.Approve;
@@ -102,17 +100,13 @@ export class ContractState {
 
   @Action(SignDocument)
   signDocument({ setState, dispatch }: Context, { contractId, data, requestId }: SignDocument) {
-     return this.rest.signDocument(contractId, data).pipe(
-       tap(c => setState(patch({ contracts: updateItem(({ id }) => c.id === id, c) }))),
-       tap(() => setState(patch<Model>({ status: "received" }))),
-       tap(() => dispatch([
-         new FetchAvailibleFilters(requestId),
-         new ToastActions.Success('Договор успешно подписан')
-       ])),
-       catchError(e => {
-         setState(patch<Model>({status: "error"}));
-         return dispatch(new ToastActions.Error(e?.error?.detail ?? "Неизвестная ошибка"));
-       })
-     );
+    return this.rest.signDocument(contractId, data).pipe(
+      tap(c => setState(patch({ contracts: updateItem(({ id }) => c.id === id, c) }))),
+      tap(() => dispatch(new FetchAvailibleFilters(requestId))),
+      catchError(e => {
+        setState(patch<Model>({status: "error"}));
+        return dispatch(new ToastActions.Error(e?.error?.detail ?? "Неизвестная ошибка"));
+      })
+    );
   }
 }
