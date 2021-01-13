@@ -129,7 +129,7 @@
                 proposalsSentToReview :
                 proposalsSendToEdit) as proposals">
             <app-common-proposal
-              #tcpComponent
+              #proposalComponent
               *ngFor="let proposal of proposals; let i = index; trackBy: trackById"
               [technicalCommercialProposalIndex]="i"
               [chooseBy$]="chooseBy$"
