@@ -16,6 +16,7 @@ export class DocumentUploadListComponent implements OnInit {
 
   @Input() documents: File[] = [];
   @Input() uploadLabel = 'Выбрать документ';
+  @Input() hideUploadedListTitle = false;
   @Input() dragAndDropAvailable = false;
   @Input() uploadAvailable = true;
   @Input() removable = true;

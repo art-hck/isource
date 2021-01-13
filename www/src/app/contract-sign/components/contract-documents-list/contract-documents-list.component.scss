@@ -1,31 +1,14 @@
-.gridable {
-  display: flex;
-  flex-wrap: wrap;
-
-  .document {
-    width: 25%;
-    min-width: 300px;
-    padding: 10px 10px 10px 0;
-    box-sizing: border-box;
-  }
-}
-
 .document {
   text-overflow: ellipsis;
   white-space: nowrap;
   display: flex;
   align-items: center;
 
-  &.awaiting {
-    opacity: .5;
-  }
-
-  &:not(.awaiting) > div {
+  & > div {
     overflow: hidden;
   }
 
-  &:not(.awaiting) > div,
-  &:not(.awaiting) > document-icon {
+  & > document-icon {
     cursor: pointer;
   }
 
@@ -33,6 +16,8 @@
     margin: 8px;
     line-height: 1.4em;
     flex-grow: 1;
+    overflow: hidden;
+    cursor: pointer;
 
     .title {
       text-overflow: ellipsis;
@@ -46,7 +31,6 @@
         margin-right: 5px;
       }
     }
-
   }
 }
 
@@ -54,17 +38,6 @@
   color: #666;
   margin: 10px 0;
   cursor: pointer;
-}
-
-.btn-delete {
-  display: none;
-  margin: 0;
-  flex-shrink: 0;
-  animation: show-btn 300ms;
-}
-
-li:hover .btn-delete{
-  display: block;
 }
 
 ul:not(.small) {

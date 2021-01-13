@@ -46,6 +46,7 @@ import { FilterCheckboxListComponent } from './components/filter/filter-checkbox
 import { PriceInputFilterDirective } from "./directives/price-input-filter.directive";
 import { FilterButtonComponent } from './components/filter/filter-button/filter-button.component';
 import { FilterDirective } from './components/filter/filter.directive';
+import { DigitalSignatureListComponent } from "../contract-sign/components/digital-signature-list/digital-signature-list.component";
 
 @NgModule({
   imports: [
@@ -59,6 +60,7 @@ import { FilterDirective } from './components/filter/filter.directive';
     ToastListModule,
   ],
   declarations: [
+    DigitalSignatureListComponent,
     DocumentSimpleListComponent,
     DocumentUploadListComponent,
     DocumentIconComponent,
@@ -154,6 +156,7 @@ import { FilterDirective } from './components/filter/filter.directive';
     FilterButtonComponent,
     FilterDirective,
     OkpdSuggestionsDirective,
+    DigitalSignatureListComponent,
   ]
 })
 export class SharedModule {
