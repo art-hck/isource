@@ -1,29 +1,29 @@
 <form [formGroup]="form">
-  <app-filter-section label="Цена">
+  <uxg-filter-section label="Цена">
     <range-slider-control [min]="priceRange[0]" [max]="priceRange[1]"
                           formControlName="price"></range-slider-control>
-  </app-filter-section>
+  </uxg-filter-section>
 
-  <app-filter-section label="Наличие" [disabled]="form.get('availability').disabled">
+  <uxg-filter-section label="Наличие" [disabled]="form.get('availability').disabled">
     <label class="app-row app-align-items-center">
       <div class="app-col">Поставка только со склада</div>
       <div class="app-col app-grow-0">
         <checkbox-slider-control formControlName="availability"></checkbox-slider-control>
       </div>
     </label>
-  </app-filter-section>
+  </uxg-filter-section>
 
-  <app-filter-section label="Сроки поставки (дн.)">
+  <uxg-filter-section label="Сроки поставки (дн.)">
     <range-slider-control [step]="1" [min]="productionTimeRange[0]" [max]="productionTimeRange[1]"
                           formControlName="productionTime"></range-slider-control>
-  </app-filter-section>
+  </uxg-filter-section>
 
-  <app-filter-section label="Поставщик">
+  <uxg-filter-section label="Поставщик">
     <app-supplier-autocomplete [multiple]="true" formControlName="contragents"></app-supplier-autocomplete>
-  </app-filter-section>
+  </uxg-filter-section>
 
   <ng-container *ngFor="let attribute of attributes.controls; let i=index;" formArrayName="attributes">
-    <app-filter-section [label]="attribute.get('label').value" formGroupName="{{i}}">
+    <uxg-filter-section [label]="attribute.get('label').value" formGroupName="{{i}}">
       <ng-container *ngFor="let attributeValue of asFormArray(attribute.get('values')).controls; let j=index"
                     formArrayName="values">
         <ng-container formGroupName="{{j}}">
@@ -33,6 +33,6 @@
           </div>
         </ng-container>
       </ng-container>
-    </app-filter-section>
+    </uxg-filter-section>
   </ng-container>
 </form>

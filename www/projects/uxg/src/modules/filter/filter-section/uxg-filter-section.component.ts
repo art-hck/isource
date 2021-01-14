@@ -1,11 +1,11 @@
 import { Component, HostBinding, Input, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-filter-section',
-  templateUrl: './filter-section.component.html',
-  styleUrls: ['./filter-section.component.scss']
+  selector: 'uxg-filter-section',
+  templateUrl: './uxg-filter-section.component.html',
+  styleUrls: ['./uxg-filter-section.component.scss']
 })
-export class FilterSectionComponent implements OnInit {
+export class UxgFilterSectionComponent implements OnInit {
   @HostBinding('class.disabled')
   @Input() disabled: boolean;
   @Input() label: string;

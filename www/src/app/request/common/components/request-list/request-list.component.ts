@@ -19,7 +19,7 @@ import { PositionStatus } from "../../enum/position-status";
 import { PositionStatusesLabels } from "../../dictionaries/position-statuses-labels";
 import { PositionStatusesFrequent } from "../../dictionaries/position-statuses-frequent";
 import { Uuid } from "../../../../cart/models/uuid";
-import { FilterCheckboxList } from "../../../../shared/components/filter/filter-checkbox-item";
+import { UxgFilterCheckboxList } from "uxg";
 import { searchContragents, searchUsers } from "../../../../shared/helpers/search";
 import moment from "moment";
 
@@ -55,8 +55,8 @@ export class RequestListComponent implements OnInit, OnDestroy {
   sortingColumn: string;
 
   hideNeedUpdate = true;
-  customers$: Observable<FilterCheckboxList<Uuid>>;
-  users$: Observable<FilterCheckboxList<Uuid>>;
+  customers$: Observable<UxgFilterCheckboxList<Uuid>>;
+  users$: Observable<UxgFilterCheckboxList<Uuid>>;
   positionStatuses$: Observable<{ value: PositionStatus, item: AvailableFilters["positionStatuses"][number] }[]>;
   readonly pages$ = this.route.queryParams.pipe(map(params => +params["page"]));
   readonly destroy$ = new Subject();

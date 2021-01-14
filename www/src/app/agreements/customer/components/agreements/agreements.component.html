@@ -1,4 +1,4 @@
-<ng-container *ngIf="(agreements$ | async) as agreements" appFilter>
+<ng-container *ngIf="(agreements$ | async) as agreements" uxgFilter>
 
   <div class="app-row app-align-items-center">
     <div class="app-col">
@@ -10,7 +10,7 @@
       </form>
     </div>
 
-    <app-filter-button class="app-col-auto"></app-filter-button>
+    <uxg-filter-button class="app-col-auto"></uxg-filter-button>
 
     <div class="app-col-aside detachable"></div>
   </div>
@@ -20,12 +20,12 @@
       <app-agreements [agreements]="agreements"></app-agreements>
     </div>
 
-    <app-filter [formGroup]="form" [count]="totalCount$| async" [skipKeys]="['actions']" (filter)="filter$.next($event)">
-      <app-filter-section label="Заявка">
+    <uxg-filter [formGroup]="form" [count]="totalCount$| async" [skipKeys]="['actions']" (filter)="filter$.next($event)">
+      <uxg-filter-section label="Заявка">
         <input uxgInput formControlName="numberOrName" placeholder="Номер или наименование заявки"/>
-      </app-filter-section>
+      </uxg-filter-section>
 
-      <app-filter-section label="Даты поступления">
+      <uxg-filter-section label="Даты поступления">
         <div class="app-row">
           <div class="app-col" [style.padding-right.px]="15">
             <div class="app-control-wrap" [style.padding]="0">
@@ -45,8 +45,8 @@
             </div>
           </div>
         </div>
-      </app-filter-section>
-    </app-filter>
+      </uxg-filter-section>
+    </uxg-filter>
   </div>
 </ng-container>
 

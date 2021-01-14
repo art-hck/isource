@@ -21,9 +21,9 @@ import { ProcedureAction } from "../../../models/procedure-action";
 import { StateStatus } from "../../../../common/models/state-status";
 import { TechnicalProposalsStatus } from "../../../../common/enum/technical-proposals-status";
 import { FormBuilder } from "@angular/forms";
-import { FilterCheckboxList } from "../../../../../shared/components/filter/filter-checkbox-item";
 import { TechnicalProposalsStatusesLabels } from "../../../../common/dictionaries/technical-proposals-statuses-labels";
 import { searchContragents } from "../../../../../shared/helpers/search";
+import { UxgFilterCheckboxList } from "uxg";
 
 @Component({
   templateUrl: './technical-proposal-list.component.html',
@@ -35,8 +35,8 @@ export class TechnicalProposalListComponent implements OnInit, OnDestroy {
   requestId: Uuid;
   technicalProposals$: Observable<TechnicalProposal[]>;
   availableFilters$: Observable<TechnicalProposalFilter>;
-  contragentsFilter$: Observable<FilterCheckboxList<Uuid>>;
-  statusesFilter$: Observable<FilterCheckboxList<TechnicalProposalsStatus>>;
+  contragentsFilter$: Observable<UxgFilterCheckboxList<Uuid>>;
+  statusesFilter$: Observable<UxgFilterCheckboxList<TechnicalProposalsStatus>>;
   procedures$: Observable<Procedure[]>;
   positions$: Observable<RequestPosition[]>;
   showForm = false;

@@ -5,10 +5,10 @@ import { Subject } from "rxjs";
 import { debounceTime, takeUntil } from "rxjs/operators";
 
 @Component({
-  selector: 'app-filter',
-  templateUrl: './filter.component.html'
+  selector: 'uxg-filter',
+  templateUrl: './uxg-filter.component.html'
 })
-export class FilterComponent implements OnInit, OnDestroy {
+export class UxgFilterComponent implements OnInit, OnDestroy {
   @HostBinding('class.app-aside-modal') class = true;
   @HostBinding('class.app-col-aside') colAside = true;
   @HostBinding('class.app-row') row = true;

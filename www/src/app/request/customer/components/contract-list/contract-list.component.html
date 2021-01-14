@@ -1,5 +1,5 @@
 <ng-container *ngIf="(status$ | async) !== 'fetching' && (requestStatus$ | async) !== 'fetching'; else placeholder">
-<ng-container *ngIf="(request$ | async) as request" appFilter>
+<ng-container *ngIf="(request$ | async) as request" uxgFilter>
 
   <!-- tabs & actions -->
   <div class="app-row">
@@ -38,7 +38,7 @@
           </uxg-tab-title>
         </uxg-tabs>
 
-        <app-filter-button></app-filter-button>
+        <uxg-filter-button></uxg-filter-button>
 
       </div>
     </div>
@@ -70,25 +70,25 @@
       </div>
     </div>
 
-    <app-filter [formGroup]="form" [count]="contractsLength$ | async" (filter)="store.dispatch(filter(request, $event))">
-      <app-filter-section label="Наименование позиции">
+    <uxg-filter [formGroup]="form" [count]="contractsLength$ | async" (filter)="store.dispatch(filter(request, $event))">
+      <uxg-filter-section label="Наименование позиции">
         <input uxgInput type="text" formControlName="positionName" placeholder="Наименование позиции или его часть" />
-      </app-filter-section>
-      <app-filter-section label="Контрагент" [disabled]="form.get('suppliers').disabled">
-        <app-filter-checkbox-list
+      </uxg-filter-section>
+      <uxg-filter-section label="Контрагент" [disabled]="form.get('suppliers').disabled">
+        <uxg-filter-checkbox-list
           formControlName="suppliers"
           searchPlaceholder="Наименование контрагента или ИНН"
           [foldedSearch]="true"
           [items$]="contractSuppliersItems$"
           [limit]="5"
           (search)="suppliersSearch$.next($event)">
-        </app-filter-checkbox-list>
-      </app-filter-section>
+        </uxg-filter-checkbox-list>
+      </uxg-filter-section>
 
-      <app-filter-section label="Согласование" [disabled]="form.get('statuses').disabled">
-        <app-filter-checkbox-list formControlName="statuses" [items$]="contractStatusesItems$"></app-filter-checkbox-list>
-      </app-filter-section>
-    </app-filter>
+      <uxg-filter-section label="Согласование" [disabled]="form.get('statuses').disabled">
+        <uxg-filter-checkbox-list formControlName="statuses" [items$]="contractStatusesItems$"></uxg-filter-checkbox-list>
+      </uxg-filter-section>
+    </uxg-filter>
   </div>
 </ng-container>
 </ng-container>

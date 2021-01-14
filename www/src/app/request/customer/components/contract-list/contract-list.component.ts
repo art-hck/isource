@@ -15,8 +15,8 @@ import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { ContractFilter } from "../../../common/models/contract-filter";
 import { ContractStatusLabels } from "../../../common/dictionaries/contract-status-labels";
 import { ContractStatus } from "../../../common/enum/contract-status";
-import { FilterComponent } from "../../../../shared/components/filter/filter.component";
-import { FilterCheckboxList } from "../../../../shared/components/filter/filter-checkbox-item";
+import { UxgFilterComponent } from "uxg";
+import { UxgFilterCheckboxList } from "uxg";
 import { Uuid } from "../../../../cart/models/uuid";
 import { searchContragents } from "../../../../shared/helpers/search";
 import Fetch = ContractActions.Fetch;
@@ -33,7 +33,7 @@ import { RequestDocument } from "../../../common/models/request-document";
   templateUrl: './contract-list.component.html'
 })
 export class ContractListComponent implements OnInit, OnDestroy {
-  @ViewChild('filterRef') filterRef: FilterComponent;
+  @ViewChild('filterRef') filterRef: UxgFilterComponent;
   @Select(RequestState.request) request$: Observable<Request>;
   @Select(RequestState.status) requestStatus$: Observable<StateStatus>;
   @Select(ContractState.availibleFilters) availibleFilters$: Observable<ContractFilter>;
@@ -56,10 +56,10 @@ export class ContractListComponent implements OnInit, OnDestroy {
   readonly destroy$ = new Subject();
   readonly suppliersSearch$ = new BehaviorSubject<string>("");
 
-  readonly contractSuppliersItems$: Observable<FilterCheckboxList<Uuid>> = combineLatest([this.suppliersSearch$, this.availibleFilters$]).pipe(
+  readonly contractSuppliersItems$: Observable<UxgFilterCheckboxList<Uuid>> = combineLatest([this.suppliersSearch$, this.availibleFilters$]).pipe(
     map(([q, f]) => searchContragents(q, f?.suppliers ?? []).map((c) => ({ label: c.shortName, value: c.id })))
   );
-  readonly contractStatusesItems$: Observable<FilterCheckboxList<ContractStatus>> = this.availibleFilters$.pipe(
+  readonly contractStatusesItems$: Observable<UxgFilterCheckboxList<ContractStatus>> = this.availibleFilters$.pipe(
     map(({ statuses }) => statuses?.map(value => ({ label: ContractStatusLabels[value], value }))),
   );
   readonly download = (contract: Contract) => new Download(contract);

@@ -58,3 +58,10 @@ export * from './modules/wizzard/uxg-wizzard-steps.component';
 export * from './modules/datepicker/uxg-datepicker.directive';
 export * from './modules/datepicker/uxg-datepicker.module';
 
+export * from './modules/filter/uxg-filter-checkbox-item';
+export * from './modules/filter/uxg-filter.component';
+export * from './modules/filter/uxg-filter.module';
+export * from './modules/filter/uxg-filter.directive';
+export * from './modules/filter/filter-button/uxg-filter-button.component';
+export * from './modules/filter/filter-checkbox-list/uxg-filter-checkbox-list.component';
+export * from './modules/filter/filter-section/uxg-filter-section.component';

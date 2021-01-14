@@ -1,4 +1,4 @@
-<ng-container appFilter>
+<ng-container uxgFilter>
 <div class="app-row">
   <div class="app-col app-table app-no-border">
     <div class="app-row app-align-items-center">
@@ -14,7 +14,7 @@
       <div class="app-col"></div>
       <div class="app-col-auto">
         <!-- Фильтр -->
-        <app-filter-button></app-filter-button>
+        <uxg-filter-button></uxg-filter-button>
 
         <!-- Создать процедуру  -->
         <uxg-popover #procedurePopover [openOnHover]="true" class="popover-item">
@@ -81,12 +81,12 @@
     ></app-proposal-group>
   </div>
 
-  <app-filter [formGroup]="form" [count]="groups?.length" (filter)="emitFilter($event)">
-    <app-filter-section label="Наименование позиции">
+  <uxg-filter [formGroup]="form" [count]="groups?.length" (filter)="emitFilter($event)">
+    <uxg-filter-section label="Наименование позиции">
       <input uxgInput type="text" formControlName="requestPositionName" placeholder="Наименование позиции или его часть" />
-    </app-filter-section>
+    </uxg-filter-section>
 
-    <app-filter-section label="Дата создания">
+    <uxg-filter-section label="Дата создания">
       <div class="app-row">
         <div class="app-col" [style.padding-right.px]="15">
           <div class="app-control-wrap" [style.padding]="0">
@@ -106,8 +106,8 @@
           </div>
         </div>
       </div>
-    </app-filter-section>
-  </app-filter>
+    </uxg-filter-section>
+  </uxg-filter>
 </div>
 </ng-container>
 

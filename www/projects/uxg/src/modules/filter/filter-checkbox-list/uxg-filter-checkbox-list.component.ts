@@ -2,17 +2,17 @@ import { ChangeDetectorRef, Component, ContentChild, forwardRef, Input, OnChange
 import { ControlValueAccessor, FormBuilder, FormGroup, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { Observable, Subject } from "rxjs";
 import { distinctUntilChanged, filter, takeUntil, tap } from "rxjs/operators";
-import { FilterCheckboxList } from "../filter-checkbox-item";
+import { UxgFilterCheckboxList } from "../uxg-filter-checkbox-item";
 
 @Component({
-  selector: 'app-filter-checkbox-list',
-  templateUrl: './filter-checkbox-list.component.html',
-  styleUrls: ['./filter-checkbox-list.component.scss'],
-  providers: [{ provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => FilterCheckboxListComponent), multi: true }]
+  selector: 'uxg-filter-checkbox-list',
+  templateUrl: './uxg-filter-checkbox-list.component.html',
+  styleUrls: ['./uxg-filter-checkbox-list.component.scss'],
+  providers: [{ provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => UxgFilterCheckboxListComponent), multi: true }]
 })
-export class FilterCheckboxListComponent implements ControlValueAccessor, OnInit, OnChanges, OnDestroy {
+export class UxgFilterCheckboxListComponent implements ControlValueAccessor, OnInit, OnChanges, OnDestroy {
   @ContentChild(TemplateRef) itemTpl: TemplateRef<any>;
-  @Input() items$: Observable<FilterCheckboxList>;
+  @Input() items$: Observable<UxgFilterCheckboxList>;
   @Input() limit = 0;
   @Input() folded = true;
   @Input() foldedSearch = false; // Show search input even folded

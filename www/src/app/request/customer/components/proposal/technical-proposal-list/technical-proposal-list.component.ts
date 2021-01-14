@@ -17,7 +17,7 @@ import { TechnicalProposalState } from "../../../states/technical-proposal.state
 import { StateStatus } from "../../../../common/models/state-status";
 import { FormBuilder } from "@angular/forms";
 import { TechnicalProposalFilter } from "../../../../common/models/technical-proposal-filter";
-import { FilterCheckboxList } from "../../../../../shared/components/filter/filter-checkbox-item";
+import { UxgFilterCheckboxList } from "uxg";
 import { searchContragents } from "../../../../../shared/helpers/search";
 import { TechnicalProposalsStatusesLabels } from "../../../../common/dictionaries/technical-proposals-statuses-labels";
 import Fetch = TechnicalProposals.Fetch;
@@ -51,11 +51,11 @@ export class TechnicalProposalListComponent implements OnInit, OnDestroy {
   readonly form = this.fb.group({ positionName: '', contragents: [[]], tpStatus: [[]] });
   readonly contragentsSearch$ = new BehaviorSubject<string>("");
 
-  readonly contragentsFilter$: Observable<FilterCheckboxList<Uuid>> = combineLatest([this.contragentsSearch$, this.availableFilters$]).pipe(
+  readonly contragentsFilter$: Observable<UxgFilterCheckboxList<Uuid>> = combineLatest([this.contragentsSearch$, this.availableFilters$]).pipe(
     map(([q, f]) => searchContragents(q, f?.contragents ?? []).map(c => ({ label: c.shortName, value: c.id })))
   );
 
-  readonly statusesFilter$: Observable<FilterCheckboxList<TechnicalProposalsStatus>> = this.availableFilters$.pipe(
+  readonly statusesFilter$: Observable<UxgFilterCheckboxList<TechnicalProposalsStatus>> = this.availableFilters$.pipe(
     map((f) => f?.tpStatus.map(value => ({ label: TechnicalProposalsStatusesLabels[value], value }))),
   );
 
