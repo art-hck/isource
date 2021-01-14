@@ -94,7 +94,7 @@
               </app-document-simple-list>
             </div>
             <div class="app-col-3 app-ellipsis">{{ document.user.shortName }} <span class="app-ghost-color">{{document.created | date : 'dd.MM.yyyy HH:mm'}}</span></div>
-            <div class="app-col-6 app-ellipsis">{{ document.comments }}</div>
+            <div class="app-col-6 app-ellipsis" [title]="document.comments">{{ document.comments }}</div>
           </div>
         </div>
       </ng-container>
