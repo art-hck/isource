@@ -11,7 +11,6 @@ import { CommercialProposalListDeprecatedComponent } from './components/commerci
 import { RequestPieChartComponent } from './components/request/request-pie-chart/request-pie-chart.component';
 import { PositionHistoryComponent } from './components/position/position-history/position-history.component';
 import { RequestGroupFormComponent } from "./components/request/request-add-group-modal/request-group-form.component";
-import { RequestAddResponsibleComponent } from './components/request/request-add-responsible-modal/request-add-responsible.component';
 import { RequestAsideInfoComponent } from "./components/request/request-aside-info/request-aside-info.component";
 import { RequestComponent } from "./components/request/request.component";
 import { PositionComponent } from './components/position/position.component';
@@ -43,7 +42,6 @@ const RequestCommonModuleDeclarations = [
   PositionSearchFilterPipe,
   RequestGroupFormComponent,
   PositionsStatusChangeComponent,
-  RequestAddResponsibleComponent,
   RequestAddPositionModalComponent,
   RequestAsideInfoComponent,
   RequestComponent,

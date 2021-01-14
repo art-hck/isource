@@ -464,12 +464,12 @@
 <uxg-modal #addResponsiblePositionModal size="s">
   <h2>Назначить позиции <span class="app-font-normal app-ghost-color">({{ checkedPositions?.length }})</span></h2>
   <div *ngIf="addResponsiblePositionModal.state">
-    <app-request-add-responsible
-      [request]="request"
+    <app-select-responsible-form
+      [contragentId]="request.contragentId"
       [positions]="checkedPositions"
       (setResponsibleUser)="addResponsiblePositions.emit({ positions: checkedPositions, user: $event })"
       (close)="addResponsiblePositionModal.close()"
-    ></app-request-add-responsible>
+    ></app-select-responsible-form>
   </div>
 </uxg-modal>
 
@@ -477,11 +477,11 @@
 <uxg-modal #addResponsibleRequestModal size="s">
   <h2>Назначить всю заявку</h2>
   <div *ngIf="addResponsibleRequestModal.state">
-    <app-request-add-responsible
-      [request]="request"
+    <app-select-responsible-form
+      [contragentId]="request.contragentId"
       (setResponsibleUser)="addResponsibleRequest.emit($event)"
       (close)="addResponsibleRequestModal.close()"
-    ></app-request-add-responsible>
+    ></app-select-responsible-form>
   </div>
 </uxg-modal>
 

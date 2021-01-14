@@ -46,6 +46,7 @@ import { FilterCheckboxListComponent } from './components/filter/filter-checkbox
 import { PriceInputFilterDirective } from "./directives/price-input-filter.directive";
 import { FilterButtonComponent } from './components/filter/filter-button/filter-button.component';
 import { FilterDirective } from './components/filter/filter.directive';
+import { SelectResponsibleFormComponent } from "./components/select-responsible-form/select-responsible-form.component";
 import { DigitalSignatureListComponent } from "../contract-sign/components/digital-signature-list/digital-signature-list.component";
 
 @NgModule({
@@ -104,6 +105,7 @@ import { DigitalSignatureListComponent } from "../contract-sign/components/digit
     FilterCheckboxListComponent,
     FilterButtonComponent,
     FilterDirective,
+    SelectResponsibleFormComponent,
   ],
   exports: [
     CommonModule,
@@ -156,6 +158,7 @@ import { DigitalSignatureListComponent } from "../contract-sign/components/digit
     FilterButtonComponent,
     FilterDirective,
     OkpdSuggestionsDirective,
+    SelectResponsibleFormComponent,
     DigitalSignatureListComponent,
   ]
 })
