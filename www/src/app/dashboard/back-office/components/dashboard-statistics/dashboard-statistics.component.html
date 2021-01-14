@@ -215,7 +215,7 @@
 
             <div class="app-col app-col-auto select-list-item-request-customer">{{ request.customerName }}</div>
 
-            <div class="app-col app-col-auto select-list-item-request-name">{{ request.name }}</div>
+            <div class="app-col app-col-auto app-ellipsis select-list-item-request-name" [title]="request.name">{{ request.name }}</div>
 
             <div class="app-col select-list-item-request-date">
               <ng-container *ngIf="request.positionsCount === 0; else deliveryDates">
