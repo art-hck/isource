@@ -17,6 +17,7 @@ import Download = ContractActions.Download;
 import Filter = ContractActions.Filter;
 import FetchAvailibleFilters = ContractActions.FetchAvailibleFilters;
 import SignDocument = ContractActions.SignDocument;
+import ConfirmWithoutSigning = ContractActions.ConfirmWithoutSigning;
 
 export interface ContractStateStateModel {
   contracts: Contract[];
@@ -76,6 +77,22 @@ export class ContractState {
   approve({ setState, dispatch }: Context, { requestId, contract }: Approve) {
     setState(patch<Model>({status: "updating"}));
     return this.rest.approve(contract.id).pipe(
+      tap(c => setState(patch<Model>({
+        contracts: updateItem(({ id }) => c.id === id, c),
+        status: "received"
+      }))),
+      tap(() => dispatch([new FetchAvailibleFilters(requestId), new ToastActions.Success('Договор согласован')])),
+      catchError(e => {
+        setState(patch<Model>({status: "error"}));
+        return dispatch(new ToastActions.Error(e?.error?.detail ?? "Неизвестная ошибка"));
+      })
+    );
+  }
+
+  @Action(ConfirmWithoutSigning)
+  confirmWithoutSigning({ setState, dispatch }: Context, { requestId, contract }: ConfirmWithoutSigning) {
+    setState(patch<Model>({status: "updating"}));
+    return this.rest.confirmWithoutSigning(contract.id).pipe(
       tap(c => setState(patch<Model>({
         contracts: updateItem(({ id }) => c.id === id, c),
         status: "received"

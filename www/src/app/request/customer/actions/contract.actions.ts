@@ -28,6 +28,11 @@ export namespace ContractActions {
     constructor(public requestId: Uuid, public contract: Contract) {}
   }
 
+  export class ConfirmWithoutSigning {
+    static readonly type = '[Contract Customer] ConfirmWithoutSigning';
+    constructor(public requestId: Uuid, public contract: Contract) {}
+  }
+
   export class Upload {
     static readonly type = '[Contract Customer] Upload';
     constructor(public contract: Contract, public files: File[], public comment?: string) {}

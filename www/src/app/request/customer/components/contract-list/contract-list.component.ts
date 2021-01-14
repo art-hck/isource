@@ -19,14 +19,15 @@ import { FilterComponent } from "../../../../shared/components/filter/filter.com
 import { FilterCheckboxList } from "../../../../shared/components/filter/filter-checkbox-item";
 import { Uuid } from "../../../../cart/models/uuid";
 import { searchContragents } from "../../../../shared/helpers/search";
+import { RequestDocument } from "../../../common/models/request-document";
 import Fetch = ContractActions.Fetch;
 import Download = ContractActions.Download;
 import Reject = ContractActions.Reject;
 import Approve = ContractActions.Approve;
+import ConfirmWithoutSigning = ContractActions.ConfirmWithoutSigning;
 import Filter = ContractActions.Filter;
 import SignDocument = ContractActions.SignDocument;
 import FetchAvailibleFilters = ContractActions.FetchAvailibleFilters;
-import { RequestDocument } from "../../../common/models/request-document";
 
 @Component({
   selector: 'app-contract-list',
@@ -38,9 +39,9 @@ export class ContractListComponent implements OnInit, OnDestroy {
   @Select(RequestState.status) requestStatus$: Observable<StateStatus>;
   @Select(ContractState.availibleFilters) availibleFilters$: Observable<ContractFilter>;
   @Select(ContractState.contractsLength) contractsLength$: Observable<number>;
-  @Select(ContractState.contracts([ContractStatus.ON_APPROVAL])) contractsSentToReview$: Observable<Contract[]>;
+  @Select(ContractState.contracts([ContractStatus.ON_APPROVAL, ContractStatus.APPROVED])) contractsSentToReview$: Observable<Contract[]>;
   @Select(ContractState.contracts([ContractStatus.REJECTED])) contractsSendToEdit$: Observable<Contract[]>;
-  @Select(ContractState.contracts([ContractStatus.APPROVED, ContractStatus.SIGNED])) contractsReviewed$: Observable<Contract[]>;
+  @Select(ContractState.contracts([ContractStatus.SIGNED, ContractStatus.CONFIRMED_BY_CUSTOMER_WO_SIGN])) contractsReviewed$: Observable<Contract[]>;
   @Select(ContractState.contracts([ContractStatus.SIGNED_BY_CUSTOMER])) contractsPendingSign$: Observable<Contract[]>;
   @Select(ContractState.contracts([ContractStatus.SIGNED_BY_SUPPLIER])) contractsSignedBySupplier$: Observable<Contract[]>;
   @Select(ContractState.status) status$: Observable<StateStatus>;
@@ -65,6 +66,7 @@ export class ContractListComponent implements OnInit, OnDestroy {
   readonly download = (contract: Contract) => new Download(contract);
   readonly reject = (request: Request, contract: Contract, files: File[], comment?: string) => new Reject(request.id, contract, files, comment);
   readonly approve = (request: Request, contract: Contract) => new Approve(request.id, contract);
+  readonly confirmWithoutSigning = (request: Request, contract: Contract) => new ConfirmWithoutSigning(request.id, contract);
   readonly signDocument = (contractId, data) => new SignDocument(contractId, data.data, data.requestId);
   readonly filter = (request: Request, value: ContractFilter<Uuid>) => new Filter(request.id, value);
 
