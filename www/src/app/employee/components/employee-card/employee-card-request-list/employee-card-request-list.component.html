@@ -43,7 +43,7 @@
   <div *ngIf="responsibleModalPayload">
     <app-select-responsible-form
       [contragentId]="responsibleModalPayload.contragent.id"
-      (setResponsibleUser)="setResponsibleUser.emit({userId: responsibleModalPayload.id, requestId: $event.id})"
+      (setResponsibleUser)="setResponsibleUser.emit({userId: $event.id, requestId: responsibleModalPayload.id})"
       (close)="responsibleModalPayload = null"
     ></app-select-responsible-form>
   </div>
