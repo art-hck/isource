@@ -165,12 +165,11 @@
 
         <div class="app-row app-col app-col-auto app-align-items-center">
           <span *ngIf="isLoading" class="spinner spinner-inline">Загрузка...</span>
-<!-- Вернуть после реализации gpn_market-3126 -->
-<!--          <button uxgButton secondary-->
-<!--                  (click)="sendToEdit.emit()"-->
-<!--                  [disabled]="selectedPositions?.length === 0 || isLoading">-->
-<!--            На доработку-->
-<!--          </button>-->
+          <button uxgButton secondary
+                  (click)="sendToEdit.emit()"
+                  [disabled]="selectedPositions?.length === 0 || isLoading">
+            На доработку
+          </button>
 
           <button uxgButton primary
                   (click)="approve.emit()"

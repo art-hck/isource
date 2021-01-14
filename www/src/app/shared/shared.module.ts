@@ -47,6 +47,7 @@ import { PriceInputFilterDirective } from "./directives/price-input-filter.direc
 import { FilterButtonComponent } from './components/filter/filter-button/filter-button.component';
 import { FilterDirective } from './components/filter/filter.directive';
 import { SelectResponsibleFormComponent } from "./components/select-responsible-form/select-responsible-form.component";
+import { DigitalSignatureListComponent } from "../contract-sign/components/digital-signature-list/digital-signature-list.component";
 
 @NgModule({
   imports: [
@@ -60,6 +61,7 @@ import { SelectResponsibleFormComponent } from "./components/select-responsible-
     ToastListModule,
   ],
   declarations: [
+    DigitalSignatureListComponent,
     DocumentSimpleListComponent,
     DocumentUploadListComponent,
     DocumentIconComponent,
@@ -157,6 +159,7 @@ import { SelectResponsibleFormComponent } from "./components/select-responsible-
     FilterDirective,
     OkpdSuggestionsDirective,
     SelectResponsibleFormComponent,
+    DigitalSignatureListComponent,
   ]
 })
 export class SharedModule {

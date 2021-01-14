@@ -10,11 +10,12 @@ import { Contract } from "../../../request/common/models/contract";
 import { RequestDocument } from "../../../request/common/models/request-document";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { UxgBreadcrumbsService, UxgModalComponent } from "uxg";
-import { Certificate, createDetachedSignature, getUserCertificates } from "crypto-pro";
-import SignDocument = ContractSignActions.SignDocument;
+import { createDetachedSignature } from "crypto-pro";
 import { Uuid } from "../../../cart/models/uuid";
-import { CertificateInfoModel } from "../../models/certificate-info.model";
+import { CertificateListItem } from "../../models/certificate-list-item.model";
 import { ToastActions } from "../../../shared/actions/toast.actions";
+import { StateStatus } from "../../../request/common/models/state-status";
+import SignDocument = ContractSignActions.SignDocument;
 
 @Component({
   selector: 'app-contract-sign',
@@ -23,21 +24,22 @@ import { ToastActions } from "../../../shared/actions/toast.actions";
 })
 
 export class ContractSignComponent implements OnInit, OnDestroy {
-
   @ViewChild('certificatesListModal') certificatesListModal: UxgModalComponent;
   @Select(ContractSignState.contractSignInfo) contractSignInfo$: Observable<Contract>;
+  @Select(ContractSignState.status) status$: Observable<StateStatus>;
 
   destroy$ = new Subject();
   signerName: string;
 
-  certificates: CertificateInfoModel[];
+  certificates: CertificateListItem[];
   certificateListError: string = null;
   contract: Contract;
   contractId: Uuid;
   documentsToSign: RequestDocument[];
+  signingStatus: boolean;
 
   readonly certForm: FormGroup = this.fb.group({
-    thumbprint: [null, Validators.required]
+    certificate: [null, Validators.required]
   });
 
   constructor(
@@ -71,30 +73,31 @@ export class ContractSignComponent implements OnInit, OnDestroy {
     ).subscribe(({result}) => {
       const e = result.error as any;
 
-      this.store.dispatch(e ?
-        new ToastActions.Error(e && e.error.detail) :
-        new ToastActions.Success(`Договор успешно подписан`)
-      );
-
-      this.store.dispatch(new Fetch(this.contractId));
+      if (e) {
+        this.store.dispatch(new ToastActions.Error(e && e.error.detail));
+      } else {
+        this.certificatesListModal.close();
+        this.signingStatus = false;
+        this.store.dispatch(new ToastActions.Success(`Договор успешно подписан`));
+      }
     });
   }
 
   openSignDocumentModal() {
     this.certificatesListModal?.open();
-    this.getCertificatesList().then(r => {});
   }
 
   onSignDocument() {
     if (this.certForm.valid) {
-      const thumbprint = this.certForm.get('thumbprint').value;
-      const selectedCertificate = this.certificates.find(cert => cert.data.thumbprint === thumbprint);
+      this.signingStatus = true;
+
+      const selectedCertificate = this.certForm.get('certificate').value;
       const documentSignatures = [];
 
       let docsSigned = 0;
 
       this.contract.documents.forEach(document => {
-        createDetachedSignature(thumbprint, document.hash).then(response => {
+        createDetachedSignature(selectedCertificate.data.thumbprint, document.hash).then(response => {
           documentSignatures.push({
             id: document.id,
             signature: response
@@ -116,57 +119,6 @@ export class ContractSignComponent implements OnInit, OnDestroy {
       });
     }
   }
-
-
-  // todo Перенести в общий компонент
-  private async getCertificatesList() {
-    this.certificates = [];
-    this.certificateListError = null;
-
-    try {
-      await getUserCertificates().then(response => {
-        response.forEach(cert => {
-          this.certificates.push(this.prepareDataForSubjectOrIssue(cert));
-        });
-      });
-    } catch (error) {
-      this.certificateListError = error.message;
-    }
-  }
-
-  prepareDataForSubjectOrIssue(certificate: Certificate): any {
-    const certInfo = {
-      data: {},
-      ownerInfo: {},
-      issuerInfo: {},
-      serialNumber: null
-    };
-
-    // Получаем серийный номер сертификата
-    certificate.getCadesProp("SerialNumber").then(r => {
-      certInfo['serialNumber'] = r;
-    });
-
-    // Получаем информацию о владельце
-    certificate.getOwnerInfo().then(r => {
-      r.map(data => {
-        certInfo['ownerInfo'][data.title] = data.description;
-      });
-    });
-
-    // Получаем информацию об издателе сертификата
-    certificate.getIssuerInfo().then(r => {
-      r.map(data => {
-        certInfo['issuerInfo'][data.title] = data.description;
-      });
-    });
-
-    // Сохраняем основную информацию о сертификате
-    certInfo['data'] = certificate;
-
-    return certInfo;
-  }
-
 
   ngOnDestroy() {
     this.destroy$.next();

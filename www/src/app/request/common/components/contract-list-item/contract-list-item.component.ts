@@ -6,23 +6,26 @@ import moment from "moment";
 import { StateStatus } from "../../models/state-status";
 import { AppFile } from "../../../../shared/components/file/file";
 import { ToastActions } from "../../../../shared/actions/toast.actions";
-import { Store } from "@ngxs/store";
+import { Actions, ofActionCompleted, Select, Store } from "@ngxs/store";
 import { UserInfoService } from "../../../../user/service/user-info.service";
-import { ActivatedRoute, Router } from "@angular/router";
-import { Certificate, createDetachedSignature, getUserCertificates } from "crypto-pro";
+import { createDetachedSignature } from "crypto-pro";
 import { Uuid } from "../../../../cart/models/uuid";
-import { RequestDocument } from "../../models/request-document";
 import { UxgModalComponent } from "uxg";
-import { CertificateInfoModel } from "../../../../contract-sign/models/certificate-info.model";
+import { Observable, Subject } from "rxjs";
+import { ContractState } from "../../../customer/states/contract.state";
+import { takeUntil } from "rxjs/operators";
+import { ContractActions } from "../../../customer/actions/contract.actions";
+import SignDocument = ContractActions.SignDocument;
 
 @Component({
   selector: 'app-contract-list-item',
   templateUrl: './contract-list-item.component.html',
   styleUrls: ['./contract-list-item.component.scss']
 })
-export class ContractListItemComponent implements OnChanges {
+export class ContractListItemComponent implements OnInit, OnChanges {
   @ViewChild('signDocumentModal') signDocumentModal: UxgModalComponent;
   @ViewChild('certificatesListModal') certificatesListModal: UxgModalComponent;
+  @Select(ContractState.status) status$: Observable<StateStatus>;
 
   @Input() contract: Contract;
   @Input() status: StateStatus;
@@ -39,22 +42,15 @@ export class ContractListItemComponent implements OnChanges {
   @Output() signDocument = new EventEmitter();
 
   readonly certForm: FormGroup = this.fb.group({
-    thumbprint: [null, Validators.required]
+    certificate: [null, Validators.required]
   });
-  certificates: {
-    data: any,
-    ownerInfo: any,
-    issuerInfo: any,
-    serialNumber: string,
-  }[];
-  certificateListError: string = null;
   contractId: Uuid;
-  documentsToSign: RequestDocument[];
-
+  signingStatus: boolean;
   folded: boolean;
   files: File[];
   historyFolded = true;
   historyFoldedLength = 3;
+  destroy$ = new Subject();
 
   readonly getCurrencySymbol = getCurrencySymbol;
   readonly form = this.fb.group({ comment: "", files: null });
@@ -79,24 +75,34 @@ export class ContractListItemComponent implements OnChanges {
     private fb: FormBuilder,
     private store: Store,
     public user: UserInfoService,
+    private actions: Actions,
   ) {}
+
+  ngOnInit() {
+    this.actions.pipe(
+      ofActionCompleted(SignDocument),
+      takeUntil(this.destroy$)
+    ).subscribe(({result}) => {
+      const e = result.error as any;
+
+      if (e) {
+        this.store.dispatch(new ToastActions.Error(e && e.error.detail));
+      } else {
+        this.certificatesListModal.close();
+        this.signingStatus = false;
+        this.store.dispatch(new ToastActions.Success(`Договор успешно подписан`));
+      }
+    });
+  }
 
   selectFiles(files: File[]) {
     this.files = files;
     this.form.get('files').setValue(this.files.map(f => new AppFile(f)).filter(({ valid }) => valid).map(({ file }) => file));
   }
 
-  openSignDocumentModal(contract, documents) {
-    this.contract = contract;
-    this.contractId = contract.id;
-    this.documentsToSign = documents;
-    this.signDocumentModal.open();
-  }
-
   openCertificatesListModal() {
     this.signDocumentModal.close();
     this.certificatesListModal.open();
-    this.getCertificatesList().then(r => {});
   }
 
   copyContractSignLink() {
@@ -134,17 +140,18 @@ export class ContractListItemComponent implements OnChanges {
     }
   }
 
-  async onSignDocument() {
+  onSignDocument() {
     if (this.certForm.valid) {
+      this.signingStatus = true;
+
       const requestId = this.contract.request.id;
-      const thumbprint = this.certForm.get('thumbprint').value;
-      const selectedCertificate = this.certificates.find(cert => cert.data.thumbprint === thumbprint);
+      const selectedCertificate = this.certForm.get('certificate').value;
       const documentSignatures = [];
 
       let docsSigned = 0;
 
       this.contract.documents.forEach(document => {
-        createDetachedSignature(thumbprint, document.hash).then(response => {
+        createDetachedSignature(selectedCertificate.data.thumbprint, document.hash).then(response => {
           documentSignatures.push({
             id: document.id,
             signature: response
@@ -165,55 +172,6 @@ export class ContractListItemComponent implements OnChanges {
         });
       });
     }
-  }
-
-  private async getCertificatesList() {
-    this.certificates = [];
-    this.certificateListError = null;
-
-    try {
-      await getUserCertificates().then(response => {
-        response.forEach(cert => {
-          this.certificates.push(this.prepareDataForSubjectOrIssue(cert));
-        });
-      });
-    } catch (error) {
-      this.certificateListError = error.message;
-    }
-  }
-
-  // todo Перенести в общий компонент
-  prepareDataForSubjectOrIssue(certificate: Certificate) {
-    const certInfo = {
-      data: {},
-      ownerInfo: {},
-      issuerInfo: {},
-      serialNumber: null
-    };
-
-    // Получаем серийный номер сертификата
-    certificate.getCadesProp("SerialNumber").then(r => {
-      certInfo['serialNumber'] = r;
-    });
-
-    // Получаем информацию о владельце
-    certificate.getOwnerInfo().then(r => {
-      r.map(data => {
-        certInfo['ownerInfo'][data.title] = data.description;
-      });
-    });
-
-    // Получаем информацию об издателе сертификата
-    certificate.getIssuerInfo().then(r => {
-      r.map(data => {
-        certInfo['issuerInfo'][data.title] = data.description;
-      });
-    });
-
-    // Сохраняем основную информацию о сертификате
-    certInfo['data'] = certificate;
-
-    return certInfo;
   }
 
   ngOnChanges() {

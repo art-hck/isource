@@ -45,12 +45,6 @@ export class ContractListComponent implements OnInit, OnDestroy {
   @Select(ContractState.contracts([ContractStatus.SIGNED_BY_SUPPLIER])) contractsSignedBySupplier$: Observable<Contract[]>;
   @Select(ContractState.status) status$: Observable<StateStatus>;
 
-  certificates: {
-    data: any,
-    ownerInfo: any,
-    issuerInfo: any,
-  }[];
-  certificateListError: string = null;
   contract: Contract;
   contractId: Uuid;
   documentsToSign: RequestDocument[];

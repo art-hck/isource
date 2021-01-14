@@ -55,7 +55,7 @@ export class ProposalComponent implements OnChanges, OnDestroy {
   form: FormGroup;
   someFilterVar = true;
 
-  get selectedPositions(): TechnicalCommercialProposalPosition[] {
+  get selectedPositions(): CommonProposalItem[] {
     return (this.form.get('positions') as FormArray).controls
       ?.filter(({value}) => value.checked)
       .map(({value}) => (value.position));
