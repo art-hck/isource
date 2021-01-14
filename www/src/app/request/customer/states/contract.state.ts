@@ -97,7 +97,7 @@ export class ContractState {
         contracts: updateItem(({ id }) => c.id === id, c),
         status: "received"
       }))),
-      tap(() => dispatch([new FetchAvailibleFilters(requestId), new ToastActions.Success('Договор согласован')])),
+      tap(() => dispatch([new FetchAvailibleFilters(requestId), new ToastActions.Success('Договор рассмотрен')])),
       catchError(e => {
         setState(patch<Model>({status: "error"}));
         return dispatch(new ToastActions.Error(e?.error?.detail ?? "Неизвестная ошибка"));
