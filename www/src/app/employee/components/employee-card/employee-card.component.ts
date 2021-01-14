@@ -81,6 +81,6 @@ export class EmployeeCardComponent implements OnInit {
   }
 
   setResponsibleUser(requestId: Uuid, userId: Uuid ) {
-    this.store.dispatch(new ChangeResponsibleUser(requestId, userId)).subscribe(() => this.getEmployeeInfo(this.employeeId))
+    this.store.dispatch(new ChangeResponsibleUser(requestId, userId)).subscribe(() => this.getEmployeeInfo(this.employeeId));
   }
 }
