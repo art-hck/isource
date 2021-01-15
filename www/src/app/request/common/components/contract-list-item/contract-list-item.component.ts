@@ -69,6 +69,7 @@ export class ContractListItemComponent implements OnInit, OnChanges {
   get canApprove(): boolean { return this.approve.observers.length && ['ON_APPROVAL'].includes(this.contract.status); }
   get canDelete(): boolean { return this.delete.observers.length && ['NEW'].includes(this.contract.status); }
   get approvedByCustomer(): boolean { return ['APPROVED'].includes(this.contract.status); }
+  get confirmedByCustomerWoSign(): boolean { return ['CONFIRMED_BY_CUSTOMER_WO_SIGN'].includes(this.contract.status); }
   get signedByCustomer(): boolean { return ['SIGNED_BY_CUSTOMER'].includes(this.contract.status); }
   get signedBySupplier(): boolean { return ['SIGNED_BY_SUPPLIER'].includes(this.contract.status); }
 
