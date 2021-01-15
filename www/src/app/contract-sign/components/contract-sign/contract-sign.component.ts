@@ -12,10 +12,10 @@ import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { UxgBreadcrumbsService, UxgModalComponent } from "uxg";
 import { createDetachedSignature } from "crypto-pro";
 import { Uuid } from "../../../cart/models/uuid";
-import { CertificateListItem } from "../../models/certificate-list-item.model";
 import { ToastActions } from "../../../shared/actions/toast.actions";
 import { StateStatus } from "../../../request/common/models/state-status";
 import SignDocument = ContractSignActions.SignDocument;
+import moment from "moment";
 
 @Component({
   selector: 'app-contract-sign',
@@ -31,8 +31,6 @@ export class ContractSignComponent implements OnInit, OnDestroy {
   destroy$ = new Subject();
   signerName: string;
 
-  certificates: CertificateListItem[];
-  certificateListError: string = null;
   contract: Contract;
   contractId: Uuid;
   documentsToSign: RequestDocument[];
@@ -110,6 +108,8 @@ export class ContractSignComponent implements OnInit, OnDestroy {
               certNumber: selectedCertificate.serialNumber,
               certOwnerName: selectedCertificate.ownerInfo['Владелец'],
               certIssuerName: selectedCertificate.issuerInfo['Компания'],
+              certValidFrom: moment(selectedCertificate.data.validFrom).format('YYYY-MM-DD'),
+              certValidTill: moment(selectedCertificate.data.validTo).format('YYYY-MM-DD'),
               documentSignatures
             };
 
