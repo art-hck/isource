@@ -133,7 +133,7 @@
         </div>
       </ng-container>
       <!-- footer -->
-      <ng-container *ngIf="canSend || canRollback || canReject || canApprove || approvedByCustomer || signedByCustomer || signedBySupplier">
+      <ng-container *ngIf="canSend || canRollback || canReject || canApprove || approvedByCustomer || confirmedByCustomerWoSign || signedByCustomer || signedBySupplier">
         <hr/>
         <div class="app-row app-align-items-center">
           <button uxgButton iconText secondary type="button" *ngIf="download.observers.length" (click)="download.emit()">
@@ -192,6 +192,10 @@
               </div>
               <button uxgButton primary type="button" [disabled]="status === 'updating'" (click)="sign.emit()">Подтвердить подписание</button>
             </ng-container>
+          </ng-container>
+
+          <ng-container *ngIf="user.isBackOffice() && confirmedByCustomerWoSign">
+            <button uxgButton primary type="button" [disabled]="status === 'updating'" (click)="sign.emit()">Подтвердить подписание</button>
           </ng-container>
         </div>
       </ng-container>

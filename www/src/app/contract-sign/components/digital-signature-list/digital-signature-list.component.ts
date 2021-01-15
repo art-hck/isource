@@ -40,7 +40,7 @@ export class DigitalSignatureListComponent implements OnInit, OnDestroy {
     this.isValidSystemSetup$ = fromPromise(isValidSystemSetup());
     this.userCertificates$ = fromPromise(getUserCertificates());
 
-    const timeout = of(new Error("timed out")).pipe(delay(4000));
+    const timeout = of(new Error("timed out")).pipe(delay(7000));
     const isValidCryptoProSetup = race(this.isValidSystemSetup$, timeout).pipe(takeUntil(this.destroy$));
 
     isValidCryptoProSetup.subscribe(response => {
