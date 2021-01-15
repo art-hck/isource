@@ -164,6 +164,8 @@ export class ContractListItemComponent implements OnInit, OnChanges {
               certNumber: selectedCertificate.serialNumber,
               certOwnerName: selectedCertificate.ownerInfo['Владелец'],
               certIssuerName: selectedCertificate.issuerInfo['Компания'],
+              certValidFrom: moment(selectedCertificate.data.validFrom).format('YYYY-MM-DD'),
+              certValidTill: moment(selectedCertificate.data.validTo).format('YYYY-MM-DD'),
               documentSignatures
             };
 
