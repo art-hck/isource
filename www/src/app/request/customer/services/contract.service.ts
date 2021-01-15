@@ -31,6 +31,11 @@ export class ContractService {
     return this.api.get<Contract>(url);
   }
 
+  confirmWithoutSigning(contractId: Uuid) {
+    const url = `requests/customer/contracts/${contractId}/confirm-wo-sign`;
+    return this.api.get<Contract>(url);
+  }
+
   upload(contractId: Uuid, files: File[], comment?: string): Observable<RequestDocument[]> {
     const url = `requests/contracts/${contractId}/upload`;
     return this.api.post<RequestDocument[]>(url, this.formDataService.toFormData({ files, comments: [comment] }));

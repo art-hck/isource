@@ -34,6 +34,7 @@ export class ContractListItemComponent implements OnInit, OnChanges {
   @Output() send = new EventEmitter<{ comment?: string, files: File[] }>();
   @Output() rollback = new EventEmitter();
   @Output() approve = new EventEmitter();
+  @Output() confirmWithoutSigning = new EventEmitter();
   @Output() reject = new EventEmitter<{ comment?: string, files: File[] }>();
   @Output() download = new EventEmitter();
   @Output() sign = new EventEmitter();
@@ -66,8 +67,8 @@ export class ContractListItemComponent implements OnInit, OnChanges {
   get canSend(): boolean { return this.send.observers.length && ['NEW', 'REJECTED'].includes(this.contract.status); }
   get canReject(): boolean { return this.reject.observers.length && ['ON_APPROVAL'].includes(this.contract.status); }
   get canApprove(): boolean { return this.approve.observers.length && ['ON_APPROVAL'].includes(this.contract.status); }
-  get canSign(): boolean { return this.sign.observers.length && ['APPROVED'].includes(this.contract.status); }
   get canDelete(): boolean { return this.delete.observers.length && ['NEW'].includes(this.contract.status); }
+  get approvedByCustomer(): boolean { return ['APPROVED'].includes(this.contract.status); }
   get signedByCustomer(): boolean { return ['SIGNED_BY_CUSTOMER'].includes(this.contract.status); }
   get signedBySupplier(): boolean { return ['SIGNED_BY_SUPPLIER'].includes(this.contract.status); }
 

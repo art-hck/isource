@@ -61,6 +61,7 @@
         [status]="status$ | async"
         (signDocument)="store.dispatch(signDocument(contract.id, $event));"
         (approve)="store.dispatch(approve(request, contract))"
+        (confirmWithoutSigning)="store.dispatch(confirmWithoutSigning(request, contract))"
         (reject)="store.dispatch(reject(request, contract, $event.files, $event.comment))"
       ></app-contract-list-item>
 
