@@ -4,9 +4,7 @@ import { DashboardAgreementsComponent } from './components/dashboard-agreements/
 import { SharedModule } from "../../shared/shared.module";
 import { AgreementsCommonModule } from "../../agreements/common/agreements-common.module";
 import { DashboardService } from "./services/dashboard.service";
-import { NgxsModule } from "@ngxs/store";
 import { TasksBarComponent } from './components/tasks-bar/tasks-bar.component';
-import { DashboardCommonState } from "./states/dashboard.state";
 import { DashboardStatisticsComponent } from './components/dashboard-statistics/dashboard-statistics.component';
 import { PercentageBarComponent } from './components/dashboard-statistics/percentage-bar/percentage-bar.component';
 import { ReactiveFormsModule } from "@angular/forms";
@@ -24,9 +22,6 @@ import { DashboardCommonRoutingModule } from "./dashboard-common-routing.module"
     SharedModule,
     CommonModule,
     DashboardCommonRoutingModule,
-    NgxsModule.forFeature([
-      DashboardCommonState
-    ]),
     ReactiveFormsModule,
   ],
   providers: [

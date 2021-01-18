@@ -9,7 +9,6 @@ import { DashboardState } from "./states/dashboard.state";
 import { ReactiveFormsModule } from "@angular/forms";
 import { DashboardComponent } from "./components/dashboard/dashboard.component";
 import { DashboardCommonModule } from "../common/dashboard-common.module";
-import { DashboardCommonState } from "../common/states/dashboard.state";
 
 @NgModule({
   declarations: [

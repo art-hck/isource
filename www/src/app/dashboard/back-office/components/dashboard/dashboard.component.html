@@ -4,7 +4,8 @@
   [tasksTotalCount$]="tasksTotalCount$"
   [agreementsTotalCount$]="agreementsTotalCount$"
   [agreementsBar$]="agreementsBar$"
-  [tasksBar$]="tasksBar$">
+  [tasksBar$]="tasksBar$"
+  (switchView)="switchView($event)">
 </app-dashboard-agreements>
 
 <br><br>
@@ -13,6 +14,14 @@
   <div class="app-col">
     <h2>Статистика по статусам и деньгам</h2>
 
-    <app-dashboard-statistics></app-dashboard-statistics>
+    <app-dashboard-statistics
+      #dashboardStatisticsComponent
+      [statusesStatistics$]="statusesStatistics$"
+      [filterRequestList$]="filterRequestList$"
+      [filterCustomerList$]="filterCustomerList$"
+      [filterResponsibleUsersList$]="filterResponsibleUsersList$"
+      (submitFilter)="submitFilter($event)"
+      (resetFilter)="resetFilter()"
+    ></app-dashboard-statistics>
   </div>
 </div>

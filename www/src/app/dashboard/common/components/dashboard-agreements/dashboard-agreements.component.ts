@@ -1,14 +1,10 @@
-import { Component, OnInit, OnDestroy, ViewChildren, QueryList, Input } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChildren, QueryList, Input, EventEmitter, Output } from '@angular/core';
 import { DashboardView } from "../../models/dashboard-view";
-import { Select, Store } from "@ngxs/store";
-import FetchTasks = DashboardActions.FetchTasks;
-import FetchAgreements = DashboardActions.FetchAgreements;
+import { Store } from "@ngxs/store";
 import { Agreement } from "../../../../agreements/common/models/Agreement";
 import { StateStatus } from "../../../../request/common/models/state-status";
-import { DashboardCommonState } from "../../states/dashboard.state";
 import { DashboardTaskItem } from "../../models/dashboard-task-item";
 import { Observable, Subject } from "rxjs";
-import { DashboardActions } from "../../actions/dashboard.actions";
 import { UxgPopoverComponent } from "uxg";
 import { AgreementActionFilters } from "../../../../agreements/back-office/dictionaries/agreement-action-label";
 
@@ -26,6 +22,8 @@ export class DashboardAgreementsComponent implements OnInit, OnDestroy {
   @Input() agreementsBar$: Observable<DashboardTaskItem[]>;
   @Input() tasksBar$: Observable<DashboardTaskItem[]>;
 
+  @Output() switchView = new EventEmitter();
+
   @ViewChildren('viewPopover') viewPopover: QueryList<UxgPopoverComponent>;
 
   destroy$ = new Subject();
@@ -36,11 +34,11 @@ export class DashboardAgreementsComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    this.switchView(this.view);
+    this.onSwitchView(this.view);
   }
 
-  switchView(view: DashboardView) {
-    view === 'tasks' ? this.store.dispatch(FetchTasks) : this.store.dispatch(FetchAgreements);
+  onSwitchView(view: DashboardView) {
+    this.switchView.emit(view);
     this.view = view;
     this.viewPopover?.first.hide();
   }

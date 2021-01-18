@@ -11,7 +11,7 @@
             </div>
 
             <div class="app-col-auto">
-              <button uxgButton clear (click)="resetFilter()" *ngIf="filterIsFilled()">
+              <button uxgButton clear (click)="onResetFilter()" *ngIf="filterIsFilled()">
                 <uxg-icon shape="app-reset-filters"></uxg-icon>
                 <span>Сбросить все</span>
               </button>
@@ -257,7 +257,7 @@
 
     <ng-template uxgModalFooter>
       <button uxgButton secondary lg type="button" (click)="filterRequestsListModal.close()">Отмена</button>
-      <button uxgButton primary lg (click)="submitFilter(); filterRequestsListModal.close()">Продолжить</button>
+      <button uxgButton primary lg (click)="onSubmitFilter(); filterRequestsListModal.close()">Продолжить</button>
     </ng-template>
   </uxg-modal>
 
@@ -309,7 +309,7 @@
 
     <ng-template uxgModalFooter>
       <button uxgButton secondary lg type="button" (click)="filterCustomersListModal.close()">Отмена</button>
-      <button uxgButton primary lg (click)="submitFilter(); filterCustomersListModal.close()">Продолжить</button>
+      <button uxgButton primary lg (click)="onSubmitFilter(); filterCustomersListModal.close()">Продолжить</button>
     </ng-template>
   </uxg-modal>
 
@@ -361,7 +361,7 @@
 
     <ng-template uxgModalFooter>
       <button uxgButton secondary lg type="button" (click)="filterResponsibleUserListModal.close()">Отмена</button>
-      <button uxgButton primary lg (click)="submitFilter(); filterResponsibleUserListModal.close()">Продолжить</button>
+      <button uxgButton primary lg (click)="onSubmitFilter(); filterResponsibleUserListModal.close()">Продолжить</button>
     </ng-template>
   </uxg-modal>
 </form>
