@@ -3,7 +3,7 @@ import { getCurrencySymbol } from "@angular/common";
 import { StatusesStatisticsInfo } from "../../models/statuses-statistics";
 import { FormControl, FormGroup } from "@angular/forms";
 import { Select, Store } from "@ngxs/store";
-import { DashboardState } from "../../states/dashboard.state";
+import { DashboardCommonState } from "../../states/dashboard.state";
 import { Observable, Subject } from "rxjs";
 import {
   DashboardAvailableFiltersCustomerItem,
@@ -28,10 +28,10 @@ export class DashboardStatisticsComponent implements OnInit, OnDestroy {
   @ViewChild('customersSelectList') customersSelectList: SelectItemsWithSearchComponent;
   @ViewChild('usersSelectList') usersSelectList: SelectItemsWithSearchComponent;
 
-  @Select(DashboardState.statusesStatistics) statusesStatistics$: Observable<StatusesStatisticsInfo>;
-  @Select(DashboardState.filterRequestList) filterRequestList$: Observable<DashboardAvailableFiltersRequestItem[]>;
-  @Select(DashboardState.filterCustomerList) filterCustomerList$: Observable<DashboardAvailableFiltersCustomerItem[]>;
-  @Select(DashboardState.filterResponsibleUsersList) filterResponsibleUsersList$: Observable<DashboardAvailableFiltersResponsibleUserItem[]>;
+  @Select(DashboardCommonState.statusesStatistics) statusesStatistics$: Observable<StatusesStatisticsInfo>;
+  @Select(DashboardCommonState.filterRequestList) filterRequestList$: Observable<DashboardAvailableFiltersRequestItem[]>;
+  @Select(DashboardCommonState.filterCustomerList) filterCustomerList$: Observable<DashboardAvailableFiltersCustomerItem[]>;
+  @Select(DashboardCommonState.filterResponsibleUsersList) filterResponsibleUsersList$: Observable<DashboardAvailableFiltersResponsibleUserItem[]>;
 
   form = new FormGroup({
     requests: new FormControl(null),
