@@ -160,6 +160,11 @@ export class PositionFormComponent implements OnInit, ControlValueAccessor, Vali
 
     this.form = form;
     this.form.valueChanges.pipe(startWith(<{}>this.form.value)).subscribe(value => {
+      value = {
+        ...this.form.value,
+        measureUnit: this.form.value?.measureUnit?.symbol,
+        okeiCode: this.form.value?.measureUnit?.code
+      };
       this.writeValue(value);
       if (this.onChange) {
         this.onChange(value);
@@ -173,10 +178,6 @@ export class PositionFormComponent implements OnInit, ControlValueAccessor, Vali
       return;
     } else {
       let submit$: Observable<RequestPosition>;
-      const body = {
-        ...this.form.value,
-        measureUnit: this.form.value.measureUnit.symbol,
-        okeiCode: this.form.value.measureUnit.code};
 
       if (this.position.id) {
         // Проверяем, есть ли правки для сохранения или данные в форме остались без изменений
@@ -186,9 +187,9 @@ export class PositionFormComponent implements OnInit, ControlValueAccessor, Vali
           return;
         }
 
-        submit$ = this.positionService.updatePosition(this.position.id, body);
+        submit$ = this.positionService.updatePosition(this.position.id, this.value);
       } else {
-        submit$ = this.positionService.addPosition(this.requestId, [body])
+        submit$ = this.positionService.addPosition(this.requestId, [this.value])
           .pipe(map(positions => positions[0]));
       }
 
