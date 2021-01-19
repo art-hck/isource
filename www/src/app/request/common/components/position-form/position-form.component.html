@@ -87,11 +87,12 @@
       <uxg-dropdown-input appSuggestions strictMode class="measure-units" formControlName="measureUnit"
                           placeholder="Ед. измерения"
                           [$]="okeiList$" [searchFn]="okeiService.searchOkei" [lg]="true" #sug="appSuggestions"
+                          [displayByFn]="getOkeiSymbol"
       >
         <ng-container *ngIf="(sug.suggestions$ | async) as okeiSuggestions">
           <div uxgDropdownItem
                *ngFor="let suggestion of okeiSuggestions"
-               [value]="suggestion.symbol | lowercase"
+               [value]="suggestion"
                [attr.title]="suggestion.name | lowercase"
           >{{suggestion.symbol | lowercase }} <span class="app-ghost-color">- {{suggestion.name | lowercase}}</span>
           </div>
