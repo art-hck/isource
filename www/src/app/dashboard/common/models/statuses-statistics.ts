@@ -1,4 +1,4 @@
-import { DashboardStatusListItem } from "../../common/models/dashboard-status-list-item";
+import { DashboardStatusListItem } from "./dashboard-status-list-item";
 
 export class StatusesStatisticsInfo {
   requestsCount: number;

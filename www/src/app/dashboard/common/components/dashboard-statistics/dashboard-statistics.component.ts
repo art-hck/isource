@@ -1,9 +1,8 @@
-import { Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { getCurrencySymbol } from "@angular/common";
 import { StatusesStatisticsInfo } from "../../models/statuses-statistics";
 import { FormControl, FormGroup } from "@angular/forms";
-import { Select, Store } from "@ngxs/store";
-import { DashboardState } from "../../states/dashboard.state";
+import { Store } from "@ngxs/store";
 import { Observable, Subject } from "rxjs";
 import {
   DashboardAvailableFiltersCustomerItem,
@@ -12,10 +11,7 @@ import {
 } from "../../models/dashboard-available-filters";
 import { map, takeUntil, tap, withLatestFrom } from "rxjs/operators";
 import { ActivatedRoute } from "@angular/router";
-import { DashboardActions } from "../../actions/dashboard.actions";
 import { UserInfoService } from "../../../../user/service/user-info.service";
-import FetchStatusesStatistics = DashboardActions.FetchStatusesStatistics;
-import FetchAvailableFilters = DashboardActions.FetchAvailableFilters;
 import { SelectItemsWithSearchComponent } from "../../../../shared/components/select-items-with-search/select-items-with-search.component";
 
 @Component({
@@ -28,10 +24,13 @@ export class DashboardStatisticsComponent implements OnInit, OnDestroy {
   @ViewChild('customersSelectList') customersSelectList: SelectItemsWithSearchComponent;
   @ViewChild('usersSelectList') usersSelectList: SelectItemsWithSearchComponent;
 
-  @Select(DashboardState.statusesStatistics) statusesStatistics$: Observable<StatusesStatisticsInfo>;
-  @Select(DashboardState.filterRequestList) filterRequestList$: Observable<DashboardAvailableFiltersRequestItem[]>;
-  @Select(DashboardState.filterCustomerList) filterCustomerList$: Observable<DashboardAvailableFiltersCustomerItem[]>;
-  @Select(DashboardState.filterResponsibleUsersList) filterResponsibleUsersList$: Observable<DashboardAvailableFiltersResponsibleUserItem[]>;
+  @Input() statusesStatistics: StatusesStatisticsInfo;
+  @Input() filterRequestList: DashboardAvailableFiltersRequestItem[];
+  @Input() filterCustomerList: DashboardAvailableFiltersCustomerItem[];
+  @Input() filterResponsibleUsersList: DashboardAvailableFiltersResponsibleUserItem[];
+
+  @Output() submitFilter = new EventEmitter();
+  @Output() resetFilter = new EventEmitter();
 
   form = new FormGroup({
     requests: new FormControl(null),
@@ -57,25 +56,18 @@ export class DashboardStatisticsComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    this.route.params.pipe(
-      tap(() => this.store.dispatch([new FetchStatusesStatistics({}), new FetchAvailableFilters({})])),
-      withLatestFrom(this.statusesStatistics$),
-      takeUntil(this.destroy$)
-    ).subscribe();
-
-
     this.form.get('shipmentDateFrom').valueChanges.pipe(
-      map(() => this.submitFilter()),
+      map(() => this.onSubmitFilter()),
       takeUntil(this.destroy$)
     ).subscribe();
 
     this.form.get('shipmentDateTo').valueChanges.pipe(
-      map(() => this.submitFilter()),
+      map(() => this.onSubmitFilter()),
       takeUntil(this.destroy$)
     ).subscribe();
   }
 
-  submitFilter() {
+  onSubmitFilter() {
     this.updateSelectedItemsCount();
 
     const filters = {
@@ -90,10 +82,7 @@ export class DashboardStatisticsComponent implements OnInit, OnDestroy {
       if (!value?.length) { delete filters[key]; }
     }
 
-    this.store.dispatch(new FetchStatusesStatistics(filters));
-    this.store.dispatch(new FetchAvailableFilters(filters)).subscribe(() => {
-      this.updateSelectedItemsCount();
-    });
+    this.submitFilter.emit(filters);
   }
 
   updateSelectedItemsCount(): void {
@@ -130,25 +119,12 @@ export class DashboardStatisticsComponent implements OnInit, OnDestroy {
     return user?.fullName?.toLowerCase()?.indexOf(q.toLowerCase()) >= 0;
   }
 
-  resetFilter(): void {
-    this.form.reset({
-      requests: null,
-      customers: null,
-      users: null,
-      shipmentDateFrom: null,
-      shipmentDateTo: null,
-    }, {emitEvent: false});
-
+  onResetFilter(): void {
     this.requestsSelectList.form.get('checked').reset(null, {emitEvent: false});
     this.customersSelectList.form.get('checked').reset(null, {emitEvent: false});
     this.usersSelectList.form.get('checked').reset(null, {emitEvent: false});
 
-    this.selectedCustomers = [];
-    this.selectedRequests = [];
-    this.selectedUsers = [];
-
-    this.store.dispatch(new FetchAvailableFilters({}));
-    this.store.dispatch(new FetchStatusesStatistics({}));
+    this.resetFilter.emit();
   }
 
   filterIsFilled(): boolean {

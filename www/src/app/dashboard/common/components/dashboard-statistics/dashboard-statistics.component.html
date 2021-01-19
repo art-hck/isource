@@ -1,5 +1,5 @@
 <div class="app-card">
-  <ng-container *ngIf="(statusesStatistics$ | async) as stats; else loading">
+  <ng-container *ngIf="statusesStatistics as stats; else loading">
     <div class="app-row">
       <div class="statistics-filter-section app-col">
         <!-- Первая часть формы -->
@@ -11,7 +11,7 @@
             </div>
 
             <div class="app-col-auto">
-              <button uxgButton clear (click)="resetFilter()" *ngIf="filterIsFilled()">
+              <button uxgButton clear (click)="onResetFilter()" *ngIf="filterIsFilled()">
                 <uxg-icon shape="app-reset-filters"></uxg-icon>
                 <span>Сбросить все</span>
               </button>
@@ -195,7 +195,7 @@
 
     <select-items-with-search
       #requestsSelectList
-      *ngIf="(filterRequestList$ | async) as requests else loading"
+      *ngIf="filterRequestList as requests else loading"
       class="select-list select-list-requests"
       formControlName="requests"
       placeholder="Наименование заявки"
@@ -257,7 +257,7 @@
 
     <ng-template uxgModalFooter>
       <button uxgButton secondary lg type="button" (click)="filterRequestsListModal.close()">Отмена</button>
-      <button uxgButton primary lg (click)="submitFilter(); filterRequestsListModal.close()">Продолжить</button>
+      <button uxgButton primary lg (click)="onSubmitFilter(); filterRequestsListModal.close()">Продолжить</button>
     </ng-template>
   </uxg-modal>
 
@@ -267,7 +267,7 @@
 
     <select-items-with-search
       #customersSelectList
-      *ngIf="(filterCustomerList$ | async) as customers else loading"
+      *ngIf="filterCustomerList as customers else loading"
       class="select-list select-list-customers"
       formControlName="customers"
       placeholder="Наименование контрагентов"
@@ -309,7 +309,7 @@
 
     <ng-template uxgModalFooter>
       <button uxgButton secondary lg type="button" (click)="filterCustomersListModal.close()">Отмена</button>
-      <button uxgButton primary lg (click)="submitFilter(); filterCustomersListModal.close()">Продолжить</button>
+      <button uxgButton primary lg (click)="onSubmitFilter(); filterCustomersListModal.close()">Продолжить</button>
     </ng-template>
   </uxg-modal>
 
@@ -319,7 +319,7 @@
 
     <select-items-with-search
       #usersSelectList
-      *ngIf="(filterResponsibleUsersList$ | async) as users else loading"
+      *ngIf="filterResponsibleUsersList as users else loading"
       class="select-list select-list-users"
       formControlName="users"
       placeholder="ФИО сотрудника"
@@ -361,7 +361,7 @@
 
     <ng-template uxgModalFooter>
       <button uxgButton secondary lg type="button" (click)="filterResponsibleUserListModal.close()">Отмена</button>
-      <button uxgButton primary lg (click)="submitFilter(); filterResponsibleUserListModal.close()">Продолжить</button>
+      <button uxgButton primary lg (click)="onSubmitFilter(); filterResponsibleUserListModal.close()">Продолжить</button>
     </ng-template>
   </uxg-modal>
 </form>

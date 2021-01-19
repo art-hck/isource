@@ -2,7 +2,7 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { DashboardTasks } from "../models/dashboard-tasks";
 import { Observable } from "rxjs";
-import { DashboardAvailableFilters } from "../models/dashboard-available-filters";
+import { DashboardAvailableFilters } from "../../common/models/dashboard-available-filters";
 
 @Injectable()
 export class DashboardService {
