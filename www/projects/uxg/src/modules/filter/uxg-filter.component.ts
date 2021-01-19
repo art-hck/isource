@@ -13,7 +13,7 @@ export class UxgFilterComponent implements OnInit, OnDestroy {
   @HostBinding('class.app-col-aside') colAside = true;
   @HostBinding('class.app-row') row = true;
   @HostBinding('class.app-flex-column') flexColumn = true;
-  @HostBinding('class.detachable') detachable = true;
+  @Input() @HostBinding('class.detachable') detachable = true;
   @HostBinding('class.open') isOpen: boolean;
   @Input() count: number;
   @Input() formGroup: FormGroup;

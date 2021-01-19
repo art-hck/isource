@@ -8,6 +8,7 @@
   "core/controls",
   "core/grid",
   "core/icon",
+  "core/aside-modal",
   "core/tabs",
   "core/typography",
   "core/dropdown",
@@ -26,6 +27,7 @@
   @include controls($theme);
   @include grid($theme);
   @include icon($theme);
+  @include asideModal($theme);
   @include tabs($theme);
   @include typography($theme);
   @include dropdown($theme);
