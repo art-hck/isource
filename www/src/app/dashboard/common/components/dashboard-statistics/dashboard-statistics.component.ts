@@ -24,10 +24,10 @@ export class DashboardStatisticsComponent implements OnInit, OnDestroy {
   @ViewChild('customersSelectList') customersSelectList: SelectItemsWithSearchComponent;
   @ViewChild('usersSelectList') usersSelectList: SelectItemsWithSearchComponent;
 
-  @Input() statusesStatistics$: Observable<StatusesStatisticsInfo>;
-  @Input() filterRequestList$: Observable<DashboardAvailableFiltersRequestItem[]>;
-  @Input() filterCustomerList$: Observable<DashboardAvailableFiltersCustomerItem[]>;
-  @Input() filterResponsibleUsersList$: Observable<DashboardAvailableFiltersResponsibleUserItem[]>;
+  @Input() statusesStatistics: StatusesStatisticsInfo;
+  @Input() filterRequestList: DashboardAvailableFiltersRequestItem[];
+  @Input() filterCustomerList: DashboardAvailableFiltersCustomerItem[];
+  @Input() filterResponsibleUsersList: DashboardAvailableFiltersResponsibleUserItem[];
 
   @Output() submitFilter = new EventEmitter();
   @Output() resetFilter = new EventEmitter();
@@ -83,11 +83,6 @@ export class DashboardStatisticsComponent implements OnInit, OnDestroy {
     }
 
     this.submitFilter.emit(filters);
-
-    // this.store.dispatch(new FetchStatusesStatistics(filters));
-    // this.store.dispatch(new FetchAvailableFilters(filters)).subscribe(() => {
-    //   this.updateSelectedItemsCount();
-    // });
   }
 
   updateSelectedItemsCount(): void {

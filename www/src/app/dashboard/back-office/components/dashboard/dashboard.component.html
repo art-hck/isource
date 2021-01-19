@@ -1,10 +1,10 @@
 <app-dashboard-agreements
-  [agreements$]="agreements$"
-  [tasks$]="tasks$"
-  [tasksTotalCount$]="tasksTotalCount$"
-  [agreementsTotalCount$]="agreementsTotalCount$"
-  [agreementsBar$]="agreementsBar$"
-  [tasksBar$]="tasksBar$"
+  [agreements]="agreements$ | async"
+  [tasks]="tasks$ | async"
+  [tasksTotalCount]="tasksTotalCount$ | async"
+  [agreementsTotalCount]="agreementsTotalCount$ | async"
+  [agreementsBar]="agreementsBar$ | async"
+  [tasksBar]="tasksBar$ | async"
   (switchView)="switchView($event)">
 </app-dashboard-agreements>
 
@@ -16,10 +16,10 @@
 
     <app-dashboard-statistics
       #dashboardStatisticsComponent
-      [statusesStatistics$]="statusesStatistics$"
-      [filterRequestList$]="filterRequestList$"
-      [filterCustomerList$]="filterCustomerList$"
-      [filterResponsibleUsersList$]="filterResponsibleUsersList$"
+      [statusesStatistics]="statusesStatistics$ | async"
+      [filterRequestList]="filterRequestList$ | async"
+      [filterCustomerList]="filterCustomerList$ | async"
+      [filterResponsibleUsersList]="filterResponsibleUsersList$ | async"
       (submitFilter)="submitFilter($event)"
       (resetFilter)="resetFilter()"
     ></app-dashboard-statistics>

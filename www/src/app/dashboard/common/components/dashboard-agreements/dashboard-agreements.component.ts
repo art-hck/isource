@@ -14,13 +14,13 @@ import { AgreementActionFilters } from "../../../../agreements/back-office/dicti
   styleUrls: ['./dashboard-agreements.component.scss']
 })
 export class DashboardAgreementsComponent implements OnInit, OnDestroy {
-  @Input() agreements$: Observable<Agreement[]>;
-  @Input() tasks$: Observable<Agreement[]>;
-  @Input() status$: Observable<StateStatus>;
-  @Input() tasksTotalCount$: Observable<number>;
-  @Input() agreementsTotalCount$: Observable<number>;
-  @Input() agreementsBar$: Observable<DashboardTaskItem[]>;
-  @Input() tasksBar$: Observable<DashboardTaskItem[]>;
+  @Input() agreements: Agreement[];
+  @Input() tasks: Agreement[];
+  @Input() status: StateStatus;
+  @Input() tasksTotalCount: number;
+  @Input() agreementsTotalCount: number;
+  @Input() agreementsBar: DashboardTaskItem[];
+  @Input() tasksBar: DashboardTaskItem[];
 
   @Output() switchView = new EventEmitter();
 

@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { DashboardAgreementsComponent } from './components/dashboard-agreements/dashboard-agreements.component';
 import { SharedModule } from "../../shared/shared.module";
 import { AgreementsCommonModule } from "../../agreements/common/agreements-common.module";
-import { DashboardService } from "./services/dashboard.service";
 import { TasksBarComponent } from './components/tasks-bar/tasks-bar.component';
 import { DashboardStatisticsComponent } from './components/dashboard-statistics/dashboard-statistics.component';
 import { PercentageBarComponent } from './components/dashboard-statistics/percentage-bar/percentage-bar.component';
@@ -23,9 +22,6 @@ import { DashboardCommonRoutingModule } from "./dashboard-common-routing.module"
     CommonModule,
     DashboardCommonRoutingModule,
     ReactiveFormsModule,
-  ],
-  providers: [
-    DashboardService
   ],
   exports: [
     DashboardAgreementsComponent,

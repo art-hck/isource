@@ -1,5 +1,5 @@
 <div class="app-card">
-  <ng-container *ngIf="(statusesStatistics$ | async) as stats; else loading">
+  <ng-container *ngIf="statusesStatistics as stats; else loading">
     <div class="app-row">
       <div class="statistics-filter-section app-col">
         <!-- Первая часть формы -->
@@ -195,7 +195,7 @@
 
     <select-items-with-search
       #requestsSelectList
-      *ngIf="(filterRequestList$ | async) as requests else loading"
+      *ngIf="filterRequestList as requests else loading"
       class="select-list select-list-requests"
       formControlName="requests"
       placeholder="Наименование заявки"
@@ -267,7 +267,7 @@
 
     <select-items-with-search
       #customersSelectList
-      *ngIf="(filterCustomerList$ | async) as customers else loading"
+      *ngIf="filterCustomerList as customers else loading"
       class="select-list select-list-customers"
       formControlName="customers"
       placeholder="Наименование контрагентов"
@@ -319,7 +319,7 @@
 
     <select-items-with-search
       #usersSelectList
-      *ngIf="(filterResponsibleUsersList$ | async) as users else loading"
+      *ngIf="filterResponsibleUsersList as users else loading"
       class="select-list select-list-users"
       formControlName="users"
       placeholder="ФИО сотрудника"
