@@ -1,4 +1,4 @@
-<ng-container appFilter>
+<ng-container uxgFilter>
 <!-- tabs -->
 <div class="app-row">
   <div class="app-col">
@@ -60,7 +60,7 @@
         <uxg-icon shape="app-plus"></uxg-icon>
         <span>Новая заявка</span>
       </button>
-      <app-filter-button></app-filter-button>
+      <uxg-filter-button></uxg-filter-button>
     </div>
   </div>
   <div class="app-col-aside detachable"></div>
@@ -206,41 +206,41 @@
 
   </div>
 
-  <app-filter [formGroup]="form" [count]="total" (filter)="emitFilter($event)">
-    <app-filter-section label="Заявка">
+  <uxg-filter [formGroup]="form" [count]="total" (filter)="emitFilter($event)">
+    <uxg-filter-section label="Заявка">
       <input uxgInput type="text" formControlName="requestNameOrNumber" placeholder="Номер или наименование заявки" />
-    </app-filter-section>
+    </uxg-filter-section>
 
-    <app-filter-section label="Есть вопросы на согласовании" *ngIf="form.get('onlyOpenAgreements')">
+    <uxg-filter-section label="Есть вопросы на согласовании" *ngIf="form.get('onlyOpenAgreements')">
       <div class="app-row app-align-items-center">
         <label class="app-col" (click)="onlyOpenTasksRef.switch($event)">Есть открытые согласования</label>
         <uxg-switcher class="app-col-auto" #onlyOpenTasksRef formControlName="onlyOpenAgreements"></uxg-switcher>
       </div>
-    </app-filter-section>
-    <app-filter-section label="Заказчик" *ngIf="form.get('customers')">
-      <app-filter-checkbox-list
+    </uxg-filter-section>
+    <uxg-filter-section label="Заказчик" *ngIf="form.get('customers')">
+      <uxg-filter-checkbox-list
         formControlName="customers"
         searchPlaceholder="Заказчик"
         [foldedSearch]="true"
         [items$]="customers$"
         [limit]="5"
         (search)="customersSearch$.next($event)">
-      </app-filter-checkbox-list>
-    </app-filter-section>
+      </uxg-filter-checkbox-list>
+    </uxg-filter-section>
 
-    <app-filter-section label="Создал заявку" *ngIf="form.get('userIds')">
-      <app-filter-checkbox-list
+    <uxg-filter-section label="Создал заявку" *ngIf="form.get('userIds')">
+      <uxg-filter-checkbox-list
         formControlName="userIds"
         searchPlaceholder="Заказчик"
         [foldedSearch]="true"
         [items$]="users$"
         [limit]="5"
         (search)="usersSearch$.next($event)">
-      </app-filter-checkbox-list>
-    </app-filter-section>
+      </uxg-filter-checkbox-list>
+    </uxg-filter-section>
 
-    <app-filter-section label="Статус" *ngIf="form.get('positionStatuses')">
-      <app-filter-checkbox-list
+    <uxg-filter-section label="Статус" *ngIf="form.get('positionStatuses')">
+      <uxg-filter-checkbox-list
         formControlName="positionStatuses"
         [items$]="positionStatuses$"
         [limit]="9"
@@ -257,11 +257,11 @@
             </div>
           </ng-container>
         </ng-template>
-      </app-filter-checkbox-list>
-    </app-filter-section>
+      </uxg-filter-checkbox-list>
+    </uxg-filter-section>
 
 
-    <app-filter-section label="Даты поставки" *ngIf="form.get('shipmentDateFrom') && form.get('shipmentDateTo')">
+    <uxg-filter-section label="Даты поставки" *ngIf="form.get('shipmentDateFrom') && form.get('shipmentDateTo')">
       <div class="app-row">
         <div class="app-col" [style.padding-right.px]="15">
           <div class="app-control-wrap" [style.padding]="0">
@@ -283,7 +283,7 @@
       </div>
       <br/>
       <uxg-switcher label="Как можно скорее" labelAlign="right" formControlName="shipmentDateAsap"></uxg-switcher>
-    </app-filter-section>
-  </app-filter>
+    </uxg-filter-section>
+  </uxg-filter>
 </div>
 </ng-container>

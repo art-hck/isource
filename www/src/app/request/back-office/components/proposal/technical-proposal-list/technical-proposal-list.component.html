@@ -1,4 +1,4 @@
-<ng-container *ngIf="(request$ | async) as request; else loading" appFilter>
+<ng-container *ngIf="(request$ | async) as request; else loading" uxgFilter>
   <div class="app-row" *ngIf="(technicalProposals$ | async) as technicalProposals">
     <ng-container *ngIf="(procedures$ | async) as procedures">
       <div class="app-col" [class.disabled]="state === 'updating'">
@@ -8,7 +8,7 @@
             <div class="app-row app-justify-content-end">
               <div class="app-col-auto">
 
-                <app-filter-button></app-filter-button>
+                <uxg-filter-button></uxg-filter-button>
 
                 <!-- Создать процедуру  -->
                 <button uxgButton secondary iconText
@@ -84,24 +84,24 @@
         </uxg-modal>
       </div>
 
-      <app-filter [formGroup]="form" [count]="technicalProposals.length" (filter)="filter($event)">
-        <app-filter-section label="Заявка">
+      <uxg-filter [formGroup]="form" [count]="technicalProposals.length" (filter)="filter($event)">
+        <uxg-filter-section label="Заявка">
           <input uxgInput type="text" formControlName="positionName" placeholder="Наименование позиции" />
-        </app-filter-section>
+        </uxg-filter-section>
 
-        <app-filter-section label="Контрагент" *ngIf="(contragentsFilter$ | async)?.length">
-          <app-filter-checkbox-list formControlName="contragents" searchPlaceholder="Заказчик"
+        <uxg-filter-section label="Контрагент" *ngIf="(contragentsFilter$ | async)?.length">
+          <uxg-filter-checkbox-list formControlName="contragents" searchPlaceholder="Заказчик"
             [foldedSearch]="true"
             [items$]="contragentsFilter$"
             [limit]="5"
             (search)="contragentsSearch$.next($event)">
-          </app-filter-checkbox-list>
-        </app-filter-section>
+          </uxg-filter-checkbox-list>
+        </uxg-filter-section>
 
-        <app-filter-section label="Согласование" *ngIf="(statusesFilter$ | async)?.length">
-          <app-filter-checkbox-list formControlName="tpStatus" [items$]="statusesFilter$"></app-filter-checkbox-list>
-        </app-filter-section>
-      </app-filter>
+        <uxg-filter-section label="Согласование" *ngIf="(statusesFilter$ | async)?.length">
+          <uxg-filter-checkbox-list formControlName="tpStatus" [items$]="statusesFilter$"></uxg-filter-checkbox-list>
+        </uxg-filter-section>
+      </uxg-filter>
     </ng-container>
   </div>
 </ng-container>

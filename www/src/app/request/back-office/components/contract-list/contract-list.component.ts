@@ -16,7 +16,7 @@ import { ContractFilter } from "../../../common/models/contract-filter";
 import { ContractStatusLabels } from "../../../common/dictionaries/contract-status-labels";
 import { ContragentWithPositions } from "../../../common/models/contragentWithPositions";
 import { Uuid } from "../../../../cart/models/uuid";
-import { FilterCheckboxList } from "../../../../shared/components/filter/filter-checkbox-item";
+import { UxgFilterCheckboxList } from "uxg";
 import { ContractStatus } from "../../../common/enum/contract-status";
 import { searchContragents } from "../../../../shared/helpers/search";
 import FetchSuppliers = ContractActions.FetchSuppliers;
@@ -47,10 +47,10 @@ export class ContractListComponent implements OnInit, OnDestroy {
   readonly form = this.fb.group({ positionName: "", suppliers: [], statuses: [] });
   readonly destroy$ = new Subject();
   readonly suppliersSearch$ = new BehaviorSubject<string>("");
-  readonly contractSuppliersItems$: Observable<FilterCheckboxList<Uuid>> = combineLatest([this.suppliersSearch$, this.availibleFilters$]).pipe(
+  readonly contractSuppliersItems$: Observable<UxgFilterCheckboxList<Uuid>> = combineLatest([this.suppliersSearch$, this.availibleFilters$]).pipe(
     map(([q, f]) => searchContragents(q, f?.suppliers ?? []).map((c) => ({ label: c.shortName, value: c.id })))
   );
-  readonly contractStatusesItems$: Observable<FilterCheckboxList<ContractStatus>> = this.availibleFilters$.pipe(
+  readonly contractStatusesItems$: Observable<UxgFilterCheckboxList<ContractStatus>> = this.availibleFilters$.pipe(
     map(({ statuses }) => statuses?.map(value => ({ label: ContractStatusLabels[value], value }))),
   );
   readonly send = (request: Request, contract: Contract, files?: File[], comment?: string) => new Send(request.id, contract, files, comment);
