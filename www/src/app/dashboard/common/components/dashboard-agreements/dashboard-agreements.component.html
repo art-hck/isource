@@ -1,34 +1,3 @@
-<h2>Задачи или согласования по статусам</h2>
-
-<div class="app-row app-align-items-center">
-  <div class="app-col">
-    <span class="app-secondary-color">показать: </span>
-    <uxg-popover #viewPopover>
-      <button uxgButton uxgPopoverTrigger link clear [ngSwitch]="view">
-        <span *ngSwitchCase="'tasks'"><b>мои задачи</b></span>
-        <span *ngSwitchCase="'agreements'"><b>согласования заказчика</b></span>
-      </button>
-      <div *uxgPopoverContent>
-        <div>
-          <button uxgButton clear (click)="onSwitchView('tasks')">мои задачи</button>
-        </div>
-        <div>
-          <button uxgButton clear (click)="onSwitchView('agreements')">согласования заказчика</button>
-        </div>
-      </div>
-    </uxg-popover>
-  </div>
-  <div class="app-col"></div>
-  <div class="app-col-auto">
-    <div *ngIf="view === 'tasks'">
-      <a routerLink="/agreements/backoffice"><b>Все задачи ({{tasksTotalCount}})</b></a>
-    </div>
-    <div *ngIf="view === 'agreements'">
-      <a routerLink="/agreements/backoffice" [queryParams]="getQueryParams()"><b>Все согласования ({{agreementsTotalCount}})</b></a>
-    </div>
-  </div>
-</div>
-
 <!--Мои задачи-->
 <ng-container *ngIf="view === 'tasks' && tasks">
   <div class="stat-block" [ngClass]="{'no-tasks': tasks.length === 0}">
