@@ -162,8 +162,8 @@ export class PositionFormComponent implements OnInit, ControlValueAccessor, Vali
     this.form.valueChanges.pipe(startWith(<{}>this.form.value)).subscribe(value => {
       value = {
         ...this.form.value,
-        measureUnit: this.form.value?.measureUnit?.symbol,
-        okeiCode: this.form.value?.measureUnit?.code
+        measureUnit: this.form.value.measureUnit?.symbol ?? this.form.value.measureUnit,
+        okeiCode: this.form.value.measureUnit?.code
       };
       this.writeValue(value);
       if (this.onChange) {
