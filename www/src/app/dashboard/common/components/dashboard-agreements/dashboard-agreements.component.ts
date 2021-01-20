@@ -21,30 +21,15 @@ export class DashboardAgreementsComponent implements OnInit, OnDestroy {
   @Input() agreementsTotalCount: number;
   @Input() agreementsBar: DashboardTaskItem[];
   @Input() tasksBar: DashboardTaskItem[];
-
-  @Output() switchView = new EventEmitter();
-
-  @ViewChildren('viewPopover') viewPopover: QueryList<UxgPopoverComponent>;
+  @Input() view: DashboardView = "tasks";
 
   destroy$ = new Subject();
-  view: DashboardView = "tasks";
 
   constructor(
     public store: Store
   ) { }
 
   ngOnInit() {
-    this.onSwitchView(this.view);
-  }
-
-  onSwitchView(view: DashboardView) {
-    this.switchView.emit(view);
-    this.view = view;
-    this.viewPopover?.first.hide();
-  }
-
-  getQueryParams() {
-    return {actions: JSON.stringify(AgreementActionFilters[18].type)};
   }
 
   ngOnDestroy() {

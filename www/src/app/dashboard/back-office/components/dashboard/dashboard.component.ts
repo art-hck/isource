@@ -21,6 +21,8 @@ import FetchAvailableFilters = DashboardActions.FetchAvailableFilters;
 import { ActivatedRoute } from "@angular/router";
 import { FormControl, FormGroup } from "@angular/forms";
 import { DashboardStatisticsComponent } from "../../../common/components/dashboard-statistics/dashboard-statistics.component";
+import { UxgPopoverComponent } from "uxg";
+import { AgreementActionFilters } from "../../../../agreements/back-office/dictionaries/agreement-action-label";
 
 @Component({
   selector: 'app-dashboard',
@@ -28,6 +30,7 @@ import { DashboardStatisticsComponent } from "../../../common/components/dashboa
   styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements OnInit, OnDestroy {
+  @ViewChildren('viewPopover') viewPopover: QueryList<UxgPopoverComponent>;
   @ViewChild('dashboardStatisticsComponent') dashboardStatisticsComponent: DashboardStatisticsComponent;
 
   @Select(DashboardState.agreements) agreements$: Observable<Agreement[]>;
@@ -70,7 +73,13 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   switchView(view: DashboardView) {
-    view === 'tasks' ? this.store.dispatch(FetchTasks) : this.store.dispatch(FetchAgreements);
+    this.view = view;
+    this.viewPopover?.first.hide();
+    this.view === 'tasks' ? this.store.dispatch(FetchTasks) : this.store.dispatch(FetchAgreements);
+  }
+
+  getQueryParams() {
+    return {actions: JSON.stringify(AgreementActionFilters[18].type)};
   }
 
   submitFilter(filters: { key, value}) {
