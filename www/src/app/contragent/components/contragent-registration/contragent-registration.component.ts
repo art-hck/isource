@@ -137,7 +137,7 @@ export class ContragentRegistrationComponent implements OnInit {
     });
 
     this.seniorBackofficeUsers$ = this.employeeService.getEmployeeList('SENIOR_BACKOFFICE');
-    this.groups$ = this.usersGroupService.getGroups();
+    this.groups$ = this.usersGroupService.getBackofficeGroups();
 
     if (this.isEditing) {
       this.getContragentInfo();
