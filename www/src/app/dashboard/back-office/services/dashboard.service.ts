@@ -1,8 +1,8 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { DashboardTasks } from "../models/dashboard-tasks";
 import { Observable } from "rxjs";
 import { DashboardAvailableFilters } from "../../common/models/dashboard-available-filters";
+import { DashboardTasks } from "../../common/models/dashboard-tasks";
 
 @Injectable()
 export class DashboardService {

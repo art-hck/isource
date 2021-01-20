@@ -4,6 +4,7 @@ export class DashboardAvailableFilters {
   requests: DashboardAvailableFiltersRequestItem[];
   customers: DashboardAvailableFiltersCustomerItem[];
   responsibleUsers: DashboardAvailableFiltersResponsibleUserItem[];
+  applicantUsers: DashboardAvailableFiltersApplicantItem[];
   totalCount: number;
 }
 
@@ -32,4 +33,11 @@ export class DashboardAvailableFiltersResponsibleUserItem {
   email: string;
   phone: string;
   groupName: string;
+}
+
+export class DashboardAvailableFiltersApplicantItem {
+  id: Uuid;
+  fullName: string;
+  groupName: string;
+  phone: string;
 }

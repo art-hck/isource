@@ -4,9 +4,7 @@ import { Store } from "@ngxs/store";
 import { Agreement } from "../../../../agreements/common/models/Agreement";
 import { StateStatus } from "../../../../request/common/models/state-status";
 import { DashboardTaskItem } from "../../models/dashboard-task-item";
-import { Observable, Subject } from "rxjs";
-import { UxgPopoverComponent } from "uxg";
-import { AgreementActionFilters } from "../../../../agreements/back-office/dictionaries/agreement-action-label";
+import { Subject } from "rxjs";
 
 @Component({
   selector: 'app-dashboard-agreements',
