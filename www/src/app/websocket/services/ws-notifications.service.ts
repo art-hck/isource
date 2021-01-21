@@ -31,9 +31,7 @@ export class WsNotificationsService implements IWebsocketService {
   readonly received$ = new Subject<unknown>();
 
   constructor(@Inject(config) private wsConfig: WsConfig, private keycloakService: KeycloakService, private user: UserInfoService) {
-    if (!user.isAuth()) { return; }
-
-    this.keycloakService.getToken().then(accessToken => {
+    this.keycloakService.getToken(false).then(accessToken => {
         if (!accessToken) { return; }
 
         this.connect(accessToken);
