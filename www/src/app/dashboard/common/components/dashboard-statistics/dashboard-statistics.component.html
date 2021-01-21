@@ -395,7 +395,7 @@
       #applicantsSelectList
       *ngIf="filterApplicantsList as applicants else loading"
       class="select-list select-list-applicants"
-      formControlName="applicants"
+      formControlName="userIds"
       placeholder="ФИО заявителей"
       [liveUpdate]="false"
       [filterFn]="filterApplicants"
