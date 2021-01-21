@@ -1,6 +1,6 @@
 <ng-container *ngIf="agreements; else loading">
   <ng-container *ngIf="agreements.length > 0; else emptyAgreementsList">
-    <div class="app-table app-no-border">
+    <div class="app-table agreements-list-header app-no-border">
       <div class="app-row" [ngClass]="{'dashboard-header': dashboardView}">
         <small class="app-col-1 app-ghost-color id"><b>№ ЗАЯВКИ</b></small>
         <small class="app-col-3 app-ghost-color name"><b>НАИМЕНОВАНИЕ ПОЗИЦИИ/ГРУППЫ</b></small>
@@ -58,8 +58,8 @@
           </app-position-status>
         </div>
         <div class="app-col-2 action app-ellipsis">
-          <a [routerLink]="getRouterLink(agreement)">
-            {{agreement.action.label }}
+          <a [routerLink]="getRouterLink(agreement)" title="{{ agreement.action.label }}">
+            {{ agreement.action.label }}
           </a>
         </div>
       </div>
