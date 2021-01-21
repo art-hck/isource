@@ -30,6 +30,7 @@ export class AppComponent implements OnInit, OnDestroy {
   noHeaderStick: boolean;
   noFooter: boolean;
   _isTitleHidden: boolean;
+  isHeaderHidden: boolean;
   readonly year = new Date().getFullYear();
 
 
@@ -108,6 +109,7 @@ export class AppComponent implements OnInit, OnDestroy {
         this.noHeaderStick = data.noHeaderStick;
         this.noFooter = data.noFooter;
         this._isTitleHidden = data.hideTitle;
+        this.isHeaderHidden = data.hideHeader;
         this.bc.breadcrumbs = [];
         this.titleService.setTitle(data.title);
         this.cd.detectChanges();
@@ -117,7 +119,7 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.keycloakService.getToken().then(token => this.bearerService.token = token);
+    this.keycloakService.getToken(false).then(token => this.bearerService.token = token);
 
     if (this.user.isCustomer()) {
       // Выгружаем корзину при логауте
