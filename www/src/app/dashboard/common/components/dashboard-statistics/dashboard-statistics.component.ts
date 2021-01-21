@@ -38,7 +38,7 @@ export class DashboardStatisticsComponent implements OnInit, OnDestroy {
     requests: new FormControl(null),
     customers: new FormControl(null),
     users: new FormControl(null),
-    applicants: new FormControl(null),
+    userIds: new FormControl(null),
     shipmentDateFrom: new FormControl(null),
     shipmentDateTo: new FormControl(null),
   });

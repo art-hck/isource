@@ -63,10 +63,9 @@ export class DashboardComponent implements OnInit {
   submitFilter() {
     this.updateSelectedItemsCount();
 
-    // Если не сработает формирование фильтра, убрать здесь и раскомментить в сабмите в компоненте коммон
     const filters = {
       requestIds: this.dashboardStatisticsComponent.selectedRequests,
-      applicants: this.dashboardStatisticsComponent.selectedApplicants,
+      userIds: this.dashboardStatisticsComponent.selectedApplicants,
       shipmentDateFrom: this.dashboardStatisticsComponent.form.get('shipmentDateFrom').value,
       shipmentDateTo: this.dashboardStatisticsComponent.form.get('shipmentDateTo').value,
     };
@@ -86,7 +85,7 @@ export class DashboardComponent implements OnInit {
     this.dashboardStatisticsComponent.applicantsSelectList.submit();
 
     this.dashboardStatisticsComponent.selectedRequests = this.dashboardStatisticsComponent.form.get('requests').value?.map(request => request.id);
-    this.dashboardStatisticsComponent.selectedApplicants = this.dashboardStatisticsComponent.form.get('applicants').value?.map(applicant => applicant.id);
+    this.dashboardStatisticsComponent.selectedApplicants = this.dashboardStatisticsComponent.form.get('userIds').value?.map(applicant => applicant.id);
   }
 
   resetFilter(): void {
@@ -95,7 +94,7 @@ export class DashboardComponent implements OnInit {
 
     this.dashboardStatisticsComponent.form.reset({
       requests: null,
-      applicants: null,
+      userIds: null,
       shipmentDateFrom: null,
       shipmentDateTo: null,
     }, {emitEvent: false});
