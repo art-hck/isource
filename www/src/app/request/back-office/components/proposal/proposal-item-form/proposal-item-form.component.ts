@@ -10,6 +10,7 @@ import { PositionCurrency } from "../../../../common/enum/position-currency";
 import { CustomValidators } from "../../../../../shared/forms/custom.validators";
 import { DatePipe } from "@angular/common";
 import { ProposalSource } from "../../../enum/proposal-source";
+import { Okei } from "../../../../../shared/models/okei";
 
 @Component({
   selector: 'app-proposal-item-form',
@@ -34,6 +35,7 @@ export class ProposalItemFormComponent implements OnInit {
     priceWithoutVat: [null, Validators.required],
     quantity: [null, [Validators.required, Validators.pattern("^[.0-9]+$"), Validators.min(0.0001)]],
     measureUnit: [null, Validators.required],
+    okeiCode: [null],
     currency: [PositionCurrency.RUB, Validators.required],
     deliveryDate: [null, CustomValidators.futureDate()],
     manufacturer: [null, Validators.required],
@@ -61,6 +63,13 @@ export class ProposalItemFormComponent implements OnInit {
       ...{ deliveryDate: this.parseDate(this.proposalItem?.deliveryDate ?? this.position.deliveryDate) }
     });
 
+    this.form.valueChanges.subscribe(
+      () => this.form.patchValue({
+          okeiCode: this.form.value.measureUnit?.code ?? this.form.value.okeiCode,
+          measureUnit: this.form.value.measureUnit?.symbol ?? this.form.value.measureUnit,
+        }, {emitEvent: false})
+    );
+
     this.form.get('currency').disable();
 
     if (this.source === 'TECHNICAL_COMMERCIAL_PROPOSAL') {
@@ -84,4 +93,6 @@ export class ProposalItemFormComponent implements OnInit {
       return date;
     }
   }
+
+  getOkeiSymbol = ({symbol}: Okei) => symbol && symbol.toLowerCase();
 }
