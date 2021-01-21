@@ -15,6 +15,7 @@ import { Uuid } from "../../../cart/models/uuid";
 export class SelectResponsibleFormComponent implements OnInit, OnDestroy {
   @Input() positions: RequestPosition[] = [];
   @Input() contragentId: Uuid;
+  @Input() isRequest = false;
   @Output() setResponsibleUser = new EventEmitter<User>();
   @Output() close = new EventEmitter<User>();
   subscription = new Subscription();
