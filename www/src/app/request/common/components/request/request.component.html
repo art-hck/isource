@@ -479,6 +479,7 @@
   <div *ngIf="addResponsibleRequestModal.state">
     <app-select-responsible-form
       [contragentId]="request.contragentId"
+      [isRequest]="true"
       (setResponsibleUser)="addResponsibleRequest.emit($event)"
       (close)="addResponsibleRequestModal.close()"
     ></app-select-responsible-form>

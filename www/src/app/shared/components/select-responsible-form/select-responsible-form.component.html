@@ -1,5 +1,5 @@
 <form [formGroup]="form" (ngSubmit)="submit()" *ngIf="!isLoading; else loading">
-  <p class="app-secondary-color">Вы можете назначить позиции на закупщиков, у которых есть компетенции в соответствующих категориях МТР</p>
+  <p class="app-secondary-color">Вы можете назначить {{isRequest ? 'заявку' : 'позиции'}} на закупщиков, у которых есть компетенции в соответствующих категориях МТР</p>
   <br/>
   <uxg-dropdown-input
     formControlName="user" placeholder="Выберите на кого назначить" appSuggestions #sug="appSuggestions"
