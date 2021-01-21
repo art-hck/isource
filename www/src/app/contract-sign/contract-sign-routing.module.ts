@@ -7,7 +7,7 @@ const routes: Routes = [
   {
     path: ':id',
     component: ContractSignComponent,
-    data: { title: 'Запрос на подписание договора ЭЦП', hideHeader: true },
+    data: { title: 'Запрос на подписание договора ЭЦП' },
   }
 ];
 

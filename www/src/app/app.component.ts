@@ -30,7 +30,6 @@ export class AppComponent implements OnInit, OnDestroy {
   noHeaderStick: boolean;
   noFooter: boolean;
   _isTitleHidden: boolean;
-  isHeaderHidden: boolean;
   readonly year = new Date().getFullYear();
 
 
@@ -109,7 +108,6 @@ export class AppComponent implements OnInit, OnDestroy {
         this.noHeaderStick = data.noHeaderStick;
         this.noFooter = data.noFooter;
         this._isTitleHidden = data.hideTitle;
-        this.isHeaderHidden = data.hideHeader;
         this.bc.breadcrumbs = [];
         this.titleService.setTitle(data.title);
         this.cd.detectChanges();
