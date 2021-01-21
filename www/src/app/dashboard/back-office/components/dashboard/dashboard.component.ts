@@ -1,12 +1,9 @@
 import { Component, OnInit, OnDestroy, ViewChildren, QueryList, ViewChild } from '@angular/core';
-import { DashboardView } from "../../models/dashboard-view";
 import { Select, Store } from "@ngxs/store";
-import FetchTasks = DashboardActions.FetchTasks;
-import FetchAgreements = DashboardActions.FetchAgreements;
 import { Agreement } from "../../../../agreements/common/models/Agreement";
 import { StateStatus } from "../../../../request/common/models/state-status";
 import { DashboardState } from "../../states/dashboard.state";
-import { DashboardTaskItem } from "../../models/dashboard-task-item";
+import { DashboardTaskItem } from "../../../common/models/dashboard-task-item";
 import { Observable, Subject } from "rxjs";
 import { DashboardActions } from "../../actions/dashboard.actions";
 import { StatusesStatisticsInfo } from "../../../common/models/statuses-statistics";
@@ -16,13 +13,15 @@ import {
   DashboardAvailableFiltersResponsibleUserItem
 } from "../../../common/models/dashboard-available-filters";
 import { takeUntil, tap, withLatestFrom } from "rxjs/operators";
-import FetchStatusesStatistics = DashboardActions.FetchStatusesStatistics;
-import FetchAvailableFilters = DashboardActions.FetchAvailableFilters;
 import { ActivatedRoute } from "@angular/router";
-import { FormControl, FormGroup } from "@angular/forms";
 import { DashboardStatisticsComponent } from "../../../common/components/dashboard-statistics/dashboard-statistics.component";
+import { DashboardView } from "../../../common/models/dashboard-view";
 import { UxgPopoverComponent } from "uxg";
 import { AgreementActionFilters } from "../../../../agreements/back-office/dictionaries/agreement-action-label";
+import FetchTasks = DashboardActions.FetchTasks;
+import FetchAgreements = DashboardActions.FetchAgreements;
+import FetchStatusesStatistics = DashboardActions.FetchStatusesStatistics;
+import FetchAvailableFilters = DashboardActions.FetchAvailableFilters;
 
 @Component({
   selector: 'app-dashboard',
@@ -46,16 +45,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
   @Select(DashboardState.filterCustomerList) filterCustomerList$: Observable<DashboardAvailableFiltersCustomerItem[]>;
   @Select(DashboardState.filterResponsibleUsersList) filterResponsibleUsersList$: Observable<DashboardAvailableFiltersResponsibleUserItem[]>;
 
-  destroy$ = new Subject();
   view: DashboardView = "tasks";
-
-  form = new FormGroup({
-    requests: new FormControl(null),
-    customers: new FormControl(null),
-    users: new FormControl(null),
-    shipmentDateFrom: new FormControl(null),
-    shipmentDateTo: new FormControl(null),
-  });
+  destroy$ = new Subject();
 
   constructor(
     private route: ActivatedRoute,
@@ -82,8 +73,16 @@ export class DashboardComponent implements OnInit, OnDestroy {
     return {actions: JSON.stringify(AgreementActionFilters[18].type)};
   }
 
-  submitFilter(filters: { key, value}) {
+  submitFilter() {
     this.updateSelectedItemsCount();
+
+    const filters = {
+      requestIds: this.dashboardStatisticsComponent.selectedRequests,
+      customers: this.dashboardStatisticsComponent.selectedCustomers,
+      responsibleUsersIds: this.dashboardStatisticsComponent.selectedUsers,
+      shipmentDateFrom: this.dashboardStatisticsComponent.form.get('shipmentDateFrom').value,
+      shipmentDateTo: this.dashboardStatisticsComponent.form.get('shipmentDateTo').value,
+    };
 
     for (const [key, value] of Object.entries(filters)) {
       if (!value?.length) { delete filters[key]; }
@@ -91,7 +90,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
     this.store.dispatch(new FetchStatusesStatistics(filters));
     this.store.dispatch(new FetchAvailableFilters(filters)).subscribe(() => {
-      this.dashboardStatisticsComponent.updateSelectedItemsCount();
+      this.updateSelectedItemsCount();
     });
   }
 
@@ -100,13 +99,17 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.dashboardStatisticsComponent.customersSelectList.submit();
     this.dashboardStatisticsComponent.usersSelectList.submit();
 
-    this.dashboardStatisticsComponent.selectedRequests = this.form.get('requests').value?.map(request => request.id);
-    this.dashboardStatisticsComponent.selectedCustomers = this.form.get('customers').value?.map(customer => customer.id);
-    this.dashboardStatisticsComponent.selectedUsers = this.form.get('users').value?.map(user => user.id);
+    this.dashboardStatisticsComponent.selectedRequests = this.dashboardStatisticsComponent.form.get('requests').value?.map(request => request.id);
+    this.dashboardStatisticsComponent.selectedCustomers = this.dashboardStatisticsComponent.form.get('customers').value?.map(customer => customer.id);
+    this.dashboardStatisticsComponent.selectedUsers = this.dashboardStatisticsComponent.form.get('users').value?.map(user => user.id);
   }
 
   resetFilter(): void {
-    this.form.reset({
+    this.dashboardStatisticsComponent.requestsSelectList.form.get('checked').reset(null, {emitEvent: false});
+    this.dashboardStatisticsComponent.customersSelectList.form.get('checked').reset(null, {emitEvent: false});
+    this.dashboardStatisticsComponent.usersSelectList.form.get('checked').reset(null, {emitEvent: false});
+
+    this.dashboardStatisticsComponent.form.reset({
       requests: null,
       customers: null,
       users: null,

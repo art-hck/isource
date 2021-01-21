@@ -15,6 +15,21 @@
 
 <br><br>
 
+<div class="app-row">
+  <div class="app-col">
+    <h2>Статистика по статусам и деньгам</h2>
+
+    <app-dashboard-statistics
+      #dashboardStatisticsComponent
+      [statusesStatistics]="statusesStatistics$ | async"
+      [filterRequestList]="filterRequestList$ | async"
+      [filterApplicantsList]="filterApplicantsList$ | async"
+      (submitFilter)="submitFilter()"
+      (resetFilter)="resetFilter()"
+    ></app-dashboard-statistics>
+  </div>
+</div>
+
 <div class="app-card" style="background: none" *ngIf="!user.getContragentId()">
   <div class="app-row app-align-items-center">
     <div class="app-col-3 app-row app-justify-content-center">

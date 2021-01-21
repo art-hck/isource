@@ -16,13 +16,13 @@ import { DashboardState } from "./states/dashboard.state";
   ],
   imports: [
     AgreementsCommonModule,
+    DashboardCommonModule,
     SharedModule,
     CommonModule,
-    DashboardCustomerRoutingModule,
-    DashboardCommonModule,
     NgxsModule.forFeature([
       DashboardState
     ]),
+    DashboardCustomerRoutingModule
   ],
   providers: [
     DashboardService,
