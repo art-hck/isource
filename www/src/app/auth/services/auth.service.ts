@@ -88,6 +88,7 @@ export class AuthService {
   }
 
   logout(): void {
+    this.userInfoService.clearData();
     this.keycloakService.logout(location.origin).then(() => this.onLogout.next());
   }
 
