@@ -92,7 +92,7 @@
               </div>
             </div>
 
-            <ng-container *ngIf="control.value.length; else manufacturerError">
+            <ng-container *ngIf="control.value.length; else manufacturerItemError">
               <div *ngFor="let proposalPosition of control.value" class="position-info-item">
                 <ng-container *ngIf="source === 'TECHNICAL_COMMERCIAL_PROPOSAL' || source === 'TECHNICAL_PROPOSAL'">
                   <ng-container *ngIf="proposalPosition.manufacturingName; else manufacturerItemError">
@@ -136,7 +136,7 @@
           </button>
         </div>
 
-        <ng-container *ngIf="control.value.length; else parameterError">
+        <ng-container *ngIf="control.value.length; else parameterItemError">
           <div class="position-info-item app-row" *ngFor="let pos of control.value">
             <ng-container
               *ngIf="pos.priceWithoutVat && pos.quantity && pos.measureUnit && pos.currency && pos.deliveryDate; else parameterItemError">
