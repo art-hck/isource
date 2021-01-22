@@ -107,13 +107,6 @@
               </div>
             </ng-container>
 
-            <ng-template #manufacturerError>
-              <div class="position-info-item" *ngIf="form.get('positions').dirty && form.get('positions').touched">
-                <div class="app-control-error">
-                  <span class="error-message">Заполните наименования для каждой позиции</span>
-                </div>
-              </div>
-            </ng-template>
             <ng-template #manufacturerItemError>
               <ng-container *ngIf="(!isManufacturingNamePristine && !isManufacturerPristine) || form.get('positions').dirty && form.get('positions').touched">
                 <span class="error-message">Заполните данные</span>
@@ -160,13 +153,6 @@
           </div>
         </ng-container>
 
-        <ng-template #parameterError>
-          <div class="position-info-item" *ngIf="form.get('positions').dirty && form.get('positions').touched">
-            <div class="app-control-error">
-              <span class="error-message">Заполните наименования для каждой позиции</span>
-            </div>
-          </div>
-        </ng-template>
         <ng-template #parameterItemError>
           <ng-container *ngIf="!isParamsPristine || form.get('positions').dirty && form.get('positions').touched">
             <span class="error-message">Заполните параметры для позиций</span>
