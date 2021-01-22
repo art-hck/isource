@@ -123,7 +123,6 @@ export class AppComponent implements OnInit, OnDestroy {
       // Выгружаем корзину при логауте
       this.subscription
         .add(this.authService.onLogout.subscribe(() => {
-          this.user.clearData();
           this.cartStoreService.cartItems = [];
         }));
     }
