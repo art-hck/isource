@@ -117,7 +117,7 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.keycloakService.getToken().then(token => this.bearerService.token = token);
+    this.keycloakService.getToken(false).then(token => this.bearerService.token = token);
 
     if (this.user.isCustomer()) {
       // Выгружаем корзину при логауте
