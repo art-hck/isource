@@ -88,9 +88,7 @@ export class AuthService {
   }
 
   logout(): void {
-    this.keycloakService.logout().then(() => {
-      this.onLogout.next();
-    });
+    this.keycloakService.logout(location.origin).then(() => this.onLogout.next());
   }
 
   isAuth(): boolean {
