@@ -21,7 +21,8 @@ export interface GpnmarketConfigInterface {
   };
   files: {
     allowedExtensions: AppFileExtensions,
-    deniedExtensions: AppFileExtensions
+    deniedExtensions: AppFileExtensions,
+    sizeLimit: number
   };
   keycloak: KeycloakOptions;
   dadata: {
