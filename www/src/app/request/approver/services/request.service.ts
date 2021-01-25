@@ -1,21 +1,10 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Uuid } from "../../../cart/models/uuid";
-import { Observable } from "rxjs";
-import { RequestPosition } from "../../common/models/request-position";
-import { map } from "rxjs/operators";
-import { RequestPositionList } from "../../common/models/request-position-list";
-import { RequestGroup } from "../../common/models/request-group";
+import { of } from "rxjs";
 import { Request } from "../../common/models/request";
-import { PositionStatus } from "../../common/enum/position-status";
-import { User } from "../../../user/models/user";
-import { UserInfoService } from "../../../user/service/user-info.service";
-import { RequestDocument } from "../../common/models/request-document";
-import { FormDataService } from "../../../shared/services/form-data.service";
 import { Page } from "../../../core/models/page";
 import { RequestsList } from "../../common/models/requests-list/requests-list";
-import { AvailableFilters } from "../models/available-filters";
-import { RequestStatusCount } from "../../common/models/requests-list/request-status-count";
 
 
 @Injectable({
@@ -23,119 +12,13 @@ import { RequestStatusCount } from "../../common/models/requests-list/request-st
 })
 export class RequestService {
 
-  constructor(
-    protected api: HttpClient,
-    public user: UserInfoService,
-    public formDataService: FormDataService,
-  ) {
+  constructor(protected api: HttpClient,) {}
+
+  get(id: Uuid) {
+    return of<Request>(null);
   }
 
-  getRequests(startFrom, pageSize, filters, sort): Observable<Page<RequestsList>> {
-    const url = `requests/backoffice/list`;
-    return this.api.post<Page<RequestsList>>(url, { startFrom, pageSize, filters, sort });
-  }
-
-  getRequest(id: Uuid) {
-    const url = `requests/backoffice/${id}/info`;
-    return this.api.post<Request>(url, {})
-      .pipe(map(data => new Request(data)));
-  }
-
-  getRequestPositions(id: Uuid): Observable<RequestPositionList[]> {
-    const url = `requests/backoffice/${id}/positions`;
-    return this.api.post<RequestPositionList[]>(url, {}).pipe(
-      map(data => this.mapPositionList(data))
-    );
-  }
-
-  getRequestPosition(requestId: Uuid, positionId: Uuid): Observable<RequestPosition> {
-    const url = `requests/backoffice/${requestId}/positions/${positionId}/info`;
-    return this.api.get<RequestPosition>(url);
-  }
-
-  requestStatusCount() {
-    const url = `requests/backoffice/counts-on-different-statuses`;
-    return this.api.get<RequestStatusCount>(url);
-  }
-
-  publishRequest(id: Uuid, positions: [string]) {
-    const url = `requests/backoffice/${id}/positions/publish`;
-    return this.api.post(url, {positions});
-  }
-
-  attachDocuments(id: Uuid, positionIds: Uuid[], files: File[]) {
-    const url = `requests/${id}/positions/attach-documents-batch`;
-    return this.api.post(url, this.formDataService.toFormData({ positions: positionIds, files }));
-  }
-
-  editRequestName(requestId: Uuid, requestName: string) {
-    const url = `requests/${requestId}/edit-name`;
-    return this.api.post(url, { id: requestId, name: requestName });
-  }
-
-  changeStatus(id: Uuid, positionId: Uuid, status: string) {
-    const url = `requests/backoffice/${id}/positions/${positionId}/change-status`;
-    return this.api.post<{status: PositionStatus, statusLabel: string, availableStatuses: string[]}>(url, {
-      status: status
-    });
-  }
-
-  // Функция не подсвечивается, но она на самом деле используется
-  uploadDocuments(requestPosition: RequestPosition, files: File[]): Observable<RequestDocument[]> {
-    const formData = new FormData();
-    files.forEach(file => {
-      formData.append('files[]', file, file.name);
-    });
-
-    return this.api.post<RequestDocument[]>(
-      `requests/backoffice/${requestPosition.request.id}/positions/${requestPosition.id}/documents/upload`,
-      formData
-    );
-  }
-
-  changeResponsibleUser(id: Uuid, user: Uuid) {
-    const url = `requests/backoffice/${id}/change-responsible-user`;
-    return this.api.post(url, { user });
-  }
-
-  changeResponsibleUserPositions(id: Uuid, user: Uuid, positions: Uuid[]) {
-    const url = `requests/backoffice/${id}/positions/change-responsible-user`;
-    return this.api.post(url, { user, positions });
-  }
-
-  addPositionsFromExcel(requestId: Uuid, files: File[]): Observable<any> {
-    const url = `requests/backoffice/${requestId}/add-positions/from-excel`;
-    return this.api.post(url, this.formDataService.toFormData({ files })); // @TODO Typization!
-  }
-
-  availableFilters() {
-    const url = `requests/backoffice/available-filters`;
-    return this.api.get<AvailableFilters>(url);
-  }
-
-  private mapPositionList(requestPositionsList: RequestPositionList[]) {
-    return requestPositionsList.map(
-      function recursiveMapPositionList(item: RequestPositionList) {
-        switch (item.entityType) {
-          case 'GROUP':
-            const group = new RequestGroup(item);
-            group.positions = group.positions.map(recursiveMapPositionList);
-
-            return group;
-          case 'POSITION':
-            return new RequestPosition(item);
-        }
-      });
-  }
-
-  changeHiddenContragents(requestId: Uuid, value: boolean) {
-    const url = `requests/backoffice/${requestId}/hide-contragent`;
-    return this.api.post(url, {hideContragent: value});
-  }
-
-  downloadRequests() {
-    const url = `requests/backoffice/download`;
-    return this.api.post(url, {}, { responseType: 'blob' });
+  list() {
+    return of<Page<RequestsList>>(null);
   }
 }
-

@@ -11,7 +11,7 @@ export class PositionService {
 
   constructor(protected api: HttpClient) {}
 
-  get(positionId: Uuid) {
+  get(id: Uuid) {
     return of<RequestPosition>(null);
   }
 }
