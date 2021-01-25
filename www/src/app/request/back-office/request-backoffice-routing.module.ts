@@ -1,8 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-
-import { RequestComponent as BackOfficeRequestComponent } from "./components/request/request.component";
-
+import { RequestComponent } from "./components/request/request.component";
 import { DesignDocumentationListComponent } from "../common/components/design-documentation-list/design-documentation-list.component";
 import { PositionComponent } from "./components/position/position.component";
 import { TechnicalProposalListComponent } from "./components/proposal/technical-proposal-list/technical-proposal-list.component";
@@ -30,7 +28,7 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        component: BackOfficeRequestComponent,
+        component: RequestComponent,
         data: { hideTitle: true }
       },
       {
