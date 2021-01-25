@@ -10,6 +10,7 @@ export interface IFeatureList {
   catalog;
   catalogUpdate;
   cart;
+  approverRequest;
   backofficeRequest;
   deliveryMonitor;
   createContragent;
@@ -47,6 +48,7 @@ export const FeatureList: { [key in keyof IFeatureList]: Feature } = {
   catalogUpdate: { roles: [UserRole.ADMIN] },
   cart: { roles: [UserRole.CUSTOMER] },
   instructionsFileForCustomer: { roles: [UserRole.CUSTOMER] },
+  approverRequest: { roles: [UserRole.BACKOFFICE] }, // TODO: ждём бэк с доп ролью
   backofficeRequest: { roles: [UserRole.BACKOFFICE] },
   deliveryMonitor: { roles: [UserRole.BACKOFFICE] },
   createContragent: { roles: [UserRole.BACKOFFICE] },
