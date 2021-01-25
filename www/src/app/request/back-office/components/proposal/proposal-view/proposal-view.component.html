@@ -63,7 +63,7 @@
 
         <!-- Добавить столбец контрагента  -->
         <button *ngSwitchCase="'grid'" uxgButton secondary iconText
-                [disabled]="allPositionsOnReview()"
+                [disabled]="isAddContragentDisabled()"
                 (click)="addContragentModal.open()">
           <uxg-icon shape="app-plus"></uxg-icon>
           <span>Контрагент</span>
