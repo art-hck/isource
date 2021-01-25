@@ -12,7 +12,7 @@ import { RequestsList } from "../../common/models/requests-list/requests-list";
 })
 export class RequestService {
 
-  constructor(protected api: HttpClient,) {}
+  constructor(protected api: HttpClient) {}
 
   get(id: Uuid) {
     return of<Request>(null);
