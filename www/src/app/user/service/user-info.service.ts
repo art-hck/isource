@@ -32,6 +32,7 @@ export class UserInfoService {
     isCustomerBuyer: 'isCustomerBuyer',
 
     isBackofficeBuyer: 'isBackofficeBuyer',
+    isCustomerApprover: 'isCustomerApprover',
     isSeniorBackoffice: 'isSeniorBackoffice',
 
     isSystemAdmin: 'isSystemAdmin',
@@ -68,6 +69,10 @@ export class UserInfoService {
       // ВАЖНО! Новый функционал желательно не завязывать на польз. роли, а лучше использовать permissions
       if (this.isCustomerBuyer()) {
         roles.push(UserRole.CUSTOMER_BUYER);
+      }
+
+      if (this.isCustomerApprover()) {
+        roles.push(UserRole.CUSTOMER_APPROVER);
       }
 
       if (this.isBackofficeBuyer()) {
@@ -176,6 +181,10 @@ export class UserInfoService {
 
   public isCustomerBuyer(): boolean {
     return this.getUserInfo()?.isCustomerBuyer;
+  }
+
+  public isCustomerApprover(): boolean {
+    return this.getUserInfo()?.isCustomerApprover;
   }
 
   public isBackofficeBuyer(): boolean {

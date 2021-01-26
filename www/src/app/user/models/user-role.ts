@@ -8,6 +8,7 @@ export enum UserRole {
   // Пользовательские роли
   // Роли заказчика
   CUSTOMER_BUYER = 'CUSTOMER_BUYER',
+  CUSTOMER_APPROVER = 'CUSTOMER_APPROVER',
 
   // Роли БО
   BACKOFFICE_BUYER = 'BACKOFFICE_BUYER',
