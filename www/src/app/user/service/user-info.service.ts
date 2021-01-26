@@ -25,6 +25,7 @@ export class UserInfoService {
     middleName: 'middleName',
 
     isCustomer: 'isCustomer',
+    isCustomerApprover: 'isCustomerApprover',
     isBackOffice: 'isBackOffice',
     isSupplier: 'isSupplier',
     isAdmin: 'isAdmin',
@@ -160,6 +161,10 @@ export class UserInfoService {
 
   public isCustomer(): boolean {
     return this.getUserInfo()?.isCustomer;
+  }
+
+  public isCustomerApprover(): boolean {
+    return this.getUserInfo()?.isCustomerApprover;
   }
 
   public isBackOffice(): boolean {
