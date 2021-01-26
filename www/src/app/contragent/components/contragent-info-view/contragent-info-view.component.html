@@ -12,7 +12,7 @@
       uxgButton
       secondary
       iconText
-      *ngIf="(user.isBackOffice() && user.isInGroup(contragent.usersGroupId)) || user.isAdmin()"
+      *ngIf="user.isBackOffice() || user.isAdmin()"
       (click)="router.navigateByUrl('/contragents/' + contragent.id + '/edit')"
     >
       <uxg-icon shape="app-pen"></uxg-icon>

@@ -34,7 +34,7 @@
             uxgButton
             secondary
             icon
-            *ngIf="(user.isBackOffice() && user.isInGroup(contragent.usersGroupId)) || user.isAdmin()"
+            *ngIf="user.isBackOffice() || user.isAdmin()"
             (click)="edit($event, contragent)"
           >
             <uxg-icon shape="app-pen"></uxg-icon>
