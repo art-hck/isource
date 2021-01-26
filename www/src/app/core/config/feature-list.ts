@@ -48,7 +48,7 @@ export const FeatureList: { [key in keyof IFeatureList]: Feature } = {
   catalogUpdate: { roles: [UserRole.ADMIN] },
   cart: { roles: [UserRole.CUSTOMER] },
   instructionsFileForCustomer: { roles: [UserRole.CUSTOMER] },
-  approverRequest: { roles: [UserRole.CUSTOMER] }, // TODO: ждём бэк с доп ролью
+  approverRequest: { roles: [UserRole.CUSTOMER_APPROVER] },
   backofficeRequest: { roles: [UserRole.BACKOFFICE] },
   deliveryMonitor: { roles: [UserRole.BACKOFFICE] },
   createContragent: { roles: [UserRole.BACKOFFICE] },
