@@ -147,9 +147,12 @@ export class ProposalViewComponent implements OnDestroy, AfterViewInit, OnChange
   isDraft = ({ items }: CommonProposalByPosition): boolean => items.every(p => ['NEW'].includes(p.status));
   isPositionOnProposalsPreparation = ({ position }: CommonProposalByPosition): boolean => ['PROPOSALS_PREPARATION'].includes(position.status);
   isPositionOnApprove = ({ position }: CommonProposalByPosition): boolean => position.status === 'ON_CUSTOMER_APPROVAL';
-  allPositionsOnReview = () => this.proposalsByPositions.length > 0 && this.proposalsByPositions.every(
+  isAddContragentDisabled = () => this.proposalsByPositions.length > 0 && (this.proposalsByPositions.every(
     item => (this.isOnReview(item) || this.isReviewed(item)) && item.items.length > 0
-  )
+  ) || this.proposalsByPositions.some((item) => [
+    'TECHNICAL_PROPOSALS_PREPARATION',
+    'TECHNICAL_PROPOSALS_AGREEMENT'
+  ].includes(item.position.status)))
 
   addProposalPosition(proposal: CommonProposal, position: RequestPosition, proposalPosition?: CommonProposalItem) {
     this.addProposalPositionPayload = { proposal, position, proposalPosition };

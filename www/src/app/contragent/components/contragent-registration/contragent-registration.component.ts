@@ -65,7 +65,7 @@ export class ContragentRegistrationComponent implements OnInit {
 
   get groupPlaceholder() {
     const group: UsersGroup = this.form.get('contragent').get('usersGroup').value;
-    return group && group.name;
+    return group && group.name || 'Выберите группу';
   }
 
   constructor(

@@ -1,0 +1,21 @@
+<ng-container *ngIf="(request$ | async) as request">
+  <ng-container *ngIf="(positions$ | async) as positions">
+    <app-request
+      #commonRequestComponent
+      [positions]="positions"
+      [request]="request"
+      [status]="status$ | async"
+      [positionsStatus]="positionsStatus$ | async"
+      (addPosition)="store.dispatch([refreshPositions(requestId), refresh(requestId)])"
+      (approvePositions)="store.dispatch(approvePositions($event))"
+      (rejectPositions)="store.dispatch(rejectPositions($event))"
+    ></app-request>
+  </ng-container>
+</ng-container>
+
+<ng-template #loading>
+  <div class="text-center">
+    <span class="spinner spinner-md"></span>
+  </div>
+</ng-template>
+
