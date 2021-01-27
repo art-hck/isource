@@ -3,7 +3,7 @@ import { PositionStatus } from "../enum/position-status";
 export const PositionStatusesLabels: Record<PositionStatus, string> = {
   [PositionStatus.DRAFT]: 'Черновик',
   [PositionStatus.ON_CUSTOMER_APPROVAL]: 'На согласовании заказчика',
-  [PositionStatus.PROOF_OF_NEED]: 'Необходимо подтверждение',
+  [PositionStatus.PROOF_OF_NEED]: 'Подтвержд. потребности',
   [PositionStatus.NEW]: 'Новая',
   [PositionStatus.TECHNICAL_PROPOSALS_PREPARATION]: 'Подготовка ТП',
   [PositionStatus.TECHNICAL_PROPOSALS_AGREEMENT]: 'Согласование ТП',
