@@ -78,8 +78,8 @@ export class RequestListComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  downloadRequests() {
-    this.requestService.downloadRequests()
+  downloadRequests(requestIds) {
+    this.requestService.downloadRequests(requestIds)
       .subscribe(data => saveAs(data, `Registry.xlsx`));
   }
 

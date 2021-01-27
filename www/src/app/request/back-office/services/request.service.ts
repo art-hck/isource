@@ -133,9 +133,9 @@ export class RequestService {
     return this.api.post(url, {hideContragent: value});
   }
 
-  downloadRequests() {
+  downloadRequests(requestIds) {
     const url = `requests/backoffice/download`;
-    return this.api.post(url, {}, { responseType: 'blob' });
+    return this.api.post(url, { requestIds }, { responseType: 'blob' });
   }
 }
 
