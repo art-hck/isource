@@ -1,0 +1,6 @@
+<ng-container *ngIf="(position$ | async) as position">
+  <app-request-position
+    [requestId]="requestId"
+    [position]="position"
+  ></app-request-position>
+</ng-container>

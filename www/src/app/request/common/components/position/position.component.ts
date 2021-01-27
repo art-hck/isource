@@ -26,6 +26,7 @@ export class PositionComponent implements DoCheck {
   datesWithDocuments: DateWithDocuments[];
   iterableDiffer: IterableDiffer<any>;
   PopoverContentDirection = UxgPopoverContentDirection;
+  folded = false;
 
   constructor(
     private positionStatusService: RequestPositionStatusService,
