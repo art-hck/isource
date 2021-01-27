@@ -36,6 +36,7 @@ export interface IFeatureList {
   customerIntelplan;
   createTemplate;
   normalization;
+  requestDashboard;
 }
 
 export const FeatureList: { [key in keyof IFeatureList]: Feature } = {
@@ -48,7 +49,7 @@ export const FeatureList: { [key in keyof IFeatureList]: Feature } = {
   catalogUpdate: { roles: [UserRole.ADMIN] },
   cart: { roles: [UserRole.CUSTOMER] },
   instructionsFileForCustomer: { roles: [UserRole.CUSTOMER] },
-  approverRequest: { roles: [UserRole.BACKOFFICE] }, // TODO: ждём бэк с доп ролью
+  approverRequest: { roles: [UserRole.CUSTOMER_APPROVER] },
   backofficeRequest: { roles: [UserRole.BACKOFFICE] },
   deliveryMonitor: { roles: [UserRole.BACKOFFICE] },
   createContragent: { roles: [UserRole.BACKOFFICE] },
@@ -58,7 +59,7 @@ export const FeatureList: { [key in keyof IFeatureList]: Feature } = {
   instructionsFileForBackoffice: { roles: [UserRole.BACKOFFICE] },
   editTechnicalProposal: { roles: [UserRole.BACKOFFICE] },
   publishRequest: { roles: [UserRole.CUSTOMER] },
-  approveRequest: { roles: [UserRole.CUSTOMER] },
+  approveRequest: { roles: [UserRole.CUSTOMER, UserRole.CUSTOMER_APPROVER] },
   addRequestGroup: { roles: [UserRole.BACKOFFICE] },
   moveRequestGroup: { roles: [UserRole.BACKOFFICE] },
   kim: { roles: [UserRole.CUSTOMER] },
@@ -72,5 +73,6 @@ export const FeatureList: { [key in keyof IFeatureList]: Feature } = {
   customerProfile: { roles: [UserRole.CUSTOMER] },
   customerIntelplan: { roles: [UserRole.CUSTOMER] },
   createTemplate: { roles: [UserRole.CUSTOMER] },
-  normalization: { roles: [UserRole.SENIOR_BACKOFFICE, UserRole.BACKOFFICE]}
+  normalization: { roles: [UserRole.SENIOR_BACKOFFICE, UserRole.BACKOFFICE]},
+  requestDashboard: { roles: [UserRole.SENIOR_BACKOFFICE, UserRole.BACKOFFICE, UserRole.CUSTOMER]},
 };

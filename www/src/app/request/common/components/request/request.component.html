@@ -141,7 +141,7 @@
 
         <!-- Кебаб-меню -->
         <div class="app-col app-basis-auto">
-          <uxg-popover #more>
+          <uxg-popover #more *ngIf="!user.isCustomerApprover()">
             <button uxgButton uxgPopoverTrigger clear link>
               <uxg-icon shape="app-kebab"></uxg-icon>
             </button>
@@ -234,7 +234,7 @@
           <uxg-popover #more [openOnHover]="true">
             <button uxgButton secondary iconText
                     uxgPopoverTrigger
-                    *ngIf="request.status !== 'COMPLETED' && request.status !== 'NOT_RELEVANT'"
+                    *ngIf="request.status !== 'COMPLETED' && request.status !== 'NOT_RELEVANT' && !user.isCustomerApprover()"
                     [disabled]="request.isOlderTwoWeeks" (click)="addPositionModal.open()">
               <uxg-icon shape="app-plus"></uxg-icon>
               <span>Новая позиция</span>

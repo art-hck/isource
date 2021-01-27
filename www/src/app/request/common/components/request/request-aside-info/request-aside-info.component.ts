@@ -16,7 +16,7 @@ import { FeatureService } from "../../../../../core/services/feature.service";
 export class RequestAsideInfoComponent implements OnChanges {
   @Input() positions: RequestPosition[];
   @Input() request: Request;
-  isInfoTabVisible: boolean;
+  isInfoTabVisible = this.user.isCustomerApprover();
   isStatTabVisible: boolean;
   isChecked = new FormControl();
   statusCounters: PositionStatusesGroupInfo[];
