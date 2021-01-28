@@ -78,7 +78,7 @@ export class RequestState {
     return dispatch(new Fetch(requestId, false, false));
   }
 
-  @Action(FetchPositions) fetchPositions({setState}: Context, {requestId, useCache, clearState}: FetchPositions) {
+  @Action(FetchPositions) fetchPositions({setState}: Context, {requestId, filter, useCache, clearState}: FetchPositions) {
     // @TODO: Временно выпилил кеширование
     // if (this.cachePositions[requestId] && useCache) {
     //   return setState(patch({positions: this.cachePositions[requestId]}));
@@ -88,7 +88,7 @@ export class RequestState {
       setState(patch({positions: null, positionsStatus: "fetching" as StateStatus}));
     }
 
-    return this.rest.getRequestPositions(requestId).pipe(
+    return this.rest.getRequestPositions(requestId, filter).pipe(
       tap(positions => setState(patch({positions, positionsStatus: "received" as StateStatus}))),
       tap(positions => this.cachePositions[requestId] = positions),
       tap(() => setState(patch({status: "received" as StateStatus})))

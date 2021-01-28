@@ -7,8 +7,8 @@
       [status]="status$ | async"
       [positionsStatus]="positionsStatus$ | async"
       (addPosition)="store.dispatch([refreshPositions(requestId), refresh(requestId)])"
-      (approvePositions)="store.dispatch(approvePositions($event))"
-      (rejectPositions)="store.dispatch(rejectPositions($event))"
+      (approvePositions)="publishPositions($event)"
+      (rejectPositions)="rejectPositions($event)"
     ></app-request>
   </ng-container>
 </ng-container>

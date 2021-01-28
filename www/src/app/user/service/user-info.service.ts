@@ -33,7 +33,6 @@ export class UserInfoService {
     isCustomerBuyer: 'isCustomerBuyer',
 
     isBackofficeBuyer: 'isBackofficeBuyer',
-    isCustomerApprover: 'isCustomerApprover',
     isSeniorBackoffice: 'isSeniorBackoffice',
 
     isSystemAdmin: 'isSystemAdmin',
@@ -166,10 +165,6 @@ export class UserInfoService {
 
   public isCustomer(): boolean {
     return this.getUserInfo()?.isCustomer;
-  }
-
-  public isCustomerApprover(): boolean {
-    return this.getUserInfo()?.isCustomerApprover;
   }
 
   public isBackOffice(): boolean {

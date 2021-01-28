@@ -67,9 +67,9 @@ export class RequestService {
     );
   }
 
-  getRequestPositions(id: Uuid): Observable<RequestPositionList[]> {
+  getRequestPositions(id: Uuid, filter): Observable<RequestPositionList[]> {
     const url = `requests/customer/${id}/positions`;
-    return this.api.post<RequestPositionList[]>(url, {}).pipe(
+    return this.api.post<RequestPositionList[]>(url, {filter: filter}).pipe(
       map((data: RequestPositionList[]) => {
         return data.map(function recursiveMapPositionList(item: RequestPositionList) {
           switch (item.entityType) {

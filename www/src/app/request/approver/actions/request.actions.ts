@@ -13,7 +13,7 @@ export namespace RequestActions {
 
   export class FetchPositions {
     static readonly type = '[Request Approver] Fetch Positions';
-    constructor(public requestId: Uuid, public useCache = true, public clearState = true) {}
+    constructor(public requestId: Uuid, public filter?: {}, public useCache = true, public clearState = true) {}
   }
 
   export class RefreshPositions {
@@ -28,6 +28,16 @@ export namespace RequestActions {
 
   export class RejectPositions {
     static readonly type = '[Request Approver] RejectPositions';
+    constructor(public requestId: Uuid, public positionIds: Uuid[], public rejectionMessage: string) {}
+  }
+
+  export class PublishPositions {
+    static readonly type = '[Request Approver] PublishPositions';
+    constructor(public requestId: Uuid, public positionIds: Uuid[]) {}
+  }
+
+  export class CancelPositions {
+    static readonly type = '[Request Approver] CancelPositions';
     constructor(public requestId: Uuid, public positionIds: Uuid[], public rejectionMessage: string) {}
   }
 }

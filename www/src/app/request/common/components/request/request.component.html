@@ -51,7 +51,6 @@
             </uxg-popover>
           </div>
         </div>
-
         <!-- Отправить позиции на согласование -->
         <div class="app-col app-col-auto" *ngIf="featureService.authorize('sentToApprove') && isDraft">
           <button uxgButton clear link [disabled]="checkedPositions.length === 0 || !canPublish"
@@ -121,8 +120,8 @@
           <!-- Отклонить -->
           <div class="app-col app-col-auto" *ngIf="featureService.available('approveRequest', user.roles)">
             <button uxgButton clear link
-                    [disabled]="checkedPositions.length === 0 || !everyPositionHasStatus(checkedPositions, 'ON_CUSTOMER_APPROVAL')"
-                    (click)="rejectPositionModal.open()">
+                    [disabled]="checkedPositions.length === 0"
+                    (click)="onRejectPositions($event)">
               <uxg-icon shape="app-cross"></uxg-icon>
               <span>Отклонить</span>
             </button>
@@ -131,7 +130,7 @@
           <!-- Согласовать -->
           <div class="app-col app-col-auto" *ngIf="featureService.available('approveRequest', user.roles)">
             <button uxgButton clear link
-                    [disabled]="checkedPositions.length === 0 || !everyPositionHasStatus(checkedPositions, 'ON_CUSTOMER_APPROVAL')"
+                    [disabled]="checkedPositions.length === 0"
                     (click)="onApprovePositions()">
               <uxg-icon shape="app-check"></uxg-icon>
               <span>Согласовать</span>
@@ -335,7 +334,8 @@
         <ng-container *ngFor="let formGroup of formPositions.controls">
           <!-- Позиция -->
           <ng-container *ngIf="asPosition(formGroup.get('position').value) as position">
-            <a appUploadFile hoverClass="upload-area-hover" (dropFile)="onDragAndDropDocumentsToPosition(position.id, $event)"
+            <a appUploadFile hoverClass="upload-area-hover"
+               (dropFile)="onDragAndDropDocumentsToPosition(position.id, $event)"
                [href]="getPositionUrl(position)"
                (click)="navigateToPosition(position, $event)"
                class="app-row app-link-no-color"
@@ -386,27 +386,34 @@
   </div>
 
   <div class="app-col item-status app-ellipsis">
-    <ng-container
-      *ngIf="user.isBackOffice() &&
+    <ng-container *ngIf="!user.isCustomerApprover(); else positionSumm">
+      <ng-container
+        *ngIf="user.isBackOffice() &&
       user.hasPermission(permissionType.POSITIONS_DISTRIBUTION_BETWEEN_BACKOFFICE_BUYERS) &&
       position.responsibleUser as user; else status">
-      {{ position.responsibleUser.shortName }}
+        {{ position.responsibleUser.shortName }}
+      </ng-container>
+      <ng-template #status>
+        <app-position-status [label]="PositionStatusesLabels[position.status]" [status]="position.status">
+        </app-position-status>
+      </ng-template>
     </ng-container>
-    <ng-template #status>
-      <app-position-status [label]="PositionStatusesLabels[position.status]" [status]="position.status">
-      </app-position-status>
+    <ng-template #positionSumm>
+      2300
     </ng-template>
   </div>
 
   <div class="app-col item-attribute-icon">
-    <uxg-popover #more [openOnHover]="true" *ngIf="position.isInspectionControlRequired">
-      <uxg-icon uxgPopoverTrigger shape="app-inspector" class="app-ghost-color"></uxg-icon>
+    <ng-container *ngIf="!user.isCustomerApprover()">
+      <uxg-popover #more [openOnHover]="true" *ngIf="position.isInspectionControlRequired">
+        <uxg-icon uxgPopoverTrigger shape="app-inspector" class="app-ghost-color"></uxg-icon>
 
-      <div *uxgPopoverContent="popoverDir.bottomRight" (click)="more.hide()">
-        <div>Инспекционный контроль</div>
-      </div>
-    </uxg-popover>
-    <uxg-icon shape="app-element" [class]="position.mtrPositionId ? 'app-ghost-color' : 'app-link-color'"></uxg-icon>
+        <div *uxgPopoverContent="popoverDir.bottomRight" (click)="more.hide()">
+          <div>Инспекционный контроль</div>
+        </div>
+      </uxg-popover>
+      <uxg-icon shape="app-element" [class]="position.mtrPositionId ? 'app-ghost-color' : 'app-link-color'"></uxg-icon>
+    </ng-container>
   </div>
 
 </ng-template>
@@ -438,7 +445,8 @@
     <div class="positions" *ngIf="!folded.value">
       <ng-container *ngFor="let childformGroup of asFormArray(formGroup.get('positions')).controls">
         <div class="group-position-item"
-             appUploadFile hoverClass="upload-area-hover" (dropFile)="onDragAndDropDocumentsToPosition(childformGroup.get('position').value.id, $event)">
+             appUploadFile hoverClass="upload-area-hover"
+             (dropFile)="onDragAndDropDocumentsToPosition(childformGroup.get('position').value.id, $event)">
           <div class="app-row">
             <ng-container *ngTemplateOutlet="positionItem; context:{
                 position: childformGroup.get('position').value,
@@ -581,7 +589,7 @@
 
 
 <uxg-modal #editRequestNameModal size="l">
-  <ng-container *ngIf="editRequestNameModal.state" >
+  <ng-container *ngIf="editRequestNameModal.state">
     <h2>Изменить наименование</h2>
     <div class="app-section app-secondary-color">
       Вы можете изменить название для текущей заявки. После изменения, старое наименование не сохраняется.
@@ -590,7 +598,7 @@
 
     <form appFormValidation [formGroup]="requestNameForm" (ngSubmit)="onSaveRequestName()">
       <div class="app-control-wrap">
-        <input #requestName uxgInput lg formControlName="requestName" />
+        <input #requestName uxgInput lg formControlName="requestName"/>
         <label class="app-control-label" (click)="requestName.focus()">Наименование заявки</label>
         <div class="app-control-error" *ngIf="requestNameForm.get('requestName').errors as e">
           <span *ngIf="e.empty">Обязательное поле</span>
@@ -608,7 +616,8 @@
 
 <!-- Модальное окно прикрепления документа к позициям -->
 <uxg-modal #addDocumentsModal size="l">
-  <h2>Загрузить документы для выбранных позиций <span class="app-ghost-color">({{ checkedPositions.length }})</span></h2>
+  <h2>Загрузить документы для выбранных позиций <span class="app-ghost-color">({{ checkedPositions.length }})</span>
+  </h2>
 
   <div class="app-section app-secondary-color">
     Загруженные документы будут прикреплены ко всем выбранным в завке позициям.

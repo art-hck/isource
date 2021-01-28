@@ -28,6 +28,7 @@ import { User } from "../../../../user/models/user";
 export class RequestComponent implements OnChanges {
   @ViewChild('editRequestNameModal') editRequestNameModal: UxgModalComponent;
   @ViewChild('addDocumentsModal') addDocumentsModal: UxgModalComponent;
+  @ViewChild('rejectPositionModal') rejectPositionModal: UxgModalComponent;
 
   @Input() request: Request;
   @Input() positions: RequestPositionList[];
@@ -207,7 +208,7 @@ export class RequestComponent implements OnChanges {
   onApprovePositions() {
     const positionIds = this.checkedPositions.map(item => item.id);
 
-    this.approvePositions.emit(positionIds);
+    this.user.isCustomerApprover() ? this.publishPositions.emit(positionIds) : this.approvePositions.emit(positionIds);
   }
 
   onRejectPositions(rejectionMessage) {
@@ -275,6 +276,10 @@ export class RequestComponent implements OnChanges {
     }
 
     return formGroup;
+  }
+
+  clickRejectPositions($event) {
+    this.user.isCustomerApprover() ? this.onRejectPositions($event) : this.rejectPositionModal.open();
   }
 
   trackByFormPositionId = (i, c: AbstractControl) => c.get("position").value.id;
