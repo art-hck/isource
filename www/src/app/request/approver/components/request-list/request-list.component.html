@@ -4,11 +4,11 @@
     <div class="app-col">
       <div class="app-row app-align-items-center">
         <uxg-tabs class="app-col">
-          <uxg-tab-title (click)="clickOnTab('onReviewTab')" [active]="true">
+          <uxg-tab-title (click)="clickOnTab(false)" [active]="true">
             <span>Необходимо рассмотреть </span>
             <span class="counter">({{(statusCounters$ | async)?.inProgressRequestsCount}})</span>
           </uxg-tab-title>
-          <uxg-tab-title #approvedTab (click)="clickOnTab('reviewedTab')">
+          <uxg-tab-title #approvedTab (click)="clickOnTab(true)">
             <span>Рассмотренные </span>
             <span class="counter">({{(statusCounters$ | async)?.newRequestsCount}})</span>
           </uxg-tab-title>
