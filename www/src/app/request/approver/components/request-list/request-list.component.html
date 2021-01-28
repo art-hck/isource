@@ -41,7 +41,7 @@
         <a class="app-row app-link-no-color" [routerLink]="request.request.id" [queryParams]="{showOnlyApproved: approvedTab.active ? 1:0 }" *ngFor="let request of requests$ | async">
           <div class="app-col-auto number app-bold">{{ request.request.number | number:'1.0-2' }}</div>
           <div class="app-col-6 name app-ellipsis">{{ request.request.name }}</div>
-          <div class="app-col-2 initiator app-ellipsis">qdwdqwdqw</div>
+          <div class="app-col-2 initiator app-ellipsis">{{request.request.user.shortName}}</div>
           <div class="app-col-2 published app-ghost-color">{{ request.request.publishedDate | date:'dd.MM.yyyy' }}</div>
           <div class="app-col-2 total app-ellipsis app-bold">
             <span>{{(request.request.amount || 0) | number:'1.0-2'}} </span>
