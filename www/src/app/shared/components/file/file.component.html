@@ -22,16 +22,14 @@
     <div class="app-ellipsis">{{ appFile.file.name }}</div>
     <small class="app-ghost-color" *ngIf="!appFile.invalid">{{ appFile.file.size | bytesToSize : 2 }}</small>
 
-    <small class="app-ghost-color">{{ appFile.invalid }} {{ appFile.validExtension }}</small>
-
     <small class="app-alert-color app-bold" *ngIf="!appFile.validExtension">Недопустимый формат, не будет загружен</small>
 
     <small class="app-alert-color app-bold" *ngIf="appFile.validExtension && !appFile.validSize">
-      Размер превышает {{ appFile.singleFileSizeLimit | bytesToSize : 3 }}, не будет загружен
+      Размер файла превышает {{ appFile.singleFileSizeLimit | bytesToSize : 3 }}.<br> Не будет загружен
     </small>
 
-    <small class="app-alert-color app-bold" *ngIf="appFile.validExtension && appFile.invalidMark">
-      Лимит прикреплений {{ appFile.totalFilesSizeLimit | bytesToSize : 3 }}, не будет загружен
+    <small class="app-alert-color app-bold" *ngIf="appFile.validExtension && appFile.validSize && appFile.invalidMark">
+      Лимит всех прикреплений – {{ appFile.totalFilesSizeLimit | bytesToSize : 3 }}.<br> Не будет загружен
     </small>
   </div>
 

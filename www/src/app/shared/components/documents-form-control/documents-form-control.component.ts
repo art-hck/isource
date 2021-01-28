@@ -23,57 +23,44 @@ export class DocumentsFormControlComponent implements ControlValueAccessor {
   @Input() docType = 'ТКП';
   @Output() select = new EventEmitter<AppFile[]>();
   @Output() remove = new EventEmitter<number>();
+  totalFilesSizeLimit: number = AppConfig.files.totalFilesSizeLimit;
   onTouched: (value) => void;
   onChange: (value) => void;
 
-  totalFilesSizeLimit: number = AppConfig.files.totalFilesSizeLimit;
-  totalSelectedSize: number;
-  processedFiles = [];
-
   removeFile(i) {
-    // this.remove.emit(i);
+    this.remove.emit(i);
     this.files.splice(i, 1);
 
-    console.log(i);
-    console.log(this.files);
+    // Список оставшихся файлов прогоняем через анализатор допустимых размеров
+    this.files = this.processAttachments(this.files);
 
-    const processedFiles = this.processAttachments(this.files, true);
-
-    if (this.onChange) { this.onChange(processedFiles); }
+    if (this.onChange) { this.onChange(this.files); }
   }
 
   selectFile(files: File[]) {
-    const processedFiles = this.processAttachments(files.map(file => new AppFile(file)));
+    this.writeValue([...this.files, ...files.map(file => new AppFile(file))]);
 
-    this.writeValue([...this.files, ...processedFiles]);
-
-    console.log(processedFiles);
+    // Список выбранных файлов прогоняем через анализатор допустимых размеров
+    this.files = this.processAttachments(this.files);
 
     this.select.emit(this.files);
     if (this.onChange) { this.onChange(this.files); }
   }
 
-  processAttachments(files: AppFile[], onRemove = false): AppFile[] {
-    const filesList = onRemove ? this.files : files;
+  // Анализируем и помечаем прикреплённые файлы на превышение допустимого размера прикреплений
+  processAttachments(files: AppFile[]): AppFile[] {
+    let selectedFilesTotalSize = 0;
 
-    const selectedFilesTotalSize = this.files.filter(fileItem => !fileItem.invalid).map(fileItem => fileItem.file.size).reduce((a, b) => a + b, 0);
-
-    filesList.forEach((appFile, i) => {
-      console.log(this.totalFilesSizeLimit);
-      console.log(selectedFilesTotalSize);
-      console.log(appFile.file.size);
-
-      if (this.totalFilesSizeLimit - selectedFilesTotalSize > appFile.file.size) {
-        this.totalSelectedSize += appFile.file.size;
-        console.log('marking as false');
-        filesList[i].invalidMark = false;
+    files.forEach((appFile, i) => {
+      if (selectedFilesTotalSize + appFile.file.size < this.totalFilesSizeLimit) {
+        selectedFilesTotalSize = selectedFilesTotalSize + appFile.file.size;
+        files[i].invalidMark = false;
       } else {
-        console.log('marking as true');
-        filesList[i].invalidMark = true;
+        files[i].invalidMark = true;
       }
     });
 
-    return filesList;
+    return files;
   }
 
   registerOnChange = fn => this.onChange = fn;
