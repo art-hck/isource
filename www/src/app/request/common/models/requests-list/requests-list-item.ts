@@ -17,4 +17,5 @@ export class RequestListItem {
   publishedDate?: Date;
   conversation?: { id: Uuid, externalId: ChatConversation["id"], unreadCount?: number };
   context?: { id: Uuid, externalId: ChatContext["id"], unreadCount?: number };
+  amount?: number;
 }

@@ -24,6 +24,8 @@ export * from './modules/breadcrumbs/uxg-breadcrumbs.module';
 export * from './modules/breadcrumbs/uxg-breadcrumbs.service';
 export * from './modules/breadcrumbs/uxg-breadcrumbs';
 export * from './modules/breadcrumbs/uxg-breadcrumbs.component';
+export * from './modules/footer/uxg-footer.module';
+export * from './modules/footer/uxg-footer.component';
 export * from './modules/radio/uxg-radio.module';
 export * from './modules/radio/uxg-radio-item.component';
 export * from './modules/tree/uxg-tree.module';
