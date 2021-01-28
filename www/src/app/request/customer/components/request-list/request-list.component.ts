@@ -35,7 +35,7 @@ export class RequestListComponent implements OnInit, OnDestroy {
   @Select(RequestListState.status) status$: Observable<StateStatus>;
 
   readonly pageSize = this.appConfig.paginator.pageSize;
-  readonly fetchFilters$ = new Subject<{ page?: number, filters?: RequestsListFilter , sort?: RequestsListSort }>();
+  readonly fetchFilters$ = new Subject<{ page?: number, filters?: RequestsListFilter, sort?: RequestsListSort }>();
   readonly destroy$ = new Subject();
   readonly form = this.fb.group({
     requestNameOrNumber: '',
@@ -92,5 +92,4 @@ export class RequestListComponent implements OnInit, OnDestroy {
     this.destroy$.next();
     this.destroy$.complete();
   }
-
 }

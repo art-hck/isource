@@ -19,6 +19,7 @@ import { UxgDatepickerModule } from "./modules/datepicker/uxg-datepicker.module"
 import { UxgModalModule } from "./modules/modal/uxg-modal.module";
 import { UxgPaginationModule } from "./modules/pagination/uxg-pagination.module";
 import { UxgFilterModule } from "./modules/filter/uxg-filter.module";
+import { UxgFooterModule } from "./modules/footer/uxg-footer.module";
 
 
 @NgModule({
@@ -34,6 +35,7 @@ import { UxgFilterModule } from "./modules/filter/uxg-filter.module";
     UxgIconModule,
     UxgInputModule,
     UxgFilterModule,
+    UxgFooterModule,
     UxgModalModule,
     UxgPaginationModule,
     UxgPopoverModule,
@@ -54,6 +56,7 @@ import { UxgFilterModule } from "./modules/filter/uxg-filter.module";
     UxgIconModule,
     UxgInputModule,
     UxgFilterModule,
+    UxgFooterModule,
     UxgModalModule,
     UxgPaginationModule,
     UxgPopoverModule,

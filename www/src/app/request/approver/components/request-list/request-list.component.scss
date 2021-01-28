@@ -1,0 +1,14 @@
+@import "src/theme";
+@import "src/assets/styles/helpers";
+
+.table-col {
+  overflow: hidden;
+}
+
+.app-table {
+  .number { flex-basis: 65px; }
+
+  &.disabled {
+    opacity: .5;
+  }
+}

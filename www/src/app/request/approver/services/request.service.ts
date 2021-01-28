@@ -1,7 +1,7 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Uuid } from "../../../cart/models/uuid";
-import { of } from "rxjs";
+import { Observable, of } from "rxjs";
 import { Request } from "../../common/models/request";
 import { Page } from "../../../core/models/page";
 import { RequestsList } from "../../common/models/requests-list/requests-list";
@@ -18,7 +18,8 @@ export class RequestService {
     return of<Request>(null);
   }
 
-  list() {
-    return of<Page<RequestsList>>(null);
+  list(startFrom, pageSize, filters, sort): Observable<Page<RequestsList>> {
+    const url = `requests/customer/list`;
+    return this.api.post<Page<RequestsList>>(url, { startFrom, pageSize, filters, sort });
   }
 }

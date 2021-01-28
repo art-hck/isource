@@ -1,6 +1,7 @@
 export enum PositionStatus {
   DRAFT = 'DRAFT',                                 // Черновик
   ON_CUSTOMER_APPROVAL = 'ON_CUSTOMER_APPROVAL',   // На согласовании заказчика
+  PROOF_OF_NEED = 'PROOF_OF_NEED',                 // Необходимо подтверждение
   NEW = 'NEW',                                     // Новая
   NOT_RELEVANT = 'NOT_RELEVANT',                   // Неактуально
   TECHNICAL_COMMERCIAL_PROPOSALS_PREPARATION = 'TECHNICAL_COMMERCIAL_PROPOSALS_PREPARATION', // Подготовка ТКП
