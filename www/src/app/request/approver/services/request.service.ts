@@ -5,6 +5,8 @@ import { Observable, of } from "rxjs";
 import { Request } from "../../common/models/request";
 import { Page } from "../../../core/models/page";
 import { RequestsList } from "../../common/models/requests-list/requests-list";
+import { RequestsListFilter } from "../../common/models/requests-list/requests-list-filter";
+import { RequestsListSort } from "../../common/models/requests-list/requests-list-sort";
 
 
 @Injectable({
@@ -18,7 +20,7 @@ export class RequestService {
     return of<Request>(null);
   }
 
-  list(startFrom, pageSize, filters, sort): Observable<Page<RequestsList>> {
+  list(startFrom: number, pageSize: number, filters: RequestsListFilter, sort: RequestsListSort): Observable<Page<RequestsList>> {
     const url = `requests/customer/list`;
     return this.api.post<Page<RequestsList>>(url, { startFrom, pageSize, filters, sort });
   }

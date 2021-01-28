@@ -21,7 +21,6 @@ export class UserInfo {
   isSeniorBackoffice: boolean;
   isSystemAdmin: boolean;
   isContragentCreator: boolean;
-  isCustomerApprover: boolean;
   permissions: Permission[];
   groups: UsersGroup[];
 

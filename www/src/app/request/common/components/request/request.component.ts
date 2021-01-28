@@ -1,4 +1,5 @@
 import { ActivatedRoute, Router, UrlTree } from "@angular/router";
+import { getCurrencySymbol } from "@angular/common";
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewChild } from "@angular/core";
 import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
 import { Observable } from "rxjs";
@@ -28,6 +29,7 @@ import { User } from "../../../../user/models/user";
 export class RequestComponent implements OnChanges {
   @ViewChild('editRequestNameModal') editRequestNameModal: UxgModalComponent;
   @ViewChild('addDocumentsModal') addDocumentsModal: UxgModalComponent;
+  @ViewChild('rejectPositionModal') rejectPositionModal: UxgModalComponent;
 
   @Input() request: Request;
   @Input() positions: RequestPositionList[];
@@ -53,6 +55,8 @@ export class RequestComponent implements OnChanges {
   readonly popoverDir = UxgPopoverContentDirection;
   readonly permissionType = PermissionType;
   readonly PositionStatusesLabels = PositionStatusesLabels;
+  readonly PositionStatus = PositionStatus;
+  readonly getCurrencySymbol = getCurrencySymbol;
   flatPositions: RequestPosition[] = [];
   form: FormGroup;
   editedPosition: RequestPosition;
@@ -100,12 +104,17 @@ export class RequestComponent implements OnChanges {
            (this.user.isBackOffice() && ['NEW', 'IN_PROGRESS'].indexOf(this.request.status) !== -1);
   }
 
-  everyPositionHasStatus(positions: RequestPosition[], status: string): boolean {
-    return positions.every(position => position.status === status);
+  everyPositionHasStatus(positions: RequestPosition[], statuses: PositionStatus[]): boolean {
+    return positions.every(position => statuses.includes(position.status));
   }
 
-  someOfPositionsHasStatus(positions: RequestPosition[], status: string): boolean {
-    return positions.some(position => position.status === status);
+  someOfPositionsHasStatus(positions: RequestPosition[], statuses: PositionStatus[]): boolean {
+    return positions.some(position => statuses.includes(position.status));
+  }
+
+  showCheckbox(positions: RequestPosition[]) {
+    return this.user.isCustomer() || this.user.isSeniorBackoffice() || (this.user.isCustomerApprover() &&
+      positions.some(position => position.status === PositionStatus.PROOF_OF_NEED));
   }
 
   someOfPositionsAreInProcedure(): boolean {
@@ -210,7 +219,7 @@ export class RequestComponent implements OnChanges {
     this.approvePositions.emit(positionIds);
   }
 
-  onRejectPositions(rejectionMessage) {
+  onRejectPositions(rejectionMessage?: string) {
     const positionIds = this.checkedPositions.map(item => item.id);
 
     this.rejectPositions.emit({positionIds, rejectionMessage});
@@ -275,6 +284,10 @@ export class RequestComponent implements OnChanges {
     }
 
     return formGroup;
+  }
+
+  clickRejectPositions() {
+    this.user.isCustomerApprover() ? this.onRejectPositions() : this.rejectPositionModal.open();
   }
 
   trackByFormPositionId = (i, c: AbstractControl) => c.get("position").value.id;

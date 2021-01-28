@@ -13,6 +13,8 @@ import { Page } from "../../../core/models/page";
 import { RequestsList } from "../../common/models/requests-list/requests-list";
 import { AvailableFilters } from "../models/available-filters";
 import { RecommendedPositions } from "../models/recommended-positions";
+import { PositionStatus } from "../../common/enum/position-status";
+import { PositionFilter } from "../../common/models/position-filter";
 
 @Injectable({
   providedIn: "root"
@@ -67,9 +69,9 @@ export class RequestService {
     );
   }
 
-  getRequestPositions(id: Uuid): Observable<RequestPositionList[]> {
+  getRequestPositions(id: Uuid, filters?: PositionFilter): Observable<RequestPositionList[]> {
     const url = `requests/customer/${id}/positions`;
-    return this.api.post<RequestPositionList[]>(url, {}).pipe(
+    return this.api.post<RequestPositionList[]>(url, {filters}).pipe(
       map((data: RequestPositionList[]) => {
         return data.map(function recursiveMapPositionList(item: RequestPositionList) {
           switch (item.entityType) {
@@ -189,6 +191,15 @@ export class RequestService {
     const url = `#profile#request-techmaps/recommended`;
     return this.api.post<RecommendedPositions[]>(url, {
       commodities: positions
+    });
+  }
+
+  changePositionsStatus(positionIds: Uuid[], status: PositionStatus, statusComment?: string) {
+    const url = `requests/customer/positions/statuses/change`;
+    return this.api.post<RequestPosition[]>(url, {
+      positionIds,
+      status,
+      statusComment
     });
   }
 }

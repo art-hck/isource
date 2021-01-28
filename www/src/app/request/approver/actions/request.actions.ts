@@ -1,4 +1,5 @@
 import { Uuid } from "../../../cart/models/uuid";
+import { PositionFilter } from "../../common/models/position-filter";
 
 export namespace RequestActions {
   export class Fetch {
@@ -13,12 +14,12 @@ export namespace RequestActions {
 
   export class FetchPositions {
     static readonly type = '[Request Approver] Fetch Positions';
-    constructor(public requestId: Uuid, public useCache = true, public clearState = true) {}
+    constructor(public requestId: Uuid, public filter?: PositionFilter, public useCache = true, public clearState = true) {}
   }
 
   export class RefreshPositions {
     static readonly type = '[Request Approver] Refresh Positions';
-    constructor(public requestId: Uuid) {}
+    constructor(public requestId: Uuid, public filter?: PositionFilter) {}
   }
 
   export class ApprovePositions {
