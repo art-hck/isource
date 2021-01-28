@@ -13,7 +13,7 @@ import { RequestListState } from "../../states/request-list.state";
 import { RequestListActions } from "../../actions/request-list.actions";
 import { StateStatus } from "../../../common/models/state-status";
 import { RequestStatusCount } from "../../../common/models/requests-list/request-status-count";
-import { RequestStatus } from "../../../common/enum/request-status";
+import { PositionStatus } from "../../../common/enum/position-status";
 import { APP_CONFIG, GpnmarketConfigInterface } from "../../../../core/config/gpnmarket-config.interface";
 import { UxgFooterComponent } from "uxg";
 import Fetch = RequestListActions.Fetch;
@@ -45,10 +45,6 @@ export class RequestListComponent {
     shipmentDateAsap: false,
     userIds: [[]],
   });
-  readonly tabsStatuses: Record<TabTypes, RequestStatus[]> = {
-    'onReviewTab': [RequestStatus.ON_CUSTOMER_APPROVAL],
-    'reviewedTab': [RequestStatus.COMPLETED, RequestStatus.DRAFT, RequestStatus.IN_PROGRESS, RequestStatus.NEW, RequestStatus.NOT_RELEVANT],
-  }
   readonly getCurrencySymbol = getCurrencySymbol;
   constructor(
     @Inject(APP_CONFIG) private appConfig: GpnmarketConfigInterface,
@@ -70,15 +66,17 @@ export class RequestListComponent {
         }
       }),
       scan(({ filters: prev, sort: prevSort }, { page = 1, filters: curr, sort: currSort }) => ({ page, filters: { ...prev, ...curr }, sort: { ...prevSort, ...currSort } }), {
-        filters: { requestListStatusesFilter: this.tabsStatuses.onReviewTab }
+        filters: {  positionStatuses: [PositionStatus.PROOF_OF_NEED] }
       } as { page?: number, filters?: RequestsListFilter, sort?: RequestsListSort }),
       switchMap(data => this.store.dispatch(new Fetch((data.page - 1) * this.pageSize, this.pageSize, data.filters, data.sort))),
       takeUntil(this.destroy$)
     ).subscribe();
   }
 
-  clickOnTab(tab: TabTypes) {
-    this.fetchFilters$.next({ filters: { requestListStatusesFilter: this.tabsStatuses[tab] } });
+  clickOnTab(isReviewedTab: boolean) {
+    this.fetchFilters$.next({ filters:
+      isReviewedTab ? { positionStatuses: [PositionStatus.PROOF_OF_NEED] } : { positionNotStatuses: [PositionStatus.PROOF_OF_NEED] }
+    });
   }
 
   ngAfterViewInit() {

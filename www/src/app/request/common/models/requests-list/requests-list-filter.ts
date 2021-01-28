@@ -9,6 +9,7 @@ export class RequestsListFilter {
   onlyOpenTasks?: boolean;
   customers?: Uuid[];
   positionStatuses?: PositionStatus[];
+  positionNotStatuses?: PositionStatus[];
   shipmentDateFrom?: string;
   shipmentDateTo?: string;
   shipmentDateAsap?: boolean;
