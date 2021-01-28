@@ -257,6 +257,9 @@ export class RequestListComponent implements OnInit, OnDestroy {
 
   resetSelectedRequests() {
     this.requestsForm.reset();
+    this.customFilterForm.reset();
+
+    this.requestsSelectList.form.get('search').reset("");
     this.requestsSelectList.formItems?.controls.map(control => control.get("checked").setValue(false));
   }
 
