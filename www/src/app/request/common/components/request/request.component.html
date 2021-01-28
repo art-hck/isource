@@ -99,7 +99,7 @@
 
         <!-- Отправить в работу -->
         <div class="app-col app-col-auto"
-             *ngIf="featureService.available('publishRequest', user.roles) && everyPositionHasStatus(flatPositions, 'DRAFT')">
+             *ngIf="featureService.available('publishRequest', user.roles) && everyPositionHasStatus(flatPositions, [PositionStatus.DRAFT])">
           <button uxgButton clear link
                   [disabled]="checkedPositions.length === 0"
                   (click)="onPublishPositions()">
@@ -123,8 +123,9 @@
           <!-- Отклонить -->
           <div class="app-col app-col-auto" *ngIf="featureService.available('approveRequest', user.roles)">
             <button uxgButton clear link
-                    [disabled]="checkedPositions.length === 0"
-                    (click)="onRejectPositions()">
+                    [disabled]="checkedPositions.length === 0 ||
+                    !everyPositionHasStatus(checkedPositions, [PositionStatus.ON_CUSTOMER_APPROVAL, PositionStatus.PROOF_OF_NEED])"
+                    (click)="clickRejectPositions()">
               <uxg-icon shape="app-cross"></uxg-icon>
               <span>Отклонить</span>
             </button>
@@ -133,7 +134,8 @@
           <!-- Согласовать -->
           <div class="app-col app-col-auto" *ngIf="featureService.available('approveRequest', user.roles)">
             <button uxgButton clear link
-                    [disabled]="checkedPositions.length === 0"
+                    [disabled]="checkedPositions.length === 0 ||
+                    !everyPositionHasStatus(checkedPositions, [PositionStatus.ON_CUSTOMER_APPROVAL, PositionStatus.PROOF_OF_NEED])"
                     (click)="onApprovePositions()">
               <uxg-icon shape="app-check"></uxg-icon>
               <span>Согласовать</span>
@@ -188,9 +190,10 @@
               <ng-container *ngIf="user.isCustomer()">
                 <!-- Отправить в работу -->
                 <div class="app-col app-col-auto"
-                     *ngIf="featureService.available('publishRequest', user.roles) && !everyPositionHasStatus(flatPositions, 'DRAFT')">
+                     *ngIf="featureService.available('publishRequest', user.roles) &&
+                     !everyPositionHasStatus(flatPositions, [PositionStatus.DRAFT])">
                   <button uxgButton clear
-                          [disabled]="checkedPositions.length === 0 || !everyPositionHasStatus(checkedPositions, 'DRAFT')"
+                          [disabled]="checkedPositions.length === 0 || !everyPositionHasStatus(checkedPositions, [PositionStatus.DRAFT])"
                           (click)="onPublishPositions()">
                     Отправить в работу
                   </button>

@@ -104,8 +104,8 @@ export class RequestComponent implements OnChanges {
            (this.user.isBackOffice() && ['NEW', 'IN_PROGRESS'].indexOf(this.request.status) !== -1);
   }
 
-  everyPositionHasStatus(positions: RequestPosition[], status: string): boolean {
-    return positions.every(position => position.status === status);
+  everyPositionHasStatus(positions: RequestPosition[], statuses: PositionStatus[]): boolean {
+    return positions.every(position => statuses.includes(position.status));
   }
 
   someOfPositionsHasStatus(positions: RequestPosition[], statuses: PositionStatus[]): boolean {
@@ -286,8 +286,8 @@ export class RequestComponent implements OnChanges {
     return formGroup;
   }
 
-  clickRejectPositions($event) {
-    this.user.isCustomerApprover() ? this.onRejectPositions($event) : this.rejectPositionModal.open();
+  clickRejectPositions() {
+    this.user.isCustomerApprover() ? this.onRejectPositions() : this.rejectPositionModal.open();
   }
 
   trackByFormPositionId = (i, c: AbstractControl) => c.get("position").value.id;

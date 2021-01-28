@@ -31,14 +31,4 @@ export namespace RequestActions {
     static readonly type = '[Request Approver] RejectPositions';
     constructor(public requestId: Uuid, public positionIds: Uuid[], public rejectionMessage: string) {}
   }
-
-  export class PublishPositions {
-    static readonly type = '[Request Approver] PublishPositions';
-    constructor(public requestId: Uuid, public positionIds: Uuid[]) {}
-  }
-
-  export class CancelPositions {
-    static readonly type = '[Request Approver] CancelPositions';
-    constructor(public requestId: Uuid, public positionIds: Uuid[], public rejectionMessage: string) {}
-  }
 }
