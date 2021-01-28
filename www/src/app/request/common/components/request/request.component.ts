@@ -54,6 +54,7 @@ export class RequestComponent implements OnChanges {
   readonly popoverDir = UxgPopoverContentDirection;
   readonly permissionType = PermissionType;
   readonly PositionStatusesLabels = PositionStatusesLabels;
+  readonly PositionStatus = PositionStatus;
   flatPositions: RequestPosition[] = [];
   form: FormGroup;
   editedPosition: RequestPosition;
@@ -105,8 +106,8 @@ export class RequestComponent implements OnChanges {
     return positions.every(position => position.status === status);
   }
 
-  someOfPositionsHasStatus(positions: RequestPosition[], status: string): boolean {
-    return positions.some(position => position.status === status);
+  someOfPositionsHasStatus(positions: RequestPosition[], statuses: PositionStatus[]): boolean {
+    return positions.some(position => statuses.includes(position.status));
   }
 
   someOfPositionsAreInProcedure(): boolean {
@@ -211,7 +212,7 @@ export class RequestComponent implements OnChanges {
     this.user.isCustomerApprover() ? this.publishPositions.emit(positionIds) : this.approvePositions.emit(positionIds);
   }
 
-  onRejectPositions(rejectionMessage) {
+  onRejectPositions(rejectionMessage?: string) {
     const positionIds = this.checkedPositions.map(item => item.id);
 
     this.rejectPositions.emit({positionIds, rejectionMessage});

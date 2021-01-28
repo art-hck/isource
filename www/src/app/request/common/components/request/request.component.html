@@ -116,12 +116,12 @@
           </button>
         </div>
 
-        <ng-container *ngIf="someOfPositionsHasStatus(flatPositions, 'ON_CUSTOMER_APPROVAL')">
+        <ng-container *ngIf="someOfPositionsHasStatus(flatPositions, [PositionStatus.ON_CUSTOMER_APPROVAL, PositionStatus.PROOF_OF_NEED])">
           <!-- Отклонить -->
           <div class="app-col app-col-auto" *ngIf="featureService.available('approveRequest', user.roles)">
             <button uxgButton clear link
                     [disabled]="checkedPositions.length === 0"
-                    (click)="onRejectPositions($event)">
+                    (click)="onRejectPositions()">
               <uxg-icon shape="app-cross"></uxg-icon>
               <span>Отклонить</span>
             </button>
