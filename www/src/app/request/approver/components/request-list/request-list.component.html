@@ -6,11 +6,11 @@
         <uxg-tabs class="app-col">
           <uxg-tab-title (click)="clickOnTab(false)" [active]="true">
             <span>Необходимо рассмотреть </span>
-            <span class="counter">({{(statusCounters$ | async)?.inProgressRequestsCount}})</span>
+            <span class="counter">({{(statusCounters$ | async)?.proofOfNeedRequestsCount}})</span>
           </uxg-tab-title>
           <uxg-tab-title #approvedTab (click)="clickOnTab(true)">
             <span>Рассмотренные </span>
-            <span class="counter">({{(statusCounters$ | async)?.newRequestsCount}})</span>
+            <span class="counter">({{(statusCounters$ | async)?.notProofOfNeedRequestsCount}})</span>
           </uxg-tab-title>
         </uxg-tabs>
 <!--        <uxg-filter-button></uxg-filter-button>-->
