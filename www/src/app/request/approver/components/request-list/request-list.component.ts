@@ -1,5 +1,5 @@
 import { DOCUMENT, getCurrencySymbol, isPlatformBrowser } from "@angular/common";
-import { ChangeDetectionStrategy, Component, ElementRef, Inject, InjectionToken, PLATFORM_ID, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, Inject, InjectionToken, OnDestroy, OnInit, PLATFORM_ID, ViewChild } from '@angular/core';
 import { FeatureService } from "../../../../core/services/feature.service";
 import { FormBuilder } from "@angular/forms";
 import { map, scan, switchMap, takeUntil, tap, throttleTime } from "rxjs/operators";
@@ -24,7 +24,7 @@ type TabTypes = 'onReviewTab' | 'reviewedTab';
   styleUrls: ['./request-list.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class RequestListComponent {
+export class RequestListComponent implements AfterViewInit, OnDestroy, OnInit {
   @ViewChild(UxgFooterComponent, { read: ElementRef }) footerRef: ElementRef;
   @Select(RequestListState.requests) requests$: Observable<RequestsList[]>;
   @Select(RequestListState.statusCounters) statusCounters$: Observable<RequestStatusCount>;
@@ -75,7 +75,7 @@ export class RequestListComponent {
 
   clickOnTab(isReviewedTab: boolean) {
     this.fetchFilters$.next({ filters:
-      isReviewedTab ? { positionStatuses: [PositionStatus.PROOF_OF_NEED] } : { positionNotStatuses: [PositionStatus.PROOF_OF_NEED] }
+        (isReviewedTab ? { positionStatuses: [PositionStatus.PROOF_OF_NEED] } : { positionNotStatuses: [PositionStatus.PROOF_OF_NEED] })
     });
   }
 
