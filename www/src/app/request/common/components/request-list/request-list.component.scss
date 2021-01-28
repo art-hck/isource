@@ -83,3 +83,57 @@
     }
   }
 }
+
+.select-list {
+  &-requests { max-height: calc(70vh - 206px) }
+  .checkbox-space {
+    width: 18px;
+  }
+
+  &-item {
+    &-request {
+      &-number { flex-grow: 0.15; min-width: 60px; max-width: 100px; text-align: left; }
+      &-customer { flex-grow: .15; min-width: 190px; max-width: 190px; text-align: left; }
+      &-name { min-width: 200px; max-width: 200px; text-align: left; }
+      &-date { min-width: 120px; text-align: right; }
+    }
+
+    &-footer {
+      padding: 10px 0;
+
+      & * {
+        padding: 0 10px;
+        font-size: 11px;
+        box-sizing: content-box;
+
+        &:first-child { padding-left: 0; }
+        &:last-child { padding-right: 0; }
+      }
+    }
+  }
+}
+
+.input-date-from {
+  padding-right: 10px;
+
+  & .app-control-wrap {
+    margin: -1.5em 0;
+  }
+
+  & .app-control-icon {
+    margin-right: 5px;
+  }
+}
+
+.input-date-to {
+  padding-left: 10px;
+  margin-right: 25px;
+
+  & .app-control-wrap {
+    margin: -1.5em 0;
+  }
+
+  & .app-control-icon {
+    margin-right: 5px;
+  }
+}

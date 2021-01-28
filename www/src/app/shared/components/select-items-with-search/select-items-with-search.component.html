@@ -4,14 +4,18 @@
       <div class="app-col app-grow-0">
         <uxg-checkbox formControlName="checked" uxgSelectAllFor="items" [mixedWithDisabled]="true"></uxg-checkbox>
       </div>
-      <div class="app-col">
+      <div class="app-col-auto app-grow-0">
         <small><span class="app-secondary-color">Выбрано: </span><b>{{ checkedFormItems.length }}</b></small>
       </div>
       <ng-container *ngIf="filterFn">
-        <div class="app-col app-col-auto app-row app-align-items-center">
-          <div class="app-col app-col-auto app-ghost-color">Фильтр: &nbsp; </div>
-          <div class="app-col-auto search">
-            <input type="text" uxgInput formControlName="search" [placeholder]="placeholder"/>
+        <div class="app-col">
+          <div class="app-row app-align-items-center app-justify-content-end">
+            <ng-container *ngTemplateOutlet="customFilterFieldsRef"></ng-container>
+
+            <div class="app-col app-col-auto app-ghost-color">Фильтр: &nbsp; </div>
+            <div class="app-col-auto search" [class.wide]="!customFilterFieldsRef">
+              <input type="text" uxgInput formControlName="search" [placeholder]="placeholder"/>
+            </div>
           </div>
         </div>
       </ng-container>

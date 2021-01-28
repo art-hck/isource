@@ -6,8 +6,11 @@ hr {
 }
 
 .search {
-  width: 280px;
   margin-left: .5em;
+
+  &.wide {
+    width: 280px;
+  }
 }
 
 form {
