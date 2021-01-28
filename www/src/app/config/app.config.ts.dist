@@ -19,7 +19,8 @@ export const AppConfig: GpnmarketConfigInterface = {
       'pdf', 'txt', '7z', 'cdw', 'sld', 'drw', '3ds', 'ma', 'obj' // Чертежи и прочее
     ],
     deniedExtensions: [],
-    sizeLimit: 8388608
+    singleFileSizeLimit: 10485760,
+    totalFilesSizeLimit: 20971520
   },
   keycloak: {
     config: {

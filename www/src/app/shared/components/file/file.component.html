@@ -8,6 +8,7 @@
         <div>Недопустимый формат, файл не будет загружен.
           <span [hidden]="!appFile.allowed?.length">Допускаются: {{map(appFile.allowed)}}.</span>
           <span [hidden]="appFile.allowed?.length || !appFile.denied?.length">Запрещены: {{map(appFile.denied)}}.</span>
+
         </div>
         <br/>
         <div>Считаете, что тут не хватает нужного вам формата? Напишите на <a href="mailto:support@isource.ru" target="_blank">support@isource.ru</a></div>
@@ -20,8 +21,18 @@
   <div class="app-ellipsis app-col file-item" *ngIf="appFile.file">
     <div class="app-ellipsis">{{ appFile.file.name }}</div>
     <small class="app-ghost-color" *ngIf="!appFile.invalid">{{ appFile.file.size | bytesToSize : 2 }}</small>
+
+    <small class="app-ghost-color">{{ appFile.invalid }} {{ appFile.validExtension }}</small>
+
     <small class="app-alert-color app-bold" *ngIf="!appFile.validExtension">Недопустимый формат, не будет загружен</small>
-    <small class="app-alert-color app-bold" *ngIf="appFile.validExtension && !appFile.validSize">Недопустимый размер, не будет загружен</small>
+
+    <small class="app-alert-color app-bold" *ngIf="appFile.validExtension && !appFile.validSize">
+      Размер превышает {{ appFile.singleFileSizeLimit | bytesToSize : 3 }}, не будет загружен
+    </small>
+
+    <small class="app-alert-color app-bold" *ngIf="appFile.validExtension && appFile.invalidMark">
+      Лимит прикреплений {{ appFile.totalFilesSizeLimit | bytesToSize : 3 }}, не будет загружен
+    </small>
   </div>
 
   <button *ngIf="delete.observers.length" uxgButton clear link class="app-file-delete app-shrink-0" type="button" (click)="delete.emit()">

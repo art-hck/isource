@@ -1,5 +1,7 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { AppFile } from "../file/file";
+import { APP_CONFIG, GpnmarketConfigInterface } from "../../../core/config/gpnmarket-config.interface";
+import { AppConfig } from "../../../config/app.config";
 
 /**
  * Компонент для отображения и выбора файлов для последующей загрузки на сервер
@@ -24,6 +26,7 @@ export class DocumentUploadListComponent implements OnInit {
   @Output() fileSelected = new EventEmitter<File[]>();
   @ViewChild('uploadEl') uploadElRef: ElementRef;
   appFiles: AppFile[] = [];
+  totalFilesSizeLimit: number = AppConfig.files.totalFilesSizeLimit;
 
   ngOnInit() {
     this.appFiles = this.documents.map(file => new AppFile(file, this.allowed));

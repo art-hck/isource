@@ -22,7 +22,8 @@ export interface GpnmarketConfigInterface {
   files: {
     allowedExtensions: AppFileExtensions,
     deniedExtensions: AppFileExtensions,
-    sizeLimit: number
+    singleFileSizeLimit: 10485760,
+    totalFilesSizeLimit: 20971520
   };
   keycloak: KeycloakOptions;
   dadata: {

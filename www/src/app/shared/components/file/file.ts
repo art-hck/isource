@@ -5,11 +5,13 @@ export class AppFile {
     public file: File,
     public allowed: AppFileExtensions = AppConfig.files.allowedExtensions,
     public denied: AppFileExtensions = AppConfig.files.deniedExtensions,
-    public sizeLimit: number = AppConfig.files.sizeLimit
+    public singleFileSizeLimit: number = AppConfig.files.singleFileSizeLimit,
+    public totalFilesSizeLimit: number = AppConfig.files.totalFilesSizeLimit,
+    public invalidMark: boolean = false
   ) {}
 
   get validSize(): boolean {
-    return this.file.size < this.sizeLimit;
+    return this.file.size < this.singleFileSizeLimit;
   }
 
   get validExtension(): boolean {
@@ -18,7 +20,7 @@ export class AppFile {
   }
 
   get valid(): boolean {
-    return this.validSize && this.validExtension;
+    return this.validSize && this.validExtension && !this.invalidMark;
   }
 
   get invalid(): boolean {
