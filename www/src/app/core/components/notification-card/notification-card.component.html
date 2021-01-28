@@ -100,11 +100,11 @@
       <div class="app-row notification-card-header app-primary-color"
            [ngSwitch]="notification?.body?.requestStatus" [ngClass]="'status-' + notification?.body?.type + '-badge'">
         <ng-container *ngSwitchCase="'NEW'">
-          <b class="app-col">Ваша заявка принята в работу</b>
+          <b class="app-col">Заявка принята в работу</b>
         </ng-container>
 
         <ng-container *ngSwitchCase="'COMPLETED'">
-          <b class="app-col">По Вашей заявке заказ выполнен</b>
+          <b class="app-col">По заявке заказ выполнен</b>
         </ng-container>
 
         <ng-container *ngSwitchCase="'ON_CUSTOMER_APPROVAL'">
