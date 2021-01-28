@@ -95,9 +95,9 @@ export class RequestState {
     );
   }
 
-  @Action(RefreshPositions) refreshPositions({setState, dispatch}: Context, {requestId}: RefreshPositions) {
+  @Action(RefreshPositions) refreshPositions({setState, dispatch}: Context, {requestId, filter}: RefreshPositions) {
     setState(patch({positionsStatus: "updating" as StateStatus}));
-    return dispatch(new FetchPositions(requestId, false, false));
+    return dispatch(new FetchPositions(requestId, filter, false, false));
   }
 
   @Action(ApprovePositions) approvePositions({setState, dispatch}: Context, {requestId, positionIds}: ApprovePositions) {

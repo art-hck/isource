@@ -12,12 +12,14 @@ import { UxgBreadcrumbsService } from "uxg";
 import { Title } from "@angular/platform-browser";
 import { filter, switchMap, takeUntil, tap } from "rxjs/operators";
 import { RequestActions } from "../../actions/request.actions";
+import { RequestState } from "../../states/request.state";
+import { PositionService } from "../../../back-office/services/position.service";
+import { PositionStatus } from "../../../common/enum/position-status";
+import { PositionFilter } from "../../../common/models/position-filter";
 import Refresh = RequestActions.Refresh;
 import RefreshPositions = RequestActions.RefreshPositions;
 import FetchPositions = RequestActions.FetchPositions;
 import Fetch = RequestActions.Fetch;
-import { RequestState } from "../../states/request.state";
-import { PositionService } from "../../../back-office/services/position.service";
 
 @Component({
   templateUrl: './request.component.html',
@@ -25,6 +27,7 @@ import { PositionService } from "../../../back-office/services/position.service"
 })
 export class RequestComponent implements OnInit, OnDestroy {
   requestId: Uuid;
+  positionFilter: PositionFilter;
   @ViewChild('commonRequestComponent') commonRequestComponent: CommonRequestComponent;
   @Select(RequestState.request) request$: Observable<Request>;
   @Select(RequestState.positions) positions$: Observable<RequestPositionList[]>;
@@ -49,8 +52,9 @@ export class RequestComponent implements OnInit, OnDestroy {
     this.route.params.pipe(
       tap(({id}) => this.requestId = id),
       switchMap(({id}) => {
-        const positionFilter = this.route.snapshot.queryParams.showOnlyApproved === '1' ? { "statuses": ["PROOF_OF_NEED"]} : { "statuses": ["PROOF_OF_NEED"]};
-        return this.store.dispatch([new Fetch(id), new FetchPositions(id, positionFilter)]);
+        this.positionFilter = this.route.snapshot.queryParams.showOnlyApproved === '1' ?
+          { "notStatuses": [PositionStatus.PROOF_OF_NEED]} : { "statuses": [PositionStatus.PROOF_OF_NEED]};
+        return this.store.dispatch([new Fetch(id), new FetchPositions(id, this.positionFilter)]);
       }),
       switchMap(() => this.request$),
       filter(request => !!request),
@@ -63,14 +67,14 @@ export class RequestComponent implements OnInit, OnDestroy {
     ).subscribe();
   }
 
-  rejectPositions(positionIds: string[]) {
+  rejectPositions(positionIds: Uuid[]) {
     this.positionService.changePositionsStatus(positionIds, 'CANCELED', 'customer').subscribe(
-      () => new RefreshPositions(this.requestId));
+      () => this.store.dispatch(new RefreshPositions(this.requestId, this.positionFilter)));
   }
 
-  publishPositions(positionIds: string[]) {
-    this.requestService.publishPositions(this.requestId, positionIds).subscribe(
-      () => new RefreshPositions(this.requestId));
+  approvePositions(positionIds: Uuid[]) {
+    this.requestService.changePositionsStatus(positionIds, PositionStatus.NEW).subscribe(
+      () => this.store.dispatch(new RefreshPositions(this.requestId, this.positionFilter)));
   }
 
   ngOnDestroy() {

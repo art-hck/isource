@@ -26,31 +26,33 @@
     <div class="app-col app-table app-no-border">
       <div class="app-row app-align-items-center">
         <!-- Царь-чекбокс -->
-        <div class="app-col app-col-auto">
-          <div class="app-row app-align-items-center">
-            <uxg-checkbox formControlName="checked" uxgSelectAllFor="positions"
-                          *ngFor="let form of [form]"></uxg-checkbox>
-            <uxg-popover #popover>
-              <button uxgButton uxgPopoverTrigger link icon>
-                <uxg-icon shape="app-triangle down"></uxg-icon>
-              </button>
-              <div *uxgPopoverContent>
-                <div>
-                  <button uxgButton clear (click)="select('all'); popover.hide()">Все</button>
+        <ng-container *ngIf="showCheckbox(flatPositions)">
+          <div class="app-col app-col-auto">
+            <div class="app-row app-align-items-center">
+              <uxg-checkbox formControlName="checked" uxgSelectAllFor="positions"
+                            *ngFor="let form of [form]"></uxg-checkbox>
+              <uxg-popover #popover>
+                <button uxgButton uxgPopoverTrigger link icon>
+                  <uxg-icon shape="app-triangle down"></uxg-icon>
+                </button>
+                <div *uxgPopoverContent>
+                  <div>
+                    <button uxgButton clear (click)="select('all'); popover.hide()">Все</button>
+                  </div>
+                  <div>
+                    <button uxgButton clear (click)="select('none'); popover.hide()">Ни одного</button>
+                  </div>
+                  <div>
+                    <button uxgButton clear (click)="select('groups'); popover.hide()">Группы</button>
+                  </div>
+                  <div>
+                    <button uxgButton clear (click)="select('positions'); popover.hide()">Вне групп</button>
+                  </div>
                 </div>
-                <div>
-                  <button uxgButton clear (click)="select('none'); popover.hide()">Ни одного</button>
-                </div>
-                <div>
-                  <button uxgButton clear (click)="select('groups'); popover.hide()">Группы</button>
-                </div>
-                <div>
-                  <button uxgButton clear (click)="select('positions'); popover.hide()">Вне групп</button>
-                </div>
-              </div>
-            </uxg-popover>
+              </uxg-popover>
+            </div>
           </div>
-        </div>
+        </ng-container>
         <!-- Отправить позиции на согласование -->
         <div class="app-col app-col-auto" *ngIf="featureService.authorize('sentToApprove') && isDraft">
           <button uxgButton clear link [disabled]="checkedPositions.length === 0 || !canPublish"
@@ -116,7 +118,8 @@
           </button>
         </div>
 
-        <ng-container *ngIf="someOfPositionsHasStatus(flatPositions, [PositionStatus.ON_CUSTOMER_APPROVAL, PositionStatus.PROOF_OF_NEED])">
+        <ng-container
+          *ngIf="someOfPositionsHasStatus(flatPositions, [PositionStatus.ON_CUSTOMER_APPROVAL, PositionStatus.PROOF_OF_NEED])">
           <!-- Отклонить -->
           <div class="app-col app-col-auto" *ngIf="featureService.available('approveRequest', user.roles)">
             <button uxgButton clear link
@@ -208,7 +211,8 @@
                     </button>
                   </div>
                 </ng-container>
-                <ng-container *ngIf="!someOfPositionsHasStatus(flatPositions, 'ON_CUSTOMER_APPROVAL')">
+                <ng-container
+                  *ngIf="!someOfPositionsHasStatus(flatPositions, [PositionStatus.ON_CUSTOMER_APPROVAL, PositionStatus.PROOF_OF_NEED])">
                   <!-- Отклонить -->
                   <div class="app-col app-col-auto" *ngIf="featureService.available('approveRequest', user.roles)">
                     <button uxgButton clear disabled>
@@ -364,9 +368,11 @@
 
 <!-- Шаблон позиции -->
 <ng-template #positionItem let-position="position" let-formGroup="formGroup">
-  <div class="app-col app-grow-0" [formGroup]="formGroup">
-    <uxg-checkbox formControlName="checked"></uxg-checkbox>
-  </div>
+  <ng-container *ngIf="showCheckbox(flatPositions)">
+    <div class="app-col app-grow-0" [formGroup]="formGroup">
+      <uxg-checkbox formControlName="checked"></uxg-checkbox>
+    </div>
+  </ng-container>
 
   <div class="app-col app-bold item-title app-ellipsis">
     <a [href]="getPositionUrl(position)" (click)="navigateToPosition(position, $event)"
@@ -399,7 +405,8 @@
       </ng-template>
     </ng-container>
     <ng-template #positionSumm>
-      2300
+      <span class="app-bold">{{(position?.startPrice || 0) | number:'1.0-2'}} </span>
+      <span class="app-ghost-color app-bold">{{getCurrencySymbol('RUB', "narrow")}}</span>
     </ng-template>
   </div>
 
@@ -413,6 +420,14 @@
         </div>
       </uxg-popover>
       <uxg-icon shape="app-element" [class]="position.mtrPositionId ? 'app-ghost-color' : 'app-link-color'"></uxg-icon>
+    </ng-container>
+    <ng-container *ngIf="user.isCustomerApprover()">
+      <ng-container *ngIf="position.status === PositionStatus.CANCELED">
+        <uxg-icon shape="app-cross" class="app-error-color"></uxg-icon>
+      </ng-container>
+      <ng-container *ngIf="position.status !== PositionStatus.CANCELED && position.status !== PositionStatus.PROOF_OF_NEED">
+        <uxg-icon shape="app-check" class="app-success-color"></uxg-icon>
+      </ng-container>
     </ng-container>
   </div>
 

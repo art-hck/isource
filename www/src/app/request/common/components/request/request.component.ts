@@ -1,4 +1,5 @@
 import { ActivatedRoute, Router, UrlTree } from "@angular/router";
+import { getCurrencySymbol } from "@angular/common";
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewChild } from "@angular/core";
 import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
 import { Observable } from "rxjs";
@@ -55,6 +56,7 @@ export class RequestComponent implements OnChanges {
   readonly permissionType = PermissionType;
   readonly PositionStatusesLabels = PositionStatusesLabels;
   readonly PositionStatus = PositionStatus;
+  readonly getCurrencySymbol = getCurrencySymbol;
   flatPositions: RequestPosition[] = [];
   form: FormGroup;
   editedPosition: RequestPosition;
@@ -108,6 +110,11 @@ export class RequestComponent implements OnChanges {
 
   someOfPositionsHasStatus(positions: RequestPosition[], statuses: PositionStatus[]): boolean {
     return positions.some(position => statuses.includes(position.status));
+  }
+
+  showCheckbox(positions: RequestPosition[]) {
+    return this.user.isCustomer() || this.user.isSeniorBackoffice() || (this.user.isCustomerApprover() &&
+      positions.some(position => position.status === PositionStatus.PROOF_OF_NEED));
   }
 
   someOfPositionsAreInProcedure(): boolean {
@@ -209,7 +216,7 @@ export class RequestComponent implements OnChanges {
   onApprovePositions() {
     const positionIds = this.checkedPositions.map(item => item.id);
 
-    this.user.isCustomerApprover() ? this.publishPositions.emit(positionIds) : this.approvePositions.emit(positionIds);
+    this.approvePositions.emit(positionIds);
   }
 
   onRejectPositions(rejectionMessage?: string) {
