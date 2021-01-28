@@ -1,5 +1,5 @@
-import { getCurrencySymbol } from "@angular/common";
-import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
+import { DOCUMENT, getCurrencySymbol, isPlatformBrowser } from "@angular/common";
+import { ChangeDetectionStrategy, Component, ElementRef, Inject, InjectionToken, PLATFORM_ID, ViewChild } from '@angular/core';
 import { FeatureService } from "../../../../core/services/feature.service";
 import { FormBuilder } from "@angular/forms";
 import { map, scan, switchMap, takeUntil, tap, throttleTime } from "rxjs/operators";
@@ -15,6 +15,7 @@ import { StateStatus } from "../../../common/models/state-status";
 import { RequestStatusCount } from "../../../common/models/requests-list/request-status-count";
 import { RequestStatus } from "../../../common/enum/request-status";
 import { APP_CONFIG, GpnmarketConfigInterface } from "../../../../core/config/gpnmarket-config.interface";
+import { UxgFooterComponent } from "uxg";
 import Fetch = RequestListActions.Fetch;
 
 type TabTypes = 'onReviewTab' | 'reviewedTab';
@@ -24,6 +25,7 @@ type TabTypes = 'onReviewTab' | 'reviewedTab';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RequestListComponent {
+  @ViewChild(UxgFooterComponent, { read: ElementRef }) footerRef: ElementRef;
   @Select(RequestListState.requests) requests$: Observable<RequestsList[]>;
   @Select(RequestListState.statusCounters) statusCounters$: Observable<RequestStatusCount>;
   @Select(RequestListState.tabTotalCount) tabTotalCount$: Observable<number>;
@@ -44,12 +46,14 @@ export class RequestListComponent {
     userIds: [[]],
   });
   readonly tabsStatuses: Record<TabTypes, RequestStatus[]> = {
-    'onReviewTab': [RequestStatus.IN_PROGRESS],
-    'reviewedTab': [RequestStatus.COMPLETED, RequestStatus.DRAFT, RequestStatus.ON_CUSTOMER_APPROVAL, RequestStatus.NEW, RequestStatus.NOT_RELEVANT],
+    'onReviewTab': [RequestStatus.ON_CUSTOMER_APPROVAL],
+    'reviewedTab': [RequestStatus.COMPLETED, RequestStatus.DRAFT, RequestStatus.IN_PROGRESS, RequestStatus.NEW, RequestStatus.NOT_RELEVANT],
   }
   readonly getCurrencySymbol = getCurrencySymbol;
   constructor(
     @Inject(APP_CONFIG) private appConfig: GpnmarketConfigInterface,
+    @Inject(DOCUMENT) private document,
+    @Inject(PLATFORM_ID) private platformId: InjectionToken<Object>,
     private router: Router,
     private route: ActivatedRoute,
     private fb: FormBuilder,
@@ -66,7 +70,7 @@ export class RequestListComponent {
         }
       }),
       scan(({ filters: prev, sort: prevSort }, { page = 1, filters: curr, sort: currSort }) => ({ page, filters: { ...prev, ...curr }, sort: { ...prevSort, ...currSort } }), {
-        filters: { requestListStatusesFilter: [] }
+        filters: { requestListStatusesFilter: this.tabsStatuses.onReviewTab }
       } as { page?: number, filters?: RequestsListFilter, sort?: RequestsListSort }),
       switchMap(data => this.store.dispatch(new Fetch((data.page - 1) * this.pageSize, this.pageSize, data.filters, data.sort))),
       takeUntil(this.destroy$)
@@ -77,7 +81,18 @@ export class RequestListComponent {
     this.fetchFilters$.next({ filters: { requestListStatusesFilter: this.tabsStatuses[tab] } });
   }
 
+  ngAfterViewInit() {
+    if (isPlatformBrowser(this.platformId)) {
+      const footerEl = this.document.querySelector('.app-footer');
+      footerEl?.parentElement.insertBefore(this.footerRef.nativeElement, footerEl);
+    }
+  }
+
   ngOnDestroy() {
+    if (isPlatformBrowser(this.platformId)) {
+      this.footerRef.nativeElement.remove();
+    }
+
     this.destroy$.next();
     this.destroy$.complete();
   }
