@@ -204,11 +204,7 @@ export class UserInfoService {
   }
 
   public getUserRole(): 'customer' | 'backoffice' {
-    return this.isCustomer() ? 'customer' : 'backoffice';
-  }
-
-  public getUserRoleName(): string {
-    return this.isCustomer() ? 'Заказчик' : 'Бэк-офис';
+    return this.isCustomer() || this.isCustomerApprover() ? 'customer' : 'backoffice';
   }
 
   public getContragentId(): string | null {
