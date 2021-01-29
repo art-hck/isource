@@ -8,6 +8,7 @@
   [pageSize]="pageSize"
   [availableFilters$]="availableFilters$"
   [form]="form"
+  [downloadRequestsList]="downloadRequestsList"
   (filter)="fetchFilters$.next($event)"
   (refresh)="fetchFilters$.next({})"
   (downloadRequests)="downloadRequests($event)"

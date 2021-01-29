@@ -19,6 +19,7 @@ import { saveAs } from 'file-saver/src/FileSaver';
 import Fetch = RequestListActions.Fetch;
 import FetchAvailableFilters = RequestListActions.FetchAvailableFilters;
 import { RequestService } from "../../services/request.service";
+import { Page } from "../../../../core/models/page";
 
 @Component({
   templateUrl: './request-list.component.html',
@@ -34,6 +35,7 @@ export class RequestListComponent implements OnInit, OnDestroy {
   @Select(RequestListState.totalCount) totalCount$: Observable<number>;
   @Select(RequestListState.status) status$: Observable<StateStatus>;
 
+  downloadRequestsList: RequestsList[];
   readonly pageSize = this.appConfig.paginator.pageSize;
   readonly fetchFilters$ = new Subject<{page?: number, filters?: RequestsListFilter, sort?: RequestsListSort}>();
   readonly destroy$ = new Subject();
@@ -71,6 +73,12 @@ export class RequestListComponent implements OnInit, OnDestroy {
     });
 
     this.store.dispatch(new FetchAvailableFilters());
+
+    this.getDownloadRequestsList()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(data => {
+      this.downloadRequestsList = data.entities;
+    });
   }
 
   ngOnDestroy() {
@@ -81,6 +89,10 @@ export class RequestListComponent implements OnInit, OnDestroy {
   downloadRequests(requestIds) {
     this.requestService.downloadRequests(requestIds)
       .subscribe(data => saveAs(data, `Registry.xlsx`));
+  }
+
+  getDownloadRequestsList(): Observable<Page<RequestsList>> {
+    return this.requestService.getRequests(0, 2000, {requestListStatusesFilter: []}, {});
   }
 
 }
