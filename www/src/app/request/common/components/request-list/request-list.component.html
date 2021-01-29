@@ -302,7 +302,7 @@
       [filterFn]="filterRequests"
       [customFilterForm]="customFilterForm"
       [trackBy]="trackByRequestId"
-      [items]="requests">
+      [items]="downloadRequestsList">
 
       <ng-template let-formGroup="formGroup" let-request="item">
         <ng-container *ngIf="toRequestItem(request) as request">

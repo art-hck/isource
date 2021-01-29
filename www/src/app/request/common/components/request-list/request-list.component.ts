@@ -48,6 +48,7 @@ export class RequestListComponent implements OnInit, OnDestroy {
   @Input() availableFilters$: Observable<AvailableFilters>;
   @Input() filters: {page?: number, filters?: RequestsListFilter};
   @Input() form: FormGroup;
+  @Input() downloadRequestsList: RequestsList[];
   @Output() filter = new EventEmitter<{ page?: number, filters?: RequestsListFilter, sort?: RequestsListSort }>();
   @Output() addRequest = new EventEmitter();
   @Output() refresh = new EventEmitter();
