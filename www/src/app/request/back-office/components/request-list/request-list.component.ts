@@ -74,7 +74,9 @@ export class RequestListComponent implements OnInit, OnDestroy {
 
     this.store.dispatch(new FetchAvailableFilters());
 
-    this.getDownloadRequestsList().subscribe(data => {
+    this.getDownloadRequestsList()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(data => {
       this.downloadRequestsList = data.entities;
     });
   }
