@@ -92,7 +92,7 @@ export class RequestListComponent implements OnInit, OnDestroy {
   }
 
   getDownloadRequestsList(): Observable<Page<RequestsList>> {
-    return this.requestService.getRequests(0, 2000, {requestListStatusesFilter: []}, {});
+    return this.requestService.getRequests(0, 500, {requestListStatusesFilter: []}, {});
   }
 
 }
