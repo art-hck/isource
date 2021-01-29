@@ -292,6 +292,10 @@
 <uxg-modal #downloadRequestsModal size="l" (stateChange)="resetSelectedRequests()">
   <h2>Выбор заявок для выгрузки в Excel</h2>
 
+  <div class="app-row app-secondary-color app-section">
+    <span>Для выгрузки доступны только последние <b>500</b> заявок</span>
+  </div>
+
   <form [formGroup]="requestsForm">
     <select-items-with-search
       #requestsSelectList
