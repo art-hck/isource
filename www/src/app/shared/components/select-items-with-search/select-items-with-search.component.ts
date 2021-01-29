@@ -61,6 +61,11 @@ export class SelectItemsWithSearchComponent implements ControlValueAccessor, OnC
       this.form.get('search').valueChanges.subscribe((value) => this.formItems?.controls
         .filter(c => !this.disabledFn || !this.disabledFn(c.get('item').value)) // не учитываем позиции, задизейбленые функцией
         .forEach(c => !this.filterFn(value, c.get('item').value) ? c.disable() : c.enable()));
+
+      // Обработка при изменениях кастомной формы, при её наличии
+      this.customFilterForm?.valueChanges.subscribe(() => this.formItems?.controls
+        .filter(c => !this.disabledFn || !this.disabledFn(c.get('item').value)) // не учитываем позиции, задизейбленые функцией
+        .forEach(c => !this.filterFn(this.form.get('search').value, c.get('item').value) ? c.disable() : c.enable()));
     }
   }
 
