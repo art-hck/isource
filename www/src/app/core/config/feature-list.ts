@@ -37,6 +37,7 @@ export interface IFeatureList {
   createTemplate;
   normalization;
   requestDashboard;
+  contragents;
 }
 
 export const FeatureList: { [key in keyof IFeatureList]: Feature } = {
@@ -45,7 +46,7 @@ export const FeatureList: { [key in keyof IFeatureList]: Feature } = {
   registration: {},
   customerRequest: { roles: [UserRole.CUSTOMER] },
   createRequest: { roles: [UserRole.CUSTOMER] },
-  catalog: {},
+  catalog: {roles: [UserRole.CUSTOMER, UserRole.BACKOFFICE]},
   catalogUpdate: { roles: [UserRole.ADMIN] },
   cart: { roles: [UserRole.CUSTOMER] },
   instructionsFileForCustomer: { roles: [UserRole.CUSTOMER] },
@@ -75,4 +76,5 @@ export const FeatureList: { [key in keyof IFeatureList]: Feature } = {
   createTemplate: { roles: [UserRole.CUSTOMER] },
   normalization: { roles: [UserRole.SENIOR_BACKOFFICE, UserRole.BACKOFFICE]},
   requestDashboard: { roles: [UserRole.SENIOR_BACKOFFICE, UserRole.BACKOFFICE, UserRole.CUSTOMER]},
+  contragents: {roles: [UserRole.CUSTOMER, UserRole.BACKOFFICE]}
 };

@@ -42,6 +42,7 @@ export const Menu: MenuModel[] = [
   {
     text: 'Контрагенты',
     path: 'contragents',
+    feature: 'contragents',
   },
   {
     text: 'Сотрудники',

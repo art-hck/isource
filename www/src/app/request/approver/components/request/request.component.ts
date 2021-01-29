@@ -20,6 +20,8 @@ import Refresh = RequestActions.Refresh;
 import RefreshPositions = RequestActions.RefreshPositions;
 import FetchPositions = RequestActions.FetchPositions;
 import Fetch = RequestActions.Fetch;
+import { Toast } from "../../../../shared/models/toast";
+import { ToastActions } from "../../../../shared/actions/toast.actions";
 
 @Component({
   templateUrl: './request.component.html',
@@ -61,7 +63,8 @@ export class RequestComponent implements OnInit, OnDestroy {
       tap(({id, name}) => this.title.setTitle(name || "Заявка №" + id)),
       tap(({id, number}) => this.bc.breadcrumbs = [
         {label: "Заявки", link: "/requests/approver"},
-        {label: `Заявка №${number}`, link: "/requests/approver/" + id}
+        {label: `Заявка №${number}`, link: "/requests/approver/" + id,
+          queryParams: {showOnlyApproved: this.route.snapshot.queryParams.showOnlyApproved}}
       ]),
       takeUntil(this.destroy$),
     ).subscribe();
@@ -69,12 +72,17 @@ export class RequestComponent implements OnInit, OnDestroy {
 
   rejectPositions(positionIds: Uuid[]) {
     this.positionService.changePositionsStatus(positionIds, 'CANCELED', 'customer').subscribe(
-      () => this.store.dispatch(new RefreshPositions(this.requestId, this.positionFilter)));
+      () => this.store.dispatch(
+        [new ToastActions.Success(positionIds.length > 1 ? positionIds.length + 'позиции отклонены' : 'Позиция отклонена'),
+        new RefreshPositions(this.requestId, this.positionFilter)]));
   }
 
   approvePositions(positionIds: Uuid[]) {
     this.requestService.changePositionsStatus(positionIds, PositionStatus.NEW).subscribe(
-      () => this.store.dispatch(new RefreshPositions(this.requestId, this.positionFilter)));
+      () => this.store.dispatch(
+        [new ToastActions.Success(positionIds.length > 1 ? positionIds.length + 'позиции успешно согласованы' :
+          'Позиция успешно согласована'),
+        new RefreshPositions(this.requestId, this.positionFilter)]));
   }
 
   ngOnDestroy() {
