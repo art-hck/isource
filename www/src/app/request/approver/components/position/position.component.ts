@@ -14,7 +14,6 @@ import { PositionService } from "../../../back-office/services/position.service"
 
 @Component({
   templateUrl: './position.component.html',
-  // changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PositionComponent implements OnInit {
   requestId: Uuid;
