@@ -9,6 +9,7 @@ import * as moment from "moment";
 import { Observable } from "rxjs";
 import { UxgPopoverContentDirection } from "uxg";
 import { Request } from "../../models/request";
+import { FeatureService } from "../../../../core/services/feature.service";
 
 @Component({
   selector: 'app-request-position',
@@ -31,7 +32,8 @@ export class PositionComponent implements DoCheck {
   constructor(
     private positionStatusService: RequestPositionStatusService,
     public user: UserInfoService,
-    private iterableDiffers: IterableDiffers
+    private iterableDiffers: IterableDiffers,
+    public featureService: FeatureService
   ) {
     this.iterableDiffer = iterableDiffers.find([]).create();
   }

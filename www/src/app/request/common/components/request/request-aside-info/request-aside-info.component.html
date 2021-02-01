@@ -114,6 +114,7 @@
   <hr class="divider"/>
   <div class="app-row app-align-items-center">
     <uxg-checkbox class="app-control" [formControl]="isChecked"
+                  [disabled]="!featureService.authorize('hideRequestContragentsName')"
                   (ngModelChange)="onChangeHiddenContragents($event)"></uxg-checkbox>
     <label>&nbsp; Скрывать поставщиков</label>
   </div>

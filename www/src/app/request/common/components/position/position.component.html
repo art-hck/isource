@@ -38,7 +38,7 @@
       lg
       class="app-col"
       [placeholder]="position.statusLabel"
-      [disabled]="statuses.length === 0"
+      [disabled]="statuses.length === 0 || !featureService.authorize('changePositionStatus')"
       (select)="changeStatus.emit({status: $event, position: position})">
       <div uxgDropdownItem *ngFor="let status of statuses" [value]="status[0]">{{ status[1] }}</div>
     </uxg-dropdown>
@@ -71,12 +71,15 @@
           <h3>Все документы позиции</h3>
         </div>
 
-        <button uxgButton secondary iconText appUploadFile
-                (select)="uploadDocuments.emit({ files: $event, position: position })"
-                [multiple]="true" [disabled]="isNotActual(position)">
-          <uxg-icon shape="app-upload"></uxg-icon>
-          <span>Загрузить документы</span>
-        </button>
+        <ng-container *ngIf="featureService.authorize('uploadPositionDocuments')">
+          <button uxgButton secondary iconText appUploadFile
+                  (select)="uploadDocuments.emit({ files: $event, position: position })"
+                  [multiple]="true" [disabled]="isNotActual(position)">
+            <uxg-icon shape="app-upload"></uxg-icon>
+            <span>Загрузить документы</span>
+          </button>
+        </ng-container>
+
       </div>
       <div class="documents" *ngFor="let dateWithDocs of datesWithDocuments">
         <h4>{{dateWithDocs.date}}</h4>
@@ -209,7 +212,7 @@
           <br/>
         </ng-container>
 
-        <div *ngIf="isBeforeContractSigning(position) && !user.isCustomer() && !user.isCustomerApprover()">
+        <div *ngIf="isBeforeContractSigning(position) && featureService.authorize('editPosition')">
           <uxg-popover #more [openOnHover]="true">
             <button uxgButton secondary
                     uxgPopoverTrigger

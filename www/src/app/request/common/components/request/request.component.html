@@ -79,8 +79,8 @@
           </button>
         </div>
 
-        <!-- Групповая смена статус -->
-        <div class="app-col app-col-auto" *ngIf="user.isBackOffice()">
+        <!-- Групповая смена статуса -->
+        <div class="app-col app-col-auto" *ngIf="featureService.authorize('changePositionStatus')">
           <uxg-popover #status [openOnHover]="true">
             <button uxgButton uxgPopoverTrigger clear link
                     [disabled]="!canChangeStatuses || checkedPositions.length === 0"
@@ -109,7 +109,7 @@
         </div>
 
         <!-- Отмена позиции заказчиком -->
-        <div class="app-col app-col-auto" *ngIf="user.isCustomer()">
+        <div class="app-col app-col-auto" *ngIf="featureService.authorize('customerCancelPosition')">
           <button uxgButton clear link
                   [disabled]="checkedPositions.length === 0 || !everyPositionIsNotDraftEntity() || someOfPositionsAreInProcedure()"
                   (click)="cancelPositionModal.open()">
@@ -154,7 +154,7 @@
               <ng-container *ngIf="user.isBackOffice()">
 
                 <!-- Загрузить документы в выбранные позиции -->
-                <div>
+                <div *ngIf="featureService.authorize('uploadPositionDocuments')">
                   <button uxgButton clear [disabled]="checkedPositions.length === 0"
                           (click)="openFileUploadToPositionsModal()">Загрузить документы
                   </button>
@@ -171,7 +171,7 @@
                   <button uxgButton clear (click)="addResponsibleRequestModal.open()">Назначить всю завку</button>
                 </div>
 
-                <div>
+                <div *ngIf="featureService.authorize('backofficeCancelPosition')">
                   <button uxgButton clear
                           [disabled]="checkedPositions.length === 0 || !everyPositionIsNotDraftEntity() || someOfPositionsAreInProcedure()"
                           (click)="cancelPositionModal.open()">Отменить
@@ -200,7 +200,7 @@
                 </div>
 
                 <!-- Загрузить документы в выбранные позиции -->
-                <div class="app-col app-col-auto">
+                <div class="app-col app-col-auto" *ngIf="featureService.authorize('uploadPositionDocuments')">
                   <button uxgButton clear [disabled]="checkedPositions.length === 0"
                           (click)="openFileUploadToPositionsModal()">Загрузить документы
                   </button>
@@ -240,7 +240,7 @@
           <uxg-popover #more [openOnHover]="true">
             <button uxgButton secondary iconText
                     uxgPopoverTrigger
-                    *ngIf="request.status !== 'COMPLETED' && request.status !== 'NOT_RELEVANT' && !user.isCustomerApprover()"
+                    *ngIf="request.status !== 'COMPLETED' && request.status !== 'NOT_RELEVANT' && featureService.authorize('addPosition')"
                     [disabled]="request.isOlderTwoWeeks" (click)="addPositionModal.open()">
               <uxg-icon shape="app-plus"></uxg-icon>
               <span>Новая позиция</span>
