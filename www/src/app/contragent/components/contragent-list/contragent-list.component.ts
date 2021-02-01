@@ -2,6 +2,7 @@ import { Component, Input } from '@angular/core';
 import { ContragentList } from "../../models/contragent-list";
 import { Router } from "@angular/router";
 import { UserInfoService } from "../../../user/service/user-info.service";
+import { FeatureService } from "../../../core/services/feature.service";
 
 @Component({
   selector: 'app-contragent-list',
@@ -14,7 +15,8 @@ export class ContragentListComponent {
 
   constructor(
     private router: Router,
-    public user: UserInfoService
+    public user: UserInfoService,
+    public featureService: FeatureService,
   ) {}
 
   mailto(ev, email): void {
