@@ -7,11 +7,13 @@ import { RequestService } from "../../../customer/services/request.service";
 import { Title } from "@angular/platform-browser";
 import { UxgBreadcrumbsService } from "uxg";
 import { Store } from "@ngxs/store";
-import { tap } from "rxjs/operators";
+import { switchMap, tap } from "rxjs/operators";
+import { ToastActions } from "../../../../shared/actions/toast.actions";
+import { PositionStatus } from "../../../common/enum/position-status";
+import { PositionService } from "../../../back-office/services/position.service";
 
 @Component({
   templateUrl: './position.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PositionComponent implements OnInit {
   requestId: Uuid;
@@ -24,13 +26,13 @@ export class PositionComponent implements OnInit {
     private requestService: RequestService,
     private title: Title,
     private bc: UxgBreadcrumbsService,
-    private store: Store
+    private store: Store,
+    private positionService: PositionService
   ) {
-    this.route.params.subscribe(() => this.getData());
   }
 
   ngOnInit() {
-    this.getData();
+    this.route.params.subscribe(() => this.getData());
   }
 
   getData() {
@@ -50,4 +52,17 @@ export class PositionComponent implements OnInit {
     ];
   }
 
+  rejectPositions(positionIds: Uuid[]) {
+    this.positionService.changePositionsStatus(positionIds, 'CANCELED', 'customer').pipe(tap(() => {
+      this.store.dispatch(new ToastActions.Success('Позиция отклонена'));
+      this.position$ = this.requestService.getRequestPosition(this.requestId, this.positionId);
+    })).subscribe();
+  }
+
+  approvePositions(positionIds: Uuid[]) {
+    this.requestService.changePositionsStatus(positionIds, PositionStatus.NEW).pipe(tap(() => {
+      this.store.dispatch(new ToastActions.Success('Позиция успешно согласована'));
+      this.position$ = this.requestService.getRequestPosition(this.requestId, this.positionId);
+    })).subscribe();
+  }
 }

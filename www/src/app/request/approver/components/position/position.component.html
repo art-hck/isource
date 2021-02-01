@@ -2,5 +2,7 @@
   <app-request-position
     [requestId]="requestId"
     [position]="position"
+    (rejectPosition)="rejectPositions([$event.id])"
+    (approvePosition)="approvePositions([$event.id])"
   ></app-request-position>
 </ng-container>
