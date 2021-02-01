@@ -195,6 +195,10 @@ export class UserInfoService {
     return this.getUserInfo()?.isSeniorBackoffice;
   }
 
+  public isObserverBackoffice(): boolean {
+    return this.getUserInfo()?.isObserverBackoffice;
+  }
+
   public isSystemAdmin(): boolean {
     return this.getUserInfo()?.isSystemAdmin;
   }
