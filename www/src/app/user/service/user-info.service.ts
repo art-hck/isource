@@ -83,6 +83,10 @@ export class UserInfoService {
         roles.push(UserRole.SENIOR_BACKOFFICE);
       }
 
+      if (this.isBackofficeObserver()) {
+        roles.push(UserRole.BACKOFFICE_OBSERVER);
+      }
+
       if (this.isSystemAdmin()) {
         roles.push(UserRole.SYSTEM_ADMIN);
       }
@@ -195,8 +199,8 @@ export class UserInfoService {
     return this.getUserInfo()?.isSeniorBackoffice;
   }
 
-  public isObserverBackoffice(): boolean {
-    return this.getUserInfo()?.isObserverBackoffice;
+  public isBackofficeObserver(): boolean {
+    return this.getUserInfo()?.isBackofficeObserver;
   }
 
   public isSystemAdmin(): boolean {
