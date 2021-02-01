@@ -23,10 +23,14 @@ export class PositionComponent implements DoCheck {
   @Output() changeStatus = new EventEmitter<{ status, position }>();
   @Output() positionChange = new EventEmitter<RequestPosition>();
   @Output() uploadDocuments = new EventEmitter<{ files: File[], position: RequestPosition }>();
+  @Output() rejectPosition = new EventEmitter<RequestPosition>();
+  @Output() approvePosition = new EventEmitter<RequestPosition>();
   datesWithDocuments: DateWithDocuments[];
   iterableDiffer: IterableDiffer<any>;
   PopoverContentDirection = UxgPopoverContentDirection;
   folded = false;
+
+  readonly PositionStatus = PositionStatus;
 
   constructor(
     private positionStatusService: RequestPositionStatusService,

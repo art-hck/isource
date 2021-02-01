@@ -1,7 +1,7 @@
 <div class="app-row">
   <!-- Горизонтальная инфа о позиции -->
   <div class="app-col app-table app-no-border actions">
-    <div class="app-row">
+    <div class="app-row app-align-items-center">
 
       <div class="app-col">
         <span class="app-ghost-color">Изменена: </span>
@@ -28,9 +28,16 @@
           </span>
         </a>
       </div>
+
     </div>
   </div>
-
+  <ng-container *ngIf="user.isCustomerApprover() && position.status === PositionStatus.PROOF_OF_NEED">
+    <div class="app-col app-col-auto">
+      <button uxgButton secondary (click)="rejectPosition.emit(position)">Отклонить</button>
+      <button uxgButton primary (click)="approvePosition.emit(position)">Согласовать</button>
+    </div>
+    <div class="app-col-aside"></div>
+  </ng-container>
   <!-- Статус -->
   <div class="app-col-aside status" *ngIf="user.isBackOffice() && statuses">
     <div class="app-position-status-icon" [ngClass]="position.status"></div>

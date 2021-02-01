@@ -178,8 +178,9 @@ export class RequestComponent implements OnChanges {
     }
   }
 
-  isNotActual(position: RequestPosition): boolean {
-    return position.status === PositionStatus.CANCELED || position.status === PositionStatus.NOT_RELEVANT;
+  isNotActualOrOnApprove(position: RequestPosition): boolean {
+    return position.status === PositionStatus.CANCELED || position.status === PositionStatus.NOT_RELEVANT ||
+      (position.status === PositionStatus.PROOF_OF_NEED && this.user.isCustomer());
   }
 
   getPositionUrl(position: RequestPositionList): UrlTree {
@@ -278,7 +279,7 @@ export class RequestComponent implements OnChanges {
 
     if (position) {
       formGroup.addControl("position", this.fb.control(position));
-      if (this.asPosition(position) && this.isNotActual(this.asPosition(position))) {
+      if (this.asPosition(position) && this.isNotActualOrOnApprove(this.asPosition(position))) {
         formGroup.get("checked").disable();
       }
     }
