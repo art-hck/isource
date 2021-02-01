@@ -101,7 +101,7 @@ export class NavComponent implements OnInit, OnDestroy {
       return 'Бэк-офис';
     }
 
-    if (this.user.isObserverBackoffice()) {
+    if (this.user.isBackofficeObserver()) {
       return 'Наблюдатель БО';
     }
 
