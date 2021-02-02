@@ -94,11 +94,11 @@ export class NavComponent implements OnInit, OnDestroy {
 
   get userBriefInfo(): string {
     if (this.user.isCustomer()) {
-      if (this.user.isCustomerApprover()) {
-        return 'Согласующий';
-      }
-
       return this.user.getUserInfo()?.contragent.shortName;
+    }
+
+    if (this.user.isCustomerApprover()) {
+      return 'Согласующий';
     }
 
     if (this.user.isBackOffice()) {

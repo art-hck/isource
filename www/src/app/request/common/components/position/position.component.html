@@ -18,17 +18,18 @@
         </div>
       </ng-container>
 
-      <div class="app-col separator"></div>
+      <ng-container *ngIf="featureService.authorize('chat')">
+        <div class="app-col separator"></div>
 
-      <div class="app-col">
-        <a [routerLink]="['/im', position.request.id]" [queryParams]="{positionId: position.id}">
+        <div class="app-col">
+          <a [routerLink]="['/im', position.request.id]" [queryParams]="{positionId: position.id}">
           <span class="app-secondary-color">
             <uxg-icon shape="app-comment"></uxg-icon>
             <span>Перейти к чату по позиции</span>
           </span>
-        </a>
-      </div>
-
+          </a>
+        </div>
+      </ng-container>
     </div>
   </div>
   <ng-container *ngIf="user.isCustomerApprover() && position.status === PositionStatus.PROOF_OF_NEED">
