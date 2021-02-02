@@ -30,4 +30,8 @@ export class AgreementsComponent {
       return routerLink;
     }
   }
+
+  onSendRating(star) {
+    console.log(star);
+  }
 }
