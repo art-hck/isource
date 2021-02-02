@@ -7,6 +7,8 @@ export interface IFeatureList {
   registration;
   customerRequest;
   createRequest;
+  editRequestNameBackoffice;
+  editRequestNameCustomer;
   catalog;
   catalogUpdate;
   cart;
@@ -23,8 +25,14 @@ export interface IFeatureList {
   instructionsFileForBackoffice;
   publishRequest;
   approveRequest;
+  addPosition;
+  editPosition;
+  backofficeCancelPosition;
+  customerCancelPosition;
+  changePositionStatus;
   addRequestGroup;
   moveRequestGroup;
+  uploadPositionDocuments;
   kim;
   sentToApprove;
   backofficeAgreements;
@@ -39,6 +47,7 @@ export interface IFeatureList {
   normalization;
   requestDashboard;
   contragents;
+  hideRequestContragentsName;
 }
 
 export const FeatureList: { [key in keyof IFeatureList]: Feature } = {
@@ -47,6 +56,8 @@ export const FeatureList: { [key in keyof IFeatureList]: Feature } = {
   registration: {},
   customerRequest: { roles: [UserRole.CUSTOMER] },
   createRequest: { roles: [UserRole.CUSTOMER] },
+  editRequestNameBackoffice: { roles: [UserRole.SENIOR_BACKOFFICE, UserRole.BACKOFFICE_BUYER] },
+  editRequestNameCustomer: { roles: [UserRole.CUSTOMER] },
   catalog: {roles: [UserRole.CUSTOMER, UserRole.BACKOFFICE]},
   catalogUpdate: { roles: [UserRole.ADMIN] },
   cart: { roles: [UserRole.CUSTOMER] },
@@ -63,8 +74,14 @@ export const FeatureList: { [key in keyof IFeatureList]: Feature } = {
   editTechnicalProposal: { roles: [UserRole.BACKOFFICE] },
   publishRequest: { roles: [UserRole.CUSTOMER] },
   approveRequest: { roles: [UserRole.CUSTOMER, UserRole.CUSTOMER_APPROVER] },
-  addRequestGroup: { roles: [UserRole.BACKOFFICE] },
-  moveRequestGroup: { roles: [UserRole.BACKOFFICE] },
+  addPosition: { roles: [UserRole.SENIOR_BACKOFFICE, UserRole.BACKOFFICE_BUYER, UserRole.CUSTOMER, UserRole.ADMIN] },
+  editPosition: { roles: [UserRole.SENIOR_BACKOFFICE, UserRole.BACKOFFICE_BUYER, UserRole.ADMIN] },
+  backofficeCancelPosition: { roles: [UserRole.SENIOR_BACKOFFICE, UserRole.BACKOFFICE_BUYER] },
+  customerCancelPosition: { roles: [UserRole.CUSTOMER] },
+  changePositionStatus: { roles: [UserRole.SENIOR_BACKOFFICE, UserRole.BACKOFFICE_BUYER, UserRole.ADMIN] },
+  addRequestGroup: { roles: [UserRole.SENIOR_BACKOFFICE, UserRole.BACKOFFICE_BUYER] },
+  moveRequestGroup: { roles: [UserRole.SENIOR_BACKOFFICE, UserRole.BACKOFFICE_BUYER] },
+  uploadPositionDocuments: { roles: [UserRole.SENIOR_BACKOFFICE, UserRole.BACKOFFICE_BUYER, UserRole.CUSTOMER] },
   kim: { roles: [UserRole.CUSTOMER] },
   sentToApprove: { roles: [UserRole.SENIOR_BACKOFFICE, UserRole.BACKOFFICE] },
   backofficeAgreements: { roles: [UserRole.SENIOR_BACKOFFICE, UserRole.BACKOFFICE] },
@@ -78,5 +95,6 @@ export const FeatureList: { [key in keyof IFeatureList]: Feature } = {
   createTemplate: { roles: [UserRole.CUSTOMER] },
   normalization: { roles: [UserRole.SENIOR_BACKOFFICE, UserRole.BACKOFFICE]},
   requestDashboard: { roles: [UserRole.SENIOR_BACKOFFICE, UserRole.BACKOFFICE, UserRole.CUSTOMER]},
-  contragents: {roles: [UserRole.CUSTOMER, UserRole.BACKOFFICE]}
+  contragents: {roles: [UserRole.CUSTOMER, UserRole.BACKOFFICE]},
+  hideRequestContragentsName: {roles: [UserRole.SENIOR_BACKOFFICE, UserRole.BACKOFFICE_BUYER]}
 };
