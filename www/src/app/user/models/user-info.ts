@@ -19,6 +19,7 @@ export class UserInfo {
   isCustomerApprover: boolean;
   isBackofficeBuyer: boolean;
   isSeniorBackoffice: boolean;
+  isBackofficeObserver: boolean;
   isSystemAdmin: boolean;
   isContragentCreator: boolean;
   permissions: Permission[];
