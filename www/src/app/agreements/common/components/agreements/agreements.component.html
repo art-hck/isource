@@ -1,12 +1,4 @@
-<button uxgButton primary (click)="setRatingModal.open()">Оценить</button>
-<uxg-modal #setRatingModal size="s">
-  <h2>Оценитe платформу</h2>
-  <p class="app-color-secondary">Оцените качество работы платформы и предоста- вленных услуг.
-    После сохранения оценку будет невозможно изменить.</p>
-  <app-star-rating (sendRate)="onSendRating($event)" (close)="setRatingModal.close()"></app-star-rating>
-</uxg-modal>
-
-    <ng-container *ngIf="agreements; else loading">
+ <ng-container *ngIf="agreements; else loading">
   <ng-container *ngIf="agreements.length > 0; else emptyAgreementsList">
     <div class="app-table agreements-list-header app-no-border">
       <div class="app-row" [ngClass]="{'dashboard-header': dashboardView}">
@@ -22,6 +14,15 @@
 
     <div class="app-table agreements-list" [ngClass]="{'dashboard-table': dashboardView}">
       <div class="app-row app-align-items-center" *ngFor="let agreement of agreements">
+        <button uxgButton primary (click)="setRatingModal.open()">Оценить</button>
+        <uxg-modal #setRatingModal size="s">
+          <h2>Оценитe платформу</h2>
+          <p class="app-color-secondary">Оцените качество работы платформы и предоста- вленных услуг.
+            После сохранения оценку будет невозможно изменить.</p>
+          <app-star-rating
+            (sendRating)="sendRating.emit({requestId: agreement.request?.id, positionId: agreement.requestPosition?.id, rating: $event})"
+            (close)="setRatingModal.close()"></app-star-rating>
+        </uxg-modal>
         <div class="app-col-1 id">{{ agreement.request.number}}</div>
         <div class="app-col-3 name">
           <div class="app-ellipsis">

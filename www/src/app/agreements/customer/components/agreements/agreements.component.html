@@ -17,7 +17,8 @@
 
   <div class="app-row">
     <div class="app-col agreements-col">
-      <app-agreements [agreements]="agreements"></app-agreements>
+      <app-agreements [agreements]="agreements" (sendRating)="sendRating($event.requestId, $event.positionId, $event.rating)">
+      </app-agreements>
     </div>
 
     <uxg-filter [formGroup]="form" [count]="totalCount$| async" [skipKeys]="['actions']" (filter)="filter$.next($event)">

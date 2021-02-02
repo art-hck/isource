@@ -1,4 +1,5 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Agreement } from "../../../agreements/common/models/Agreement";
 
 @Component({
   selector: 'app-star-rating',
@@ -9,7 +10,8 @@ export class StarRatingComponent implements OnInit {
 
   stars: number[] = [1, 2, 3, 4, 5];
 
-  @Output() sendRate = new EventEmitter<number>();
+  @Input() agreement: Agreement;
+  @Output() sendRating = new EventEmitter<number>();
   @Output() close = new EventEmitter();
 
   rateValue: number;
@@ -23,7 +25,7 @@ export class StarRatingComponent implements OnInit {
     this.rateValue = star;
   }
   onSendRating() {
-    this.sendRate.emit(this.rateValue);
+    // this.sendRating.emit(this.agreement.request.id, this.agreement.requestPosition.id, this.rateValue);
+    this.sendRating.emit(this.rateValue);
   }
-
 }

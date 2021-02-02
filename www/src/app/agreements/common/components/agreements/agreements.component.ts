@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Agreement } from "../../models/Agreement";
 import { AgreementActionLink } from "../../../back-office/dictionaries/agreement-action-link";
 import { UserInfoService } from "../../../../user/service/user-info.service";
@@ -12,6 +12,7 @@ export class AgreementsComponent {
   @Input() agreements: Agreement[];
   @Input() dashboardView = false;
   @Input() agreementsView = false;
+  @Output() sendRating = new EventEmitter<{requestId, positionId, rating}>();
 
   constructor(public userInfoService: UserInfoService) {}
 
@@ -29,9 +30,5 @@ export class AgreementsComponent {
       }
       return routerLink;
     }
-  }
-
-  onSendRating(star) {
-    console.log(star);
   }
 }
