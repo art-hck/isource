@@ -17,14 +17,15 @@
     </div>
   </div>
 
-  <div class="app-col action">
-    <button uxgButton secondary iconText
-            *ngIf="userInfoService.isBackOffice() || userInfoService.isAdmin()"
-            (click)="router.navigateByUrl('contragents/create')">
-      <uxg-icon size="16" shape="app-plus"></uxg-icon>
-      <span>Новый контрагент</span>
-    </button>
-  </div>
+  <ng-container *ngIf="featureService.authorize('createContragent')">
+    <div class="app-col action">
+      <button uxgButton secondary iconText
+              (click)="router.navigateByUrl('contragents/create')">
+        <uxg-icon size="16" shape="app-plus"></uxg-icon>
+        <span>Новый контрагент</span>
+      </button>
+    </div>
+  </ng-container>
 </div>
 
 <app-contragent-list

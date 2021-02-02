@@ -29,17 +29,15 @@
 
         <div class="app-col responsible">{{ contragent.responsible?.shortName || '—' }}</div>
 
-        <div class="app-col-auto edit">
-          <button
-            uxgButton
-            secondary
-            icon
-            *ngIf="user.isBackOffice() || user.isAdmin()"
-            (click)="edit($event, contragent)"
-          >
-            <uxg-icon shape="app-pen"></uxg-icon>
-          </button>
-        </div>
+        <ng-container *ngIf="featureService.authorize('editContragent')">
+          <div class="app-col-auto edit">
+            <button uxgButton secondary icon
+              *ngIf="user.isBackOffice() || user.isAdmin()"
+              (click)="edit($event, contragent)">
+              <uxg-icon shape="app-pen"></uxg-icon>
+            </button>
+          </div>
+        </ng-container>
       </a>
     </ng-container>
   </div>
