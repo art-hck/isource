@@ -25,11 +25,13 @@ import { Uuid } from "../../../../cart/models/uuid";
 import { searchUsers } from "../../../../shared/helpers/search";
 import Fetch = RequestListActions.Fetch;
 import FetchAvailableFilters = RequestListActions.FetchAvailableFilters;
+import { PluralizePipe } from "../../../../shared/pipes/pluralize-pipe";
 
 @Component({
   templateUrl: './request-list.component.html',
   styleUrls: ['./request-list.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [PluralizePipe]
 })
 export class RequestListComponent implements AfterViewInit, OnDestroy, OnInit {
   @ViewChild(UxgFooterComponent, { read: ElementRef }) footerRef: ElementRef;
@@ -77,6 +79,7 @@ export class RequestListComponent implements AfterViewInit, OnDestroy, OnInit {
     private route: ActivatedRoute,
     private fb: FormBuilder,
     private cd: ChangeDetectorRef,
+    private pluralize: PluralizePipe,
     public store: Store,
     public feature: FeatureService,
   ) {}
@@ -93,7 +96,9 @@ export class RequestListComponent implements AfterViewInit, OnDestroy, OnInit {
 
     // Review actions
     this.review$.pipe(withLatestFrom(this.selectedRequests$)).subscribe(([approved, requests]) => {
-      this.store.dispatch(new ToastActions.Success(`Успешно согласовано ${requests} заявки`));
+      this.store.dispatch(new ToastActions.Success(
+        `Успешно согласовано ${requests} ${this.pluralize.transform(length, "заявка", "заявки", "заявок")}`
+      ));
     });
 
     // Getting data

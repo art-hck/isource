@@ -13,7 +13,7 @@
             <span class="counter">({{(statusCounters$ | async)?.notProofOfNeedRequestsCount}})</span>
           </uxg-tab-title>
         </uxg-tabs>
-<!--        <uxg-filter-button></uxg-filter-button>-->
+        <uxg-filter-button></uxg-filter-button>
       </div>
     </div>
     <div class="app-col-aside detachable"></div>
@@ -103,15 +103,13 @@
         <br/>
         <uxg-switcher label="Как можно скорее" labelAlign="right" formControlName="shipmentDateAsap"></uxg-switcher>
       </uxg-filter-section>
-
-
     </uxg-filter>
   </div>
 </form>
 
 <uxg-footer [formGroup]="filterForm" [hidden]="approvedTab.active">
   <button uxgButton outline lg (click)="form.get('checked').setValue(true)">Выбрать все</button>
-  <button uxgButton outline lg (click)="form.get('checked').setValue(false  )">Сбросить</button>
+  <button uxgButton outline lg (click)="form.get('checked').setValue(false)">Сбросить</button>
   <div class="app-col"></div>
   <div class="app-col-auto"><span class="app-ghost-color">Выбрано позиций: </span><span>{{0}}</span>
   </div>
