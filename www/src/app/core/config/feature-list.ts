@@ -58,7 +58,7 @@ export const FeatureList: { [key in keyof IFeatureList]: Feature } = {
   createRequest: { roles: [UserRole.CUSTOMER] },
   editRequestNameBackoffice: { roles: [UserRole.SENIOR_BACKOFFICE, UserRole.BACKOFFICE_BUYER] },
   editRequestNameCustomer: { roles: [UserRole.CUSTOMER] },
-  catalog: {roles: [UserRole.CUSTOMER, UserRole.BACKOFFICE]},
+  catalog: {roles: [UserRole.CUSTOMER, UserRole.BACKOFFICE, UserRole.ADMIN]},
   catalogUpdate: { roles: [UserRole.ADMIN] },
   cart: { roles: [UserRole.CUSTOMER] },
   instructionsFileForCustomer: { roles: [UserRole.CUSTOMER] },
@@ -95,6 +95,6 @@ export const FeatureList: { [key in keyof IFeatureList]: Feature } = {
   createTemplate: { roles: [UserRole.CUSTOMER] },
   normalization: { roles: [UserRole.SENIOR_BACKOFFICE, UserRole.BACKOFFICE]},
   requestDashboard: { roles: [UserRole.SENIOR_BACKOFFICE, UserRole.BACKOFFICE, UserRole.CUSTOMER]},
-  contragents: {roles: [UserRole.CUSTOMER, UserRole.BACKOFFICE]},
+  contragents: {roles: [UserRole.CUSTOMER, UserRole.BACKOFFICE, UserRole.ADMIN]},
   hideRequestContragentsName: {roles: [UserRole.SENIOR_BACKOFFICE, UserRole.BACKOFFICE_BUYER]}
 };
