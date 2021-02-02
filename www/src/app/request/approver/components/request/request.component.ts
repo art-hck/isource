@@ -13,15 +13,13 @@ import { Title } from "@angular/platform-browser";
 import { filter, switchMap, takeUntil, tap } from "rxjs/operators";
 import { RequestActions } from "../../actions/request.actions";
 import { RequestState } from "../../states/request.state";
-import { PositionService } from "../../../back-office/services/position.service";
 import { PositionStatus } from "../../../common/enum/position-status";
 import { PositionFilter } from "../../../common/models/position-filter";
+import { ToastActions } from "../../../../shared/actions/toast.actions";
 import Refresh = RequestActions.Refresh;
 import RefreshPositions = RequestActions.RefreshPositions;
 import FetchPositions = RequestActions.FetchPositions;
 import Fetch = RequestActions.Fetch;
-import { Toast } from "../../../../shared/models/toast";
-import { ToastActions } from "../../../../shared/actions/toast.actions";
 
 @Component({
   templateUrl: './request.component.html',
@@ -46,7 +44,6 @@ export class RequestComponent implements OnInit, OnDestroy {
     private actions: Actions,
     public store: Store,
     private title: Title,
-    private positionService: PositionService,
   ) {
   }
 
@@ -62,7 +59,7 @@ export class RequestComponent implements OnInit, OnDestroy {
       filter(request => !!request),
       tap(({id, name}) => this.title.setTitle(name || "Заявка №" + id)),
       tap(({id, number}) => this.bc.breadcrumbs = [
-        {label: "Заявки", link: "/requests/approver"},
+        {label: "Заявки", link: "/requests/approver?showOnlyApproved=" + this.route.snapshot.queryParams.showOnlyApproved},
         {label: `Заявка №${number}`, link: "/requests/approver/" + id,
           queryParams: {showOnlyApproved: this.route.snapshot.queryParams.showOnlyApproved}}
       ]),
@@ -71,7 +68,7 @@ export class RequestComponent implements OnInit, OnDestroy {
   }
 
   rejectPositions(positionIds: Uuid[]) {
-    this.positionService.changePositionsStatus(positionIds, 'CANCELED', 'customer').subscribe(
+    this.requestService.changePositionsStatus(positionIds, PositionStatus.CANCELED).subscribe(
       () => this.store.dispatch(
         [new ToastActions.Success(positionIds.length > 1 ? positionIds.length + 'позиции отклонены' : 'Позиция отклонена'),
         new RefreshPositions(this.requestId, this.positionFilter)]));
