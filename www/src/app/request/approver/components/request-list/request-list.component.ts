@@ -66,7 +66,7 @@ export class RequestListComponent implements AfterViewInit, OnDestroy, OnInit {
   }
 
   readonly selectedRequests$: Observable<RequestsList[]> = this.formRequests.valueChanges.pipe(map(() => {
-    return this.formRequests.controls.filter(form => form.get('checked').value).map(form => form.get('request').value)
+    return this.formRequests.controls.filter(form => form.get('checked').value).map(form => form.get('request').value);
   }));
 
   constructor(
@@ -108,7 +108,7 @@ export class RequestListComponent implements AfterViewInit, OnDestroy, OnInit {
         const filters = { ...prev, ...curr };
         filters.shipmentDateFrom = this.dateOrNull(filters.shipmentDateFrom);
         filters.shipmentDateTo = this.dateOrNull(filters.shipmentDateTo);
-        return ({ page, filters, sort: { ...prevSort, ...currSort } })
+        return ({ page, filters, sort: { ...prevSort, ...currSort } });
       }, {
         filters: {  positionStatuses: [PositionStatus.PROOF_OF_NEED] }
       } as { page?: number, filters?: RequestsListFilter, sort?: RequestsListSort }),
