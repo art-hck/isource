@@ -1,7 +1,8 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { Agreement } from "../../models/Agreement";
 import { AgreementActionLink } from "../../../back-office/dictionaries/agreement-action-link";
 import { UserInfoService } from "../../../../user/service/user-info.service";
+import { UxgModalComponent } from "uxg";
 
 @Component({
   selector: 'app-agreements',
@@ -24,7 +25,6 @@ export class AgreementsComponent {
       if (AgreementActionLink[agreement.action.name]) {
         routerLink.push(AgreementActionLink[agreement.action.name]);
       }
-
       if (agreement.type === 'REQUEST_TECHNICAL_COMMERCIAL_PROPOSAL_GROUP') {
         routerLink.push(agreement.requestTechnicalCommercialProposalGroup.id);
       }

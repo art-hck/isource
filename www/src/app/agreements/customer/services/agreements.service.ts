@@ -7,15 +7,16 @@ import { Uuid } from "../../../cart/models/uuid";
 @Injectable()
 export class AgreementsService {
 
-  constructor(private api: HttpClient) {}
+  constructor(private api: HttpClient) {
+  }
 
   getAgreements(filters = null, startFrom: number = 0, pageSize: number = 20): Observable<AgreementsResponse> {
     const url = `requests/customer/tasks`;
     return this.api.post<AgreementsResponse>(url, {startFrom, pageSize, filters});
   }
-  setRating(requestId: Uuid, positionId: Uuid, rating: number) {
+
+  setRating = (requestId: Uuid, positionId: Uuid, rating: number) => {
     const url = `requests/customer/${requestId}/positions/${positionId}/set-rating`;
-    // return this.api.post<any>(url, {rating});
-    return of(null);
-  }
+    return this.api.post<any>(url, {rating});
+  };
 }

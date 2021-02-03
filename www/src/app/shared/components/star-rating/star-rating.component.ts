@@ -16,7 +16,8 @@ export class StarRatingComponent implements OnInit {
 
   rateValue: number;
 
-  constructor() { }
+  constructor() {
+  }
 
   ngOnInit(): void {
   }
@@ -24,8 +25,8 @@ export class StarRatingComponent implements OnInit {
   setRating(star) {
     this.rateValue = star;
   }
+
   onSendRating() {
-    // this.sendRating.emit(this.agreement.request.id, this.agreement.requestPosition.id, this.rateValue);
     this.sendRating.emit(this.rateValue);
   }
 }
