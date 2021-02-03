@@ -119,6 +119,14 @@ export class DashboardStatisticsComponent implements OnInit, OnDestroy {
            this.form.get('shipmentDateTo').value;
   }
 
+  getApplicantGroupInfo(applicantGroup) {
+    if (applicantGroup?.length > 1) {
+      return "Состоит в " + applicantGroup.length + " группах";
+    } else {
+      return 'applicantGroup.name';
+    }
+  }
+
   trackByRequestId = (request: DashboardAvailableFiltersRequestItem) => request.id;
   trackByCustomerId = (customer: DashboardAvailableFiltersRequestItem) => customer.id;
   trackByResponsibleUserId = (user: DashboardAvailableFiltersRequestItem) => user.id;

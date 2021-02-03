@@ -39,5 +39,6 @@ export class DashboardAvailableFiltersApplicantItem {
   id: Uuid;
   fullName: string;
   groupName: string;
+  group: any[];
   phone: string;
 }

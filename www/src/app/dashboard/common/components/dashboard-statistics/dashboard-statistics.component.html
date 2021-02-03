@@ -415,7 +415,9 @@
 
             <div class="app-col select-list-item-applicant-phone">{{ applicant.phone }}</div>
 
-            <div class="app-col select-list-item-applicant-group">{{ applicant.groupName }}</div>
+            <div class="app-col select-list-item-applicant-group">
+              {{ getApplicantGroupInfo(applicant.group) }}
+            </div>
           </div>
         </ng-container>
       </ng-template>
