@@ -20,6 +20,7 @@ import { User } from "../../user/models/user";
 import { WsNotification } from "../models/ws-notification";
 import { WsNotificationTypes } from "../enum/ws-notification-types";
 import { UserInfoService } from "../../user/service/user-info.service";
+import { FeatureService } from "../../core/services/feature.service";
 
 @Injectable({
    providedIn: 'root'
@@ -30,9 +31,14 @@ export class WsNotificationsService implements IWebsocketService {
   readonly send$ = new ReplaySubject<WsNotification<unknown>>();
   readonly received$ = new Subject<unknown>();
 
-  constructor(@Inject(config) private wsConfig: WsConfig, private keycloakService: KeycloakService, private user: UserInfoService) {
+  constructor(
+    @Inject(config) private wsConfig: WsConfig,
+    private keycloakService: KeycloakService,
+    private user: UserInfoService,
+    public featureService: FeatureService,
+  ) {
     this.keycloakService.getToken(false).then(accessToken => {
-        if (!accessToken) { return; }
+        if (!accessToken || !this.featureService.authorize('notifications')) { return; }
 
         this.connect(accessToken);
 

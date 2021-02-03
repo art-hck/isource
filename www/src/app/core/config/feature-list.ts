@@ -13,6 +13,7 @@ export interface IFeatureList {
   catalogUpdate;
   cart;
   chat;
+  notifications;
   approverRequest;
   backofficeRequest;
   deliveryMonitor;
@@ -63,6 +64,7 @@ export const FeatureList: { [key in keyof IFeatureList]: Feature } = {
   catalogUpdate: { roles: [UserRole.ADMIN] },
   cart: { roles: [UserRole.CUSTOMER] },
   chat: { roles: [UserRole.SENIOR_BACKOFFICE, UserRole.BACKOFFICE_BUYER, UserRole.CUSTOMER, UserRole.CUSTOMER_APPROVER] },
+  notifications: { roles: [UserRole.SENIOR_BACKOFFICE, UserRole.BACKOFFICE_BUYER, UserRole.CUSTOMER, UserRole.CUSTOMER_APPROVER] },
   instructionsFileForCustomer: { roles: [UserRole.CUSTOMER] },
   approverRequest: { roles: [UserRole.CUSTOMER_APPROVER] },
   backofficeRequest: { roles: [UserRole.BACKOFFICE] },
