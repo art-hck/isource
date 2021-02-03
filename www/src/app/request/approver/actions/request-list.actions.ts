@@ -7,4 +7,8 @@ export namespace RequestListActions {
 
     constructor(public startFrom: number, public pageSize: number, public filters: RequestsListFilter = {}, public sort: RequestsListSort = {}) {}
   }
+
+  export class FetchAvailableFilters {
+    static readonly type = '[Request List Approver] Fetch Available Filters';
+  }
 }

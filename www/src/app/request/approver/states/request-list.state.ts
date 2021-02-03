@@ -7,12 +7,15 @@ import { RequestStatusCount } from "../../common/models/requests-list/request-st
 import { patch } from "@ngxs/store/operators";
 import { tap } from "rxjs/operators";
 import { RequestListActions } from "../actions/request-list.actions";
-import Fetch = RequestListActions.Fetch;
 import { RequestService } from "../services/request.service";
+import { AvailableFilters } from "../../common/models/requests-list/available-filters";
+import Fetch = RequestListActions.Fetch;
+import FetchAvailableFilters = RequestListActions.FetchAvailableFilters;
 
 export interface RequestStateStateModel {
   requests: Page<RequestsList>;
   requestStatusCounts: RequestStatusCount;
+  availableFilters: AvailableFilters;
   status: StateStatus;
 }
 
@@ -21,7 +24,7 @@ type Context = StateContext<Model>;
 
 @State<Model>({
   name: 'ApproverRequestList',
-  defaults: { requests: null, requestStatusCounts: null, status: "pristine" }
+  defaults: { requests: null, requestStatusCounts: null, availableFilters: null, status: "pristine" }
 })
 @Injectable()
 export class RequestListState {
@@ -32,11 +35,16 @@ export class RequestListState {
   @Selector() static totalCount({requests}: Model) { return Object.values(requests.statusCounters).reduce((acc, curr) => acc += curr, 0); }
   @Selector() static tabTotalCount({requests}: Model) { return requests.totalCount; }
   @Selector() static status({status}: Model) { return status; }
+  @Selector() static availableFilters({availableFilters}: Model) { return availableFilters; }
 
   @Action(Fetch, { cancelUncompleted: true }) fetch({setState}: Context, {startFrom, pageSize, filters, sort}: Fetch) {
     setState(patch({ status: "fetching" as StateStatus }));
     return this.rest.list(startFrom, pageSize, filters, sort).pipe(
       tap(requests => setState(patch({requests, status: "received" as StateStatus}))),
     );
+  }
+
+  @Action(FetchAvailableFilters) fetchFilters({setState}: Context) {
+    return this.rest.availableFilters().pipe(tap(filters => setState(patch({ availableFilters: filters }))));
   }
 }

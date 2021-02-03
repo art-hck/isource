@@ -7,6 +7,7 @@
 
 .app-table {
   .number { flex-basis: 65px; }
+  .select { flex-basis: 50px; }
 
   &.disabled {
     opacity: .5;

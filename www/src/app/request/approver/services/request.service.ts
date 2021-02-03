@@ -7,6 +7,7 @@ import { Page } from "../../../core/models/page";
 import { RequestsList } from "../../common/models/requests-list/requests-list";
 import { RequestsListFilter } from "../../common/models/requests-list/requests-list-filter";
 import { RequestsListSort } from "../../common/models/requests-list/requests-list-sort";
+import { AvailableFilters } from "../../common/models/requests-list/available-filters";
 
 
 @Injectable({
@@ -24,4 +25,10 @@ export class RequestService {
     const url = `requests/customer/list`;
     return this.api.post<Page<RequestsList>>(url, { startFrom, pageSize, filters, sort });
   }
+
+  availableFilters() {
+    const url = `requests/customer/available-filters`;
+    return this.api.get<AvailableFilters>(url);
+  }
+
 }
