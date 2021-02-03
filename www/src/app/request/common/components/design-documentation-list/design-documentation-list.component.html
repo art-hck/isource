@@ -7,7 +7,7 @@
     <div class="info-card app-col">
       <div class="request-info">
 
-        <ng-container *ngIf="userInfoService.isBackOffice()">
+        <ng-container *ngIf="featureService.authorize('addDesignDocumentation')">
           <div class="app-row w-100">
             <div class="clr-col-2">
               <button uxgButton primary lg
@@ -122,11 +122,17 @@
                           </button>
                         </ng-template>
                       </uxg-modal>
-                      <button uxgButton secondary lg *ngIf="designDocumentation.status === 'NEW'" (click)="confirmDelete.open()" type="button">
+
+
+                      <button uxgButton secondary lg
+                              *ngIf="designDocumentation.status === 'NEW' && featureService.authorize('deleteDesignDocList')"
+                              (click)="confirmDelete.open()" type="button">
                         Удалить
                       </button>
+
                     </ng-container>
-                    <button uxgButton primary lg *ngIf="canEditDesignDocList(designDocumentation)"
+
+                    <button uxgButton primary lg *ngIf="canEditDesignDocList(designDocumentation) && featureService.authorize('sendForApprovalDesignDocList')"
                             [clrLoading]="this.isSendingForApproval(designDocumentation) ? clrLoadingState.LOADING : clrLoadingState.DEFAULT"
                             [disabled]="!isSendOnApproveActive(designDocumentation)"
                             (click)="sendForApproval(designDocumentation)">Согласовать</button>
@@ -159,7 +165,7 @@
                           [documents]="designDoc.documents"
                           [enableUpload]="designDoc.id && canUploadDocuments(designDoc, designDocumentation)"
                           [limit]="5"
-                          [enableDelete]="designDocumentation.status === designDocStatus.NEW"
+                          [enableDelete]="designDocumentation.status === designDocStatus.NEW && featureService.authorize('addOrEditDesignDocuments')"
                           (delete)="removeDocuments(request, designDoc, [$event])"
                           (selected)="onSelectDocument($event, designDoc)"
                         ></app-document-simple-list>
@@ -204,7 +210,8 @@
                         </ng-container>
                         <ng-container *ngIf="designDocModels[j+'_'+i]">
                           <button uxgButton secondary lg (click)="designDocModels[j+'_'+i] = null">Отмена</button>
-                          <button uxgButton primary lg [disabled]="isDesignDocModelInvalid(designDocModels[j+'_'+i])"
+                          <button uxgButton primary lg
+                                  [disabled]="isDesignDocModelInvalid(designDocModels[j+'_'+i]) && featureService.authorize('addOrEditDesignDocuments')"
                                   (click)="editDesignDoc(request, j+'_'+i, designDocumentation)" type="button">
                             Сохранить
                           </button>
@@ -223,8 +230,8 @@
                     <td class="app-col">
                       <input type="text" [(ngModel)]="newDesignDocModel.model.receivingLimit"/>
                     </td>
-                    <td class="clr-col-2 ">
-                      <div class="app-row app-justify-content-end">
+                    <td class="clr-col-2">
+                      <div class="app-row app-justify-content-end" *ngIf="featureService.authorize('addOrEditDesignDocuments')">
                         <button uxgButton secondary lg (click)="removeNewDesignDoc(j, i)" type="button">Удалить</button>
                         <button [disabled]="isDesignDocModelInvalid(newDesignDocModel.model)"
                                 [clrLoading]="newDesignDocModel.state"
@@ -236,7 +243,7 @@
                       </div>
                     </td>
                   </tr>
-                  <tr class="app-row" *ngIf="canEditDesignDocList(designDocumentation)">
+                  <tr class="app-row" *ngIf="canEditDesignDocList(designDocumentation) && featureService.authorize('addOrEditDesignDocuments')">
                     <td class="app-col app-justify-content-end">
                       <div class="app-row app-justify-content-end">
                         <button uxgButton primary lg (click)="pushNewDesignDoc(j)" type="button">
@@ -281,7 +288,7 @@
               </div>
 
               <div class="design-actions clr-col-2">
-                <ng-container *ngIf="designDocumentation.status !== designDocStatus.APPROVED">
+                <ng-container *ngIf="designDocumentation.status !== designDocStatus.APPROVED && featureService.authorize('processDesignDocumentations')">
                   <uxg-dropdown lg>
                     <div uxgDropdownItem (click)="approve(designDocumentation)">
                       <uxg-icon shape="app-check"></uxg-icon>

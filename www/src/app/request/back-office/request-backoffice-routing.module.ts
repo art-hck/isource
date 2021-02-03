@@ -70,7 +70,8 @@ const routes: Routes = [
         data: { title: "Процедура" }
       },
       {
-        path: 'element', canActivate: [AppAuthGuard],
+        path: 'element', canActivate: [AppAuthGuard, CanActivateFeatureGuard],
+        data: { feature: 'normalization' },
         loadChildren: () => import('./element-lazy.module').then(m => m.ElementLazyModule)
       },
       {

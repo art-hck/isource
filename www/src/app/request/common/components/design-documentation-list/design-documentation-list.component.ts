@@ -19,6 +19,7 @@ import { CustomValidators } from "../../../../shared/forms/custom.validators";
 import { DesignDocumentationEdit } from "../../models/requests-list/design-documentation-edit";
 import { UserInfoService } from "../../../../user/service/user-info.service";
 import { UxgBreadcrumbsService } from "uxg";
+import { FeatureService } from "../../../../core/services/feature.service";
 
 @Component({
   selector: 'app-request-design-documentation-list',
@@ -59,7 +60,8 @@ export class DesignDocumentationListComponent implements OnInit {
     private customerRequestService: CustomerRequestService,
     private designDocumentationService: DesignDocumentationService,
     private formBuilder: FormBuilder,
-    public userInfoService: UserInfoService
+    public userInfoService: UserInfoService,
+    public featureService: FeatureService,
   ) {
     this.addDocumentationForm = this.formBuilder.group({
       'addDocumentationListForm': this.formBuilder.array([])
@@ -183,7 +185,7 @@ export class DesignDocumentationListComponent implements OnInit {
 
   canUploadDocuments(designDoc: DesignDocumentation, designDocumentationList: DesignDocumentationList) {
     // Если мы бэкофис и загрузка еще не началась и не отправляем на согласование и можем отправить на согласование
-    return this.userInfoService.isBackOffice()
+    return this.featureService.authorize('addOrEditDesignDocuments')
       && !this.isLoadingDesignDoc(designDoc)
       && !this.isSendingForApproval(designDocumentationList)
       && this.canEditDesignDocList(designDocumentationList)
@@ -195,7 +197,9 @@ export class DesignDocumentationListComponent implements OnInit {
   }
 
   canEditDesignDoc(designDocumentation: DesignDocumentationList, designDoc: DesignDocumentation) {
-    return designDoc.type !== DesignDocumentationType.REMARK && this.canEditDesignDocList(designDocumentation);
+    return designDoc.type !== DesignDocumentationType.REMARK &&
+      this.canEditDesignDocList(designDocumentation) &&
+      this.featureService.authorize('addOrEditDesignDocuments');
   }
 
   isSendOnApproveActive(designDocList: DesignDocumentationList) {
