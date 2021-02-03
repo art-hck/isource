@@ -19,9 +19,20 @@ export interface IFeatureList {
   createContragent;
   editContragent;
   employees;
-  editTechnicalProposal;
   contractGeneration;
   createProcedure;
+  createTechnicalProposal;
+  editTechnicalProposal;
+  cancelPublishTechnicalProposal;
+  createProposalsGroup;
+  editProposalsGroup;
+  createProposal;
+  editProposal;
+  cancelPublishProposal;
+  createProposalsFromTemplate;
+  addProposalContragent;
+  publishProposalPositions;
+  editProposalsCommonParameters;
   instructionsFileForCustomer;
   instructionsFileForBackoffice;
   publishRequest;
@@ -34,6 +45,12 @@ export interface IFeatureList {
   addRequestGroup;
   moveRequestGroup;
   uploadPositionDocuments;
+  addContract;
+  downloadGeneratedContract;
+  attachContractDocument;
+  sendContractToApproval;
+  rollbackSentToApprovalContract;
+  confirmContractSign;
   kim;
   sentToApprove;
   backofficeAgreements;
@@ -71,9 +88,20 @@ export const FeatureList: { [key in keyof IFeatureList]: Feature } = {
   editContragent: { roles: [UserRole.ADMIN, UserRole.BACKOFFICE_BUYER, UserRole.SENIOR_BACKOFFICE] },
   employees: { roles: [UserRole.SENIOR_BACKOFFICE] },
   contractGeneration: { roles: [UserRole.BACKOFFICE] },
-  createProcedure: { roles: [UserRole.BACKOFFICE] },
+  createProcedure: { roles: [UserRole.BACKOFFICE_BUYER, UserRole.SENIOR_BACKOFFICE] },
+  createTechnicalProposal: { roles: [UserRole.BACKOFFICE_BUYER, UserRole.SENIOR_BACKOFFICE] },
+  editTechnicalProposal: { roles: [UserRole.BACKOFFICE_BUYER, UserRole.SENIOR_BACKOFFICE] },
+  cancelPublishTechnicalProposal: { roles: [UserRole.BACKOFFICE_BUYER, UserRole.SENIOR_BACKOFFICE] },
+  createProposalsGroup: { roles: [UserRole.BACKOFFICE_BUYER, UserRole.SENIOR_BACKOFFICE] },
+  editProposalsGroup: { roles: [UserRole.BACKOFFICE_BUYER, UserRole.SENIOR_BACKOFFICE] },
+  createProposal: { roles: [UserRole.BACKOFFICE_BUYER, UserRole.SENIOR_BACKOFFICE] },
+  editProposal: { roles: [UserRole.BACKOFFICE_BUYER, UserRole.SENIOR_BACKOFFICE] },
+  cancelPublishProposal: { roles: [UserRole.BACKOFFICE_BUYER, UserRole.SENIOR_BACKOFFICE] },
+  createProposalsFromTemplate: { roles: [UserRole.BACKOFFICE_BUYER, UserRole.SENIOR_BACKOFFICE] },
+  addProposalContragent: { roles: [UserRole.BACKOFFICE_BUYER, UserRole.SENIOR_BACKOFFICE] },
+  publishProposalPositions: { roles: [UserRole.BACKOFFICE_BUYER, UserRole.SENIOR_BACKOFFICE] },
+  editProposalsCommonParameters: { roles: [UserRole.BACKOFFICE_BUYER, UserRole.SENIOR_BACKOFFICE] },
   instructionsFileForBackoffice: { roles: [UserRole.BACKOFFICE] },
-  editTechnicalProposal: { roles: [UserRole.BACKOFFICE] },
   publishRequest: { roles: [UserRole.CUSTOMER] },
   approveRequest: { roles: [UserRole.CUSTOMER, UserRole.CUSTOMER_APPROVER] },
   addPosition: { roles: [UserRole.SENIOR_BACKOFFICE, UserRole.BACKOFFICE_BUYER, UserRole.CUSTOMER, UserRole.ADMIN] },
@@ -84,6 +112,12 @@ export const FeatureList: { [key in keyof IFeatureList]: Feature } = {
   addRequestGroup: { roles: [UserRole.SENIOR_BACKOFFICE, UserRole.BACKOFFICE_BUYER] },
   moveRequestGroup: { roles: [UserRole.SENIOR_BACKOFFICE, UserRole.BACKOFFICE_BUYER] },
   uploadPositionDocuments: { roles: [UserRole.SENIOR_BACKOFFICE, UserRole.BACKOFFICE_BUYER, UserRole.CUSTOMER] },
+  addContract: { roles: [UserRole.SENIOR_BACKOFFICE, UserRole.BACKOFFICE_BUYER] },
+  downloadGeneratedContract: { roles: [UserRole.SENIOR_BACKOFFICE, UserRole.BACKOFFICE_BUYER] },
+  attachContractDocument: { roles: [UserRole.SENIOR_BACKOFFICE, UserRole.BACKOFFICE_BUYER, UserRole.CUSTOMER] },
+  sendContractToApproval: { roles: [UserRole.SENIOR_BACKOFFICE, UserRole.BACKOFFICE_BUYER] },
+  rollbackSentToApprovalContract: { roles: [UserRole.SENIOR_BACKOFFICE, UserRole.BACKOFFICE_BUYER] },
+  confirmContractSign: { roles: [UserRole.SENIOR_BACKOFFICE, UserRole.BACKOFFICE_BUYER] },
   kim: { roles: [UserRole.CUSTOMER] },
   sentToApprove: { roles: [UserRole.SENIOR_BACKOFFICE, UserRole.BACKOFFICE] },
   backofficeAgreements: { roles: [UserRole.SENIOR_BACKOFFICE, UserRole.BACKOFFICE] },

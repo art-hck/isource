@@ -16,6 +16,7 @@ import { ContractState } from "../../../customer/states/contract.state";
 import { takeUntil } from "rxjs/operators";
 import { ContractActions } from "../../../customer/actions/contract.actions";
 import SignDocument = ContractActions.SignDocument;
+import { FeatureService } from "../../../../core/services/feature.service";
 
 @Component({
   selector: 'app-contract-list-item',
@@ -78,6 +79,7 @@ export class ContractListItemComponent implements OnInit, OnChanges {
     private store: Store,
     public user: UserInfoService,
     private actions: Actions,
+    public featureService: FeatureService
   ) {}
 
   ngOnInit() {

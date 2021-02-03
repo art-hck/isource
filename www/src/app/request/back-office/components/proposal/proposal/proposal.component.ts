@@ -7,6 +7,7 @@ import { CommonProposal, CommonProposalItem } from "../../../../common/models/co
 import { RequestPosition } from "../../../../common/models/request-position";
 import { TechnicalCommercialProposalHelperService } from "../../../../common/services/technical-commercial-proposal-helper.service";
 import { ContragentShortInfo } from "../../../../../contragent/models/contragent-short-info";
+import { FeatureService } from "../../../../../core/services/feature.service";
 
 @Component({
   selector: 'app-common-proposal',
@@ -50,6 +51,6 @@ export class ProposalComponent {
     return this.proposal?.items.length > 0 && this.proposal?.items.every(({status}) => ['SENT_TO_EDIT'].includes(status));
   }
 
-  constructor(public helper: TechnicalCommercialProposalHelperService) {
+  constructor(public helper: TechnicalCommercialProposalHelperService, public featureService: FeatureService) {
   }
 }

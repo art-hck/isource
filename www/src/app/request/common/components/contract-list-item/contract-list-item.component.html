@@ -112,7 +112,10 @@
         </div>
 
         <div class="app-row app-align-items-center">
-          <div class="app-col-6 app-basis-auto app-ellipsis"><input uxgInput type="text" lg formControlName="comment" placeholder="Текст комментария"/></div>
+          <div class="app-col-6 app-basis-auto app-ellipsis">
+            <input uxgInput type="text" lg formControlName="comment" placeholder="Текст комментария"/>
+          </div>
+
           <app-document-upload-list
             *ngIf="files?.length; else uploadFile"
             class="app-col-6"
@@ -126,8 +129,11 @@
             <div class="app-col app-ghost-color">
               <span>Необходимо выбрать файл договора для прикрепления и отправки на согласование</span>
             </div>
+
             <div class="app-col-auto">
-              <button uxgButton secondary appUploadFile type="button" (select)="selectFiles($event);">Выбрать документ</button>
+              <button uxgButton secondary appUploadFile
+                      [disabled]="!featureService.authorize('attachContractDocument')"
+                      type="button" (select)="selectFiles($event);">Выбрать документ</button>
             </div>
           </ng-template>
         </div>
@@ -136,7 +142,8 @@
       <ng-container *ngIf="canSend || canRollback || canReject || canApprove || approvedByCustomer || confirmedByCustomerNoSign || signedByCustomer || signedBySupplier">
         <hr/>
         <div class="app-row app-align-items-center">
-          <button uxgButton iconText secondary type="button" *ngIf="download.observers.length" (click)="download.emit()">
+          <button uxgButton iconText secondary type="button"
+                  *ngIf="download.observers.length && featureService.authorize('downloadGeneratedContract')" (click)="download.emit()">
             <uxg-icon shape="app-download"></uxg-icon>
             <span>Скачать типовой договор</span>
           </button>
@@ -144,9 +151,11 @@
           <div class="app-col"></div>
           <div *ngIf="status === 'updating'"><span class="spinner spinner-inline"></span></div>
 
-          <button uxgButton primary *ngIf="canSend" [disabled]="status === 'updating' || form.invalid">Отправить на согласование</button>
+          <button uxgButton primary *ngIf="canSend"
+                  [disabled]="status === 'updating' || form.invalid || !featureService.authorize('sendContractToApproval')">Отправить на согласование</button>
 
-          <button uxgButton primary type="button" *ngIf="canRollback" [style.min-width.px]="140" [disabled]="status === 'updating'" (click)="rollback.emit()">
+          <button uxgButton primary type="button" *ngIf="canRollback" [style.min-width.px]="140"
+                  [disabled]="status === 'updating' || !featureService.authorize('rollbackSentToApprovalContract')" (click)="rollback.emit()">
             Отозвать {{ rollbackDate | countdownTimer: rollbackDuration }}
           </button>
 
@@ -186,15 +195,25 @@
             </ng-container>
 
             <ng-container *ngIf="user.isBackOffice()">
-              <div class="app-col-auto app-ghost-color text-right">
-                Документ подписан с обеих сторон электронной цифровой подписью. <br>
-                Вы можете продолжить работу с позицией по обычному процессу.
-              </div>
-              <button uxgButton primary type="button" [disabled]="status === 'updating'" (click)="sign.emit()">Подтвердить подписание</button>
+              <ng-container *ngIf="featureService.authorize('confirmContractSign'); else canNotConfirmSign">
+                <div class="app-col-auto app-ghost-color text-right">
+                  Документ подписан с обеих сторон электронной цифровой подписью. <br>
+                  Вы можете продолжить работу с позицией по обычному процессу.
+                </div>
+                <button uxgButton primary type="button"
+                        [disabled]="status === 'updating'"
+                        (click)="sign.emit()">Подтвердить подписание</button>
+              </ng-container>
+
+              <ng-template #canNotConfirmSign>
+                <div class="app-col-auto app-ghost-color text-right">
+                  Документ подписан с обеих сторон электронной цифровой подписью.
+                </div>
+              </ng-template>
             </ng-container>
           </ng-container>
 
-          <ng-container *ngIf="user.isBackOffice() && confirmedByCustomerNoSign">
+          <ng-container *ngIf="featureService.authorize('confirmContractSign') && confirmedByCustomerNoSign">
             <button uxgButton primary type="button" [disabled]="status === 'updating'" (click)="sign.emit()">Подтвердить подписание</button>
           </ng-container>
         </div>

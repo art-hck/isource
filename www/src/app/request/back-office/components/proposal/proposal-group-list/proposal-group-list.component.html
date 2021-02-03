@@ -38,7 +38,8 @@
         <uxg-popover #groupFormPopover [openOnHover]="true" class="popover-item">
           <button uxgButton secondary iconText
                   [disabled]="!availablePositions?.length"
-                  (click)="editedGroup = null; groupFormModal.open()">
+                  (click)="editedGroup = null; groupFormModal.open()"
+                  *ngIf="featureService.authorize('createProposalsGroup')">
             <uxg-icon shape="app-plus"></uxg-icon>
             <span>Новое {{sourceLabel[source]}}</span>
           </button>
@@ -55,7 +56,8 @@
         <uxg-popover #templateFormPopup [openOnHover]="true" class="popover-item">
           <button uxgButton primary iconText
                   [disabled]="!availablePositions?.length"
-                  (click)="formTemplate.reset(); uploadTemplateModal.open();">
+                  (click)="formTemplate.reset(); uploadTemplateModal.open();"
+                  *ngIf="featureService.authorize('createProposalsFromTemplate')">
             <uxg-icon shape="app-plus"></uxg-icon>
             <span>{{sourceLabel[source]}} из шаблона</span>
           </button>
