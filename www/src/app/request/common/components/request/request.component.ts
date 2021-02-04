@@ -113,8 +113,10 @@ export class RequestComponent implements OnChanges {
   }
 
   showCheckbox(positions: RequestPosition[]) {
-    return this.user.isCustomer() || this.user.isSeniorBackoffice() || this.user.isBackofficeObserver() || (this.user.isCustomerApprover() &&
-      positions.some(position => position.status === PositionStatus.PROOF_OF_NEED));
+    return this.user.isCustomer() ||
+      this.user.isBackofficeBuyer() ||
+      this.user.isSeniorBackoffice() ||
+      (this.user.isCustomerApprover() && positions.some(position => position.status === PositionStatus.PROOF_OF_NEED));
   }
 
   someOfPositionsAreInProcedure(): boolean {
