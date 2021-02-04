@@ -31,4 +31,13 @@ export class RequestService {
     return this.api.get<AvailableFilters>(url);
   }
 
+  approve(requestIds: Uuid[]){
+    const url = `requests/customer/approve`;
+    return this.api.post(url, { requestIds })
+  }
+
+  reject(requestIds: Uuid[]) {
+    const url = `requests/customer/reject`;
+    return this.api.post(url, { requestIds })
+  }
 }

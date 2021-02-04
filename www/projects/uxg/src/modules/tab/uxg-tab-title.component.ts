@@ -20,6 +20,7 @@ export class UxgTabTitleComponent {
   @HostBinding('class.app-tabs-item') appTabsItem = true;
   @HostBinding('class.app-tabs-item-active')
   @Input() active = false;
+  @Input() id: string | number; // you can attach any id to your tab title
   @HostBinding('attr.disabled')
   @Input() set disabled(disabled: boolean) {
     this._disabled = disabled;

@@ -11,6 +11,7 @@ import { RequestService } from "../services/request.service";
 import { AvailableFilters } from "../../common/models/requests-list/available-filters";
 import Fetch = RequestListActions.Fetch;
 import FetchAvailableFilters = RequestListActions.FetchAvailableFilters;
+import Review = RequestListActions.Review;
 
 export interface RequestStateStateModel {
   requests: Page<RequestsList>;
@@ -46,5 +47,11 @@ export class RequestListState {
 
   @Action(FetchAvailableFilters) fetchFilters({setState}: Context) {
     return this.rest.availableFilters().pipe(tap(filters => setState(patch({ availableFilters: filters }))));
+  }
+
+  @Action(Review) review({setState}: Context, { approved, requestIds }: Review) {
+    setState(patch<Model>({ status: "updating" }));
+    return (approved ? this.rest.approve(requestIds) : this.rest.reject(requestIds))
+      .pipe(tap(() => setState(patch<Model>({ status: 'received' }))));
   }
 }
