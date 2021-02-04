@@ -18,5 +18,5 @@ export class AgreementsService {
   setRating = (requestId: Uuid, positionId: Uuid, rating: number) => {
     const url = `requests/customer/${requestId}/positions/${positionId}/set-rating`;
     return this.api.post<any>(url, {rating});
-  };
+  }
 }
