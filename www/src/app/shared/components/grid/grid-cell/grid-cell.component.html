@@ -1,5 +1,6 @@
 <ng-container *ngIf="proposal else emptyProposal">
-  <button (click)="editable && proposal?.source !== 'ETP' ? edit.emit(proposal) : show.emit(proposal)">
+  <button
+    (click)="editable && proposal?.source !== 'ETP' && featureService.authorize('editProposal') ? edit.emit(proposal) : show.emit(proposal)">
     <div class="app-row app-align-items-center">
       <!-- name -->
       <h3 class="app-col">
@@ -76,7 +77,7 @@
 </ng-container>
 
 <ng-template #emptyProposal>
-  <button [disabled]="!editable" (click)="create.emit()">
+  <button [disabled]="!editable || !featureService.authorize('createProposal')" (click)="create.emit()">
     <uxg-icon class="app-link" *ngIf="editable; else notProvided" shape="app-plus-big" size="24"></uxg-icon>
     <ng-template #notProvided><b>Не предоставлено</b></ng-template>
   </button>

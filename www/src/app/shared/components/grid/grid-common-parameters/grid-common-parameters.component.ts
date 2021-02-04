@@ -6,6 +6,7 @@ import { ProposalWithCommonInfo } from "../../../../request/common/models/propos
 import { CommonProposal } from "../../../../request/common/models/common-proposal";
 import { RequestPosition } from "../../../../request/common/models/request-position";
 import { Uuid } from "../../../../cart/models/uuid";
+import { FeatureService } from "../../../../core/services/feature.service";
 
 @Component({
   selector: 'app-grid-common-parameters',
@@ -29,7 +30,8 @@ export class GridCommonParametersComponent {
 
   constructor(
     public helper: ProposalHelperService,
-    public userInfoService: UserInfoService
+    public userInfoService: UserInfoService,
+    public featureService: FeatureService,
   ) { }
 
   edit(proposal: ProposalWithCommonInfo) {

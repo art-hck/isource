@@ -37,7 +37,9 @@
       </div>
     </div>
 
-    <button uxgButton icon link (click)="edit.emit()" [disabled]="group.status !== 'DRAFT'" *ngIf="edit.observers.length">
+    <button uxgButton icon link
+            *ngIf="edit.observers.length && featureService.authorize('editProposalsGroup')"
+            (click)="edit.emit()" [disabled]="group.status !== 'DRAFT'">
       <uxg-icon shape="app-pen"></uxg-icon>
     </button>
 

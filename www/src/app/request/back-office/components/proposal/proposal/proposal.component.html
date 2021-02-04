@@ -25,9 +25,13 @@
         <uxg-icon shape="app-warning"></uxg-icon>
         <span>На доработке</span>
       </div>
-      <button uxgButton icon link (click)="state = 'edit'" [disabled]="!editable">
-        <uxg-icon shape="app-pen"></uxg-icon>
-      </button>
+
+      <ng-container *ngIf="featureService.authorize('editProposal')">
+        <button uxgButton icon link (click)="state = 'edit'" [disabled]="!editable">
+          <uxg-icon shape="app-pen"></uxg-icon>
+        </button>
+      </ng-container>
+
       <button uxgButton icon link (click)="folded = !folded" [disabled]="proposal.items.length === 0">
         <uxg-icon shape="app-chevron" [attr.dir]="folded ? 'down' : 'up'"></uxg-icon>
       </button>

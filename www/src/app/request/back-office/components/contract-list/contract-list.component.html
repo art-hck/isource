@@ -8,7 +8,10 @@
         <div class="app-col"></div>
         <uxg-filter-button></uxg-filter-button>
 
-        <button uxgButton primary iconText (click)="contractFormModal.open()" [disabled]="(suppliers$ | async)?.length === 0">
+        <button uxgButton primary iconText
+                (click)="contractFormModal.open()"
+                [disabled]="(suppliers$ | async)?.length === 0"
+                *ngIf="featureService.authorize('addContract')">
           <uxg-icon shape="app-plus"></uxg-icon>
           <span>Добавить договор</span>
         </button>
@@ -45,6 +48,7 @@
       <uxg-filter-section label="Наименование позиции">
         <input uxgInput type="text" formControlName="positionName" placeholder="Наименование позиции или его часть" />
       </uxg-filter-section>
+
       <uxg-filter-section label="Контрагент" [disabled]="form.get('suppliers').disabled">
         <uxg-filter-checkbox-list
           formControlName="suppliers"
@@ -69,6 +73,7 @@
         </app-contract-form>
       </ng-container>
     </uxg-modal>
+
     <uxg-modal [(state)]="deleteContract" size="s">
       <h2 class="modal-title"><b>Подтвердите удаление</b></h2>
       <div class="app-section">Все данные по уже созданному договору c <b>{{deleteContract?.supplier?.shortName}}</b> будут удалены.</div>
@@ -77,6 +82,7 @@
         <button uxgButton primary lg (click)="store.dispatch(delete(request, deleteContract)); deleteContract = null">Удалить</button>
       </ng-template>
     </uxg-modal>
+
     <uxg-modal [(state)]="rollbackContract" size="s">
       <h2 class="modal-title"><b>Обратите внимание!</b></h2>
       <div class="app-section">Ваш последний комментарий и приложенный файл при отзыве будут удалены, вам потребуется прикрепить файл снова и написать новый комментарий.</div>

@@ -28,6 +28,7 @@ import Sign = ContractActions.Sign;
 import Delete = ContractActions.Delete;
 import Filter = ContractActions.Filter;
 import FetchAvailibleFilters = ContractActions.FetchAvailibleFilters;
+import { FeatureService } from "../../../../core/services/feature.service";
 
 @Component({
   selector: 'app-contract-list',
@@ -65,6 +66,7 @@ export class ContractListComponent implements OnInit, OnDestroy {
     private bc: UxgBreadcrumbsService,
     private fb: FormBuilder,
     private route: ActivatedRoute,
+    public featureService: FeatureService
   ) {}
 
   ngOnInit() {
