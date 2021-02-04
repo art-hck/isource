@@ -1,6 +1,16 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+  ViewChild
+} from '@angular/core';
 import { RequestStatusCount } from "../../models/requests-list/request-status-count";
-import { UxgTabTitleComponent } from "uxg";
+import { UxgModalComponent, UxgTabTitleComponent } from "uxg";
 import { RequestsListFilter } from "../../models/requests-list/requests-list-filter";
 import { RequestStatus } from "../../enum/request-status";
 import { FeatureService } from "../../../../core/services/feature.service";
@@ -31,6 +41,7 @@ import { SelectItemsWithSearchComponent } from "../../../../shared/components/se
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RequestListComponent implements OnInit, OnDestroy {
+  @ViewChild('downloadRequestsModal') downloadRequestsModal: UxgModalComponent;
   @ViewChild('requestsSelectList') requestsSelectList: SelectItemsWithSearchComponent;
   @ViewChild('allProgressTab') allProgressTab: UxgTabTitleComponent;
   @ViewChild('inProgressTab') inProgressTabElRef: UxgTabTitleComponent;
@@ -53,6 +64,7 @@ export class RequestListComponent implements OnInit, OnDestroy {
   @Output() addRequest = new EventEmitter();
   @Output() refresh = new EventEmitter();
   @Output() downloadRequests = new EventEmitter<{ requestIds: Uuid[] }>();
+  @Output() openDownloadRequestsListModal = new EventEmitter();
 
   requestsForm = new FormGroup({
     requestIds: new FormControl([], Validators.required),
@@ -112,7 +124,6 @@ export class RequestListComponent implements OnInit, OnDestroy {
     this.positionStatuses$ = this.availableFilters$?.pipe(map(f => f?.positionStatuses.map(
       status => ({ value: status.status, item: status, hideFolded: PositionStatusesFrequent.indexOf(status.status) < 0 })
     )));
-
   }
 
   ngOnDestroy() {
@@ -287,6 +298,11 @@ export class RequestListComponent implements OnInit, OnDestroy {
 
   limitedRange(date: Date): boolean {
     return moment().diff(moment(date), 'days') > 100;
+  }
+
+  openDownloadRequestsModal() {
+    this.downloadRequestsModal.open();
+    this.openDownloadRequestsListModal.emit();
   }
 
   trackByRequestId = (request: RequestsList) => request.request.id;

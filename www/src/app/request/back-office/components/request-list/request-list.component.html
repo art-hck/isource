@@ -9,6 +9,7 @@
   [availableFilters$]="availableFilters$"
   [form]="form"
   [downloadRequestsList]="downloadRequestsList"
+  (openDownloadRequestsListModal)="onOpenDownloadRequestsListModal()"
   (filter)="fetchFilters$.next($event)"
   (refresh)="fetchFilters$.next({})"
   (downloadRequests)="downloadRequests($event)"
