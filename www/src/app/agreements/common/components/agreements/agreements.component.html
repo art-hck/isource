@@ -41,8 +41,7 @@
             </ng-container>
           </div>
 
-          <span *ngIf="agreement.groupCounter > 0" class="app-ghost-color group-counter">({{agreement.groupCounter}}
-            )</span>
+          <span *ngIf="agreement.groupCounter > 0" class="app-ghost-color group-counter">({{agreement.groupCounter}})</span>
         </div>
 
         <div class="app-col-2 app-ellipsis customer" *ngIf="!userInfoService.isCustomer()">
@@ -59,14 +58,16 @@
           </app-position-status>
         </div>
         <div class="app-col-2 action app-ellipsis">
-          <a [routerLink]="getRouterLink(agreement)" title="{{ agreement.action.label }}">
-            {{ agreement.action.label }}
-          </a>
-          <ng-container *ngIf="agreement.action.name === 'REVIEW_COMPLETED_POSITION'">
-            <a (click)="setRatingModal.open()" title="{{ agreement.action.label }}">
+          <ng-container *ngIf="agreement.action.name === 'REVIEW_COMPLETED_POSITION'; else routerLink">
+            <a class="app-link" (click)="setRatingModal.open()" title="{{ agreement.action.label }}">
               {{ agreement.action.label }}
             </a>
           </ng-container>
+          <ng-template #routerLink>
+            <a [routerLink]="getRouterLink(agreement)" title="{{ agreement.action.label }}">
+              {{ agreement.action.label }}
+            </a>
+          </ng-template>
         </div>
 
         <!-- Модальное окно оценки -->
