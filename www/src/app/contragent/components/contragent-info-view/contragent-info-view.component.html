@@ -41,7 +41,7 @@
           <span class="spinner spinner-md"></span>
         </ng-template>
 
-        <div class="action" *ngIf="(customerBuyerUsersWithoutContragent$ | async)?.length > 0">
+        <div class="action" *ngIf="(customerBuyerUsersWithoutContragent$ | async)?.length > 0 && featureService.authorize('addContragentToUser')">
           <button
             uxgButton
             primary
