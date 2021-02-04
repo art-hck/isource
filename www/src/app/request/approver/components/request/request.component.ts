@@ -59,9 +59,10 @@ export class RequestComponent implements OnInit, OnDestroy {
       filter(request => !!request),
       tap(({id, name}) => this.title.setTitle(name || "Заявка №" + id)),
       tap(({id, number}) => this.bc.breadcrumbs = [
-        {label: "Заявки", link: "/requests/approver?showOnlyApproved=" + this.route.snapshot.queryParams.showOnlyApproved},
-        {label: `Заявка №${number}`, link: "/requests/approver/" + id,
-          queryParams: {showOnlyApproved: this.route.snapshot.queryParams.showOnlyApproved}}
+        { label: "Заявки", link: "/requests/approver" },
+        { label: `Заявка №${number}`, link: "/requests/approver/" + id, queryParams: {
+          showOnlyApproved: this.route.snapshot.queryParams.showOnlyApproved
+        }}
       ]),
       takeUntil(this.destroy$),
     ).subscribe();
