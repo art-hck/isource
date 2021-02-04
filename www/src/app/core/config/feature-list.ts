@@ -110,7 +110,7 @@ export const FeatureList: { [key in keyof IFeatureList]: Feature } = {
   addProposalContragent: { roles: [UserRole.BACKOFFICE_BUYER, UserRole.SENIOR_BACKOFFICE] },
   publishProposalPositions: { roles: [UserRole.BACKOFFICE_BUYER, UserRole.SENIOR_BACKOFFICE] },
   editProposalsCommonParameters: { roles: [UserRole.BACKOFFICE_BUYER, UserRole.SENIOR_BACKOFFICE] },
-  instructionsFileForBackoffice: { roles: [UserRole.BACKOFFICE] },
+  instructionsFileForBackoffice: { roles: [UserRole.BACKOFFICE_BUYER, UserRole.SENIOR_BACKOFFICE] },
   publishRequest: { roles: [UserRole.CUSTOMER] },
   approveRequest: { roles: [UserRole.CUSTOMER, UserRole.CUSTOMER_APPROVER] },
   addPosition: { roles: [UserRole.SENIOR_BACKOFFICE, UserRole.BACKOFFICE_BUYER, UserRole.CUSTOMER, UserRole.ADMIN] },
