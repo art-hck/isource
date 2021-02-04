@@ -113,7 +113,7 @@ export class DashboardStatisticsComponent implements OnInit, OnDestroy {
   filterIsFilled(): boolean {
     return this.selectedRequests?.length ||
            this.selectedCustomers?.length && this.user.isBackOffice() ||
-           this.selectedUsers?.length && this.user.isSeniorBackoffice() ||
+           this.selectedUsers?.length && (this.user.isSeniorBackoffice() || this.user.isBackofficeObserver()) ||
            this.selectedApplicants?.length && this.user.isCustomer() ||
            this.form.get('shipmentDateFrom').value ||
            this.form.get('shipmentDateTo').value;

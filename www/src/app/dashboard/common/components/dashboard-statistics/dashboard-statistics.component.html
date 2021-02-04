@@ -50,7 +50,7 @@
                 </button>
               </div>
 
-              <ng-container *ngIf="user.isSeniorBackoffice()">
+              <ng-container *ngIf="user.isSeniorBackoffice() || user.isBackofficeObserver()">
                 <div class="vertical-divider"></div>
 
                 <div class="app-col-auto">
@@ -134,7 +134,7 @@
           <div class="app-col" *ngIf="user.isCustomer()">Заявителей</div>
           <div class="app-col" *ngIf="user.isBackOffice()">Заказчиков</div>
           <div class="app-col" *ngIf="user.isBackOffice()">Требует действий БО</div>
-          <div class="app-col" *ngIf="user.isSeniorBackoffice()">Ответственных</div>
+          <div class="app-col" *ngIf="user.isSeniorBackoffice() || user.isBackofficeObserver()">Ответственных</div>
           <div class="app-col sum-column">Сумма без НДС</div>
         </div>
 
@@ -145,7 +145,7 @@
           <h2 class="app-col" *ngIf="user.isCustomer()">{{ stats.applicantsCount }}</h2>
           <h2 class="app-col" *ngIf="user.isBackOffice()">{{ stats.customersCount }}</h2>
           <h2 class="app-col" *ngIf="user.isBackOffice()">{{ stats.backofficeTasksCount }}</h2>
-          <h2 class="app-col" *ngIf="user.isSeniorBackoffice()">{{ stats.responsibleUsersCount }}</h2>
+          <h2 class="app-col" *ngIf="user.isSeniorBackoffice() || user.isBackofficeObserver()">{{ stats.responsibleUsersCount }}</h2>
           <h2 class="app-col sum-column">
             <b>{{ stats.positionsTotalSumWithoutVat | number: "1.0-2" }} <span class="app-ghost-color">{{ getCurrencySymbol('RUB', 'narrow') }}</span></b>
           </h2>
