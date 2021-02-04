@@ -53,7 +53,7 @@
           </ng-container>
 
           <button uxgButton link icon
-                  *ngIf="featureService.available('editTechnicalProposal', userInfoService.roles)"
+                  *ngIf="featureService.authorize('editTechnicalProposal')"
                   (click)="edit.emit(true)"
                   [disabled]="!editable">
             <uxg-icon shape="app-pen"></uxg-icon>
@@ -121,8 +121,9 @@
           </ng-template>
         </div>
 
-        <!-- footer -->
-        <ng-container *ngIf="availableCancelPublishTechnicalProposal(technicalProposal) || tpStatusLabel(technicalProposal) === 'Черновик'">
+        <ng-container *ngIf="featureService.authorize('cancelPublishTechnicalProposal') &&
+                             (availableCancelPublishTechnicalProposal(technicalProposal) || tpStatusLabel(technicalProposal) === 'Черновик')">
+          <!-- footer -->
           <hr>
 
           <div class="app-row app-align-items-center">

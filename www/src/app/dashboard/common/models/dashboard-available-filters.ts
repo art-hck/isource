@@ -32,12 +32,19 @@ export class DashboardAvailableFiltersResponsibleUserItem {
   fullName: string;
   email: string;
   phone: string;
-  groupName: string;
+  groups: [{
+    id: string;
+    name: string
+  }];
 }
 
 export class DashboardAvailableFiltersApplicantItem {
   id: Uuid;
   fullName: string;
   groupName: string;
+  groups: [{
+    id: string;
+    name: string
+  }];
   phone: string;
 }

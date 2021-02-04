@@ -5,6 +5,7 @@ import { Position } from "../position";
 import { Proposal } from "../proposal";
 import { ProposalHelperService } from "../proposal-helper.service";
 import { ContragentShortInfo } from "../../../../contragent/models/contragent-short-info";
+import { FeatureService } from "../../../../core/services/feature.service";
 
 @Component({
   selector: 'app-grid-cell',
@@ -24,5 +25,5 @@ export class GridCellComponent {
   @HostBinding('class.empty') get isEmpty() { return !this.proposal; }
   getCurrencySymbol = getCurrencySymbol;
 
-  constructor(public helper: ProposalHelperService) {}
+  constructor(public helper: ProposalHelperService, public featureService: FeatureService) {}
 }
