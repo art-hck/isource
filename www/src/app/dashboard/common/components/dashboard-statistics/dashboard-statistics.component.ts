@@ -13,6 +13,7 @@ import {
 import { map, takeUntil } from "rxjs/operators";
 import { UserInfoService } from "../../../../user/service/user-info.service";
 import { SelectItemsWithSearchComponent } from "../../../../shared/components/select-items-with-search/select-items-with-search.component";
+import { PluralizePipe } from "../../../../shared/pipes/pluralize-pipe";
 
 @Component({
   selector: 'app-dashboard-statistics',
@@ -55,7 +56,8 @@ export class DashboardStatisticsComponent implements OnInit, OnDestroy {
 
   constructor(
     public store: Store,
-    public user: UserInfoService
+    public user: UserInfoService,
+    private pluralize: PluralizePipe,
   ) { }
 
   ngOnInit() {
@@ -119,11 +121,11 @@ export class DashboardStatisticsComponent implements OnInit, OnDestroy {
            this.form.get('shipmentDateTo').value;
   }
 
-  getApplicantGroupInfo(applicantGroup) {
-    if (applicantGroup?.length > 1) {
-      return "Состоит в " + applicantGroup.length + " группах";
+  getGroupsInfo(groups): string {
+    if (groups?.length > 1) {
+      return `Состоит в ${this.pluralize.transform(groups.length, "группе", "группах", "группах")}`;
     } else {
-      return 'applicantGroup.name';
+      return groups?.length ? groups[0].name : '—';
     }
   }
 
