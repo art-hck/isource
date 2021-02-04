@@ -1,0 +1,18 @@
+@import "src/theme";
+
+.rating-list li {
+  float: right;
+  color: uxg($theme, color-control-secondary);
+  padding: 24px 5px;
+
+}
+
+.rating-list li:hover,
+.rating-list li:hover ~ li, .rating-list li.selected {
+  color: uxg($theme, color-control-primary);
+}
+
+.rating-list {
+  display: inline-block;
+  list-style: none;
+}

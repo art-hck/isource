@@ -58,10 +58,27 @@
           </app-position-status>
         </div>
         <div class="app-col-2 action app-ellipsis">
-          <a [routerLink]="getRouterLink(agreement)" title="{{ agreement.action.label }}">
-            {{ agreement.action.label }}
-          </a>
+          <ng-container *ngIf="agreement.action.name === 'REVIEW_COMPLETED_POSITION'; else routerLink">
+            <a class="app-link" (click)="setRatingModal.open()" title="{{ agreement.action.label }}">
+              {{ agreement.action.label }}
+            </a>
+          </ng-container>
+          <ng-template #routerLink>
+            <a [routerLink]="getRouterLink(agreement)" title="{{ agreement.action.label }}">
+              {{ agreement.action.label }}
+            </a>
+          </ng-template>
         </div>
+
+        <!-- Модальное окно оценки -->
+        <uxg-modal #setRatingModal size="s">
+          <h2>Оценитe платформу</h2>
+          <p class="app-color-secondary">Оцените качество работы платформы и предоста- вленных услуг.
+            После сохранения оценку будет невозможно изменить.</p>
+          <app-star-rating
+            (sendRating)="sendRating.emit({requestId: agreement.request?.id, positionId: agreement.requestPosition?.id, rating: $event})"
+            (close)="setRatingModal.close()"></app-star-rating>
+        </uxg-modal>
       </div>
     </div>
   </ng-container>

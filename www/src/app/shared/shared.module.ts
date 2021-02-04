@@ -43,6 +43,7 @@ import { GridCommonParametersComponent } from './components/grid/grid-common-par
 import { PriceInputFilterDirective } from "./directives/price-input-filter.directive";
 import { SelectResponsibleFormComponent } from "./components/select-responsible-form/select-responsible-form.component";
 import { DigitalSignatureListComponent } from "../contract-sign/components/digital-signature-list/digital-signature-list.component";
+import { StarRatingComponent } from './components/star-rating/star-rating.component';
 
 @NgModule({
   imports: [
@@ -96,6 +97,7 @@ import { DigitalSignatureListComponent } from "../contract-sign/components/digit
     ValidationDirective,
     GridCommonParametersComponent,
     SelectResponsibleFormComponent,
+    StarRatingComponent,
   ],
   exports: [
     CommonModule,
@@ -145,6 +147,7 @@ import { DigitalSignatureListComponent } from "../contract-sign/components/digit
     OkpdSuggestionsDirective,
     SelectResponsibleFormComponent,
     DigitalSignatureListComponent,
+    StarRatingComponent,
   ]
 })
 export class SharedModule {
