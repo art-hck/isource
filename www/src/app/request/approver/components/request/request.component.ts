@@ -70,14 +70,14 @@ export class RequestComponent implements OnInit, OnDestroy {
   rejectPositions(positionIds: Uuid[]) {
     this.requestService.changePositionsStatus(positionIds, PositionStatus.CANCELED).subscribe(
       () => this.store.dispatch(
-        [new ToastActions.Success(positionIds.length > 1 ? positionIds.length + 'позиции отклонены' : 'Позиция отклонена'),
+        [new ToastActions.Success(positionIds.length > 1 ? positionIds.length + ' позиции отклонены' : 'Позиция отклонена'),
         new RefreshPositions(this.requestId, this.positionFilter)]));
   }
 
   approvePositions(positionIds: Uuid[]) {
     this.requestService.changePositionsStatus(positionIds, PositionStatus.NEW).subscribe(
       () => this.store.dispatch(
-        [new ToastActions.Success(positionIds.length > 1 ? positionIds.length + 'позиции успешно согласованы' :
+        [new ToastActions.Success(positionIds.length > 1 ? positionIds.length + ' позиции успешно согласованы' :
           'Позиция успешно согласована'),
         new RefreshPositions(this.requestId, this.positionFilter)]));
   }
