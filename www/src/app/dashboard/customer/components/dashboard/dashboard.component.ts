@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { Select, Store } from "@ngxs/store";
 import { Agreement } from "../../../../agreements/common/models/Agreement";
 import { StateStatus } from "../../../../request/common/models/state-status";
@@ -48,13 +48,16 @@ export class DashboardComponent implements OnInit {
     private agreementsService: AgreementsService,
     private notificationService: NotificationService,
     private route: ActivatedRoute,
+    private cd: ChangeDetectorRef,
   ) {}
 
   ngOnInit() {
     this.store.dispatch(new Fetch());
 
     this.route.params.pipe(
-      tap(() => this.store.dispatch([new FetchStatusesStatistics({}), new FetchAvailableFilters({})])),
+      tap(() => this.store.dispatch([new FetchStatusesStatistics({}), new FetchAvailableFilters({})]).subscribe(() => {
+        this.cd.detectChanges();
+      })),
       withLatestFrom(this.statusesStatistics$),
       takeUntil(this.destroy$)
     ).subscribe();
