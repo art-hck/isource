@@ -34,6 +34,7 @@ export class UserInfoService {
 
     isBackofficeBuyer: 'isBackofficeBuyer',
     isSeniorBackoffice: 'isSeniorBackoffice',
+    isBackofficeObserver: 'isBackofficeObserver',
 
     isSystemAdmin: 'isSystemAdmin',
 
