@@ -71,7 +71,7 @@ export const FeatureList: { [key in keyof IFeatureList]: Feature } = {
   deliveryMonitor: { roles: [UserRole.BACKOFFICE] },
   createContragent: { roles: [UserRole.ADMIN, UserRole.BACKOFFICE_BUYER, UserRole.SENIOR_BACKOFFICE] },
   editContragent: { roles: [UserRole.ADMIN, UserRole.BACKOFFICE_BUYER, UserRole.SENIOR_BACKOFFICE] },
-  employees: { roles: [UserRole.SENIOR_BACKOFFICE] },
+  employees: { roles: [UserRole.SENIOR_BACKOFFICE, UserRole.BACKOFFICE_OBSERVER] },
   contractGeneration: { roles: [UserRole.BACKOFFICE] },
   createProcedure: { roles: [UserRole.BACKOFFICE] },
   instructionsFileForBackoffice: { roles: [UserRole.BACKOFFICE] },
