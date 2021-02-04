@@ -53,6 +53,11 @@ export interface IFeatureList {
   rollbackSentToApprovalContract;
   confirmContractSign;
   kim;
+  addDesignDocumentation;
+  deleteDesignDocList;
+  sendForApprovalDesignDocList;
+  addOrEditDesignDocuments;
+  processDesignDocumentations;
   sentToApprove;
   backofficeAgreements;
   customerAgreements;
@@ -121,6 +126,11 @@ export const FeatureList: { [key in keyof IFeatureList]: Feature } = {
   rollbackSentToApprovalContract: { roles: [UserRole.SENIOR_BACKOFFICE, UserRole.BACKOFFICE_BUYER] },
   confirmContractSign: { roles: [UserRole.SENIOR_BACKOFFICE, UserRole.BACKOFFICE_BUYER] },
   kim: { roles: [UserRole.CUSTOMER] },
+  addDesignDocumentation: { roles: [UserRole.SENIOR_BACKOFFICE, UserRole.BACKOFFICE_BUYER] },
+  deleteDesignDocList: { roles: [UserRole.SENIOR_BACKOFFICE, UserRole.BACKOFFICE_BUYER] },
+  sendForApprovalDesignDocList: { roles: [UserRole.SENIOR_BACKOFFICE, UserRole.BACKOFFICE_BUYER] },
+  addOrEditDesignDocuments: { roles: [UserRole.SENIOR_BACKOFFICE, UserRole.BACKOFFICE_BUYER] },
+  processDesignDocumentations: { roles: [UserRole.SENIOR_BACKOFFICE, UserRole.BACKOFFICE_BUYER] },
   sentToApprove: { roles: [UserRole.SENIOR_BACKOFFICE, UserRole.BACKOFFICE] },
   backofficeAgreements: { roles: [UserRole.SENIOR_BACKOFFICE, UserRole.BACKOFFICE] },
   customerAgreements: { roles: [UserRole.CUSTOMER] },
@@ -131,7 +141,7 @@ export const FeatureList: { [key in keyof IFeatureList]: Feature } = {
   customerProfile: { roles: [UserRole.CUSTOMER] },
   customerIntelplan: { roles: [UserRole.CUSTOMER] },
   createTemplate: { roles: [UserRole.CUSTOMER] },
-  normalization: { roles: [UserRole.SENIOR_BACKOFFICE, UserRole.BACKOFFICE]},
+  normalization: { roles: [UserRole.SENIOR_BACKOFFICE, UserRole.BACKOFFICE_BUYER]},
   requestDashboard: { roles: [UserRole.SENIOR_BACKOFFICE, UserRole.BACKOFFICE, UserRole.CUSTOMER]},
   contragents: {roles: [UserRole.CUSTOMER, UserRole.BACKOFFICE, UserRole.ADMIN]},
   hideRequestContragentsName: {roles: [UserRole.SENIOR_BACKOFFICE, UserRole.BACKOFFICE_BUYER]}
