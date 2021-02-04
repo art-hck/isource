@@ -9,6 +9,7 @@ import { DashboardCustomerRoutingModule } from "./dashboard-customer-routing.mod
 import { DashboardCommonModule } from "../common/dashboard-common.module";
 import { NgxsModule } from "@ngxs/store";
 import { DashboardState } from "./states/dashboard.state";
+import { PluralizePipe } from "../../shared/pipes/pluralize-pipe";
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import { DashboardState } from "./states/dashboard.state";
   ],
   providers: [
     DashboardService,
-    AgreementsService
+    AgreementsService,
+    PluralizePipe
   ],
 })
 export class DashboardCustomerModule {

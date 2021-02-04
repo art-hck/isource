@@ -9,6 +9,7 @@ import { DashboardState } from "./states/dashboard.state";
 import { ReactiveFormsModule } from "@angular/forms";
 import { DashboardComponent } from "./components/dashboard/dashboard.component";
 import { DashboardCommonModule } from "../common/dashboard-common.module";
+import { PluralizePipe } from "../../shared/pipes/pluralize-pipe";
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import { DashboardCommonModule } from "../common/dashboard-common.module";
     ReactiveFormsModule,
   ],
   providers: [
-    DashboardService
+    DashboardService,
+    PluralizePipe
   ],
 })
 export class DashboardBackofficeModule {

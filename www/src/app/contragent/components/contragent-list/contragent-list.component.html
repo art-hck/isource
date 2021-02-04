@@ -10,7 +10,7 @@
       <small class="app-col kpp">КПП</small>
       <small class="app-col email">E-mail</small>
       <small class="app-col responsible">Ответственный менеджер БО</small>
-      <small class="app-col-auto edit" *ngIf="user.isSeniorBackoffice()"></small>
+      <small class="app-col-auto edit" *ngIf="user.isSeniorBackoffice() || user.isBackofficeObserver()"></small>
     </div>
   </div>
 
