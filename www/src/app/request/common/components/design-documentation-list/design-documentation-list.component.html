@@ -110,6 +110,7 @@
                       <div *ngSwitchCase="designDocStatus.REJECTED"
                            class="app-bold app-warning-color status-warning">Отклонено заказчиком</div>
                     </ng-container>
+
                     <ng-container *ngIf="status === designDocStatus.NEW">
                       <uxg-modal #confirmDelete size="s">
                         <h2>Удалить перечень полностью?</h2>
@@ -123,13 +124,11 @@
                         </ng-template>
                       </uxg-modal>
 
-
                       <button uxgButton secondary lg
                               *ngIf="designDocumentation.status === 'NEW' && featureService.authorize('deleteDesignDocList')"
                               (click)="confirmDelete.open()" type="button">
                         Удалить
                       </button>
-
                     </ng-container>
 
                     <button uxgButton primary lg *ngIf="canEditDesignDocList(designDocumentation) && featureService.authorize('sendForApprovalDesignDocList')"
@@ -139,6 +138,7 @@
                   </ng-container>
                 </span>
               </div>
+
               <div class="app-row app-align-items-center">
                 <table class="document-list table table-noborder">
                   <thead>
@@ -288,7 +288,7 @@
               </div>
 
               <div class="design-actions clr-col-2">
-                <ng-container *ngIf="designDocumentation.status !== designDocStatus.APPROVED && featureService.authorize('processDesignDocumentations')">
+                <ng-container *ngIf="designDocumentation.status !== designDocStatus.APPROVED">
                   <uxg-dropdown lg>
                     <div uxgDropdownItem (click)="approve(designDocumentation)">
                       <uxg-icon shape="app-check"></uxg-icon>
