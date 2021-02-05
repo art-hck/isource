@@ -58,7 +58,6 @@ export interface IFeatureList {
   deleteDesignDocList;
   sendForApprovalDesignDocList;
   addOrEditDesignDocuments;
-  processDesignDocumentations;
   sentToApprove;
   backofficeAgreements;
   customerAgreements;
@@ -132,7 +131,6 @@ export const FeatureList: { [key in keyof IFeatureList]: Feature } = {
   deleteDesignDocList: { roles: [UserRole.SENIOR_BACKOFFICE, UserRole.BACKOFFICE_BUYER] },
   sendForApprovalDesignDocList: { roles: [UserRole.SENIOR_BACKOFFICE, UserRole.BACKOFFICE_BUYER] },
   addOrEditDesignDocuments: { roles: [UserRole.SENIOR_BACKOFFICE, UserRole.BACKOFFICE_BUYER] },
-  processDesignDocumentations: { roles: [UserRole.SENIOR_BACKOFFICE, UserRole.BACKOFFICE_BUYER] },
   sentToApprove: { roles: [UserRole.SENIOR_BACKOFFICE, UserRole.BACKOFFICE] },
   backofficeAgreements: { roles: [UserRole.SENIOR_BACKOFFICE, UserRole.BACKOFFICE] },
   customerAgreements: { roles: [UserRole.CUSTOMER] },
