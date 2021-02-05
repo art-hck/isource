@@ -91,8 +91,9 @@
               </button>
             </ng-template>
           </uxg-modal>
+        </ng-container>
 
-          <div class="design-documentation-card-list"
+        <div class="design-documentation-card-list"
                *ngFor="let designDocumentation of designDocumentations; index as j">
             <div class="design-documentation-card">
               <div class="app-row">
@@ -257,7 +258,6 @@
               </div>
             </div>
           </div>
-        </ng-container>
 
         <div class="designDocumentation" *ngIf="userInfoService.isCustomer()">
           <div class="table designDocumentationHead">
