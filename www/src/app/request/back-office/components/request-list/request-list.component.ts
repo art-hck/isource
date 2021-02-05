@@ -1,4 +1,12 @@
-import { ChangeDetectionStrategy, Component, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  Inject,
+  OnDestroy,
+  OnInit,
+  ViewChild
+} from '@angular/core';
 import { Select, Store } from "@ngxs/store";
 import { Observable, Subject } from "rxjs";
 import { scan, switchMap, takeUntil, tap, throttleTime } from "rxjs/operators";
@@ -51,6 +59,7 @@ export class RequestListComponent implements OnInit, OnDestroy {
     private router: Router,
     private route: ActivatedRoute,
     private fb: FormBuilder,
+    private cd: ChangeDetectorRef,
     public store: Store,
     public requestService: RequestService
   ) {}
@@ -73,12 +82,6 @@ export class RequestListComponent implements OnInit, OnDestroy {
     });
 
     this.store.dispatch(new FetchAvailableFilters());
-
-    this.getDownloadRequestsList()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(data => {
-      this.downloadRequestsList = data.entities;
-    });
   }
 
   ngOnDestroy() {
@@ -93,6 +96,17 @@ export class RequestListComponent implements OnInit, OnDestroy {
 
   getDownloadRequestsList(): Observable<Page<RequestsList>> {
     return this.requestService.getRequests(0, 500, {requestListStatusesFilter: []}, {});
+  }
+
+  onOpenDownloadRequestsListModal() {
+    if (!this.downloadRequestsList) {
+      this.getDownloadRequestsList()
+        .pipe(takeUntil(this.destroy$))
+        .subscribe(data => {
+          this.downloadRequestsList = data.entities;
+          this.cd.detectChanges();
+        });
+    }
   }
 
 }
