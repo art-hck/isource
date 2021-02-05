@@ -104,11 +104,12 @@ export class RequestListComponent implements AfterViewInit, OnDestroy, OnInit {
       withLatestFrom(this.selectedRequests$),
       delayWhen(([approved, requests]) => this.store.dispatch(new Review(approved, requests.map(({ id }) => id)))),
       tap(() => this.fetchFilters$.next({})),
-      tap(([, requests]) => this.store.dispatch(new ToastActions.Success(
+      tap(([approved, requests]) => approved ? this.store.dispatch(new ToastActions.Success(
         `Успешно согласовано ${this.pluralize.transform(requests.length, "заявка", "заявки", "заявок")}`
-      ))),
+      )) : this.store.dispatch(new ToastActions.Success(
+        `Отклонено ${this.pluralize.transform(requests.length, "заявка", "заявки", "заявок")}`)),
       takeUntil(this.destroy$)
-    ).subscribe();
+    )).subscribe();
 
     // Getting data
     this.fetchFilters$.pipe(
