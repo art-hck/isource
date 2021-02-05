@@ -100,16 +100,18 @@ export class RequestListComponent implements AfterViewInit, OnDestroy, OnInit {
 
     // Review actions
     this.review$.pipe(
+      takeUntil(this.destroy$),
       tap(() => this.form.disable()),
       withLatestFrom(this.selectedRequests$),
       delayWhen(([approved, requests]) => this.store.dispatch(new Review(approved, requests.map(({ id }) => id)))),
       tap(() => this.fetchFilters$.next({})),
-      tap(([approved, requests]) => approved ? this.store.dispatch(new ToastActions.Success(
-        `Успешно согласовано ${this.pluralize.transform(requests.length, "заявка", "заявки", "заявок")}`
-      )) : this.store.dispatch(new ToastActions.Success(
-        `Отклонено ${this.pluralize.transform(requests.length, "заявка", "заявки", "заявок")}`)),
-      takeUntil(this.destroy$)
-    )).subscribe();
+      tap(([approved, requests]) => this.store.dispatch(
+        new ToastActions.Success(
+        approved ?
+          `Успешно согласовано ${this.pluralize.transform(requests.length, "заявка", "заявки", "заявок")}` :
+          `Отклонено ${this.pluralize.transform(requests.length, "заявка", "заявки", "заявок")}`
+      )))
+    ).subscribe();
 
     // Getting data
     this.fetchFilters$.pipe(
@@ -126,7 +128,10 @@ export class RequestListComponent implements AfterViewInit, OnDestroy, OnInit {
         return ({ page, filters, sort: { ...prevSort, ...currSort } });
       }, {} as { page?: number, filters?: RequestsListFilter, sort?: RequestsListSort }),
       switchMap(data => this.store.dispatch(new Fetch((data.page - 1) * this.pageSize, this.pageSize, data.filters, data.sort))),
-      tap(() => this.form.enable()),
+      tap(() => {
+        this.form.enable();
+        this.form.get('checked').setValue(false);
+      }),
       takeUntil(this.destroy$)
     ).subscribe();
 
