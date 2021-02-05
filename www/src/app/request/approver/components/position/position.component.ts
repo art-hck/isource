@@ -47,7 +47,9 @@ export class PositionComponent implements OnInit {
 
     this.bc.breadcrumbs = [
       { label: 'Заявки', link: `/requests/approver` },
-      { label: `Заявка №${position.request.number}`, link: `/requests/approver/${this.requestId}` },
+      { label: `Заявка №${position.request.number}`, link: `/requests/approver/${this.requestId}`, queryParams: {
+          showOnlyApproved: position.status === "PROOF_OF_NEED" ? '0' : '1'
+        } },
       { label: position.name, link: `/requests/approver/${this.requestId}/${position.id}` }
     ];
   }
