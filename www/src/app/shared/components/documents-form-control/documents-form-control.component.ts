@@ -1,8 +1,17 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, forwardRef, Input, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, forwardRef, Inject, Input, Output } from '@angular/core';
 import { RequestDocument } from "../../../request/common/models/request-document";
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
-import { AppFile } from "../file/file";
+import { ControlValueAccessor, FormBuilder, NG_VALUE_ACCESSOR } from "@angular/forms";
+import { AppFile, AppFileExtensions } from "../file/file";
 import { AppConfig } from "../../../config/app.config";
+import { APP_CONFIG, GpnmarketConfigInterface } from "../../../core/config/gpnmarket-config.interface";
+import { ContragentService } from "../../../contragent/services/contragent.service";
+import { Store } from "@ngxs/store";
+import { EmployeeService } from "../../../employee/services/employee.service";
+import { UsersGroupService } from "../../../core/services/users-group.service";
+import { ActivatedRoute, Router } from "@angular/router";
+import { UxgBreadcrumbsService } from "uxg";
+import { UserInfoService } from "../../../user/service/user-info.service";
+import { DadataType } from "@kolkov/ngx-dadata";
 
 @Component({
   selector: 'app-documents-form-control',
@@ -23,9 +32,12 @@ export class DocumentsFormControlComponent implements ControlValueAccessor {
   @Input() docType = 'ТКП';
   @Output() select = new EventEmitter<AppFile[]>();
   @Output() remove = new EventEmitter<number>();
-  totalFilesSizeLimit: number = AppConfig.files.totalFilesSizeLimit;
   onTouched: (value) => void;
   onChange: (value) => void;
+
+  constructor(
+    public totalFilesSizeLimit: number = AppConfig.files.totalFilesSizeLimit
+  ) {}
 
   removeFile(i) {
     this.remove.emit(i);
