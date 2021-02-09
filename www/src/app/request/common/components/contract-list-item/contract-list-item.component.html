@@ -100,7 +100,17 @@
               </app-document-simple-list>
             </div>
             <div class="app-col-3 app-ellipsis">{{ document.user.shortName }} <span class="app-ghost-color">{{document.created | date : 'dd.MM.yyyy HH:mm'}}</span></div>
-            <div class="app-col-6 app-ellipsis" [title]="document.comments">{{ document.comments }}</div>
+            <div class="app-col-5 app-ellipsis" [title]="document.comments">
+              {{ document.comments }}
+            </div>
+            <div class="app-col-1 app-ellipsis">
+              <button uxgButton link lg icon *ngIf="document.documentSignatures.length"
+                      (click)="onDownloadDocumentWithSign(document)"
+                      type="button" class="btn-download"
+                      title="Скачать печатную форму документа с подписями">
+                <uxg-icon shape="app-download"></uxg-icon>
+              </button>
+            </div>
           </div>
         </div>
       </ng-container>

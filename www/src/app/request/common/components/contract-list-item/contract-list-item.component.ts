@@ -17,6 +17,8 @@ import { takeUntil } from "rxjs/operators";
 import { ContractActions } from "../../../customer/actions/contract.actions";
 import SignDocument = ContractActions.SignDocument;
 import { FeatureService } from "../../../../core/services/feature.service";
+import { RequestDocument } from "../../models/request-document";
+import { DocumentsService } from "../../services/documents.service";
 
 @Component({
   selector: 'app-contract-list-item',
@@ -79,7 +81,8 @@ export class ContractListItemComponent implements OnInit, OnChanges {
     private store: Store,
     public user: UserInfoService,
     private actions: Actions,
-    public featureService: FeatureService
+    public featureService: FeatureService,
+    private documentsService: DocumentsService
   ) {}
 
   ngOnInit() {
@@ -182,6 +185,13 @@ export class ContractListItemComponent implements OnInit, OnChanges {
 
   ngOnChanges() {
     this.form.get('files').setValidators(this.canSend ? Validators.required : null);
+  }
+
+  onDownloadDocumentWithSign(document: RequestDocument) {
+    if (!document.id) {
+      return;
+    }
+    this.documentsService.downloadFileWithSign(document);
   }
 }
 

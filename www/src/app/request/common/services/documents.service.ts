@@ -25,4 +25,17 @@ export class DocumentsService {
         saveAs(data, fileName);
       });
   }
+
+  downloadFileWithSign(event: RequestDocument): void {
+    const file = event;
+    const fileName = file.filename;
+    const fileId = file.id;
+    this.api.post(
+      `requests/documents/${fileId}/download-with-sign`,
+      {},
+      {responseType: 'blob'})
+      .subscribe(data => {
+        saveAs(data, fileName);
+      });
+  }
 }
