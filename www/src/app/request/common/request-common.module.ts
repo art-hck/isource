@@ -30,6 +30,7 @@ import { ProcedureInfoComponent } from "./components/procedure-info/procedure-in
 import { ProposalGroupComponent } from "./components/proposal-group/proposal-group.component";
 import { ContractListItemComponent } from "./components/contract-list-item/contract-list-item.component";
 import { RequestCreateTemplateComponent } from "./components/request/request-create-template-modal/request-create-template.component";
+import { PositionMtrParamsComponent } from "./components/position-mtr-params/position-mtr-params.component";
 
 const RequestCommonModuleDeclarations = [
   CommercialProposalListDeprecatedComponent,
@@ -39,6 +40,7 @@ const RequestCommonModuleDeclarations = [
   DeliveryMonitorGoodCardComponent,
   RequestPieChartComponent,
   PositionHistoryComponent,
+  PositionMtrParamsComponent,
   PositionSearchFilterPipe,
   RequestGroupFormComponent,
   PositionsStatusChangeComponent,
