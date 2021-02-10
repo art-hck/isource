@@ -75,7 +75,7 @@ const routes: Routes = [
         loadChildren: () => import('./element-lazy.module').then(m => m.ElementLazyModule)
       },
       {
-        path: ':position-id',
+        path: ':positionId',
         component: PositionComponent
       }
     ]

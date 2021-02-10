@@ -16,22 +16,22 @@ export class PositionService {
   constructor(private api: HttpClient, private formDataService: FormDataService) {}
 
   info(requestId: Uuid, positionId: Uuid) {
-    const url = `requests/backoffice/${requestId}/positions/${positionId}/info`;
+    const url = `requests/customer/${requestId}/positions/${positionId}/info`;
     return this.api.get<RequestPosition>(url);
   }
 
-  changePositionsStatus(positionIds: Uuid[], status: PositionStatus, role: string, statusComment?: string) {
-    const url = `requests/${role}/positions/statuses/change`;
+  changePositionsStatus(positionIds: Uuid[], status: PositionStatus, statusComment?: string) {
+    const url = `requests/customer/positions/statuses/change`;
     return this.api.post<RequestPosition[]>(url, { positionIds, status, statusComment });
   }
 
   uploadDocuments(requestPosition: RequestPosition, files: File[]): Observable<RequestDocument[]> {
-    const url = `requests/backoffice/${requestPosition.request.id}/positions/${requestPosition.id}/documents/upload`;
+    const url = `requests/customer/${requestPosition.request.id}/positions/${requestPosition.id}/documents/upload`;
     return this.api.post<RequestDocument[]>(url, this.formDataService.toFormData({ files }));
   }
 
   documents(positionId: Uuid) {
-    const url = `requests/backoffice/positions/${positionId}/documents`;
+    const url = `requests/customer/positions/${positionId}/documents`;
     return this.api.get<PositionDocuments>(url);
   }
 }
