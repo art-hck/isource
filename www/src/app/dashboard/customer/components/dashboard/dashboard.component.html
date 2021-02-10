@@ -10,6 +10,7 @@
   [agreementsTotalCount]="agreementsTotalCount$ | async"
   [agreementsBar]="agreementsBar$ | async"
   [view]="view"
+  (onSendRating)="sendRating($event.requestId, $event.positionId, $event.rating)"
 >
 </app-dashboard-agreements>
 
