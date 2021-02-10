@@ -30,6 +30,17 @@
           </a>
         </div>
       </ng-container>
+
+      <ng-container *ngIf="position.mtrPositionId">
+        <div class="app-col separator"></div>
+
+        <div class="app-col">
+          <span class="app-secondary-color">
+            <span>Нормализована</span>
+            <uxg-icon shape="app-element" class="app-ghost-color"></uxg-icon>
+          </span>
+        </div>
+      </ng-container>
     </div>
   </div>
   <ng-container *ngIf="user.isCustomerApprover() && position.status === PositionStatus.PROOF_OF_NEED">
