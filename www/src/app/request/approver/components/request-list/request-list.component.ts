@@ -148,7 +148,7 @@ export class RequestListComponent implements AfterViewInit, OnDestroy, OnInit {
   clickOnTab(isReviewedTab: boolean) {
     const filters = { positionStatuses: [], positionNotStatuses: [] };
     filters[isReviewedTab ? 'positionNotStatuses' : 'positionStatuses'] = (isReviewedTab ?
-      [PositionStatus.PROOF_OF_NEED, PositionStatus.DRAFT] : [PositionStatus.PROOF_OF_NEED])
+      [PositionStatus.PROOF_OF_NEED, PositionStatus.DRAFT, PositionStatus.ON_CUSTOMER_APPROVAL] : [PositionStatus.PROOF_OF_NEED])
     ;
 
     this.fetchFilters$.next({ filters });
