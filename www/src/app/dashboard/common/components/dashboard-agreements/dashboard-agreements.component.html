@@ -26,6 +26,6 @@
     [agreements]="agreements"
     [dashboardView]="true"
     [agreementsView]="true"
-    (sendRating)="sendRating($event)">
+    (sendRating)="onSendRating.emit($event)">
   </app-agreements>
 </ng-container>

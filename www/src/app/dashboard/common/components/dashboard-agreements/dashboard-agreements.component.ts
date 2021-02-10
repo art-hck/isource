@@ -31,10 +31,6 @@ export class DashboardAgreementsComponent implements OnInit, OnDestroy {
   ngOnInit() {
   }
 
-  sendRating(data) {
-    this.onSendRating.emit(data);
-  }
-
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();
