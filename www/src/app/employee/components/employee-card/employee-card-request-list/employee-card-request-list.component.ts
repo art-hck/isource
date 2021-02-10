@@ -3,6 +3,8 @@ import { EmployeeInfoRequestItem } from "../../../models/employee-info";
 import { Router } from "@angular/router";
 import { RequestListItem } from "../../../../request/common/models/requests-list/requests-list-item";
 import { Uuid } from "../../../../cart/models/uuid";
+import { UserInfoService } from "../../../../user/service/user-info.service";
+import { PermissionType } from "../../../../auth/enum/permission-type";
 
 @Component({
   selector: 'app-employee-card-request-list',
@@ -14,8 +16,12 @@ export class EmployeeCardRequestListComponent {
   @Input() requests: EmployeeInfoRequestItem[];
   @Output() setResponsibleUser = new EventEmitter<{ requestId: Uuid, userId: Uuid }>();
   responsibleModalPayload: RequestListItem;
+  readonly permissionType = PermissionType;
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    public user: UserInfoService
+  ) {}
 
   calcPieChart(request: any): number {
     const completedItems =  (request.completedCount) / (request.positionCount) * 100;

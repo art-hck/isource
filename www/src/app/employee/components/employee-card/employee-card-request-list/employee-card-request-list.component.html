@@ -28,7 +28,7 @@
         </div>
       </div>
     </div>
-    <div class="app-col-auto" *ngIf="setResponsibleUser.observers.length">
+    <div class="app-col-auto" *ngIf="setResponsibleUser.observers.length && user.hasPermission(permissionType.POSITIONS_DISTRIBUTION_BETWEEN_BACKOFFICE_BUYERS)">
       <button uxgButton icon secondary (click)="$event.preventDefault(); $event.stopPropagation(); responsibleModalPayload = request.request">
         <uxg-icon shape="app-sort-arrows" [attr.dir]="'left'"></uxg-icon>
       </button>
