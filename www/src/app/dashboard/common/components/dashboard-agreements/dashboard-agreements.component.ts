@@ -20,7 +20,7 @@ export class DashboardAgreementsComponent implements OnInit, OnDestroy {
   @Input() agreementsBar: DashboardTaskItem[];
   @Input() tasksBar: DashboardTaskItem[];
   @Input() view: DashboardView = "tasks";
-  @Output() onSendRating = new EventEmitter();
+  @Output() sendRating = new EventEmitter();
 
   destroy$ = new Subject();
 
