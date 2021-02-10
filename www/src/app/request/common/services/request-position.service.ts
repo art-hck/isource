@@ -9,7 +9,7 @@ import { saveAs } from 'file-saver/src/FileSaver';
 import { RequestGroup } from "../models/request-group";
 import { GroupWithPositions } from "../models/groupWithPositions";
 import { RecommendedQuantity } from "../../customer/models/recommended-quantity";
-import { MtrPosition } from "../models/mtr-position";
+import { MtrPosition } from "isource-element/models/mtr-position";
 
 @Injectable()
 export class RequestPositionService {

@@ -18,7 +18,7 @@
       </div>
     </div>
 
-    <div class="attributes-section">
+    <div class="attributes-section" *ngIf="(mtrPositionInfo$ | async) as mtrPositionInfo">
       <div class="title app-uppercase app-ghost-color app-bold">
         <small>Основные характеристики</small>
       </div>
