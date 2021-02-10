@@ -7,7 +7,7 @@ import { Request } from "../../../common/models/request";
 import { RequestPositionList } from "../../../common/models/request-position-list";
 import { StateStatus } from "../../../common/models/state-status";
 import { ActivatedRoute } from "@angular/router";
-import { RequestService } from "../../../customer/services/request.service";
+import { PositionService } from "../../../customer/services/position.service";
 import { UxgBreadcrumbsService } from "uxg";
 import { Title } from "@angular/platform-browser";
 import { filter, switchMap, takeUntil, tap } from "rxjs/operators";
@@ -39,7 +39,7 @@ export class RequestComponent implements OnInit, OnDestroy {
 
   constructor(
     private route: ActivatedRoute,
-    private requestService: RequestService,
+    private positionService: PositionService,
     private bc: UxgBreadcrumbsService,
     private actions: Actions,
     public store: Store,
@@ -69,14 +69,14 @@ export class RequestComponent implements OnInit, OnDestroy {
   }
 
   rejectPositions(positionIds: Uuid[]) {
-    this.requestService.changePositionsStatus(positionIds, PositionStatus.CANCELED).subscribe(
+    this.positionService.changePositionsStatus(positionIds, PositionStatus.CANCELED).subscribe(
       () => this.store.dispatch(
         [new ToastActions.Success(positionIds.length > 1 ? positionIds.length + ' позиции отклонены' : 'Позиция отклонена'),
         new RefreshPositions(this.requestId, this.positionFilter)]));
   }
 
   approvePositions(positionIds: Uuid[]) {
-    this.requestService.changePositionsStatus(positionIds, PositionStatus.NEW).subscribe(
+    this.positionService.changePositionsStatus(positionIds, PositionStatus.NEW).subscribe(
       () => this.store.dispatch(
         [new ToastActions.Success(positionIds.length > 1 ? positionIds.length + ' позиции успешно согласованы' :
           'Позиция успешно согласована'),

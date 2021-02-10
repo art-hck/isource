@@ -4,6 +4,7 @@ import { PositionService } from "../../../back-office/services/position.service"
 import { RequestPosition } from "../../models/request-position";
 import { ToastActions } from "../../../../shared/actions/toast.actions";
 import { Store } from "@ngxs/store";
+import { PositionStatus } from "../../enum/position-status";
 
 @Component({
   selector: 'app-positions-status-change',
@@ -12,12 +13,12 @@ import { Store } from "@ngxs/store";
 })
 export class PositionsStatusChangeComponent implements OnInit, OnChanges {
 
-  protected _status: string;
+  protected _status: PositionStatus;
 
   @Input() positions: RequestPosition[];
   @Output() changeStatus = new EventEmitter<string>();
   @Input()
-  set status(value: string) {
+  set status(value: PositionStatus) {
     this._status = value;
     this.newStatus = value;
   }
@@ -25,7 +26,7 @@ export class PositionsStatusChangeComponent implements OnInit, OnChanges {
     return this._status;
   }
 
-  newStatus: string;
+  newStatus: PositionStatus;
   statuses = [];
   loading = false;
 
