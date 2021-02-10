@@ -30,6 +30,17 @@
           </a>
         </div>
       </ng-container>
+
+      <ng-container *ngIf="position.mtrPositionId">
+        <div class="app-col separator"></div>
+
+        <div class="app-col">
+          <span class="app-secondary-color">
+            <span>Нормализована</span>
+            <uxg-icon shape="app-element" class="app-ghost-color"></uxg-icon>
+          </span>
+        </div>
+      </ng-container>
     </div>
   </div>
   <ng-container *ngIf="user.isCustomerApprover() && position.status === PositionStatus.PROOF_OF_NEED">
@@ -61,18 +72,17 @@
     <uxg-tabs class="app-tabs-border">
       <uxg-tab-title #historyTab [active]="true">История</uxg-tab-title>
       <uxg-tab-title #docTab>Документы</uxg-tab-title>
+      <uxg-tab-title #mtrTab [hidden]="!position.mtrPositionId">Параметры МТР</uxg-tab-title>
       <!-- Таб «Коммерческие предложения» временно скрыт, задача gpn_market-3188 -->
-      <uxg-tab-title #offersTab [attr.disabled]="!position.linkedOffers.length" [hidden]="true">Коммерческие
-        предложения
-      </uxg-tab-title>
+      <uxg-tab-title #offersTab [attr.disabled]="!position.linkedOffers.length" [hidden]="true">Коммерческие предложения</uxg-tab-title>
       <uxg-tab-title #inspectionTab [hidden]="!showInspection(position)">Изготовление</uxg-tab-title>
-      <uxg-tab-title #deliveryTab [hidden]="!isAfterManufacturing(position) || isNotActual(position)">Доставка
-      </uxg-tab-title>
+      <uxg-tab-title #deliveryTab [hidden]="!isAfterManufacturing(position) || isNotActual(position)">Доставка</uxg-tab-title>
     </uxg-tabs>
     <br/>
     <ng-container *uxgTab="historyTab">
       <app-request-position-history [requestPosition]="position"></app-request-position-history>
     </ng-container>
+
     <ng-container *uxgTab="docTab">
       <div class="app-row">
         <div class="app-col">
@@ -107,31 +117,42 @@
         </h2>
       </ng-container>
     </ng-container>
+
+    <ng-container *uxgTab="mtrTab">
+      <app-position-mtr-params
+        [requestPosition]="position">
+      </app-position-mtr-params>
+    </ng-container>
+
     <ng-container *uxgTab="offersTab">
       <app-request-commercial-proposal-list-deprecated [requestPosition]="position" [requestId]="requestId"
                                                        [isCustomerView]="user.isCustomer()"></app-request-commercial-proposal-list-deprecated>
     </ng-container>
+
     <ng-container *uxgTab="inspectionTab">
       <app-request-delivery-monitor-digital-inspector
         [position]="position"></app-request-delivery-monitor-digital-inspector>
     </ng-container>
+
     <ng-container *uxgTab="deliveryTab">
       <app-request-delivery-monitor [requestPosition]="position" [requestId]="requestId"></app-request-delivery-monitor>
     </ng-container>
   </div>
+
   <ng-template #approverView>
-    <ng-container *ngIf="!datesWithDocuments || datesWithDocuments.length === 0; else documentList">
-      <div class="app-col app-card approver">
-        <br/>
-        <h2 class="text-center" [style.opacity]="0.1">
-          <uxg-icon shape="app-doc" size="270"></uxg-icon>
+    <div class="app-col">
+      <ng-container *ngIf="!datesWithDocuments || datesWithDocuments.length === 0; else documentList">
+        <div class="app-card approver">
           <br/>
-          К позиции пока не загружено ни <br/> одного документа
-        </h2>
-      </div>
-    </ng-container>
-    <ng-template #documentList>
-      <div class="app-col">
+          <h2 class="text-center" [style.opacity]="0.1">
+            <uxg-icon shape="app-doc" size="270"></uxg-icon>
+            <br/>
+            К позиции пока не загружено ни <br/> одного документа
+          </h2>
+        </div>
+      </ng-container>
+
+      <ng-template #documentList>
         <div class="app-card">
           <div class="app-row app-align-items-center">
             <div class="app-col">
@@ -158,8 +179,17 @@
             </div>
           </ng-container>
         </div>
-      </div>
-    </ng-template>
+      </ng-template>
+
+      <br>
+
+      <ng-container *ngIf="position.mtrPositionId">
+        <app-position-mtr-params
+          [title]="'Дополнительные параметры материала'"
+          [requestPosition]="position">
+        </app-position-mtr-params>
+      </ng-container>
+    </div>
   </ng-template>
 
   <!-- Сайдбар с информацией -->
