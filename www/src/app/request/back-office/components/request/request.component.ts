@@ -25,7 +25,6 @@ import AttachDocuments = RequestActions.AttachDocuments;
 import EditRequestName = RequestActions.EditRequestName;
 import ChangeResponsibleUser = RequestActions.ChangeResponsibleUser;
 import ChangeResponsibleUserPositions = RequestActions.ChangeResponsibleUserPositions;
-import { PositionService } from "../../services/position.service";
 
 @Component({
   templateUrl: './request.component.html',
@@ -52,14 +51,13 @@ export class RequestComponent implements OnInit, OnDestroy {
   readonly uploadFromTemplate = ({files}) => new UploadFromTemplate(this.requestId, files);
   readonly sendOnApprove = (position: RequestPosition): Observable<RequestPosition> => this.store
     .dispatch(new Publish(this.requestId, false, [position.id])).pipe(
-      switchMap(() => this.positionService.info(this.requestId, position.id))
+      switchMap(() => this.requestService.getRequestPosition(this.requestId, position.id))
     )
 
   constructor(
     public store: Store,
     private route: ActivatedRoute,
     private requestService: RequestService,
-    private positionService: PositionService,
     private bc: UxgBreadcrumbsService,
     private title: Title,
     private actions: Actions

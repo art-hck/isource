@@ -1,4 +1,4 @@
-<div class="app-row position-annotation">
+<div class="app-row">
   <!-- Горизонтальная инфа о позиции -->
   <div class="app-col app-table app-no-border actions">
     <div class="app-row app-align-items-center">
@@ -64,7 +64,6 @@
   </div>
 </div>
 
-<br/><br/>
 
 <div class="app-row">
 
@@ -85,7 +84,38 @@
     </ng-container>
 
     <ng-container *uxgTab="docTab">
-      <ng-container *ngTemplateOutlet="documentsTpl; context: {$implicit: documents}"></ng-container>
+      <div class="app-row">
+        <div class="app-col">
+          <h3>Все документы позиции</h3>
+        </div>
+
+        <ng-container *ngIf="featureService.authorize('uploadPositionDocuments')">
+          <button uxgButton secondary iconText appUploadFile
+                  (select)="uploadDocuments.emit({ files: $event, position: position })"
+                  [multiple]="true" [disabled]="isNotActual(position)">
+            <uxg-icon shape="app-upload"></uxg-icon>
+            <span>Загрузить документы</span>
+          </button>
+        </ng-container>
+
+      </div>
+      <div class="documents" *ngFor="let dateWithDocs of datesWithDocuments">
+        <h4>{{dateWithDocs.date}}</h4>
+        <app-document-simple-list
+          [gridable]="true"
+          [enableUpload]="false"
+          [uploadedDateHidden]="true"
+          [documents]="dateWithDocs.documents">
+        </app-document-simple-list>
+      </div>
+      <ng-container *ngIf="!datesWithDocuments || datesWithDocuments.length === 0">
+        <br/>
+        <h2 class="text-center" [style.opacity]="0.1">
+          <uxg-icon shape="app-doc" size="270"></uxg-icon>
+          <br/>
+          К позиции пока не загружено ни <br/> одного документа
+        </h2>
+      </ng-container>
     </ng-container>
 
     <ng-container *uxgTab="mtrTab">
@@ -100,7 +130,8 @@
     </ng-container>
 
     <ng-container *uxgTab="inspectionTab">
-      <app-request-delivery-monitor-digital-inspector [position]="position"></app-request-delivery-monitor-digital-inspector>
+      <app-request-delivery-monitor-digital-inspector
+        [position]="position"></app-request-delivery-monitor-digital-inspector>
     </ng-container>
 
     <ng-container *uxgTab="deliveryTab">
@@ -110,8 +141,48 @@
 
   <ng-template #approverView>
     <div class="app-col">
-      <ng-container *ngTemplateOutlet="documentsTpl; context: {$implicit: documents}"></ng-container>
-      <br/>
+      <ng-container *ngIf="!datesWithDocuments || datesWithDocuments.length === 0; else documentList">
+        <div class="app-card approver">
+          <br/>
+          <h2 class="text-center" [style.opacity]="0.1">
+            <uxg-icon shape="app-doc" size="270"></uxg-icon>
+            <br/>
+            К позиции пока не загружено ни <br/> одного документа
+          </h2>
+        </div>
+      </ng-container>
+
+      <ng-template #documentList>
+        <div class="app-card">
+          <div class="app-row app-align-items-center">
+            <div class="app-col">
+              <h3>Общие документы позиции</h3>
+            </div>
+            <div class="app-col-auto">
+              <button uxgButton icon link (click)="folded = !folded">
+                <uxg-icon shape="app-chevron" [attr.dir]="folded ? 'down' : 'up'"></uxg-icon>
+              </button>
+            </div>
+          </div>
+          <ng-container *ngIf="!folded">
+            <div class="app-table app-no-border">
+              <hr/>
+              <div class="documents" *ngFor="let dateWithDocs of datesWithDocuments">
+                <h4>{{dateWithDocs.date}}</h4>
+                <app-document-simple-list
+                  [gridable]="true"
+                  [enableUpload]="false"
+                  [uploadedDateHidden]="true"
+                  [documents]="dateWithDocs.documents">
+                </app-document-simple-list>
+              </div>
+            </div>
+          </ng-container>
+        </div>
+      </ng-template>
+
+      <br>
+
       <ng-container *ngIf="position.mtrPositionId">
         <app-position-mtr-params
           [title]="'Дополнительные параметры материала'"
@@ -123,136 +194,93 @@
 
   <!-- Сайдбар с информацией -->
   <div class="app-col app-col-aside">
-    <ng-container *ngIf="!user.isCustomerApprover()">
-      <h3 class="sector-title">Страницы согласований</h3>
+    <div class="app-row">
+      <div class="app-col">
+        <h3 class="sector-title">Общая информация о позиции</h3>
 
-      <!-- Счетчики статусов -->
-      <div class="app-section app-bold">
-        <a routerLink="../technical-proposals">Технические предложения</a>
-      </div>
-      <div class="app-section app-bold">
-        <a routerLink="../commercial-proposals">Коммерческие предложения</a>
-      </div>
-      <div class="app-section app-bold">
-        <a routerLink="../technical-commercial-proposals">Технико-коммерческие предложения</a>
-      </div>
+        <div class="app-ghost-color">Наименование МТР</div>
+        <div class="app-bold position-name">{{ position.name }}</div>
+        <br/>
 
-      <hr class="divider"/>
-    </ng-container>
-    <h3 class="sector-title">Общая информация о позиции</h3>
+        <div class="app-ghost-color">Количество</div>
+        <div class="app-bold quantity">{{ position.quantity }} {{ position.measureUnit | lowercase }}</div>
+        <br/>
 
-    <div class="app-ghost-color">Наименование МТР</div>
-    <div class="app-bold position-name">{{ position.name }}</div>
-    <br/>
+        <div class="app-ghost-color">Необходимый срок поставки</div>
+        <div class="app-bold delivery-date">
+          <ng-container *ngIf="!position.isDeliveryDateAsap; else asap">
+            {{ position.deliveryDate | date : "dd.MM.yyyy" }}
+          </ng-container>
+          <ng-template #asap>Как можно скорее</ng-template>
+        </div>
+        <br/>
 
-    <div class="app-ghost-color">Количество</div>
-    <div class="app-bold quantity">{{ position.quantity }} {{ position.measureUnit | lowercase }}</div>
-    <br/>
+        <div class="app-ghost-color">Базис поставки</div>
+        <div class="app-bold delivery-basis">{{ position.deliveryBasis }}</div>
+        <br/>
 
-    <div class="app-ghost-color">Необходимый срок поставки</div>
-    <div class="app-bold delivery-date">
-      <ng-container *ngIf="!position.isDeliveryDateAsap; else asap">
-        {{ position.deliveryDate | date : "dd.MM.yyyy" }}
-      </ng-container>
-      <ng-template #asap>Как можно скорее</ng-template>
-    </div>
-    <br/>
-
-    <div class="app-ghost-color">Базис поставки</div>
-    <div class="app-bold delivery-basis">{{ position.deliveryBasis }}</div>
-    <br/>
-
-    <div class="app-ghost-color">Условия оплаты</div>
-    <div class="app-bold paymentTerms">{{ position.paymentTerms }}</div>
-    <br/>
-    <ng-container *ngIf="position.startPrice">
-      <div class="app-ghost-color">Начальная максимальная цена без НДС</div>
-      <div class="app-bold price">{{ position.startPrice | currency: position.currency }}</div>
-      <br/>
-    </ng-container>
-    <div class="app-ghost-color">Документ, в соответствии с которым необходимо изготовление</div>
-    <div class="app-bold document">{{ position.productionDocument }}</div>
-    <br/>
-
-    <ng-container *ngIf="position.isDesignRequired">
-      <div class="app-ghost-color">Необходимость РКД</div>
-      <div class="app-bold rkd">Да, необходимо</div>
-      <br/>
-    </ng-container>
-
-    <ng-container *ngIf="getRelatedServicesList(position)">
-      <div class="app-ghost-color">Необходимость сопутствующих услуг</div>
-      <div class="app-bold"> {{ getRelatedServicesList(position) }}</div>
-      <br/>
-    </ng-container>
-
-
-    <ng-container *ngIf="position.comments">
-      <div class="app-ghost-color">Дополнительные требования</div>
-      <div class="app-bold comment">{{ position.comments }}</div>
-      <br/>
-    </ng-container>
-
-    <div *ngIf="isBeforeContractSigning(position) && featureService.authorize('editPosition')">
-      <uxg-popover #more [openOnHover]="true">
-        <button uxgButton secondary
-                uxgPopoverTrigger
-                (click)="edit.open()"
-                [disabled]="position.isEditingByAnotherUser || isNotActual(position)">
-          <uxg-icon shape="app-pen"></uxg-icon>
-          <span>Редактировать</span>
-        </button>
-
-        <ng-container *ngIf="position.isEditingByAnotherUser && !isNotActual(position)">
-          <div *uxgPopoverContent="PopoverContentDirection.bottomRight" (click)="more.hide()">
-            <div>Позиция находится на согласовании.</div>
-            <div>Редактирование недоступно.</div>
-          </div>
+        <div class="app-ghost-color">Условия оплаты</div>
+        <div class="app-bold paymentTerms">{{ position.paymentTerms }}</div>
+        <br/>
+        <ng-container *ngIf="position.startPrice">
+          <div class="app-ghost-color">Начальная максимальная цена без НДС</div>
+          <div class="app-bold price">{{ position.startPrice | currency: position.currency }}</div>
+          <br/>
         </ng-container>
-      </uxg-popover>
-    </div>
+        <div class="app-ghost-color">Документ, в соответствии с которым необходимо изготовление</div>
+        <div class="app-bold document">{{ position.productionDocument }}</div>
+        <br/>
 
-    <uxg-modal #edit size="l">
-      <h2>Редактирование общей информации по позиции</h2>
-      <app-request-position-form
-        *ngIf="edit.state"
-        [requestId]="requestId"
-        [(position)]="position"
-        (cancel)="edit.close()"
-        (positionChange)="positionChange.emit($event); edit.close()"
-        [onDrafted]="onDrafted"
-      ></app-request-position-form>
-    </uxg-modal>
+        <ng-container *ngIf="position.isDesignRequired">
+          <div class="app-ghost-color">Необходимость РКД</div>
+          <div class="app-bold rkd">Да, необходимо</div>
+          <br/>
+        </ng-container>
+
+        <ng-container *ngIf="getRelatedServicesList(position)">
+          <div class="app-ghost-color">Необходимость сопутствующих услуг</div>
+          <div class="app-bold"> {{ getRelatedServicesList(position) }}</div>
+          <br/>
+        </ng-container>
+
+
+        <ng-container *ngIf="position.comments">
+          <div class="app-ghost-color">Дополнительные требования</div>
+          <div class="app-bold comment">{{ position.comments }}</div>
+          <br/>
+        </ng-container>
+
+        <div *ngIf="isBeforeContractSigning(position) && featureService.authorize('editPosition')">
+          <uxg-popover #more [openOnHover]="true">
+            <button uxgButton secondary
+                    uxgPopoverTrigger
+                    (click)="edit.open()"
+                    [disabled]="position.isEditingByAnotherUser || isNotActual(position)">
+              <uxg-icon shape="app-pen"></uxg-icon>
+              <span>Редактировать</span>
+            </button>
+
+            <ng-container *ngIf="position.isEditingByAnotherUser && !isNotActual(position)">
+              <div *uxgPopoverContent="PopoverContentDirection.bottomRight" (click)="more.hide()">
+                <div>Позиция находится на согласовании.</div>
+                <div>Редактирование недоступно.</div>
+              </div>
+            </ng-container>
+          </uxg-popover>
+        </div>
+
+        <uxg-modal #edit size="l">
+          <h2>Редактирование общей информации по позиции</h2>
+          <app-request-position-form
+            *ngIf="edit.state"
+            [requestId]="requestId"
+            [(position)]="position"
+            (cancel)="edit.close()"
+            (positionChange)="positionChange.emit($event); edit.close()"
+            [onDrafted]="onDrafted"
+          ></app-request-position-form>
+        </uxg-modal>
+      </div>
+    </div>
   </div>
 </div>
-
-<ng-template let-documents #documentsTpl>
-  <ng-container *ngIf="documents">
-    <ng-container *ngFor="let item of documents | keyvalue: originalOrder">
-      <app-position-document-card
-        *ngIf="item.value.length"
-        [disabled]="isNotActual(position)"
-        (upload)="uploadDocuments.emit({ files: $event, position: position })"
-        [canUpload]="item.key === 'general' && featureService.authorize('uploadPositionDocuments')"
-        [documents]="item.value"
-        [label]="positionDocumentsLabels[item.key]"
-      ></app-position-document-card>
-    </ng-container>
-
-    <ng-container *ngIf="docsLength === 0">
-      <br/>
-      <div class="text-center">
-        <h2  [style.opacity]="0.1">
-          <uxg-icon shape="app-doc" size="270"></uxg-icon>
-          <br/>
-          К позиции пока не загружено ни <br/> одного документа
-        </h2>
-        <br/>
-        <button uxgButton secondary iconText appUploadFile (select)="uploadDocuments.emit({files: $event, position: position})" [multiple]="true">
-          <uxg-icon shape="app-upload"></uxg-icon>
-          <span>Загрузить документы</span>
-        </button>
-      </div>
-    </ng-container>
-  </ng-container>
-</ng-template>

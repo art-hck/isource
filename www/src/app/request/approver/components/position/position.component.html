@@ -2,7 +2,6 @@
   <app-request-position
     [requestId]="requestId"
     [position]="position"
-    [documents]="documents$ | async"
     (rejectPosition)="rejectPositions([$event.id])"
     (approvePosition)="approvePositions([$event.id])"
   ></app-request-position>

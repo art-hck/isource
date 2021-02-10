@@ -23,7 +23,7 @@ const routes: Routes = [
         data: { hideTitle: true }
       },
       {
-        path: ':positionId',
+        path: ':position-id',
         component: PositionComponent
       }
     ]

@@ -2,16 +2,18 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Uuid } from "../../../cart/models/uuid";
 import { RequestPosition } from "../../common/models/request-position";
-import { Observable } from "rxjs";
+import { Observable, of } from "rxjs";
 import { map } from "rxjs/operators";
 import { RequestPositionList } from "../../common/models/request-position-list";
 import { RequestGroup } from "../../common/models/request-group";
 import { Request } from "../../common/models/request";
+import { RequestDocument } from "../../common/models/request-document";
 import { FormDataService } from "../../../shared/services/form-data.service";
 import { Page } from "../../../core/models/page";
 import { RequestsList } from "../../common/models/requests-list/requests-list";
 import { AvailableFilters } from "../models/available-filters";
 import { RecommendedPositions } from "../models/recommended-positions";
+import { PositionStatus } from "../../common/enum/position-status";
 import { PositionFilter } from "../../common/models/position-filter";
 
 @Injectable({
@@ -156,6 +158,18 @@ export class RequestService {
     return this.api.post(url, { id: requestId, name: requestName });
   }
 
+  uploadDocuments(requestPosition: RequestPosition, files: File[]): Observable<RequestDocument[]> {
+    const formData = new FormData();
+    files.forEach(file => {
+      formData.append('files[]', file, file.name);
+    });
+
+    return this.api.post<RequestDocument[]>(
+      `requests/customer/${requestPosition.request.id}/positions/${requestPosition.id}/documents/upload`,
+      formData
+    );
+  }
+
   sendForAgreement(requestId: Uuid, selectedOffers: object) {
     const url = `requests/customer/${requestId}/commercial-proposals/accept`;
     return this.api.post(url, selectedOffers);
@@ -177,6 +191,15 @@ export class RequestService {
     const url = `#profile#request-techmaps/recommended`;
     return this.api.post<RecommendedPositions[]>(url, {
       commodities: positions
+    });
+  }
+
+  changePositionsStatus(positionIds: Uuid[], status: PositionStatus, statusComment?: string) {
+    const url = `requests/customer/positions/statuses/change`;
+    return this.api.post<RequestPosition[]>(url, {
+      positionIds,
+      status,
+      statusComment
     });
   }
 }

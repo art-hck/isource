@@ -1,9 +1,5 @@
 @import "src/theme";
 
-.position-annotation {
-  margin-top: -24px;
-}
-
 .dashboard {
   margin-top: -17px;
   margin-bottom: 50px;
@@ -35,7 +31,15 @@
 
   .app-position-status-icon {
     margin-right: 7px;
-    margin-left: -19px;
+  }
+}
+
+.documents {
+  margin-top: 30px;
+
+  h4 {
+    font-weight: bold;
+    margin-bottom: 7px;
   }
 }
 

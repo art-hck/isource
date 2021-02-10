@@ -8,7 +8,9 @@ import { RequestPositionList } from "../../common/models/request-position-list";
 import { RequestGroup } from "../../common/models/request-group";
 import { Request } from "../../common/models/request";
 import { PositionStatus } from "../../common/enum/position-status";
+import { User } from "../../../user/models/user";
 import { UserInfoService } from "../../../user/service/user-info.service";
+import { RequestDocument } from "../../common/models/request-document";
 import { FormDataService } from "../../../shared/services/form-data.service";
 import { Page } from "../../../core/models/page";
 import { RequestsList } from "../../common/models/requests-list/requests-list";
@@ -46,6 +48,11 @@ export class RequestService {
     );
   }
 
+  getRequestPosition(requestId: Uuid, positionId: Uuid): Observable<RequestPosition> {
+    const url = `requests/backoffice/${requestId}/positions/${positionId}/info`;
+    return this.api.get<RequestPosition>(url);
+  }
+
   requestStatusCount() {
     const url = `requests/backoffice/counts-on-different-statuses`;
     return this.api.get<RequestStatusCount>(url);
@@ -71,6 +78,19 @@ export class RequestService {
     return this.api.post<{status: PositionStatus, statusLabel: string, availableStatuses: string[]}>(url, {
       status: status
     });
+  }
+
+  // Функция не подсвечивается, но она на самом деле используется
+  uploadDocuments(requestPosition: RequestPosition, files: File[]): Observable<RequestDocument[]> {
+    const formData = new FormData();
+    files.forEach(file => {
+      formData.append('files[]', file, file.name);
+    });
+
+    return this.api.post<RequestDocument[]>(
+      `requests/backoffice/${requestPosition.request.id}/positions/${requestPosition.id}/documents/upload`,
+      formData
+    );
   }
 
   changeResponsibleUser(id: Uuid, user: Uuid) {
