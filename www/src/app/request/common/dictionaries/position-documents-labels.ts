@@ -5,6 +5,6 @@ export const PositionDocumentsLabels: { [key in keyof PositionDocuments]: string
   tp: "Документы ТП",
   cp: "Документы КП",
   tcp: "Документы ТКП",
-  contract: "Договора",
+  contract: "Договоры",
   rkd: "Документы РКД",
-}
+};

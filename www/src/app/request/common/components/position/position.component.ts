@@ -39,7 +39,7 @@ export class PositionComponent {
   ) {}
 
   get docsLength() {
-    return Object.values(this.documents ?? {}).reduce((count, docs) => count += docs.length, 0)
+    return Object.values(this.documents ?? {}).reduce((count, docs) => count += docs.length, 0);
   }
 
   showInspection(position: RequestPosition): boolean {

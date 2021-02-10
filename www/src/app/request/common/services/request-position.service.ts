@@ -60,9 +60,4 @@ export class RequestPositionService {
     const url = `#intelplan#forecasts-by-name`;
     return this.api.get<RecommendedQuantity[]>(url, {params: {name: position}});
   }
-
-  getPositionMtrParams(mtrPositionId: Uuid): Observable<MtrPosition> {
-    const url = `#element#mtr/position-by-id/${mtrPositionId}`;
-    return this.api.get<MtrPosition>(url, {});
-  }
 }

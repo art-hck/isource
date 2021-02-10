@@ -1,8 +1,7 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { RequestPosition } from "../../models/request-position";
-import { RequestPositionService } from "../../services/request-position.service";
 import { Observable } from "rxjs";
-import { MtrPosition } from "isource-element/models/mtr-position";
+import { MtrPosition, NormalizationService } from "isource-element";
 
 @Component({
   selector: 'app-position-mtr-params',
@@ -15,16 +14,13 @@ export class PositionMtrParamsComponent implements OnChanges {
   @Input() requestPosition: RequestPosition;
   mtrPositionInfo$: Observable<MtrPosition>;
 
-  constructor(
-    private positionService: RequestPositionService,
-  ) { }
+  constructor(private normalizationService: NormalizationService) { }
 
   ngOnChanges(changes: SimpleChanges) {
     this.getPositionMtrParams();
   }
 
   getPositionMtrParams() {
-    // todo Дёргать метод из подключаемого модуля элемента вместо сервиса
-    this.mtrPositionInfo$ = this.positionService.getPositionMtrParams(this.requestPosition.mtrPositionId);
+    this.mtrPositionInfo$ = this.normalizationService.mtr(this.requestPosition.mtrPositionId);
   }
 }

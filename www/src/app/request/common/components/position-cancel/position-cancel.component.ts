@@ -13,6 +13,7 @@ import { RequestActions as CustomerRequestActions } from "../../../customer/acti
 import CustomerRefreshPositions = CustomerRequestActions.RefreshPositions;
 import CustomerRefreshRequest = CustomerRequestActions.Refresh;
 import { UserInfoService } from "../../../../user/service/user-info.service";
+import { PositionStatus } from "../../enum/position-status";
 
 @Component({
   selector: 'app-position-cancel',
@@ -48,7 +49,7 @@ export class PositionCancelComponent implements OnInit {
 
   submit() {
     const positionIds = this.positions.map(({ id }: RequestPosition) => id);
-    const [newStatus, role] = this.user.isCustomer() ? ['CANCELED', 'customer'] : ['NOT_RELEVANT', 'backoffice'];
+    const [newStatus, role] = this.user.isCustomer() ? [PositionStatus.CANCELED, 'customer'] : [PositionStatus.NOT_RELEVANT, 'backoffice'];
     this.positionService.changePositionsStatus(positionIds, newStatus, role, this.form.value).subscribe(() => {
       this.user.isCustomer() ?
         this.store.dispatch([new CustomerRefreshRequest(this.requestId), new CustomerRefreshPositions(this.requestId)]) :
