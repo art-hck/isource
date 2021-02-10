@@ -217,6 +217,16 @@
         <uxg-switcher class="app-col-auto" #onlyOpenTasksRef formControlName="onlyOpenAgreements"></uxg-switcher>
       </div>
     </uxg-filter-section>
+
+    <uxg-filter-section
+      *ngIf="form.get('onlyWithoutResponsibleUser') && feature.authorize('filterRequestsByOnlyWithoutResponsibleUser')"
+      label="Есть неназначенные позиции">
+      <div class="app-row app-align-items-center">
+        <label class="app-col" (click)="onlyWithoutResponsibleUserRef.switch($event)">Есть неназначенные позиции</label>
+        <uxg-switcher class="app-col-auto" #onlyWithoutResponsibleUserRef formControlName="onlyWithoutResponsibleUser"></uxg-switcher>
+      </div>
+    </uxg-filter-section>
+
     <uxg-filter-section label="Заказчик" *ngIf="form.get('customers')">
       <uxg-filter-checkbox-list
         formControlName="customers"
