@@ -62,7 +62,7 @@ export class RequestPositionService {
   }
 
   getPositionMtrParams(positionId: Uuid): Observable<MtrPosition> {
-    const url = `#element#api/v1/mtr/position-by-id/${positionId}`;
+    const url = `#element#mtr/position-by-id/${positionId}`;
     return this.api.get<MtrPosition>(url, {});
   }
 }
