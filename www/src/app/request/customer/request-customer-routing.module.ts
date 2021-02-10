@@ -71,7 +71,7 @@ const routes: Routes = [
         data: { title: "Рабочая конструкторская документация" }
       },
       {
-        path: ':position-id',
+        path: ':positionId',
         component: PositionComponent
       }
     ]
