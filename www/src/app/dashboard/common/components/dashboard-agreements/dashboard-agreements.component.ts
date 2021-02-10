@@ -20,6 +20,7 @@ export class DashboardAgreementsComponent implements OnInit, OnDestroy {
   @Input() agreementsBar: DashboardTaskItem[];
   @Input() tasksBar: DashboardTaskItem[];
   @Input() view: DashboardView = "tasks";
+  @Output() onSendRating = new EventEmitter();
 
   destroy$ = new Subject();
 
@@ -28,6 +29,10 @@ export class DashboardAgreementsComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
+  }
+
+  sendRating(data) {
+    this.onSendRating.emit(data);
   }
 
   ngOnDestroy() {

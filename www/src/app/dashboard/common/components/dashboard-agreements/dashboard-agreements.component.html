@@ -25,6 +25,7 @@
   <app-agreements
     [agreements]="agreements"
     [dashboardView]="true"
-    [agreementsView]="true">
+    [agreementsView]="true"
+    (sendRating)="sendRating($event)">
   </app-agreements>
 </ng-container>
