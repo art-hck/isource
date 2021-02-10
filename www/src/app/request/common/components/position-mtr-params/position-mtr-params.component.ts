@@ -25,6 +25,6 @@ export class PositionMtrParamsComponent implements OnChanges {
 
   getPositionMtrParams() {
     // todo Дёргать метод из подключаемого модуля элемента вместо сервиса
-    this.mtrPositionInfo$ = this.positionService.getPositionMtrParams(this.requestPosition.id);
+    this.mtrPositionInfo$ = this.positionService.getPositionMtrParams(this.requestPosition.mtrPositionId);
   }
 }
