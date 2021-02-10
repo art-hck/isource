@@ -59,6 +59,7 @@ export interface IFeatureList {
   sendForApprovalDesignDocList;
   addOrEditDesignDocuments;
   sentToApprove;
+  filterRequestsByOnlyWithoutResponsibleUser;
   backofficeAgreements;
   customerAgreements;
   recommendedPositions;
@@ -132,6 +133,7 @@ export const FeatureList: { [key in keyof IFeatureList]: Feature } = {
   sendForApprovalDesignDocList: { roles: [UserRole.SENIOR_BACKOFFICE, UserRole.BACKOFFICE_BUYER] },
   addOrEditDesignDocuments: { roles: [UserRole.SENIOR_BACKOFFICE, UserRole.BACKOFFICE_BUYER] },
   sentToApprove: { roles: [UserRole.SENIOR_BACKOFFICE, UserRole.BACKOFFICE] },
+  filterRequestsByOnlyWithoutResponsibleUser: { roles: [UserRole.SENIOR_BACKOFFICE, UserRole.BACKOFFICE_OBSERVER] },
   backofficeAgreements: { roles: [UserRole.SENIOR_BACKOFFICE, UserRole.BACKOFFICE] },
   customerAgreements: { roles: [UserRole.CUSTOMER] },
   recommendedPositions: { roles: [UserRole.CUSTOMER]},

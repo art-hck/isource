@@ -50,6 +50,7 @@ export class RequestListComponent implements OnInit, OnDestroy {
   readonly form = this.fb.group({
     requestNameOrNumber: '',
     positionStatuses: [[]],
+    onlyWithoutResponsibleUser: false,
     onlyOpenTasks: false,
     customers: [[]]
   });
