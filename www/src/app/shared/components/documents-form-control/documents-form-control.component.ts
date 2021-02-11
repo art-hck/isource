@@ -34,9 +34,10 @@ export class DocumentsFormControlComponent implements ControlValueAccessor {
   @Output() remove = new EventEmitter<number>();
   onTouched: (value) => void;
   onChange: (value) => void;
+  totalFilesSizeLimit: number = this.appConfig.files.totalFilesSizeLimit;
 
   constructor(
-    public totalFilesSizeLimit: number = AppConfig.files.totalFilesSizeLimit
+    @Inject(APP_CONFIG) public appConfig: GpnmarketConfigInterface,
   ) {}
 
   removeFile(i) {
