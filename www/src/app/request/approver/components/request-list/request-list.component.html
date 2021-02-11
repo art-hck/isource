@@ -25,7 +25,6 @@
       <div class="app-table app-no-border">
         <div class="app-row app-uppercase app-ghost-color app-bold app-align-items-center">
           <!-- Царь-чекбокс -->
-
           <div class="app-col select app-col-auto" *ngIf="!approvedTab.active">
             <uxg-checkbox *ngFor="let form of [form]" formControlName="checked" uxgSelectAllFor="requests"></uxg-checkbox>
           </div>
@@ -45,7 +44,7 @@
       <div class="app-table" [class.disabled]="(status$ | async) !== 'received'">
         <ng-container formArrayName="requests" *ngFor="let request of requests$ | async; index as i">
           <a class="app-row app-link-no-color" [routerLink]="request.request.id" [queryParams]="{showOnlyApproved: approvedTab.active ? 1:0 }" >
-            <div class="app-col-auto select app-bold" *ngIf="!approvedTab.active" [formGroupName]="i">
+            <div class="app-col-auto select app-bold" *ngIf="!approvedTab.active && formRequests.at(i)" [formGroupName]="i">
               <uxg-checkbox formControlName="checked"></uxg-checkbox>
             </div>
             <div class="app-col-auto number app-bold">{{ request.request.number | number:'1.0-2' }}</div>
