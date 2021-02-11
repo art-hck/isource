@@ -248,7 +248,10 @@
           К позиции пока не загружено ни <br/> одного документа
         </h2>
         <br/>
-        <button uxgButton secondary iconText appUploadFile (select)="uploadDocuments.emit({files: $event, position: position})" [multiple]="true">
+
+        <button *ngIf="featureService.authorize('uploadPositionDocuments')"
+                uxgButton secondary iconText appUploadFile
+                (select)="uploadDocuments.emit({files: $event, position: position})" [multiple]="true">
           <uxg-icon shape="app-upload"></uxg-icon>
           <span>Загрузить документы</span>
         </button>
