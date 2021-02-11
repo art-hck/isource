@@ -7,6 +7,7 @@ import { FormBuilder } from "@angular/forms";
 import { map, startWith } from "rxjs/operators";
 import { searchPosition } from "../../../../../shared/helpers/search";
 import { Observable } from "rxjs";
+import { FeatureService } from "../../../../../core/services/feature.service";
 
 @Component({
   selector: 'app-procedure-grid',
@@ -22,8 +23,11 @@ export class ProcedureGridComponent implements OnInit {
   readonly form = this.fb.group({ search: '' });
   procedurePositions$: Observable<RequestPosition[]>;
 
-  constructor(@Inject(APP_CONFIG) private appConfig: GpnmarketConfigInterface,
-              private  fb: FormBuilder) { }
+  constructor(
+    @Inject(APP_CONFIG) private appConfig: GpnmarketConfigInterface,
+    private fb: FormBuilder,
+    public featureService: FeatureService
+  ) { }
 
   ngOnInit(): void {
     this.procedurePositions$ = this.form.get('search').valueChanges.pipe(

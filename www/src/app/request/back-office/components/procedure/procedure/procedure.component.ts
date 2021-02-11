@@ -4,6 +4,7 @@ import moment from "moment";
 import { RequestDocument } from "../../../../common/models/request-document";
 import { APP_CONFIG, GpnmarketConfigInterface } from "../../../../../core/config/gpnmarket-config.interface";
 import { Request } from "../../../../common/models/request";
+import { FeatureService } from "../../../../../core/services/feature.service";
 
 @Component({
   selector: 'app-request-procedure',
@@ -70,6 +71,9 @@ export class ProcedureComponent {
       !this.canRetradeProcedure();
   }
 
-  constructor(@Inject(APP_CONFIG) private appConfig: GpnmarketConfigInterface) {
+  constructor(
+    @Inject(APP_CONFIG) private appConfig: GpnmarketConfigInterface,
+    public featureService: FeatureService
+  ) {
   }
 }
