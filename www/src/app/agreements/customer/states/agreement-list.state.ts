@@ -3,7 +3,7 @@ import { StateStatus } from "../../../request/common/models/state-status";
 import { Action, Selector, State, StateContext } from "@ngxs/store";
 import { Injectable } from "@angular/core";
 import { patch } from "@ngxs/store/operators";
-import { switchMap, tap } from "rxjs/operators";
+import { tap } from "rxjs/operators";
 import { AgreementsService } from "../services/agreements.service";
 import { AgreementListActions } from "../actions/agreement-list.actions";
 import Fetch = AgreementListActions.Fetch;
