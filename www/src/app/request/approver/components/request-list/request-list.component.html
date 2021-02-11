@@ -111,7 +111,7 @@
   <button uxgButton outline lg (click)="form.get('checked').setValue(true)">Выбрать все</button>
   <button uxgButton outline lg (click)="form.get('checked').setValue(false)">Сбросить</button>
   <div class="app-col"></div>
-  <div class="app-col-auto"><span class="app-ghost-color">Выбрано заявок: </span><span>{{0}}</span></div>
+  <div class="app-col-auto"><span class="app-ghost-color">Выбрано заявок: </span><span>{{(selectedRequests$ | async)?.length}}</span></div>
   <button uxgButton secondary lg (click)="review$.next(false)" [disabled]="form.disabled || form.invalid">Отклонить</button>
   <button uxgButton primary lg (click)="review$.next(true)" [disabled]="form.disabled || form.invalid">Подтвердить</button>
 </uxg-footer>
