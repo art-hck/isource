@@ -16,10 +16,19 @@
   <ng-container *ngIf="!folded">
     <hr/>
     <app-document-simple-list
+      *ngIf="documents.length; else emptyList"
       [gridable]="true"
       [enableUpload]="false"
       [uploadedDateHidden]="true"
       [documents]="documents">
     </app-document-simple-list>
+
+    <ng-template #emptyList>
+      <div class="app-row">
+        <div class="app-col app-ghost-color no-files-label">
+          Документы отсутствуют
+        </div>
+      </div>
+    </ng-template>
   </ng-container>
 </div>
