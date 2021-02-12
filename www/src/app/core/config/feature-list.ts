@@ -23,6 +23,8 @@ export interface IFeatureList {
   employees;
   contractGeneration;
   createProcedure;
+  prolongProcedure;
+  retradeProcedure;
   createTechnicalProposal;
   editTechnicalProposal;
   cancelPublishTechnicalProposal;
@@ -98,6 +100,8 @@ export const FeatureList: { [key in keyof IFeatureList]: Feature } = {
   employees: { roles: [UserRole.SENIOR_BACKOFFICE, UserRole.BACKOFFICE_OBSERVER] },
   contractGeneration: { roles: [UserRole.BACKOFFICE] },
   createProcedure: { roles: [UserRole.BACKOFFICE_BUYER, UserRole.SENIOR_BACKOFFICE] },
+  prolongProcedure: { roles: [UserRole.BACKOFFICE_BUYER, UserRole.SENIOR_BACKOFFICE] },
+  retradeProcedure: { roles: [UserRole.BACKOFFICE_BUYER, UserRole.SENIOR_BACKOFFICE] },
   createTechnicalProposal: { roles: [UserRole.BACKOFFICE_BUYER, UserRole.SENIOR_BACKOFFICE] },
   editTechnicalProposal: { roles: [UserRole.BACKOFFICE_BUYER, UserRole.SENIOR_BACKOFFICE] },
   cancelPublishTechnicalProposal: { roles: [UserRole.BACKOFFICE_BUYER, UserRole.SENIOR_BACKOFFICE] },
