@@ -230,7 +230,7 @@
   <ng-container *ngIf="documents">
     <ng-container *ngFor="let item of documents | keyvalue: originalOrder">
       <app-position-document-card
-        *ngIf="item.value.length"
+        *ngIf="item.value.length || (item.key === 'general' && docsLength > 0)"
         [disabled]="isNotActual(position)"
         (upload)="uploadDocuments.emit({ files: $event, position: position })"
         [canUpload]="item.key === 'general' && featureService.authorize('uploadPositionDocuments')"
