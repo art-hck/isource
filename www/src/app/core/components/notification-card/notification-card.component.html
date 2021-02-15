@@ -27,6 +27,23 @@
       </div>
     </ng-container>
 
+    <!-- Назначение младшего БО как ответственного по заявке -->
+    <ng-container *ngSwitchCase="'REQUEST_CHANGE_RESPONSIBLE_USER'">
+      <div class="app-row notification-card-header app-primary-color" [ngClass]="'status-' + notification?.body?.type + '-badge'">
+        <b class="app-col">Вы назначены исполнителем по заявке</b>
+      </div>
+
+      <div class="app-row notification-card-request app-secondary-color">
+        <div class="app-col app-ellipsis" title="№ {{ notification?.body?.requestNumber || notification?.body?.rows[0]?.requestNumber }} | {{ notification?.body?.requestName }}">
+          № {{ notification?.body?.requestNumber || notification?.body?.rows[0]?.requestNumber }} | {{ notification?.body?.requestName }}
+        </div>
+      </div>
+
+      <div class="app-row position-item" *ngFor="let position of notification?.body?.requestPositions.slice(0,2)">
+        <div class="app-col app-secondary-color app-ellipsis"> {{position.name}} {{position.quantity}} {{position.measureUnit}} </div>
+      </div>
+    </ng-container>
+
     <!-- Новая заявка -->
     <ng-container *ngSwitchCase="'NEW_REQUEST'">
       <div class="app-row notification-card-header app-primary-color" [ngClass]="'status-' + notification?.body?.type + '-badge'">
