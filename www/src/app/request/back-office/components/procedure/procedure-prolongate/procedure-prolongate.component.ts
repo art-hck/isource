@@ -1,5 +1,4 @@
 import {
-  ChangeDetectorRef,
   Component, ElementRef,
   EventEmitter,
   Input,
@@ -10,7 +9,6 @@ import {
 } from '@angular/core';
 import { ToastActions } from "../../../../../shared/actions/toast.actions";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { CommercialProposalsService } from "../../../services/commercial-proposals.service";
 import { Store } from "@ngxs/store";
 import { Uuid } from "../../../../../cart/models/uuid";
 import * as moment from "moment";
@@ -84,8 +82,7 @@ export class ProcedureProlongateComponent implements OnChanges, OnDestroy {
   constructor(
     private procedureService: ProcedureService,
     private store: Store,
-    private fb: FormBuilder,
-    private cd: ChangeDetectorRef
+    private fb: FormBuilder
   ) {
   }
 
