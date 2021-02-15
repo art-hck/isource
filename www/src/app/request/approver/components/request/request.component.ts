@@ -6,7 +6,7 @@ import { Observable, Subject } from "rxjs";
 import { Request } from "../../../common/models/request";
 import { RequestPositionList } from "../../../common/models/request-position-list";
 import { StateStatus } from "../../../common/models/state-status";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { PositionService } from "../../../customer/services/position.service";
 import { UxgBreadcrumbsService } from "uxg";
 import { Title } from "@angular/platform-browser";
@@ -38,6 +38,7 @@ export class RequestComponent implements OnInit, OnDestroy {
   readonly refreshPositions = id => new RefreshPositions(id);
 
   constructor(
+    public router: Router,
     private route: ActivatedRoute,
     private positionService: PositionService,
     private bc: UxgBreadcrumbsService,
@@ -51,8 +52,21 @@ export class RequestComponent implements OnInit, OnDestroy {
     this.route.params.pipe(
       tap(({id}) => this.requestId = id),
       switchMap(({id}) => {
-        this.positionFilter = this.route.snapshot.queryParams.showOnlyApproved === '1' ?
-          { "notStatuses": [PositionStatus.PROOF_OF_NEED]} : { "statuses": [PositionStatus.PROOF_OF_NEED]};
+        if (!this.route.snapshot.queryParams.showOnlyApproved) {
+          this.request$.pipe(filter(request => !!request)).subscribe(request => {
+            const onlyApproved = request.status === 'ON_CUSTOMER_APPROVAL' ? '0' : '1';
+
+            this.positionFilter = onlyApproved === '0' ?
+              { "statuses": [PositionStatus.PROOF_OF_NEED]} :
+              { "notStatuses": [PositionStatus.PROOF_OF_NEED]};
+
+            this.router.navigateByUrl(this.router.url + '?showOnlyApproved=' + onlyApproved);
+          });
+        } else {
+          this.positionFilter = this.route.snapshot.queryParams.showOnlyApproved === '1' ?
+            { "notStatuses": [PositionStatus.PROOF_OF_NEED]} : { "statuses": [PositionStatus.PROOF_OF_NEED]};
+        }
+
         return this.store.dispatch([new Fetch(id), new FetchPositions(id, this.positionFilter)]);
       }),
       switchMap(() => this.request$),
