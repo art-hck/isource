@@ -1,4 +1,5 @@
 import {
+  ChangeDetectorRef,
   Component, ElementRef,
   EventEmitter,
   Input,
@@ -83,29 +84,33 @@ export class ProcedureProlongateComponent implements OnChanges, OnDestroy {
   constructor(
     private procedureService: ProcedureService,
     private store: Store,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private cd: ChangeDetectorRef
   ) {
   }
 
   submit() {
     if (this.form.valid) {
-      const { requestId, procedureId, dateEndRegistration, dateSummingUp } = this.form.value;
       this.isLoading = true;
-      this.procedureService.prolongateProcedureEndDate(
-        requestId,
-        procedureId,
-        moment(dateEndRegistration, "DD.MM.YYYY HH:mm"),
-        moment(dateSummingUp, "DD.MM.YYYY HH:mm")
-      ).pipe(
-        tap(() => this.store.dispatch(new ToastActions.Success("Дата успешно изменена"))),
-        tap(() => this.complete.emit()),
-        catchError(err => {
-          this.store.dispatch(new ToastActions.Error(err?.error?.detail ?? "Не удалось изменить дату"));
-          return throwError(err);
-        }),
-        finalize(() => this.isLoading),
-        takeUntil(this.destroy$),
-      ).subscribe();
+
+      setTimeout(() => {
+        const { requestId, procedureId, dateEndRegistration, dateSummingUp } = this.form.value;
+        this.procedureService.prolongateProcedureEndDate(
+            requestId,
+            procedureId,
+            moment(dateEndRegistration, "DD.MM.YYYY HH:mm"),
+            moment(dateSummingUp, "DD.MM.YYYY HH:mm")
+        ).pipe(
+            tap(() => this.store.dispatch(new ToastActions.Success("Дата успешно изменена"))),
+            tap(() => this.complete.emit()),
+            catchError(err => {
+              this.store.dispatch(new ToastActions.Error(err?.error?.detail ?? "Не удалось изменить дату"));
+              return throwError(err);
+            }),
+            finalize(() => this.isLoading),
+            takeUntil(this.destroy$),
+        ).subscribe();
+      }, 350);
     }
   }
 
