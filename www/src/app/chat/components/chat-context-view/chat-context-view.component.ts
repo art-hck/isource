@@ -55,6 +55,11 @@ export class ChatContextViewComponent implements OnInit, OnDestroy, AfterViewIni
     return this.userInfoService.getUserRole();
   }
 
+  get urlRole(): 'customer' | 'approver' | 'backoffice' {
+    return this.userInfoService.isBackOffice() ? 'backoffice' :
+           this.userInfoService.isCustomerApprover() ? 'approver' : 'customer';
+  }
+
   get unreadCountContext$(): Observable<number> {
     return this.item$.pipe(
       filter(item => !!item),
