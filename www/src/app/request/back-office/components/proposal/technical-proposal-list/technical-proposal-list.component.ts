@@ -1,6 +1,6 @@
 import { ActivatedRoute } from "@angular/router";
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { filter, finalize, map, mapTo, publishReplay, refCount, switchMap, takeUntil, tap } from "rxjs/operators";
+import { filter, finalize, map, mapTo, publishReplay, refCount, shareReplay, switchMap, takeUntil, tap } from "rxjs/operators";
 import { BehaviorSubject, Observable, of, Subject } from "rxjs";
 import { Request } from "../../../../common/models/request";
 import { RequestService } from "../../../services/request.service";
@@ -118,7 +118,7 @@ export class TechnicalProposalListComponent implements OnInit, OnDestroy {
   }
 
   fetchPositions() {
-    this.positions$ = this.technicalProposalsService.positions(this.requestId);
+    this.positions$ = this.technicalProposalsService.positions(this.requestId).pipe(shareReplay(1));
   }
 
   /**

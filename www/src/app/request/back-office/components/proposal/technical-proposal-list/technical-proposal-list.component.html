@@ -20,6 +20,7 @@
 
                 <!-- Новое ТП  -->
                 <button uxgButton primary iconText
+                        [disabled]="!(positions$ | async)?.length"
                         *ngIf="featureService.authorize('createTechnicalProposal')"
                         (click)="showForm = true">
                   <uxg-icon shape="app-plus"></uxg-icon>
@@ -32,7 +33,7 @@
 
         <ng-container *ngIf="featureService.authorize('createTechnicalProposal')">
           <app-request-technical-proposals-form
-            *ngIf="showForm || technicalProposals.length + procedures.length === 0"
+            *ngIf="showForm || (technicalProposals.length + procedures.length === 0 && (positions$ | async)?.length)"
             [request]="request"
             [closable]="technicalProposals.length + procedures.length > 0"
             (visibleChange)="showForm = $event"
