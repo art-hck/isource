@@ -1,17 +1,8 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, forwardRef, Inject, Input, Output } from '@angular/core';
 import { RequestDocument } from "../../../request/common/models/request-document";
-import { ControlValueAccessor, FormBuilder, NG_VALUE_ACCESSOR } from "@angular/forms";
-import { AppFile, AppFileExtensions } from "../file/file";
-import { AppConfig } from "../../../config/app.config";
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
+import { AppFile } from "../file/file";
 import { APP_CONFIG, GpnmarketConfigInterface } from "../../../core/config/gpnmarket-config.interface";
-import { ContragentService } from "../../../contragent/services/contragent.service";
-import { Store } from "@ngxs/store";
-import { EmployeeService } from "../../../employee/services/employee.service";
-import { UsersGroupService } from "../../../core/services/users-group.service";
-import { ActivatedRoute, Router } from "@angular/router";
-import { UxgBreadcrumbsService } from "uxg";
-import { UserInfoService } from "../../../user/service/user-info.service";
-import { DadataType } from "@kolkov/ngx-dadata";
 
 @Component({
   selector: 'app-documents-form-control',
@@ -56,7 +47,7 @@ export class DocumentsFormControlComponent implements ControlValueAccessor {
     // Список выбранных файлов прогоняем через анализатор допустимых размеров
     this.files = this.processAttachments(this.files);
 
-    this.select.emit(this.files);
+    this.select.emit(this.processAttachments(files.map(file => new AppFile(file))));
     if (this.onChange) { this.onChange(this.files); }
   }
 

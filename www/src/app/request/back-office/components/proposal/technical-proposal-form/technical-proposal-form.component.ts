@@ -82,7 +82,8 @@ export class TechnicalProposalFormComponent implements OnInit, OnDestroy {
     }
 
     this.form.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(() => {
-      const docsCount = this.formDocuments.value.length + this.defaultTPValue('documents').length;
+      const docsCount = this.formDocuments.value.filter(file => file.valid).length + this.defaultTPValue('documents').length;
+
       if (this.form.get('documents').dirty && this.form.get('positions').dirty) {
         if (docsCount === 0 && this.form.get('positions').invalid) {
           this.invalidDocControl = true;
