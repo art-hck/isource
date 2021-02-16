@@ -9,7 +9,7 @@
         <ng-container *ngIf="!uploadedDateHidden; else sizeInfo">
             <span *ngIf="document.created">
               <ng-container *ngIf="document.id === null">будет скорректирован до</ng-container>
-              {{document.created  | date :' d MMMM y '}}
+              {{ document.created  | date : showUploadedTime ? ' d MMM y, HH:mm' : ' d MMM y ' }}
             </span>
         </ng-container>
 
