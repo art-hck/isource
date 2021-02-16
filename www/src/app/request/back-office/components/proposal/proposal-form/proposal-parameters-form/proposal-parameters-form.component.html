@@ -32,11 +32,14 @@
           <div class="app-col">
 
             <uxg-dropdown-input appSuggestions strictMode formControlName="measureUnit" placeholder="Ед. измерения"
-                                [$]="okeiList$" [searchFn]="okeiService.searchOkei" #okei="appSuggestions" [appControlWrap]="true"
-            >
+                                [$]="okeiList$"
+                                [searchFn]="okeiService.searchOkei"
+                                [displayByFn]="getOkeiSymbol"
+                                #okei="appSuggestions"
+                                [appControlWrap]="true">
               <ng-container *ngIf="(okei.suggestions$ | async) as okeiSuggestions">
                 <div uxgDropdownItem *ngFor="let suggestion of okeiSuggestions"
-                     [value]="suggestion.symbol | lowercase"
+                     [value]="suggestion"
                      [attr.title]="suggestion.name | lowercase"
                 >{{suggestion.symbol | lowercase }} <span class="app-ghost-color">- {{suggestion.name | lowercase}}</span></div>
               </ng-container>

@@ -1,4 +1,13 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, forwardRef, OnDestroy, Output } from '@angular/core';
+import {
+  AfterContentInit,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  forwardRef,
+  OnDestroy,
+  Output
+} from '@angular/core';
 import {
   AbstractControl,
   ControlValueAccessor,
@@ -19,6 +28,7 @@ import * as moment from "moment";
 import { PaymentTerms } from "../../../../../common/enum/payment-terms";
 import { PaymentTermsLabels } from "../../../../../common/dictionaries/payment-terms-labels";
 import { Subject } from "rxjs";
+import { Okei } from "../../../../../../shared/models/okei";
 
 @Component({
   selector: 'app-common-proposal-parameters-form',
@@ -63,6 +73,7 @@ export class ProposalParametersFormComponent implements AfterContentInit, Contro
           priceWithoutVat: [p.priceWithoutVat || p.position.startPrice, [Validators.required, Validators.min(1)]],
           quantity: [p.quantity || p.position.quantity, [Validators.required, Validators.min(0.0001)]],
           measureUnit: [p.measureUnit || p.position.measureUnit, Validators.required],
+          okeiCode: [p.okeiCode || p.position.okeiCode],
           currency: [p.currency || p.position.currency || PositionCurrency.RUB, Validators.required],
           deliveryDate: [this.parseDate(p.deliveryDate || p.position.deliveryDate), CustomValidators.futureDate()],
           paymentTerms: [p.paymentTerms || p.position.paymentTerms, Validators.required],
@@ -73,6 +84,16 @@ export class ProposalParametersFormComponent implements AfterContentInit, Contro
         form.get('currency').disable();
         return form;
       })
+    );
+
+    this.formArray?.valueChanges.subscribe(() => {
+        this.formArray.controls.forEach((formGroup: FormGroup) => {
+          formGroup.patchValue({
+              okeiCode: formGroup.value.measureUnit?.code ?? formGroup.value.okeiCode,
+              measureUnit: formGroup.value.measureUnit?.symbol ?? formGroup.value.measureUnit,
+            }, { emitEvent: false });
+        });
+      }
     );
 
     this.paymentTermsControl.setValue(this.value[0].paymentTerms || this.value[0].position.paymentTerms);
@@ -130,6 +151,8 @@ export class ProposalParametersFormComponent implements AfterContentInit, Contro
       return date;
     }
   }
+
+  getOkeiSymbol = ({symbol}: Okei) => symbol && symbol.toLowerCase();
 
   ngOnDestroy() {
     this.destroy$.next();
