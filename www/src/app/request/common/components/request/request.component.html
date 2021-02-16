@@ -168,7 +168,7 @@
                 </div>
 
                 <div *ngIf="user.hasPermission(permissionType.POSITIONS_DISTRIBUTION_BETWEEN_BACKOFFICE_BUYERS)">
-                  <button uxgButton clear (click)="addResponsibleRequestModal.open()">Назначить всю завку</button>
+                  <button uxgButton clear (click)="addResponsibleRequestModal.open()">Назначить всю заявку</button>
                 </div>
 
                 <div *ngIf="featureService.authorize('backofficeCancelPosition')">
