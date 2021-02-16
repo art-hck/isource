@@ -58,13 +58,14 @@ export class RequestComponent implements OnInit, OnDestroy {
 
             this.positionFilter = onlyApproved === '0' ?
               { "statuses": [PositionStatus.PROOF_OF_NEED]} :
-              { "notStatuses": [PositionStatus.PROOF_OF_NEED]};
+              { "notStatuses": [PositionStatus.PROOF_OF_NEED, PositionStatus.DRAFT, PositionStatus.ON_CUSTOMER_APPROVAL]};
 
             this.router.navigateByUrl(this.router.url + '?showOnlyApproved=' + onlyApproved);
           });
         } else {
           this.positionFilter = this.route.snapshot.queryParams.showOnlyApproved === '1' ?
-            { "notStatuses": [PositionStatus.PROOF_OF_NEED]} : { "statuses": [PositionStatus.PROOF_OF_NEED]};
+            { "notStatuses": [PositionStatus.PROOF_OF_NEED, PositionStatus.DRAFT, PositionStatus.ON_CUSTOMER_APPROVAL]} :
+            { "statuses": [PositionStatus.PROOF_OF_NEED]};
         }
 
         return this.store.dispatch([new Fetch(id), new FetchPositions(id, this.positionFilter)]);
