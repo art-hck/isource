@@ -16,6 +16,7 @@ export class TechnicalCommercialProposalPosition implements CommonProposalItem {
   currency: PositionCurrency | null;
   quantity: number;
   measureUnit: string;
+  okeiCode: string;
   deliveryDate: string | null;
   status: TechnicalCommercialProposalPositionStatus;
   statusLabel: TechnicalCommercialProposalPositionStatusLabel;
