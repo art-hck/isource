@@ -322,6 +322,10 @@ export class ProposalViewComponent implements AfterViewInit, OnChanges, OnDestro
     return positionProposal.items.find(({ id }) => id === proposal.id);
   }
 
+  getHiddenSupplierNumber(proposalSupplierId): number {
+    return this.suppliers(this.proposals).findIndex(s => s.id === proposalSupplierId) + 1;
+  }
+
   converProposalPosition = ({ items }: CommonProposalByPosition) => items.map((item) => new Proposal(item));
   trackById = (i, { id }: CommonProposal) => id;
 
