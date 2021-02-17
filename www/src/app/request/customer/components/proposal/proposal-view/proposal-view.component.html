@@ -132,6 +132,7 @@
               #proposalComponent
               *ngFor="let proposal of proposals; let i = index; trackBy: trackById"
               [technicalCommercialProposalIndex]="i"
+              [hiddenSupplierNumber]="getHiddenSupplierNumber(proposal.supplier.id)"
               [chooseBy$]="chooseBy$"
               [proposal]="proposal"
               [proposals]="proposals"

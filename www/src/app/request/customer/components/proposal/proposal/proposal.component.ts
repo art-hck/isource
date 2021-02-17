@@ -36,6 +36,7 @@ export class ProposalComponent implements OnChanges, OnDestroy {
   @Input() proposalByPos: CommonProposalByPosition;
   @Input() proposal: CommonProposal;
   @Input() technicalCommercialProposalIndex: number;
+  @Input() hiddenSupplierNumber: number;
   @Input() requestId: Uuid;
   @Input() chooseBy$: Subject<"date" | "price">;
   @Input() isLoading: boolean;
