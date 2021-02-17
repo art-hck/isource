@@ -89,10 +89,6 @@ export class ContractListComponent implements OnInit, OnDestroy {
         { label: 'Согласование договора', link: `/requests/customer/${id}/contracts`},
       ]),
     ).subscribe();
-
-    this.form.valueChanges
-      .pipe(withLatestFrom(this.route.params), takeUntil(this.destroy$))
-      .subscribe(([value, { id }]) => this.store.dispatch(new Filter(id, value)));
   }
 
   ngOnDestroy() {
