@@ -54,7 +54,7 @@
                                   contractsSentToReview$ :
                                   (contractsPendingSignTab.active ? contractsPendingSign$ :
                                     contractsSignedBySupplierTab.active ? contractsSignedBySupplier$ : contractsSendToEdit$))) | async as contracts">
-    <div class="app-col">
+    <div class="app-col contract-list">
       <app-contract-list-item
         *ngFor="let contract of contracts"
         [contract]="contract"
