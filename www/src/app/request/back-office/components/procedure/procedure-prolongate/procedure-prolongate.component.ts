@@ -92,6 +92,7 @@ export class ProcedureProlongateComponent implements OnChanges, OnDestroy {
 
       // Значение формы обновляется после закрытия слоя с датапикером и не моментально,
       // поэтому отправить форму можем после небольшого ожидания, пока значения формы не перезапишутся
+      // см. isprocessor-201
       setTimeout(() => {
         const { requestId, procedureId, dateEndRegistration, dateSummingUp } = this.form.value;
         this.procedureService.prolongateProcedureEndDate(
