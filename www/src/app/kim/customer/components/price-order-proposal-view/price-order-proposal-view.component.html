@@ -4,13 +4,13 @@
       <div class="app-row app-align-items-center" [class.app-layout]="view === 'grid'">
 
         <uxg-tabs class="app-col">
-          <uxg-tab-title #sentToReviewTab [active]="true" >
+          <uxg-tab-title #sentToReviewTab [disabled]="(positionsOnReview$ | async)?.length === 0" [active]="true">
             <ng-container *ngIf="(positionsOnReview$ | async) as posWithProposalsOnReview">
               Необходимо рассмотреть <span class="counter">({{posWithProposalsOnReview?.length}})</span>
             </ng-container>
           </uxg-tab-title>
 
-          <uxg-tab-title #reviewedTab>
+          <uxg-tab-title #reviewedTab [disabled]="(positionsReviewed$ | async)?.length === 0">
             <ng-container *ngIf="(positionsReviewed$ | async) as posWithProposalsReviewed">
               Рассмотренные <span class="counter">({{ posWithProposalsReviewed?.length }})</span>
             </ng-container>
@@ -75,7 +75,7 @@
           <h1 class="text-center" [style.opacity]="0.1">
             <br/>
             <uxg-icon shape="app-publish" size="270"></uxg-icon><br/>
-            Все технико-коммерческие предложения рассмотрены
+            Список ценовых запросов пуст
           </h1>
         </div>
 
@@ -104,6 +104,7 @@
   [disabled]="(status$ | async) !== 'received' || disabled"
   (approve)="reviewSelected()"
   [chooseBy$]="chooseBy$"
+  [source]="'price-order'"
   [hidden]="reviewedTab?.active || proposalsOnReview?.length === 0"
   [total]="total"
 ></app-grid-footer>
