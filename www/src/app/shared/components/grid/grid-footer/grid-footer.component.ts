@@ -15,6 +15,7 @@ export class GridFooterComponent {
   @Input() selectedProposals: { toApprove, toSendToEdit };
   @Input() selectedPositions;
   @Input() view: ProposalsView;
+  @Input() source: string;
   @Input() disabled: boolean;
   @Input() loading: boolean;
   @Output() selectAllToSendToEdit = new EventEmitter();
