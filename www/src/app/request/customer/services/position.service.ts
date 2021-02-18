@@ -20,7 +20,7 @@ export class PositionService {
     return this.api.get<RequestPosition>(url);
   }
 
-  changePositionsStatus(positionIds: Uuid[], status: PositionStatus, statusComment?: string) {
+  changePositionsStatus(positionIds: Uuid[], status: PositionStatus, statusComment?: string[]) {
     const url = `requests/customer/positions/statuses/change`;
     return this.api.post<RequestPosition[]>(url, { positionIds, status, statusComment });
   }
