@@ -119,7 +119,7 @@ export class ChatItemsState {
 
   @Action(AppendContexts)
   appendContexts({ setState }: Ctx, { contexts }: AppendContexts) {
-    return contexts.forEach(context => {
+    return contexts.filter(context => context.items.length > 0).forEach(context => {
       const requestId: Uuid = JSON.parse(context.items[0].data).contextId;
       const findFn = (item: ChatItem) => item.request?.id === requestId;
       return setState(patch<Model>({
