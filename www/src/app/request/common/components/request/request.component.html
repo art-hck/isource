@@ -304,7 +304,8 @@
               </uxg-popover>
 
               <button uxgButton secondary
-                      *ngIf="request.status !== 'COMPLETED' && request.status !== 'NOT_RELEVANT'"
+                      *ngIf="request.status !== 'COMPLETED' && request.status !== 'NOT_RELEVANT' &&
+                             user.hasPermission(permissionType.POSITIONS_DISTRIBUTION_BETWEEN_BACKOFFICE_BUYERS)"
                       (click)="addResponsibleRequestModal.open()">
                 <span>Назначить заявку</span>
               </button>
