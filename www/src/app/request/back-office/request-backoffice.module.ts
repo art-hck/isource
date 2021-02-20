@@ -47,6 +47,8 @@ import { TechnicalCommercialProposalGroupService } from "./services/technical-co
 import { ProposalViewComponent } from "./components/proposal/proposal-view/proposal-view.component";
 import { CommercialProposalGroupService } from "./services/commercial-proposal-group.service";
 import { CommercialProposalsDeprecatedService } from "./services/commercial-proposals-deprecated.service";
+import { PluralizePipe } from "../../shared/pipes/pluralize-pipe";
+import { BytesToSizePipe } from "../../shared/pipes/bytes-to-size-pipe";
 
 @NgModule({
   declarations: [
@@ -106,7 +108,9 @@ import { CommercialProposalsDeprecatedService } from "./services/commercial-prop
     PositionService,
     TechnicalCommercialProposalService,
     TechnicalCommercialProposalGroupService,
-    ContractService
+    ContractService,
+    PluralizePipe,
+    BytesToSizePipe
   ]
 })
 export class RequestBackofficeModule {

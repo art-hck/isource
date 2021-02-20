@@ -30,6 +30,8 @@ import { CommercialProposalGroupListComponent } from "./components/proposal/prop
 import { ProposalGroupListComponent } from "./components/proposal/proposal-group-list/proposal-group-list.component";
 import { ProposalViewComponent } from "./components/proposal/proposal-view/proposal-view.component";
 import { CommercialProposalsService } from "./services/commercial-proposals.service";
+import { PluralizePipe } from "../../shared/pipes/pluralize-pipe";
+import { BytesToSizePipe } from "../../shared/pipes/bytes-to-size-pipe";
 
 @NgModule({
   declarations: [
@@ -68,7 +70,9 @@ import { CommercialProposalsService } from "./services/commercial-proposals.serv
     TechnicalProposalsService,
     CommercialProposalsService,
     TechnicalCommercialProposalService,
-    ContractService
+    ContractService,
+    PluralizePipe,
+    BytesToSizePipe
   ]
 })
 export class RequestCustomerModule {
