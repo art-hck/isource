@@ -96,7 +96,7 @@ export class PositionComponent implements OnDestroy {
     const hasLargeFiles = files.some(file => file.size > this.singleFileSizeLimit);
 
     const validFiles = files.filter(file => file.size <= this.singleFileSizeLimit);
-    const invalidFiles = files.filter(file => file.size > this.singleFileSizeLimit)
+    const invalidFiles = files.filter(file => file.size > this.singleFileSizeLimit);
 
     if (hasLargeFiles) {
       this.store.dispatch(
