@@ -17,7 +17,7 @@ import { Contract } from "../../../request/common/models/contract";
 export class ContractDocumentsListComponent {
 
   @Input() contract: Contract;
-  @Input() documents: RequestDocument[] = [];
+  @Input() onlyCurrentDocument = false;
   @Input() limit = 0;
   @Input() size: DocumentIconSize = DocumentIconSize.medium;
 
@@ -36,8 +36,7 @@ export class ContractDocumentsListComponent {
     this.contractDocumentsService.downloadFile(document, this.contract.id);
   }
 
-  getDocuments() {
-    // Если showAll=true или не указан limit возвращаем всё.
-    return this.contract.documents.slice(0, this.showAll ? this.contract.documents.length : (this.limit || this.contract.documents.length));
+  getDocuments(): RequestDocument[] {
+    return this.onlyCurrentDocument ? (this.contract.currentDocument ? [this.contract.currentDocument] : []) : this.contract.documents;
   }
 }

@@ -11,6 +11,7 @@ export class RequestDocument {
   size: number;
   comments?: string;
   hash?: string;
+  hasSignedStorageFile?: boolean;
   documentSignatures?: {
     certNumber: string;
     contragentId: Uuid;
