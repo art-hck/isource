@@ -15,5 +15,6 @@ export class Contract {
   statusChangedDate: string;
   winners: Winner[];
   documents: RequestDocument[];
+  currentDocument?: RequestDocument;
   status: ContractStatus;
 }

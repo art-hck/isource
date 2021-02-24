@@ -58,7 +58,7 @@ export class ContractSignComponent implements OnInit, OnDestroy {
     ).subscribe();
 
     this.contractSignInfo$.subscribe(data => {
-      const customerInfo = data?.documents[0].documentSignatures.find(signature => signature.contragentId === data.customer.id);
+      const customerInfo = data?.currentDocument.documentSignatures.find(signature => signature.contragentId === data.customer.id);
 
       this.contract = data;
       this.signerName = customerInfo?.ownerName;
@@ -92,30 +92,24 @@ export class ContractSignComponent implements OnInit, OnDestroy {
       const selectedCertificate = this.certForm.get('certificate').value;
       const documentSignatures = [];
 
-      let docsSigned = 0;
+      const docToSign = this.contract.currentDocument;
 
-      this.contract.documents.forEach(document => {
-        createDetachedSignature(selectedCertificate.data.thumbprint, document.hash).then(response => {
-          documentSignatures.push({
-            id: document.id,
-            signature: response
-          });
-
-          docsSigned++;
-
-          if (docsSigned === this.contract.documents.length) {
-            const data = {
-              certNumber: selectedCertificate.serialNumber,
-              certOwnerName: selectedCertificate.ownerInfo['Владелец'],
-              certIssuerName: selectedCertificate.issuerInfo['Компания'],
-              certValidFrom: moment(selectedCertificate.data.validFrom).format('YYYY-MM-DD'),
-              certValidTill: moment(selectedCertificate.data.validTo).format('YYYY-MM-DD'),
-              documentSignatures
-            };
-
-            this.store.dispatch(new SignDocument(this.contractId, data));
-          }
+      createDetachedSignature(selectedCertificate.data.thumbprint, docToSign.hash).then(response => {
+        documentSignatures.push({
+          id: docToSign.id,
+          signature: response
         });
+
+        const data = {
+          certNumber: selectedCertificate.serialNumber,
+          certOwnerName: selectedCertificate.ownerInfo['Владелец'],
+          certIssuerName: selectedCertificate.issuerInfo['Компания'],
+          certValidFrom: moment(selectedCertificate.data.validFrom).format('YYYY-MM-DD'),
+          certValidTill: moment(selectedCertificate.data.validTo).format('YYYY-MM-DD'),
+          documentSignatures
+        };
+
+        this.store.dispatch(new SignDocument(this.contractId, data));
       });
     }
   }
