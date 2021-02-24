@@ -394,24 +394,27 @@
     <ng-template #deliveryDate>{{ position.deliveryDate | date : 'dd.MM.yyyy' }}</ng-template>
   </div>
 
-  <div class="app-col item-status app-ellipsis">
-    <ng-container *ngIf="!user.isCustomerApprover(); else positionSumm">
-      <ng-container
-        *ngIf="user.isBackOffice() &&
-      user.hasPermission(permissionType.POSITIONS_DISTRIBUTION_BETWEEN_BACKOFFICE_BUYERS) &&
-      position.responsibleUser as user; else status">
+  <ng-container *ngIf="!user.isCustomerApprover(); else positionSumm">
+    <div class="app-col item-status app-ellipsis">
+      <app-position-status [label]="PositionStatusesLabels[position.status]" [status]="position.status">
+      </app-position-status>
+    </div>
+
+    <div class="app-col item-responsible app-ellipsis">
+      <ng-container *ngIf="user.isBackOffice() &&
+                           user.hasPermission(permissionType.POSITIONS_DISTRIBUTION_BETWEEN_BACKOFFICE_BUYERS) &&
+                           position.responsibleUser as user">
         {{ position.responsibleUser.shortName }}
       </ng-container>
-      <ng-template #status>
-        <app-position-status [label]="PositionStatusesLabels[position.status]" [status]="position.status">
-        </app-position-status>
-      </ng-template>
-    </ng-container>
-    <ng-template #positionSumm>
+    </div>
+  </ng-container>
+
+  <ng-template #positionSumm>
+    <div class="app-col item-sum app-ellipsis">
       <span class="app-bold">{{(position?.startPrice || 0) | number:'1.0-2'}} </span>
       <span class="app-ghost-color app-bold">{{getCurrencySymbol('RUB', "narrow")}}</span>
-    </ng-template>
-  </div>
+    </div>
+  </ng-template>
 
   <div class="app-col item-attribute-icon">
     <ng-container *ngIf="!user.isCustomerApprover()">
