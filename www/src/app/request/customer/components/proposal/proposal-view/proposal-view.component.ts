@@ -22,6 +22,7 @@ import { ProposalSource } from "../../../../back-office/enum/proposal-source";
 @Component({
   selector: 'app-common-proposal-view',
   templateUrl: './proposal-view.component.html',
+  styleUrls: ['proposal-view.component.scss'],
   providers: [PluralizePipe],
   changeDetection: ChangeDetectionStrategy.OnPush
 })

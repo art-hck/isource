@@ -34,7 +34,6 @@ export class ProposalConfirmComponent {
   };
   @Output() close = new EventEmitter();
   @Output() reviewMultiple = new EventEmitter();
-  @Output() downloadAnalyticalReport = new EventEmitter();
 
   filterQuery = "";
   readonly getCurrencySymbol = getCurrencySymbol;
