@@ -100,7 +100,7 @@ export class RequestComponent implements OnChanges {
   }
 
   canEditRequestName(): boolean {
-    return (this.featureService.authorize('editRequestNameCustomer') && ['DRAFT', 'NEW', 'ON_CUSTOMER_APPROVAL'].indexOf(this.request.status) !== -1) ||
+    return (this.featureService.authorize('editRequestNameCustomer') && ['DRAFT', 'ON_CUSTOMER_APPROVAL'].indexOf(this.request.status) !== -1) ||
            (this.featureService.authorize('editRequestNameBackoffice') && ['NEW', 'IN_PROGRESS'].indexOf(this.request.status) !== -1);
   }
 
