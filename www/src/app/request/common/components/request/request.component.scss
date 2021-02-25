@@ -30,9 +30,14 @@
     flex-basis: 45px;
   }
 
-  &-status {
+  &-status, &-sum {
     min-width: 240px;
     max-width: 240px;
+  }
+
+  &-responsible {
+    min-width: 120px;
+    max-width: 120px;
   }
 
   &-date {
