@@ -255,7 +255,7 @@
               </uxg-popover>
             </div>
 
-            <div class="app-col filter-button">
+            <div class="app-col filter-button" *ngIf="featureService.authorize('filterPositions') && filterForm">
               <uxg-filter-button></uxg-filter-button>
             </div>
           </div>
