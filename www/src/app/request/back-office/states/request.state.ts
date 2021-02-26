@@ -12,6 +12,7 @@ import Fetch = RequestActions.Fetch;
 import Publish = RequestActions.Publish;
 import FetchPositions = RequestActions.FetchPositions;
 import RefreshPositions = RequestActions.RefreshPositions;
+import FetchAvailableFilters = RequestActions.FetchAvailableFilters;
 import Refresh = RequestActions.Refresh;
 import AttachDocuments = RequestActions.AttachDocuments;
 import UploadFromTemplate = RequestActions.UploadFromTemplate;
@@ -19,12 +20,15 @@ import { ToastActions } from "../../../shared/actions/toast.actions";
 import EditRequestName = RequestActions.EditRequestName;
 import ChangeResponsibleUser = RequestActions.ChangeResponsibleUser;
 import ChangeResponsibleUserPositions = RequestActions.ChangeResponsibleUserPositions;
+import { RequestAvailableFilters } from "../../common/models/request-available-filters";
 
 export interface RequestStateStateModel {
   request: Request;
   positions: RequestPositionList[];
   status: StateStatus;
   positionsStatus: StateStatus;
+  availableFilters: RequestAvailableFilters;
+  totalCount: number;
 }
 
 type Model = RequestStateStateModel;
@@ -32,7 +36,7 @@ type Context = StateContext<Model>;
 
 @State<Model>({
   name: 'BackofficeRequest',
-  defaults: { request: null, positions: null, status: "pristine", positionsStatus: "pristine" }
+  defaults: { request: null, positions: null, status: "pristine", positionsStatus: "pristine", availableFilters: null, totalCount: null }
 })
 @Injectable()
 export class RequestState {
@@ -44,6 +48,8 @@ export class RequestState {
   @Selector() static positions({positions}: Model) { return positions; }
   @Selector() static status({status}: Model) { return status; }
   @Selector() static positionsStatus({positionsStatus}: Model) { return positionsStatus; }
+  @Selector() static availableFilters({availableFilters}: Model) { return availableFilters; }
+  @Selector() static totalCount({totalCount}: Model) { return totalCount; }
 
   @Action(Fetch) fetch({setState}: Context, {requestId, useCache, clearState}: Fetch) {
     // @TODO: Временно выпилил кеширование
@@ -66,7 +72,7 @@ export class RequestState {
     return dispatch(new Fetch(requestId, false, false));
   }
 
-  @Action(FetchPositions) fetchPositions({setState}: Context, {requestId, useCache, clearState}: FetchPositions) {
+  @Action(FetchPositions) fetchPositions({setState}: Context, {requestId, filters, useCache, clearState}: FetchPositions) {
     // @TODO: Временно выпилил кеширование
     // if (this.cachePositions[requestId] && useCache) {
     //   return setState(patch({positions: this.cachePositions[requestId]}));
@@ -76,15 +82,19 @@ export class RequestState {
       setState(patch({ positions: null, positionsStatus: "fetching" as StateStatus }));
     }
 
-    return this.rest.getRequestPositions(requestId).pipe(
+    return this.rest.getRequestPositions(requestId, filters).pipe(
       tap(positions => setState(patch({positions, positionsStatus: "received" as StateStatus }))),
       tap(positions => this.cachePositions[requestId] = positions)
     );
   }
 
-  @Action(RefreshPositions) refreshPositions({setState, dispatch}: Context, {requestId}: RefreshPositions) {
+  @Action(FetchAvailableFilters) fetchAvailableFilters({setState}: Context, {requestId, filters}) {
+    return this.rest.requestAvailableFilters(requestId, filters).pipe(tap(availableFilters => setState(patch({availableFilters: availableFilters}))));
+  }
+
+  @Action(RefreshPositions) refreshPositions({setState, dispatch}: Context, {requestId, filters}: RefreshPositions) {
     setState(patch({ positionsStatus: "updating" as StateStatus }));
-    return dispatch(new FetchPositions(requestId, false, false));
+    return dispatch(new FetchPositions(requestId, filters, false, false));
   }
 
   @Action(Publish) publish({setState, dispatch}: Context, {requestId, positions, refresh}: Publish) {

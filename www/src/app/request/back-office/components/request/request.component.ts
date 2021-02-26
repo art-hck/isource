@@ -4,7 +4,7 @@ import { Request } from "../../../common/models/request";
 import { RequestPositionList } from "../../../common/models/request-position-list";
 import { RequestService } from "../../services/request.service";
 import { ActivatedRoute } from "@angular/router";
-import { filter, switchMap, takeUntil, tap } from "rxjs/operators";
+import { filter, scan, switchMap, takeUntil, tap, throttleTime } from "rxjs/operators";
 import { Title } from "@angular/platform-browser";
 import { UxgBreadcrumbsService } from "uxg";
 import { Actions, ofActionCompleted, Select, Store } from "@ngxs/store";
@@ -26,6 +26,12 @@ import EditRequestName = RequestActions.EditRequestName;
 import ChangeResponsibleUser = RequestActions.ChangeResponsibleUser;
 import ChangeResponsibleUserPositions = RequestActions.ChangeResponsibleUserPositions;
 import { PositionService } from "../../services/position.service";
+import { FormBuilder } from "@angular/forms";
+import { AvailableFilters } from "../../models/available-filters";
+import { RequestsListFilter } from "../../../common/models/requests-list/requests-list-filter";
+import { RequestsListSort } from "../../../common/models/requests-list/requests-list-sort";
+import FetchAvailableFilters = RequestActions.FetchAvailableFilters;
+import { RequestFilters } from "../../../common/models/request-filters";
 
 @Component({
   templateUrl: './request.component.html',
@@ -39,6 +45,16 @@ export class RequestComponent implements OnInit, OnDestroy {
   @Select(RequestState.positions) positions$: Observable<RequestPositionList[]>;
   @Select(RequestState.status) status$: Observable<StateStatus>;
   @Select(RequestState.positionsStatus) positionsStatus$: Observable<StateStatus>;
+  @Select(RequestState.availableFilters) availableFilters$: Observable<AvailableFilters>;
+  @Select(RequestState.totalCount) totalCount$: Observable<number>;
+
+  readonly filterForm = this.fb.group({
+    positionNameOrNumber: '',
+    positionStatuses: [[]],
+    responsibleUserIds: [[]]
+  });
+
+  readonly fetchFilters$ = new Subject<{page?: number, filters?: RequestsListFilter, sort?: RequestsListSort}>();
   readonly destroy$ = new Subject();
   readonly refresh = id => new Refresh(id);
   readonly refreshPositions = id => new RefreshPositions(id);
@@ -62,7 +78,8 @@ export class RequestComponent implements OnInit, OnDestroy {
     private positionService: PositionService,
     private bc: UxgBreadcrumbsService,
     private title: Title,
-    private actions: Actions
+    private actions: Actions,
+    private fb: FormBuilder,
   ) {}
 
   ngOnInit() {
@@ -101,6 +118,17 @@ export class RequestComponent implements OnInit, OnDestroy {
 
       this.commonRequestComponent.resetSelectedPositions();
     });
+
+    this.fetchFilters$.pipe(
+      throttleTime(100),
+      scan(({ filters: prev }, { filters: curr }) => ({ filters: { ...prev, ...curr } }), {
+        filters: {}
+      } as { filters?: RequestFilters }),
+      switchMap(data => this.store.dispatch(new RefreshPositions(this.requestId, data.filters))),
+      takeUntil(this.destroy$)
+    ).subscribe();
+
+    this.store.dispatch(new FetchAvailableFilters(this.requestId));
   }
 
   ngOnDestroy() {

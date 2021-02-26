@@ -1,8 +1,20 @@
 import { ActivatedRoute, Router, UrlTree } from "@angular/router";
 import { getCurrencySymbol } from "@angular/common";
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewChild } from "@angular/core";
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+  SimpleChanges,
+  ViewChild
+} from "@angular/core";
 import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
-import { Observable } from "rxjs";
+import { BehaviorSubject, Observable } from "rxjs";
 import { PositionStatusesLabels } from "../../dictionaries/position-statuses-labels";
 import { Request } from "../../models/request";
 import { RequestGroup } from "../../models/request-group";
@@ -15,10 +27,18 @@ import { PositionStatus } from "../../enum/position-status";
 import { PermissionType } from "../../../../auth/enum/permission-type";
 import { RequestPositionStatusService } from "../../services/request-position-status.service";
 import { StateStatus } from "../../models/state-status";
-import { debounceTime } from "rxjs/operators";
-import { UxgModalComponent, UxgPopoverContentDirection } from "uxg";
+import { debounceTime, map, switchMap, tap } from "rxjs/operators";
+import { UxgFilterCheckboxList, UxgModalComponent, UxgPopoverContentDirection } from "uxg";
 import { CustomValidators } from "../../../../shared/forms/custom.validators";
 import { User } from "../../../../user/models/user";
+import { RequestsListFilter } from "../../models/requests-list/requests-list-filter";
+import moment from "moment";
+import { AvailableFilters } from "../../models/requests-list/available-filters";
+import { searchUsers } from "../../../../shared/helpers/search";
+import { PositionStatusesFrequent } from "../../dictionaries/position-statuses-frequent";
+import { Uuid } from "../../../../cart/models/uuid";
+import { RequestAvailableFilters } from "../../models/request-available-filters";
+import { RequestFilters } from "../../models/request-filters";
 
 @Component({
   selector: "app-request",
@@ -26,7 +46,7 @@ import { User } from "../../../../user/models/user";
   styleUrls: ["./request.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class RequestComponent implements OnChanges {
+export class RequestComponent implements OnInit, AfterViewInit, OnChanges {
   @ViewChild('editRequestNameModal') editRequestNameModal: UxgModalComponent;
   @ViewChild('addDocumentsModal') addDocumentsModal: UxgModalComponent;
   @ViewChild('rejectPositionModal') rejectPositionModal: UxgModalComponent;
@@ -36,6 +56,9 @@ export class RequestComponent implements OnChanges {
   @Input() onDrafted: (position: RequestPosition) => Observable<RequestPosition>;
   @Input() status: StateStatus;
   @Input() positionsStatus: StateStatus;
+  @Input() total: number;
+  @Input() availableFilters$: Observable<RequestAvailableFilters>;
+  @Input() filterForm: FormGroup;
   @Output() addGroup = new EventEmitter();
   @Output() addPosition = new EventEmitter();
   @Output() changeStatus = new EventEmitter();
@@ -51,6 +74,7 @@ export class RequestComponent implements OnChanges {
   @Output() attachDocuments = new EventEmitter();
   @Output() saveRequestName = new EventEmitter();
   @Output() uploadFromTemplate = new EventEmitter();
+  @Output() filter = new EventEmitter<{ filters?: RequestFilters }>();
 
   readonly popoverDir = UxgPopoverContentDirection;
   readonly permissionType = PermissionType;
@@ -67,6 +91,9 @@ export class RequestComponent implements OnChanges {
   canChangeStatuses: boolean;
   canPublish: boolean;
   invalidUploadDocument: boolean;
+  positionStatuses$: Observable<{ value: PositionStatus, item: AvailableFilters["positionStatuses"][number] }[]>;
+  responsibleUsers$: Observable<UxgFilterCheckboxList<Uuid>>;
+  readonly responsibleUsersSearch$ = new BehaviorSubject<string>("");
 
   requestNameForm = new FormGroup({
     requestName: new FormControl('', [CustomValidators.requiredNotEmpty, Validators.maxLength(250)]),
@@ -137,6 +164,23 @@ export class RequestComponent implements OnChanges {
     public user: UserInfoService,
     public featureService: FeatureService
   ) {}
+
+  ngOnInit() {
+    this.positionStatuses$ = this.availableFilters$?.pipe(map(f => f?.positionStatuses.map(
+      status => ({ value: status.status, item: status, hideFolded: PositionStatusesFrequent.indexOf(status.status) < 0 })
+    )));
+
+    this.responsibleUsers$ = this.availableFilters$ && this.responsibleUsersSearch$.pipe(
+      switchMap(q => this.availableFilters$.pipe(
+        map(f => searchUsers(q, f?.responsibleUsers ?? []).map(u => ({ label: u.shortName, value: u.id })))
+      )),
+      tap(() => this.cd.detectChanges())
+    );
+  }
+
+  ngAfterViewInit() {
+    this.cd.detectChanges();
+  }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.positions) {
@@ -287,6 +331,10 @@ export class RequestComponent implements OnChanges {
     }
 
     return formGroup;
+  }
+
+  emitFilter(f: RequestsListFilter) {
+    this.filter.emit({ filters: { ...f}});
   }
 
   clickRejectPositions() {

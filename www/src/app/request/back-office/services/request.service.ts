@@ -14,6 +14,8 @@ import { Page } from "../../../core/models/page";
 import { RequestsList } from "../../common/models/requests-list/requests-list";
 import { AvailableFilters } from "../models/available-filters";
 import { RequestStatusCount } from "../../common/models/requests-list/request-status-count";
+import { RequestAvailableFilters } from "../../common/models/request-available-filters";
+import { RequestFilters } from "../../common/models/request-filters";
 
 
 @Injectable({
@@ -39,9 +41,9 @@ export class RequestService {
       .pipe(map(data => new Request(data)));
   }
 
-  getRequestPositions(id: Uuid): Observable<RequestPositionList[]> {
+  getRequestPositions(id: Uuid, filters: RequestFilters): Observable<RequestPositionList[]> {
     const url = `requests/backoffice/${id}/positions`;
-    return this.api.post<RequestPositionList[]>(url, {}).pipe(
+    return this.api.post<RequestPositionList[]>(url, { filters }).pipe(
       map(data => this.mapPositionList(data))
     );
   }
@@ -91,6 +93,11 @@ export class RequestService {
   availableFilters() {
     const url = `requests/backoffice/available-filters`;
     return this.api.get<AvailableFilters>(url);
+  }
+
+  requestAvailableFilters(requestId, filters: RequestFilters) {
+    const url = `requests/backoffice/${requestId}/available-filters`;
+    return this.api.post<RequestAvailableFilters>(url, { filters });
   }
 
   private mapPositionList(requestPositionsList: RequestPositionList[]) {
