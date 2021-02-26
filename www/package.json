@@ -37,7 +37,6 @@
     "flatpickr": "^4.6.3",
     "guid-typescript": "^1.0.9",
     "isource-element": "1.0.16",
-    "uxg": "^1.0.11",
     "jasmine-allure-reporter": "^1.0.2",
     "keycloak-angular": "^7.3.1",
     "keycloak-js": "^10.0.2",
@@ -48,6 +47,7 @@
     "rxjs": "^6.5.5",
     "text-mask-addons": "^3.8.0",
     "tslib": "^1.11.1",
+    "uxg": "^1.0.16",
     "zone.js": "~0.10.2"
   },
   "devDependencies": {

@@ -5,8 +5,12 @@
   @include uxgAsideModal(410px);
 }
 
+.app-aside-modal.initially-hidden {
+  @include uxgAsideModal(280px);
+}
+
 @media (max-width: col(5) - 1) {
-  .app-aside-modal.detachable:not(.notification) {
+  .app-aside-modal.detachable:not(.notification):not(.initially-hidden) {
     @include uxgAsideModal(280px);
   }
 

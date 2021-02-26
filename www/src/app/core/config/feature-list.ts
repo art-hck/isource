@@ -16,6 +16,7 @@ export interface IFeatureList {
   notifications;
   approverRequest;
   backofficeRequest;
+  filterPositions;
   deliveryMonitor;
   createContragent;
   editContragent;
@@ -93,6 +94,7 @@ export const FeatureList: { [key in keyof IFeatureList]: Feature } = {
   instructionsFileForCustomer: { roles: [UserRole.CUSTOMER] },
   approverRequest: { roles: [UserRole.CUSTOMER_APPROVER] },
   backofficeRequest: { roles: [UserRole.BACKOFFICE] },
+  filterPositions: { roles: [UserRole.SENIOR_BACKOFFICE, UserRole.BACKOFFICE_OBSERVER] },
   deliveryMonitor: { roles: [UserRole.BACKOFFICE] },
   createContragent: { roles: [UserRole.ADMIN, UserRole.BACKOFFICE_BUYER, UserRole.SENIOR_BACKOFFICE] },
   editContragent: { roles: [UserRole.ADMIN, UserRole.BACKOFFICE_BUYER, UserRole.SENIOR_BACKOFFICE] },

@@ -1,4 +1,5 @@
 import { Uuid } from "../../../cart/models/uuid";
+import { RequestFilters } from "../../common/models/request-filters";
 
 export namespace RequestActions {
   export class Fetch {
@@ -13,12 +14,17 @@ export namespace RequestActions {
 
   export class FetchPositions {
     static readonly type = '[Request Backoffice] Fetch Positions';
-    constructor(public requestId: Uuid, public useCache = true, public clearState = true) {}
+    constructor(public requestId: Uuid, public filters: RequestFilters = {}, public useCache = true, public clearState = true) {}
   }
 
   export class RefreshPositions {
     static readonly type = '[Request Backoffice] Refresh Positions';
-    constructor(public requestId: Uuid) {}
+    constructor(public requestId: Uuid, public filters: RequestFilters = {}) {}
+  }
+
+  export class FetchAvailableFilters {
+    static readonly type = '[Request Backoffice] Fetch Available Filters';
+    constructor(public requestId: Uuid, public filters: RequestFilters = {}) {}
   }
 
   export class ChangeResponsibleUser {

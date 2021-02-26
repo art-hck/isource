@@ -35,6 +35,10 @@
         @media (min-width: col($i)) { width: col($i) }
       }
 
+      .app-col-aside.detachable.initially-hidden {
+        display: none
+      }
+
       @media (max-width: col(5) - 1) {
         .app-col-aside.detachable {
           display: none
