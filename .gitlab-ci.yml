@@ -1,7 +1,7 @@
 stages:
   - build
   - codestyle
-  - images
+#  - images
 
 build staging:
   stage: build
