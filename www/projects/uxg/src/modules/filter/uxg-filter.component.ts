@@ -14,6 +14,7 @@ export class UxgFilterComponent implements OnInit, OnDestroy {
   @HostBinding('class.app-row') row = true;
   @HostBinding('class.app-flex-column') flexColumn = true;
   @Input() @HostBinding('class.detachable') detachable = true;
+  @Input() @HostBinding('class.initially-hidden') initiallyHidden = false;
   @HostBinding('class.open') isOpen: boolean;
   @Input() count: number;
   @Input() formGroup: FormGroup;
