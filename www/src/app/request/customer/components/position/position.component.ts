@@ -12,12 +12,20 @@ import { Store } from "@ngxs/store";
 import { RequestActions } from "../../actions/request.actions";
 import { PositionService } from "../../services/position.service";
 import { PositionDocuments } from "../../../common/models/position-documents";
+import { ToastActions } from "../../../../shared/actions/toast.actions";
+import { PluralizePipe } from "../../../../shared/pipes/pluralize-pipe";
+import { AppConfig } from "../../../../config/app.config";
+import { BytesToSizePipe } from "../../../../shared/pipes/bytes-to-size-pipe";
 
 @Component({ templateUrl: './position.component.html' })
 export class PositionComponent implements OnInit {
   requestId: Uuid;
   positionId: Uuid;
   position$: Observable<RequestPosition>;
+
+  public singleFileSizeLimit: number = AppConfig.files.singleFileSizeLimit;
+  public totalFilesSizeLimit: number = AppConfig.files.totalFilesSizeLimit;
+
   readonly documentsSubject$ = new Subject<PositionDocuments>();
   readonly documents$: Observable<PositionDocuments> = merge(this.documentsSubject$, this.route.params.pipe(
     switchMap(({ positionId }) => this.positionService.documents(positionId))));
@@ -27,6 +35,8 @@ export class PositionComponent implements OnInit {
     private route: ActivatedRoute,
     private requestService: RequestService,
     private positionService: PositionService,
+    private pluralize: PluralizePipe,
+    private bytesToSize: BytesToSizePipe,
     private title: Title,
     private bc: UxgBreadcrumbsService,
     private store: Store
@@ -66,9 +76,24 @@ export class PositionComponent implements OnInit {
 
   uploadDocuments({files, position}: {files: File[], position: RequestPosition}) {
     this.position$ = of(position);
-    this.positionService.uploadDocuments(position, files).pipe(
-      switchMap(() => this.positionService.documents(position.id)),
-      tap(docs => this.documentsSubject$.next(docs))
-    ).subscribe();
+
+    const hasLargeFiles = files.some(file => file.size > this.singleFileSizeLimit);
+
+    const validFiles = files.filter(file => file.size <= this.singleFileSizeLimit);
+    const invalidFiles = files.filter(file => file.size > this.singleFileSizeLimit);
+
+    if (hasLargeFiles) {
+      this.store.dispatch(
+        new ToastActions.Error(
+          this.pluralize.transform(invalidFiles.length, "документ не загружен", "документа не загружены", "документов не загружено") +
+          ', так как размер превышает ' + this.bytesToSize.transform(this.singleFileSizeLimit, 3)));
+    }
+
+    if (validFiles.length) {
+      this.positionService.uploadDocuments(position, files).pipe(
+        switchMap(() => this.positionService.documents(position.id)),
+        tap(docs => this.documentsSubject$.next(docs))
+      ).subscribe();
+    }
   }
 }
