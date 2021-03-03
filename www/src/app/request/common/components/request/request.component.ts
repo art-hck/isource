@@ -1,4 +1,5 @@
 import { ActivatedRoute, Router, UrlTree } from "@angular/router";
+import { getCurrencySymbol } from "@angular/common";
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewChild } from "@angular/core";
 import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
 import { Observable } from "rxjs";
@@ -17,6 +18,7 @@ import { StateStatus } from "../../models/state-status";
 import { debounceTime } from "rxjs/operators";
 import { UxgModalComponent, UxgPopoverContentDirection } from "uxg";
 import { CustomValidators } from "../../../../shared/forms/custom.validators";
+import { User } from "../../../../user/models/user";
 
 @Component({
   selector: "app-request",
@@ -27,6 +29,7 @@ import { CustomValidators } from "../../../../shared/forms/custom.validators";
 export class RequestComponent implements OnChanges {
   @ViewChild('editRequestNameModal') editRequestNameModal: UxgModalComponent;
   @ViewChild('addDocumentsModal') addDocumentsModal: UxgModalComponent;
+  @ViewChild('rejectPositionModal') rejectPositionModal: UxgModalComponent;
 
   @Input() request: Request;
   @Input() positions: RequestPositionList[];
@@ -36,7 +39,8 @@ export class RequestComponent implements OnChanges {
   @Output() addGroup = new EventEmitter();
   @Output() addPosition = new EventEmitter();
   @Output() changeStatus = new EventEmitter();
-  @Output() addResponsible = new EventEmitter();
+  @Output() addResponsiblePositions = new EventEmitter<{ positions: RequestPosition[], user: User }>();
+  @Output() addResponsibleRequest = new EventEmitter<User>();
   @Output() createTemplate = new EventEmitter();
   @Output() publish = new EventEmitter();
   @Output() reject = new EventEmitter();
@@ -51,6 +55,8 @@ export class RequestComponent implements OnChanges {
   readonly popoverDir = UxgPopoverContentDirection;
   readonly permissionType = PermissionType;
   readonly PositionStatusesLabels = PositionStatusesLabels;
+  readonly PositionStatus = PositionStatus;
+  readonly getCurrencySymbol = getCurrencySymbol;
   flatPositions: RequestPosition[] = [];
   form: FormGroup;
   editedPosition: RequestPosition;
@@ -94,16 +100,23 @@ export class RequestComponent implements OnChanges {
   }
 
   canEditRequestName(): boolean {
-    return (this.user.isCustomer() && ['DRAFT', 'NEW', 'ON_CUSTOMER_APPROVAL'].indexOf(this.request.status) !== -1) ||
-           (this.user.isBackOffice() && ['NEW', 'IN_PROGRESS'].indexOf(this.request.status) !== -1);
+    return (this.featureService.authorize('editRequestNameCustomer') && ['DRAFT', 'NEW', 'ON_CUSTOMER_APPROVAL'].indexOf(this.request.status) !== -1) ||
+           (this.featureService.authorize('editRequestNameBackoffice') && ['NEW', 'IN_PROGRESS'].indexOf(this.request.status) !== -1);
   }
 
-  everyPositionHasStatus(positions: RequestPosition[], status: string): boolean {
-    return positions.every(position => position.status === status);
+  everyPositionHasStatus(positions: RequestPosition[], statuses: PositionStatus[]): boolean {
+    return positions.every(position => statuses.includes(position.status));
   }
 
-  someOfPositionsHasStatus(positions: RequestPosition[], status: string): boolean {
-    return positions.some(position => position.status === status);
+  someOfPositionsHasStatus(positions: RequestPosition[], statuses: PositionStatus[]): boolean {
+    return positions.some(position => statuses.includes(position.status));
+  }
+
+  showCheckbox(positions: RequestPosition[]) {
+    return this.user.isCustomer() ||
+      this.user.isBackofficeBuyer() ||
+      this.user.isSeniorBackoffice() ||
+      (this.user.isCustomerApprover() && positions.some(position => position.status === PositionStatus.PROOF_OF_NEED));
   }
 
   someOfPositionsAreInProcedure(): boolean {
@@ -167,8 +180,9 @@ export class RequestComponent implements OnChanges {
     }
   }
 
-  isNotActual(position: RequestPosition): boolean {
-    return position.status === PositionStatus.CANCELED || position.status === PositionStatus.NOT_RELEVANT;
+  isNotActualOrOnApprove(position: RequestPosition): boolean {
+    return position.status === PositionStatus.CANCELED || position.status === PositionStatus.NOT_RELEVANT ||
+      (position.status === PositionStatus.PROOF_OF_NEED && this.user.isCustomer());
   }
 
   getPositionUrl(position: RequestPositionList): UrlTree {
@@ -208,7 +222,7 @@ export class RequestComponent implements OnChanges {
     this.approvePositions.emit(positionIds);
   }
 
-  onRejectPositions(rejectionMessage) {
+  onRejectPositions(rejectionMessage?: string) {
     const positionIds = this.checkedPositions.map(item => item.id);
 
     this.rejectPositions.emit({positionIds, rejectionMessage});
@@ -267,12 +281,16 @@ export class RequestComponent implements OnChanges {
 
     if (position) {
       formGroup.addControl("position", this.fb.control(position));
-      if (this.asPosition(position) && this.isNotActual(this.asPosition(position))) {
+      if (this.asPosition(position) && this.isNotActualOrOnApprove(this.asPosition(position))) {
         formGroup.get("checked").disable();
       }
     }
 
     return formGroup;
+  }
+
+  clickRejectPositions() {
+    this.user.isCustomerApprover() ? this.onRejectPositions() : this.rejectPositionModal.open();
   }
 
   trackByFormPositionId = (i, c: AbstractControl) => c.get("position").value.id;

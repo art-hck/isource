@@ -1,25 +1,4 @@
-import {
-  AfterViewChecked,
-  AfterViewInit,
-  ChangeDetectorRef,
-  Component,
-  ContentChildren,
-  ElementRef,
-  EventEmitter,
-  forwardRef,
-  HostBinding,
-  Inject,
-  InjectionToken,
-  Input,
-  NgZone,
-  OnDestroy,
-  OnInit,
-  Output,
-  PLATFORM_ID,
-  QueryList,
-  Renderer2,
-  ViewChild
-} from '@angular/core';
+import { AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, ContentChildren, ElementRef, EventEmitter, forwardRef, HostBinding, Inject, InjectionToken, Input, NgZone, OnDestroy, OnInit, Output, PLATFORM_ID, QueryList, Renderer2, ViewChild } from '@angular/core';
 import { UxgDropdownItemDirective } from "./uxg-dropdown-item.directive";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { DOCUMENT, isPlatformBrowser } from "@angular/common";
@@ -86,6 +65,8 @@ export class UxgDropdownComponent implements AfterViewInit, OnDestroy, AfterView
   get isDirectionUp() {
     if (this.itemsWrapper) {
       return this.direction === "up" || this.windowHeight < this.coords.bottom + this.itemsWrapper.offsetHeight;
+    } else {
+      return false;
     }
   }
 

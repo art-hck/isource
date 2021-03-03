@@ -1,3 +1,5 @@
+import { UxgExampleDatepickerComponent } from './uxg-example-datepicker/uxg-example-datepicker';
+import { UxgExampleNavigationComponent } from './uxg-example-navigation/uxg-example-navigation.component';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
@@ -29,7 +31,9 @@ import { UxgExampleWizzardComponent } from "./uxg-example-wizzard/uxg-example-wi
     UxgRouterLinkActiveDirective,
     UxgExampleHomeComponent,
     UxgExamplePopoverComponent,
-    UxgExampleWizzardComponent
+    UxgExampleWizzardComponent,
+    UxgExampleNavigationComponent,
+    UxgExampleDatepickerComponent
   ],
   imports: [
     BrowserModule,

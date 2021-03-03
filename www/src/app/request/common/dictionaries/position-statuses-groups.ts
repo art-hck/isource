@@ -3,6 +3,7 @@ import { PositionStatus } from "../enum/position-status";
 export const PositionStatusGroups = {
   DRAFT: [
     PositionStatus.DRAFT,
+    PositionStatus.PROOF_OF_NEED,
     PositionStatus.ON_CUSTOMER_APPROVAL
   ],
   NEW: [

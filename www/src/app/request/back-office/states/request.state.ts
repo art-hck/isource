@@ -17,6 +17,8 @@ import AttachDocuments = RequestActions.AttachDocuments;
 import UploadFromTemplate = RequestActions.UploadFromTemplate;
 import { ToastActions } from "../../../shared/actions/toast.actions";
 import EditRequestName = RequestActions.EditRequestName;
+import ChangeResponsibleUser = RequestActions.ChangeResponsibleUser;
+import ChangeResponsibleUserPositions = RequestActions.ChangeResponsibleUserPositions;
 
 export interface RequestStateStateModel {
   request: Request;
@@ -88,6 +90,20 @@ export class RequestState {
   @Action(Publish) publish({setState, dispatch}: Context, {requestId, positions, refresh}: Publish) {
     return this.rest.publishRequest(requestId, positions).pipe(
       switchMap(() => dispatch(refresh ? [new Refresh(requestId), new RefreshPositions(requestId)] : []))
+    );
+  }
+
+  @Action(ChangeResponsibleUser)
+  changeResponsibleUser({ setState, dispatch }: Context, { requestId, userId }: ChangeResponsibleUser) {
+    return this.rest.changeResponsibleUser(requestId, userId).pipe(
+      switchMap(() => dispatch([new Refresh(requestId), new RefreshPositions(requestId)]))
+    );
+  }
+
+  @Action(ChangeResponsibleUserPositions)
+  changeResponsibleUserPositions({ setState, dispatch }: Context, { requestId, userId, positionIds }: ChangeResponsibleUserPositions) {
+    return this.rest.changeResponsibleUserPositions(requestId, userId, positionIds).pipe(
+      switchMap(() => dispatch([new Refresh(requestId), new RefreshPositions(requestId)]))
     );
   }
 

@@ -8,7 +8,9 @@
   [pageSize]="pageSize"
   [availableFilters$]="availableFilters$"
   [form]="form"
+  [downloadRequestsList]="downloadRequestsList"
+  (openDownloadRequestsListModal)="onOpenDownloadRequestsListModal()"
   (filter)="fetchFilters$.next($event)"
   (refresh)="fetchFilters$.next({})"
-  (downloadRequests)="downloadRequests()"
+  (downloadRequests)="downloadRequests($event)"
 ></app-request-list>

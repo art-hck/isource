@@ -49,38 +49,49 @@
       <div class="app-col"></div>
       <div [ngSwitch]="view">
 
-        <button uxgButton secondary iconText (click)="procedureModalPayload = {action: 'create'}"
+        <button uxgButton secondary iconText
+                (click)="procedureModalPayload = {action: 'create'}"
                 *ngIf="featureService.authorize('createProcedure')">
           <uxg-icon shape="app-plus"></uxg-icon>
           <span>Создать процедуру</span>
         </button>
 
-        <!-- Новое предложение  -->
-        <button *ngSwitchCase="'list'" uxgButton secondary iconText (click)="showForm = true">
-          <uxg-icon shape="app-plus"></uxg-icon>
-          <span>Новое {{ sourceLabels[source]}}</span>
-        </button>
+        <ng-container *ngIf="featureService.authorize('createProposal')">
+          <!-- Новое предложение  -->
+          <button *ngSwitchCase="'list'"
+                  uxgButton secondary iconText
+                  (click)="showForm = true">
+            <uxg-icon shape="app-plus"></uxg-icon>
+            <span>Новое {{ sourceLabels[source]}}</span>
+          </button>
+        </ng-container>
 
-        <!-- Добавить столбец контрагента  -->
-        <button *ngSwitchCase="'grid'" uxgButton secondary iconText
-                [disabled]="allPositionsOnReview()"
-                (click)="addContragentModal.open()">
-          <uxg-icon shape="app-plus"></uxg-icon>
-          <span>Контрагент</span>
-        </button>
+        <ng-container *ngIf="featureService.authorize('addProposalContragent')">
+          <!-- Добавить столбец контрагента  -->
+          <button *ngSwitchCase="'grid'" uxgButton secondary iconText
+                  [disabled]="isAddContragentDisabled()"
+                  (click)="addContragentModal.open()">
+            <uxg-icon shape="app-plus"></uxg-icon>
+            <span>Контрагент</span>
+          </button>
+        </ng-container>
 
-        <!-- Новое предложение шаблона -->
-        <button uxgButton primary iconText (click)="uploadTemplateModal.open()">
-          <uxg-icon shape="app-plus"></uxg-icon>
-          <span>{{ sourceLabels[source]}} из шаблона</span>
-        </button>
+        <ng-container *ngIf="featureService.authorize('createProposalsFromTemplate')">
+          <!-- Новое предложение шаблона -->
+          <button uxgButton primary iconText (click)="uploadTemplateModal.open()">
+            <uxg-icon shape="app-plus"></uxg-icon>
+            <span>{{ sourceLabels[source]}} из шаблона</span>
+          </button>
+        </ng-container>
 
-        <!-- Отправить на согласование -->
-        <button *ngSwitchCase="'grid'" uxgButton primary
-                [disabled]="selectedPositions?.length === 0 || (status) !=='received'"
-                (click)="publishPositions.emit(selectedPositions)">
-          Отправить на согласование
-        </button>
+        <ng-container *ngIf="featureService.authorize('publishProposalPositions')">
+          <!-- Отправить на согласование -->
+          <button *ngSwitchCase="'grid'" uxgButton primary
+                  [disabled]="selectedPositions?.length === 0 || (status) !=='received'"
+                  (click)="publishPositions.emit(selectedPositions)">
+            Отправить на согласование
+          </button>
+        </ng-container>
       </div>
     </div>
   </ng-template>
@@ -179,7 +190,7 @@
                       <span>Позиция отредактирована</span>
                     </div>
                   </div>
-                  <ng-container *ngIf="canRollback(proposalsByPos.position, rollbackDuration)">
+                  <ng-container *ngIf="canRollback(proposalsByPos.position, rollbackDuration) && featureService.authorize('cancelPublishProposal')">
                     <button uxgButton primary type="button" [style.min-width.px]="135" (click)="rollback.emit(proposalsByPos.position)">
                       Отозвать <span class="cancel-timer"> {{ proposalsByPos.position.statusChangedDate | countdownTimer: rollbackDuration }} </span>
                     </button>

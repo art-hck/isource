@@ -25,6 +25,7 @@ export class UserInfoService {
     middleName: 'middleName',
 
     isCustomer: 'isCustomer',
+    isCustomerApprover: 'isCustomerApprover',
     isBackOffice: 'isBackOffice',
     isSupplier: 'isSupplier',
     isAdmin: 'isAdmin',
@@ -33,6 +34,7 @@ export class UserInfoService {
 
     isBackofficeBuyer: 'isBackofficeBuyer',
     isSeniorBackoffice: 'isSeniorBackoffice',
+    isBackofficeObserver: 'isBackofficeObserver',
 
     isSystemAdmin: 'isSystemAdmin',
 
@@ -70,12 +72,20 @@ export class UserInfoService {
         roles.push(UserRole.CUSTOMER_BUYER);
       }
 
+      if (this.isCustomerApprover()) {
+        roles.push(UserRole.CUSTOMER_APPROVER);
+      }
+
       if (this.isBackofficeBuyer()) {
         roles.push(UserRole.BACKOFFICE_BUYER);
       }
 
       if (this.isSeniorBackoffice()) {
         roles.push(UserRole.SENIOR_BACKOFFICE);
+      }
+
+      if (this.isBackofficeObserver()) {
+        roles.push(UserRole.BACKOFFICE_OBSERVER);
       }
 
       if (this.isSystemAdmin()) {
@@ -178,12 +188,20 @@ export class UserInfoService {
     return this.getUserInfo()?.isCustomerBuyer;
   }
 
+  public isCustomerApprover(): boolean {
+    return this.getUserInfo()?.isCustomerApprover;
+  }
+
   public isBackofficeBuyer(): boolean {
     return this.getUserInfo()?.isBackofficeBuyer;
   }
 
   public isSeniorBackoffice(): boolean {
     return this.getUserInfo()?.isSeniorBackoffice;
+  }
+
+  public isBackofficeObserver(): boolean {
+    return this.getUserInfo()?.isBackofficeObserver;
   }
 
   public isSystemAdmin(): boolean {
@@ -195,11 +213,7 @@ export class UserInfoService {
   }
 
   public getUserRole(): 'customer' | 'backoffice' {
-    return this.isCustomer() ? 'customer' : 'backoffice';
-  }
-
-  public getUserRoleName(): string {
-    return this.isCustomer() ? 'Заказчик' : 'Бэк-офис';
+    return this.isCustomer() || this.isCustomerApprover() ? 'customer' : 'backoffice';
   }
 
   public getContragentId(): string | null {

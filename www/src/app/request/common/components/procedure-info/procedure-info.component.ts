@@ -3,6 +3,7 @@ import { Procedure } from "../../../back-office/models/procedure";
 import moment from "moment";
 import { APP_CONFIG, GpnmarketConfigInterface } from "../../../../core/config/gpnmarket-config.interface";
 import { ContragentShortInfo } from "../../../../contragent/models/contragent-short-info";
+import { FeatureService } from "../../../../core/services/feature.service";
 
 @Component({
   selector: 'app-procedure-info',
@@ -30,8 +31,8 @@ export class ProcedureInfoComponent {
   constructor(
     @Inject(APP_CONFIG)
     private appConfig: GpnmarketConfigInterface,
-    ) {
-  }
+    public featureService: FeatureService
+  ) {}
 
   finished(): boolean {
     return moment(this.procedure?.dateEndRegistration).isBefore();

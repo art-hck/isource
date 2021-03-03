@@ -38,7 +38,7 @@
           <uxg-popover #prolongPopover [openOnHover]="true" [style.margin-left.rem]="0.5">
             <button uxgButton secondary
                     uxgPopoverTrigger
-                    [disabled]="prolongButtonIsDisabled()" (click)="prolong.emit()">
+                    [disabled]="prolongButtonIsDisabled() || !featureService.authorize('prolongProcedure')" (click)="prolong.emit()">
               Продлить
             </button>
 
@@ -67,7 +67,7 @@
           <uxg-popover #bargainPopover [openOnHover]="true" [style.margin-left.rem]="0.5">
             <button uxgButton secondary
                     uxgPopoverTrigger
-                    [disabled]="retradeButtonIsDisabled()" (click)="bargain.emit()">
+                    [disabled]="retradeButtonIsDisabled() || !featureService.authorize('retradeProcedure')" (click)="bargain.emit()">
               Уторговать
             </button>
 

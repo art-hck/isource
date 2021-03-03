@@ -128,6 +128,7 @@ export class PositionFormComponent implements OnInit, ControlValueAccessor, Vali
       isPnrRequired: [p?.isPnrRequired || false],
       isShmrRequired: [p?.isShmrRequired || false],
       measureUnit: [p?.measureUnit, Validators.required],
+      okeiCode: [p?.okeiCode],
       paymentTerms: [p?.paymentTerms || '30 дней по факту поставки', Validators.required],
       productionDocument: [p?.productionDocument, Validators.required],
       quantity: [p?.quantity, [Validators.required, Validators.pattern("^[.0-9]+$"), Validators.min(0.0001)]],
@@ -159,6 +160,11 @@ export class PositionFormComponent implements OnInit, ControlValueAccessor, Vali
 
     this.form = form;
     this.form.valueChanges.pipe(startWith(<{}>this.form.value)).subscribe(value => {
+      value = {
+        ...this.form.value,
+        measureUnit: this.form.value.measureUnit?.symbol ?? this.form.value.measureUnit,
+        okeiCode: this.form.value.measureUnit?.code
+      };
       this.writeValue(value);
       if (this.onChange) {
         this.onChange(value);
@@ -181,9 +187,9 @@ export class PositionFormComponent implements OnInit, ControlValueAccessor, Vali
           return;
         }
 
-        submit$ = this.positionService.updatePosition(this.position.id, this.form.value);
+        submit$ = this.positionService.updatePosition(this.position.id, this.value);
       } else {
-        submit$ = this.positionService.addPosition(this.requestId, [this.form.value])
+        submit$ = this.positionService.addPosition(this.requestId, [this.value])
           .pipe(map(positions => positions[0]));
       }
 
@@ -247,6 +253,7 @@ export class PositionFormComponent implements OnInit, ControlValueAccessor, Vali
     return event.key !== "-" && event.key !== "+";
   }
 
+  getOkeiSymbol = ({symbol}: Okei) => symbol?.toLowerCase();
   registerOnChange = (fn: any) => this.onChange = fn;
   registerOnTouched = (fn: any) => this.onTouched = fn;
   writeValue = (value) => this.value = value;

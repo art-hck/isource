@@ -7,8 +7,10 @@ export class RequestsListFilter {
   requestIds?: Uuid[];
   requestNameOrNumber?: string;
   onlyOpenTasks?: boolean;
+  onlyWithoutResponsibleUser?: boolean;
   customers?: Uuid[];
   positionStatuses?: PositionStatus[];
+  positionNotStatuses?: PositionStatus[];
   shipmentDateFrom?: string;
   shipmentDateTo?: string;
   shipmentDateAsap?: boolean;

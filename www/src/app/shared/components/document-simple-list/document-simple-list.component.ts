@@ -23,6 +23,7 @@ export class DocumentSimpleListComponent {
   @Input() enableDelete = false;
   @Input() enableUpload = true;
   @Input() uploadedDateHidden = false;
+  @Input() showUploadedTime = false;
   @Input() sizeInfoHidden = false;
   @Input() gridable = false;
   @Input() limit = 0;

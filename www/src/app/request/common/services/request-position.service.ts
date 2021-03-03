@@ -9,6 +9,7 @@ import { saveAs } from 'file-saver/src/FileSaver';
 import { RequestGroup } from "../models/request-group";
 import { GroupWithPositions } from "../models/groupWithPositions";
 import { RecommendedQuantity } from "../../customer/models/recommended-quantity";
+import { MtrPosition } from "isource-element/models/mtr-position";
 
 @Injectable()
 export class RequestPositionService {
@@ -58,5 +59,10 @@ export class RequestPositionService {
   getQuantityRecommendation(position: string) {
     const url = `#intelplan#forecasts-by-name`;
     return this.api.get<RecommendedQuantity[]>(url, {params: {name: position}});
+  }
+
+  getPositionMtrParams(mtrPositionId: Uuid): Observable<MtrPosition> {
+    const url = `#element#mtr/position-by-id/${mtrPositionId}`;
+    return this.api.get<MtrPosition>(url, {});
   }
 }

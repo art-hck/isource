@@ -16,6 +16,7 @@ import {User} from "../../../user/models/user";
 import {UserService} from "../../../user/service/user.service";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { saveAs } from 'file-saver/src/FileSaver';
+import { FeatureService } from "../../../core/services/feature.service";
 
 @Component({
   selector: 'app-contragent-info-view',
@@ -44,6 +45,7 @@ export class ContragentInfoViewComponent implements OnInit, OnDestroy {
     public getContragentService: ContragentService,
     protected employeeService: EmployeeService,
     protected userService: UserService,
+    public featureService: FeatureService,
     public user: UserInfoService,
     public router: Router,
     private store: Store

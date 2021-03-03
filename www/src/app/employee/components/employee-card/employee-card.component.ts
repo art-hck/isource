@@ -8,6 +8,7 @@ import { Uuid } from "../../../cart/models/uuid";
 import { EmployeeListRequestPosition } from "../../models/employee-list-request-position";
 import { ToastActions } from "../../../shared/actions/toast.actions";
 import { Store } from "@ngxs/store";
+import { RequestService } from "../../../request/back-office/services/request.service";
 
 @Component({
   selector: 'app-employee-card',
@@ -23,6 +24,7 @@ export class EmployeeCardComponent implements OnInit {
   sendingActivationLink = false;
 
   requestList: EmployeeInfoRequestItem[];
+  responsibleRequestList: EmployeeInfoRequestItem[];
   positionsList: EmployeeListRequestPosition[];
 
   requestCount: number;
@@ -33,7 +35,8 @@ export class EmployeeCardComponent implements OnInit {
     private title: Title,
     private route: ActivatedRoute,
     protected employeeService: EmployeeService,
-    private store: Store
+    private store: Store,
+    private requestService: RequestService
   ) { }
 
   ngOnInit() {
@@ -43,7 +46,8 @@ export class EmployeeCardComponent implements OnInit {
 
   getEmployeeInfo(id: Uuid): void {
     const subscription = this.employeeService.getEmployeeInfo(id).subscribe(employeeInfo => {
-      this.requestList = employeeInfo.requests;
+      this.requestList = employeeInfo.requestsWithResponsiblePositions;
+      this.responsibleRequestList = employeeInfo.responsibleRequests;
       this.positionsList = employeeInfo.positions;
       this.employee = employeeInfo.user;
 
@@ -76,4 +80,8 @@ export class EmployeeCardComponent implements OnInit {
     );
   }
 
+  setResponsibleUser(requestId: Uuid, userId: Uuid ) {
+    this.requestService.changeResponsibleUser(requestId, userId)
+      .subscribe(() => this.getEmployeeInfo(this.employeeId));
+  }
 }

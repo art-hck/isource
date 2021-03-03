@@ -40,10 +40,11 @@
         <uxg-dropdown-input
           lg appSuggestions strictMode formControlName="measureUnit" placeholder="Ед. измерения"
           [$]="okeiList$" [searchFn]="okeiService.searchOkei" #okei="appSuggestions" [appControlWrap]="true"
+          [displayByFn]="getOkeiSymbol"
         >
           <ng-container *ngIf="(okei.suggestions$ | async) as okeiSuggestions">
             <div uxgDropdownItem *ngFor="let suggestion of okeiSuggestions"
-                 [value]="suggestion.symbol | lowercase"
+                 [value]="suggestion"
                  [attr.title]="suggestion.name | lowercase"
             >{{suggestion.symbol | lowercase }} <span class="app-ghost-color">- {{suggestion.name | lowercase}}</span>
             </div>

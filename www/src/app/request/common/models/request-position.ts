@@ -22,6 +22,7 @@ export class RequestPosition extends RequestPositionList {
   contragentId: Uuid;
   productionDocument: string;
   measureUnit: string;
+  okeiCode: number;
   quantity: number;
   deliveryDate: string;
   isDeliveryDateAsap: boolean;
@@ -58,5 +59,6 @@ export class RequestPosition extends RequestPositionList {
   nameTemplate?: string;
   availableStatuses?: string[];
   availableEditFields?: string[];
+  mtrPositionId?: Uuid;
   beforeNormalizedName: string;
 }

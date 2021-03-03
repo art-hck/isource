@@ -1,26 +1,26 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
+import { DashboardTasks } from "../../common/models/dashboard-tasks";
+import { DashboardAvailableFilters } from "../../common/models/dashboard-available-filters";
 import { Observable } from "rxjs";
-import { DashboardMapMarkerItem } from "../models/dashboard-map-marker-item";
 
 @Injectable()
 export class DashboardService {
 
   constructor(protected api: HttpClient) {
   }
-
-  getPositionStatusStatistic(): Observable<{status: string, count: number}[]> {
-    const url = `requests/customer/dashboard/statistics/position-statuses`;
-    return this.api.post<{status: string, count: number}[]>(url, {});
+  getAgreements(filters = null, startFrom: number = 0, pageSize: number = 5) {
+    const url = `requests/customer/tasks`;
+    return this.api.post<DashboardTasks>(url, {startFrom, pageSize, filters});
   }
 
-  getBasisStatistic(): Observable<DashboardMapMarkerItem[]> {
-    const url = `requests/customer/basis-percents`;
-    return this.api.get<DashboardMapMarkerItem[]>(url);
+  getStatusesStatistics(filters = null): Observable<any> {
+    const url = `requests/customer/dashboard/statistic`;
+    return this.api.post<any>(url, { filters });
   }
 
-  getPositionMoneyStatistic(): Observable<Array<{status: string, price: number}>> {
-    const url = `requests/customer/dashboard/statistics/position-prices`;
-    return this.api.post<{status: string, price: number}[]>(url, {});
+  getDashboardAvailableFilters(filters = null) {
+    const url = `requests/customer/dashboard/available-filters`;
+    return this.api.post<DashboardAvailableFilters>(url, { filters });
   }
 }

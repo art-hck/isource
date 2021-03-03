@@ -10,7 +10,7 @@
       <small class="app-col kpp">КПП</small>
       <small class="app-col email">E-mail</small>
       <small class="app-col responsible">Ответственный менеджер БО</small>
-      <small class="app-col-auto edit" *ngIf="user.isSeniorBackoffice()"></small>
+      <small class="app-col-auto edit" *ngIf="featureService.authorize('editContragent')"></small>
     </div>
   </div>
 
@@ -29,17 +29,15 @@
 
         <div class="app-col responsible">{{ contragent.responsible?.shortName || '—' }}</div>
 
-        <div class="app-col-auto edit">
-          <button
-            uxgButton
-            secondary
-            icon
-            *ngIf="(user.isBackOffice() && user.isInGroup(contragent.usersGroupId)) || user.isAdmin()"
-            (click)="edit($event, contragent)"
-          >
-            <uxg-icon shape="app-pen"></uxg-icon>
-          </button>
-        </div>
+        <ng-container *ngIf="featureService.authorize('editContragent')">
+          <div class="app-col-auto edit">
+            <button uxgButton secondary icon
+              *ngIf="user.isBackOffice() || user.isAdmin()"
+              (click)="edit($event, contragent)">
+              <uxg-icon shape="app-pen"></uxg-icon>
+            </button>
+          </div>
+        </ng-container>
       </a>
     </ng-container>
   </div>

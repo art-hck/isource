@@ -1,6 +1,6 @@
 <ng-container *ngIf="agreements; else loading">
   <ng-container *ngIf="agreements.length > 0; else emptyAgreementsList">
-    <div class="app-table app-no-border">
+    <div class="app-table agreements-list-header app-no-border">
       <div class="app-row" [ngClass]="{'dashboard-header': dashboardView}">
         <small class="app-col-1 app-ghost-color id"><b>№ ЗАЯВКИ</b></small>
         <small class="app-col-3 app-ghost-color name"><b>НАИМЕНОВАНИЕ ПОЗИЦИИ/ГРУППЫ</b></small>
@@ -58,10 +58,27 @@
           </app-position-status>
         </div>
         <div class="app-col-2 action app-ellipsis">
-          <a [routerLink]="getRouterLink(agreement)">
-            {{agreement.action.label }}
-          </a>
+          <ng-container *ngIf="agreement.action.name === 'REVIEW_COMPLETED_POSITION'; else routerLink">
+            <a class="app-link" (click)="setRatingModal.open()" title="{{ agreement.action.label }}">
+              {{ agreement.action.label }}
+            </a>
+          </ng-container>
+          <ng-template #routerLink>
+            <a [routerLink]="getRouterLink(agreement)" title="{{ agreement.action.label }}">
+              {{ agreement.action.label }}
+            </a>
+          </ng-template>
         </div>
+
+        <!-- Модальное окно оценки -->
+        <uxg-modal #setRatingModal size="s">
+          <h2>Оцените платформу</h2>
+          <p class="app-color-secondary">Оцените качество работы платформы и предоста- вленных услуг.
+            После сохранения оценку будет невозможно изменить.</p>
+          <app-star-rating
+            (sendRating)="sendRating.emit({requestId: agreement.request?.id, positionId: agreement.requestPosition?.id, rating: $event})"
+            (close)="setRatingModal.close()"></app-star-rating>
+        </uxg-modal>
       </div>
     </div>
   </ng-container>

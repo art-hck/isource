@@ -15,5 +15,7 @@ export class UxgWizzardStepsComponent {
       case stepInfo.disabled: return 'app-lock';
       case stepInfo.completed: return 'app-check';
     }
+
+    return null;
   }
 }

@@ -52,8 +52,8 @@
     <hr/>
 
     <div class="app-col app-secondary-color section" *ngIf="source === 'TECHNICAL_COMMERCIAL_PROPOSAL'">
-      Вы можете либо приложить необходимые документы, либо заполнить все заводские наименования, либо приложить
-      документы и заполнить все заводские наименования. Все цены нужно указывать <b>без НДС</b>.
+      Вам необходимо выбрать позиции предложения, а также заполнить все обязательные поля (заводские наименования, изготовителя и параметры предложения). <br>
+      Дополнительно можно приложить документы. Все цены нужно указывать <b>без НДС</b>.
     </div>
     <div class="app-row section" *ngIf="form.get('positions') as control">
       <div class="app-col" [style.max-width.px]="700">
@@ -92,7 +92,7 @@
               </div>
             </div>
 
-            <ng-container *ngIf="control.value.length; else manufacturerError">
+            <ng-container *ngIf="control.value.length; else manufacturerItemError">
               <div *ngFor="let proposalPosition of control.value" class="position-info-item">
                 <ng-container *ngIf="source === 'TECHNICAL_COMMERCIAL_PROPOSAL' || source === 'TECHNICAL_PROPOSAL'">
                   <ng-container *ngIf="proposalPosition.manufacturingName; else manufacturerItemError">
@@ -107,13 +107,6 @@
               </div>
             </ng-container>
 
-            <ng-template #manufacturerError>
-              <div class="position-info-item" *ngIf="form.get('positions').dirty && form.get('positions').touched">
-                <div class="app-control-error">
-                  <span class="error-message">Заполните наименования для каждой позиции</span>
-                </div>
-              </div>
-            </ng-template>
             <ng-template #manufacturerItemError>
               <ng-container *ngIf="(!isManufacturingNamePristine && !isManufacturerPristine) || form.get('positions').dirty && form.get('positions').touched">
                 <span class="error-message">Заполните данные</span>
@@ -126,7 +119,7 @@
         <div class="app-row title">
           <div class="app-col"><small class="app-uppercase app-ghost-color app-bold">Сумма без НДС</small></div>
           <div class="app-col"><small class="app-uppercase app-ghost-color app-bold">Количество</small></div>
-          <div class="app-col"><small class="app-uppercase app-ghost-color app-bold">Цена за ед. без НДС</small></div>
+          <div class="app-col"><small class="app-uppercase app-ghost-color app-bold">Цена за ед. без НДС1</small></div>
           <div class="app-col"><small class="app-uppercase app-ghost-color app-bold">Срок пост.</small></div>
         </div>
         <div>
@@ -136,7 +129,7 @@
           </button>
         </div>
 
-        <ng-container *ngIf="control.value.length; else parameterError">
+        <ng-container *ngIf="control.value.length; else parameterItemError">
           <div class="position-info-item app-row" *ngFor="let pos of control.value">
             <ng-container
               *ngIf="pos.priceWithoutVat && pos.quantity && pos.measureUnit && pos.currency && pos.deliveryDate; else parameterItemError">
@@ -160,13 +153,6 @@
           </div>
         </ng-container>
 
-        <ng-template #parameterError>
-          <div class="position-info-item" *ngIf="form.get('positions').dirty && form.get('positions').touched">
-            <div class="app-control-error">
-              <span class="error-message">Заполните наименования для каждой позиции</span>
-            </div>
-          </div>
-        </ng-template>
         <ng-template #parameterItemError>
           <ng-container *ngIf="!isParamsPristine || form.get('positions').dirty && form.get('positions').touched">
             <span class="error-message">Заполните параметры для позиций</span>

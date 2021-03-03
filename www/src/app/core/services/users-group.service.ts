@@ -14,7 +14,7 @@ export class UsersGroupService {
   ) {
   }
 
-  getGroups(): Observable<UsersGroup[]> {
-    return this.api.get<UsersGroup[]>(`users-groups`);
+  getBackofficeGroups(): Observable<UsersGroup[]> {
+    return this.api.get<UsersGroup[]>(`users/groups/backoffice`);
   }
 }

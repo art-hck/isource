@@ -30,6 +30,11 @@ export const Menu: MenuModel[] = [
     feature: 'backofficeRequest',
   },
   {
+    text: 'Заявки',
+    path: 'requests/approver',
+    feature: 'approverRequest',
+  },
+  {
     text: 'Каталог',
     path: 'catalog',
     feature: 'catalog',
@@ -37,6 +42,7 @@ export const Menu: MenuModel[] = [
   {
     text: 'Контрагенты',
     path: 'contragents',
+    feature: 'contragents',
   },
   {
     text: 'Сотрудники',

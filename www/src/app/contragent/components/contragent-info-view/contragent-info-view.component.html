@@ -8,16 +8,14 @@
       <span *ngIf="downloading" class="spinner spinner-sm"></span>
     </div>
 
-    <button
-      uxgButton
-      secondary
-      iconText
-      *ngIf="(user.isBackOffice() && user.isInGroup(contragent.usersGroupId)) || user.isAdmin()"
-      (click)="router.navigateByUrl('/contragents/' + contragent.id + '/edit')"
-    >
-      <uxg-icon shape="app-pen"></uxg-icon>
-      Редактировать контрагента
-    </button>
+    <ng-container *ngIf="featureService.authorize('editContragent')">
+      <button uxgButton secondary iconText
+              (click)="router.navigateByUrl('/contragents/' + contragent.id + '/edit')">
+        <uxg-icon shape="app-pen"></uxg-icon>
+        Редактировать контрагента
+      </button>
+    </ng-container>
+
     <button uxgButton primary
             (click)="onDownloadPrimaInformReport()"
             [disabled]="downloading">
@@ -43,7 +41,7 @@
           <span class="spinner spinner-md"></span>
         </ng-template>
 
-        <div class="action" *ngIf="(customerBuyerUsersWithoutContragent$ | async)?.length > 0">
+        <div class="action" *ngIf="(customerBuyerUsersWithoutContragent$ | async)?.length > 0 && featureService.authorize('addContragentToUser')">
           <button
             uxgButton
             primary

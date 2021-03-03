@@ -13,8 +13,16 @@
         <span *ngIf="!canApprove">На согласовании</span>
         <span *ngIf="canApprove">Необходимо рассмотреть</span>
       </div>
+      <div class="app-ghost-color app-bold" *ngSwitchCase="'APPROVED'">
+        <uxg-icon shape="app-waiting"></uxg-icon>
+        <span *ngIf="!canApprove">На согласовании</span>
+        <span *ngIf="canApprove">Необходимо рассмотреть</span>
+      </div>
+
       <div class="app-warning-color app-bold" *ngSwitchCase="'REJECTED'"><uxg-icon shape="app-warning"></uxg-icon><span>На доработке</span></div>
-      <div class="app-success-color app-bold" *ngSwitchCase="'APPROVED'"><uxg-icon shape="app-check"></uxg-icon><span>Согласован</span></div>
+      <div class="app-ghost-color app-bold" *ngSwitchCase="'SIGNED_BY_CUSTOMER'"><uxg-icon shape="app-waiting"></uxg-icon><span>Ожидает подписания поставщиком</span></div>
+      <div class="app-ghost-color app-bold" *ngSwitchCase="'SIGNED_BY_SUPPLIER'"><uxg-icon shape="app-waiting"></uxg-icon><span>Подписан поставщиком</span></div>
+      <div class="app-success-color app-bold" *ngSwitchCase="'CONFIRMED_BY_CUSTOMER_WO_SIGN'"><uxg-icon shape="app-check"></uxg-icon><span>Согласован</span></div>
       <div class="app-success-color app-bold" *ngSwitchCase="'SIGNED'"><uxg-icon shape="app-check"></uxg-icon><span>Подписан</span></div>
       <div class="app-ghost-color app-bold" *ngSwitchCase="'ARCHIVE'"><uxg-icon shape="app-draft"></uxg-icon><span>Архив</span></div>
     </ng-container>
@@ -92,7 +100,17 @@
               </app-document-simple-list>
             </div>
             <div class="app-col-3 app-ellipsis">{{ document.user.shortName }} <span class="app-ghost-color">{{document.created | date : 'dd.MM.yyyy HH:mm'}}</span></div>
-            <div class="app-col-6 app-ellipsis">{{ document.comments }}</div>
+            <div class="app-col-5 app-ellipsis" [title]="document.comments">
+              {{ document.comments }}
+            </div>
+            <div class="app-col-1 app-ellipsis">
+              <button uxgButton link lg icon *ngIf="document.hasSignedStorageFile"
+                      (click)="onDownloadDocumentWithSign(document)"
+                      type="button" class="btn-download"
+                      title="Скачать печатную форму документа с подписями">
+                <uxg-icon shape="app-download"></uxg-icon>
+              </button>
+            </div>
           </div>
         </div>
       </ng-container>
@@ -104,30 +122,38 @@
         </div>
 
         <div class="app-row app-align-items-center">
-          <div class="app-col-6 app-basis-auto app-ellipsis"><input uxgInput type="text" lg formControlName="comment" placeholder="Текст комментария"/></div>
+          <div class="app-col-6 app-basis-auto app-ellipsis">
+            <input uxgInput type="text" lg formControlName="comment" placeholder="Текст комментария"/>
+          </div>
+
           <app-document-upload-list
             *ngIf="files?.length; else uploadFile"
             class="app-col-6"
             [documents]="files"
             (fileSelected)="selectFiles($event)"
             [uploadAvailable]="false"
+            [hideUploadedListTitle]="true"
           ></app-document-upload-list>
 
           <ng-template #uploadFile>
             <div class="app-col app-ghost-color">
               <span>Необходимо выбрать файл договора для прикрепления и отправки на согласование</span>
             </div>
+
             <div class="app-col-auto">
-              <button uxgButton secondary appUploadFile type="button" (select)="selectFiles($event);">Выбрать документ</button>
+              <button uxgButton secondary appUploadFile
+                      [disabled]="!featureService.authorize('attachContractDocument')"
+                      type="button" (select)="selectFiles($event);">Выбрать документ</button>
             </div>
           </ng-template>
         </div>
       </ng-container>
       <!-- footer -->
-      <ng-container *ngIf="canSend || canRollback || canReject || canApprove || canSign || signedByCustomer || signedBySupplier">
+      <ng-container *ngIf="canSend || canRollback || canReject || canApprove || approvedByCustomer || confirmedByCustomerNoSign || signedByCustomer || signedBySupplier">
         <hr/>
         <div class="app-row app-align-items-center">
-          <button uxgButton iconText secondary type="button" *ngIf="download.observers.length" (click)="download.emit()">
+          <button uxgButton iconText secondary type="button"
+                  *ngIf="download.observers.length && featureService.authorize('downloadGeneratedContract')" (click)="download.emit()">
             <uxg-icon shape="app-download"></uxg-icon>
             <span>Скачать типовой договор</span>
           </button>
@@ -135,15 +161,22 @@
           <div class="app-col"></div>
           <div *ngIf="status === 'updating'"><span class="spinner spinner-inline"></span></div>
 
-          <button uxgButton primary *ngIf="canSend" [disabled]="status === 'updating' || form.invalid">Отправить на согласование</button>
+          <button uxgButton primary *ngIf="canSend"
+                  [disabled]="status === 'updating' || form.invalid || !featureService.authorize('sendContractToApproval')">Отправить на согласование</button>
 
-          <button uxgButton primary type="button" *ngIf="canRollback" [style.min-width.px]="140" [disabled]="status === 'updating'" (click)="rollback.emit()">
+          <button uxgButton primary type="button" *ngIf="canRollback" [style.min-width.px]="140"
+                  [disabled]="status === 'updating' || !featureService.authorize('rollbackSentToApprovalContract')" (click)="rollback.emit()">
             Отозвать {{ rollbackDate | countdownTimer: rollbackDuration }}
           </button>
 
-          <ng-container *ngIf="canReject || canApprove">
+          <ng-container *ngIf="user.isCustomer() && (canReject || canApprove)">
             <button uxgButton secondary type="button" [disabled]="status === 'updating'" (click)="reject.emit(form.value)">На доработку</button>
-            <button uxgButton primary type="button" [disabled]="status === 'updating'" (click)="signDocumentModal.open()">Согласовать</button>
+            <button uxgButton primary type="button" [disabled]="status === 'updating'" (click)="approve.emit()">Согласовать</button>
+          </ng-container>
+
+          <ng-container *ngIf="user.isCustomer() && approvedByCustomer">
+            <button uxgButton secondary type="button" [disabled]="status === 'updating'" (click)="confirmWithoutSigning.emit()">Продолжить без подписания ЭЦП</button>
+            <button uxgButton primary type="button" [disabled]="status === 'updating'" (click)="openCertificatesListModal()">Подписать ЭЦП</button>
           </ng-container>
 
           <ng-container *ngIf="signedByCustomer">
@@ -172,15 +205,25 @@
             </ng-container>
 
             <ng-container *ngIf="user.isBackOffice()">
-              <div class="app-col-auto app-ghost-color text-right">
-                Документ подписан с обеих сторон электронной цифровой подписью. <br>
-                Вы можете продолжить работу с позицией по обычному процессу.
-              </div>
-              <button uxgButton primary type="button" [disabled]="status === 'updating'" (click)="sign.emit()">Подтвердить подписание</button>
+              <ng-container *ngIf="featureService.authorize('confirmContractSign'); else canNotConfirmSign">
+                <div class="app-col-auto app-ghost-color text-right">
+                  Документ подписан с обеих сторон электронной цифровой подписью. <br>
+                  Вы можете продолжить работу с позицией по обычному процессу.
+                </div>
+                <button uxgButton primary type="button"
+                        [disabled]="status === 'updating'"
+                        (click)="sign.emit()">Подтвердить подписание</button>
+              </ng-container>
+
+              <ng-template #canNotConfirmSign>
+                <div class="app-col-auto app-ghost-color text-right">
+                  Документ подписан с обеих сторон электронной цифровой подписью.
+                </div>
+              </ng-template>
             </ng-container>
           </ng-container>
 
-          <ng-container *ngIf="canSign">
+          <ng-container *ngIf="featureService.authorize('confirmContractSign') && confirmedByCustomerNoSign">
             <button uxgButton primary type="button" [disabled]="status === 'updating'" (click)="sign.emit()">Подтвердить подписание</button>
           </ng-container>
         </div>
@@ -200,18 +243,15 @@
     </div>
 
     <ng-template uxgModalFooter>
-      <button class="app-col-auto" uxgButton secondary lg type="button" (click)="approve.emit(); signDocumentModal.close();">Продолжить без подписания ЭЦП</button>
+      <button class="app-col-auto" uxgButton secondary lg type="button" (click)="confirmWithoutSigning.emit(); signDocumentModal.close();">Продолжить без подписания ЭЦП</button>
       <button uxgButton primary lg (click)="openCertificatesListModal()">Подписать ЭЦП</button>
     </ng-template>
   </div>
 </uxg-modal>
 
-
-<!-- TODO Перенести в общий компонент, т.к. переиспользуется! -->
 <uxg-modal #certificatesListModal size="m" class="certificates-list-modal">
-
   <h3>Выбор подписи ЭЦП</h3>
-  <br/>
+  <br>
 
   <form appFormValidation [formGroup]="certForm" (ngSubmit)="onSignDocument()">
     <div class="app-section">
@@ -220,33 +260,17 @@
         Вы можете выбрать только одну подпись для одного документа
       </div>
 
-      <ng-container *ngIf="certificates?.length; else loader">
-        <div class="certificates-list">
-          <div class="app-row app-align-items-top cert-item" *ngFor="let certificate of certificates">
-            <div class="app-col-auto">
-              <uxg-radio-item class="app-control" formControlName="thumbprint"
-                              value="{{ certificate.data.thumbprint }}">
-              </uxg-radio-item>
-            </div>
-
-            <div class="cert-info">
-              <div class="name app-bold">{{ certificate.data.name }}</div>
-              <div class="brief">
-                <span><span class="app-ghost-color">ИНН:</span> {{ certificate.ownerInfo['ИНН'] }}, </span>
-                <span><span class="app-ghost-color">Действует до:</span> {{ certificate.data.validTo | date : "dd.MM.yyyy" }}</span>
-              </div>
-            </div>
-          </div>
-        </div>
+      <ng-container *ngIf="certificatesListModal.state">
+        <app-digital-signature-list formControlName="certificate"></app-digital-signature-list>
       </ng-container>
 
-      <ng-template #loader>
-        <span class="spinner spinner-md"></span>
-      </ng-template>
-
       <ng-template uxgModalFooter>
-        <button class="app-col-auto" uxgButton secondary lg type="button" (click)="certificatesListModal.close()">Отмена</button>
-        <button uxgButton primary lg (click)="onSignDocument(); certificatesListModal.close()">Подписать</button>
+        <div class="app-row app-align-items-center app-justify-content-end">
+          <div *ngIf="signingStatus"><span class="spinner spinner-inline"></span></div>
+
+          <button class="app-col-auto" uxgButton secondary lg type="button" (click)="certificatesListModal.close()">Отмена</button>
+          <button uxgButton primary lg [disabled]="signingStatus" (click)="onSignDocument()">Подписать</button>
+        </div>
       </ng-template>
     </div>
   </form>

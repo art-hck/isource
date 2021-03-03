@@ -32,7 +32,7 @@ export class ProposalViewComponent implements AfterViewInit, OnChanges, OnDestro
   @ViewChildren('sendToEditRadio') sendToEditRadioElRef: QueryList<UxgRadioItemComponent>;
   @ViewChildren('proposalOnReview') proposalsOnReview: QueryList<ProposalComponent | GridRowComponent>;
   @ViewChild(GridFooterComponent, { read: ElementRef }) proposalsFooterRef: ElementRef;
-  @ViewChildren("tcpComponent") tcpComponentList: QueryList<ProposalComponent>;
+  @ViewChildren("proposalComponent") proposalComponentList: QueryList<ProposalComponent>;
 
   @Input() request: Request;
   @Input() positions: RequestPosition[];
@@ -166,15 +166,9 @@ export class ProposalViewComponent implements AfterViewInit, OnChanges, OnDestro
   }
 
   get selectedPositions() {
-    const checkedPositions = [];
-
-    this.tcpComponentList?.forEach((tcpComponent) => {
-      checkedPositions.push(...tcpComponent.selectedPositions);
-    });
-
-    return checkedPositions;
+    return this.proposalComponentList?.map(c => c.selectedPositions).reduce(
+      (acc, curr) => [...acc, ...curr], []);
   }
-
 
   constructor(
     @Inject(DOCUMENT) private document: Document,
@@ -263,15 +257,15 @@ export class ProposalViewComponent implements AfterViewInit, OnChanges, OnDestro
 
   approveFromListView(): void {
     if (this.selectedPositions) {
-      const selectedPositions = Array.from(this.selectedPositions, (tcp) => tcp);
-      this.review.emit({accepted: selectedPositions});
+      this.review.emit({ accepted: this.selectedPositions });
     }
   }
 
   sendToEditFromListView(): void {
     if (this.selectedPositions) {
-      const selectedPositions = Array.from(this.selectedPositions, (tcp) => tcp.position);
-      this.review.emit({sendToEdit: selectedPositions});
+      this.review.emit({
+        sendToEdit: this.selectedPositions.map(item => this.positions.find(({ id }) => id === item.requestPositionId))
+      });
     }
   }
 
@@ -319,13 +313,17 @@ export class ProposalViewComponent implements AfterViewInit, OnChanges, OnDestro
   }
 
   onPositionSelected(data): void {
-    this.tcpComponentList.forEach((tcpComponent) => {
+    this.proposalComponentList.forEach((tcpComponent) => {
       tcpComponent.refreshPositionsSelectedState(data.index, data.selectedPositions);
     });
   }
 
   getProposal = (positionProposal: CommonProposalByPosition, proposal: Proposal<CommonProposalItem>) => {
     return positionProposal.items.find(({ id }) => id === proposal.id);
+  }
+
+  getHiddenSupplierNumber(proposalSupplierId): number {
+    return this.suppliers(this.proposals).findIndex(s => s.id === proposalSupplierId) + 1;
   }
 
   converProposalPosition = ({ items }: CommonProposalByPosition) => items.map((item) => new Proposal(item));

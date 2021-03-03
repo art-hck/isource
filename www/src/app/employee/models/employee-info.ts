@@ -6,7 +6,8 @@ import { ContragentInfoBankRequisites } from "../../contragent/models/contragent
 import { User } from "../../user/models/user";
 
 export class EmployeeInfo {
-  requests: EmployeeInfoRequestItem[];
+  requestsWithResponsiblePositions: EmployeeInfoRequestItem[];
+  responsibleRequests: EmployeeInfoRequestItem[];
   positions: EmployeeListRequestPosition[];
   user: EmployeeInfoBrief;
 

@@ -9,7 +9,6 @@ import {
 } from '@angular/core';
 import { ToastActions } from "../../../../../shared/actions/toast.actions";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { CommercialProposalsService } from "../../../services/commercial-proposals.service";
 import { Store } from "@ngxs/store";
 import { Uuid } from "../../../../../cart/models/uuid";
 import * as moment from "moment";
@@ -89,23 +88,29 @@ export class ProcedureProlongateComponent implements OnChanges, OnDestroy {
 
   submit() {
     if (this.form.valid) {
-      const { requestId, procedureId, dateEndRegistration, dateSummingUp } = this.form.value;
       this.isLoading = true;
-      this.procedureService.prolongateProcedureEndDate(
-        requestId,
-        procedureId,
-        moment(dateEndRegistration, "DD.MM.YYYY HH:mm"),
-        moment(dateSummingUp, "DD.MM.YYYY HH:mm")
-      ).pipe(
-        tap(() => this.store.dispatch(new ToastActions.Success("Дата успешно изменена"))),
-        tap(() => this.complete.emit()),
-        catchError(err => {
-          this.store.dispatch(new ToastActions.Error(err?.error?.detail ?? "Не удалось изменить дату"));
-          return throwError(err);
-        }),
-        finalize(() => this.isLoading),
-        takeUntil(this.destroy$),
-      ).subscribe();
+
+      // Значение формы обновляется после закрытия слоя с датапикером и не моментально,
+      // поэтому отправить форму можем после небольшого ожидания, пока значения формы не перезапишутся
+      // см. isprocessor-201
+      setTimeout(() => {
+        const { requestId, procedureId, dateEndRegistration, dateSummingUp } = this.form.value;
+        this.procedureService.prolongateProcedureEndDate(
+            requestId,
+            procedureId,
+            moment(dateEndRegistration, "DD.MM.YYYY HH:mm"),
+            moment(dateSummingUp, "DD.MM.YYYY HH:mm")
+        ).pipe(
+            tap(() => this.store.dispatch(new ToastActions.Success("Дата успешно изменена"))),
+            tap(() => this.complete.emit()),
+            catchError(err => {
+              this.store.dispatch(new ToastActions.Error(err?.error?.detail ?? "Не удалось изменить дату"));
+              return throwError(err);
+            }),
+            finalize(() => this.isLoading),
+            takeUntil(this.destroy$),
+        ).subscribe();
+      }, 350);
     }
   }
 

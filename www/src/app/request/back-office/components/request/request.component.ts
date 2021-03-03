@@ -23,6 +23,9 @@ import Fetch = RequestActions.Fetch;
 import FetchPositions = RequestActions.FetchPositions;
 import AttachDocuments = RequestActions.AttachDocuments;
 import EditRequestName = RequestActions.EditRequestName;
+import ChangeResponsibleUser = RequestActions.ChangeResponsibleUser;
+import ChangeResponsibleUserPositions = RequestActions.ChangeResponsibleUserPositions;
+import { PositionService } from "../../services/position.service";
 
 @Component({
   templateUrl: './request.component.html',
@@ -39,19 +42,24 @@ export class RequestComponent implements OnInit, OnDestroy {
   readonly destroy$ = new Subject();
   readonly refresh = id => new Refresh(id);
   readonly refreshPositions = id => new RefreshPositions(id);
+  readonly changeResponsibleUser = (requestId: Uuid, userId: Uuid ) => new ChangeResponsibleUser(requestId, userId);
+  readonly changeResponsibleUserPositions = (requestId: Uuid, userId: Uuid, positions: RequestPosition[] ) => {
+    return new ChangeResponsibleUserPositions(requestId, userId, positions.map(({ id }) => id));
+  }
   readonly saveRequestName = data => new EditRequestName(this.requestId, data);
   readonly attachDocuments = ({positionIds, files}) => new AttachDocuments(this.requestId, positionIds, files);
   readonly publish = (id, positions) => new Publish(id, true, positions.map(position => position.id));
   readonly uploadFromTemplate = ({files}) => new UploadFromTemplate(this.requestId, files);
   readonly sendOnApprove = (position: RequestPosition): Observable<RequestPosition> => this.store
     .dispatch(new Publish(this.requestId, false, [position.id])).pipe(
-      switchMap(() => this.requestService.getRequestPosition(this.requestId, position.id))
+      switchMap(() => this.positionService.info(this.requestId, position.id))
     )
 
   constructor(
     public store: Store,
     private route: ActivatedRoute,
     private requestService: RequestService,
+    private positionService: PositionService,
     private bc: UxgBreadcrumbsService,
     private title: Title,
     private actions: Actions

@@ -8,7 +8,7 @@
 
     <h3 class="app-col">
       <app-contragent-info-link
-        hiddenName="Поставщик №{{technicalCommercialProposalIndex + 1}}"
+        hiddenName="Поставщик №{{ hiddenSupplierNumber }}"
         [contragent]="proposal.supplier">
       </app-contragent-info-link>
     </h3>
@@ -151,8 +151,6 @@
       <div class="app-row app-align-items-center bottom-row">
         <div class="app-col app-secondary-color">
           Все цены указаны <b>без НДС</b>.
-<!--          Вы можете отклонить все предложения по этой <br>-->
-<!--          позиции и не получать другие предложения по ней от этих поставщиков-->
         </div>
 
         <div class="app-col app-col-auto total-price-block">
@@ -165,12 +163,11 @@
 
         <div class="app-row app-col app-col-auto app-align-items-center">
           <span *ngIf="isLoading" class="spinner spinner-inline">Загрузка...</span>
-<!-- Вернуть после реализации gpn_market-3126 -->
-<!--          <button uxgButton secondary-->
-<!--                  (click)="sendToEdit.emit()"-->
-<!--                  [disabled]="selectedPositions?.length === 0 || isLoading">-->
-<!--            На доработку-->
-<!--          </button>-->
+          <button uxgButton secondary
+                  (click)="sendToEdit.emit()"
+                  [disabled]="selectedPositions?.length === 0 || isLoading">
+            На доработку
+          </button>
 
           <button uxgButton primary
                   (click)="approve.emit()"

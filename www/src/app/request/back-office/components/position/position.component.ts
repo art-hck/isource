@@ -1,29 +1,34 @@
 import { ActivatedRoute, Router } from "@angular/router";
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { Title } from "@angular/platform-browser";
-import { Observable, of, Subscription } from "rxjs";
+import { merge, Observable, of, Subject, Subscription } from "rxjs";
 import { UxgBreadcrumbsService } from "uxg";
 import { switchMap, tap } from "rxjs/operators";
 import { RequestPosition } from "../../../common/models/request-position";
 import { RequestService } from "../../services/request.service";
 import { Uuid } from "../../../../cart/models/uuid";
 import { PositionStatusesLabels } from "../../../common/dictionaries/position-statuses-labels";
-import { RequestDocument } from "../../../common/models/request-document";
 import { Store } from "@ngxs/store";
 import { RequestActions } from "../../actions/request.actions";
+import { PositionDocuments } from "../../../common/models/position-documents";
+import { PositionService } from "../../services/position.service";
 
 @Component({ templateUrl: './position.component.html' })
-export class PositionComponent implements OnInit, OnDestroy {
+export class PositionComponent implements OnDestroy {
   requestId: Uuid;
   positionId: Uuid;
   position$: Observable<RequestPosition>;
   subscription = new Subscription();
   statuses = [];
+  readonly documentsSubject$ = new Subject<PositionDocuments>();
+  readonly documents$: Observable<PositionDocuments> = merge(this.documentsSubject$, this.route.params.pipe(
+    switchMap(({ positionId }) => this.positionService.documents(positionId))));
 
   constructor(
     private router: Router,
     private route: ActivatedRoute,
     private requestService: RequestService,
+    private positionService: PositionService,
     private title: Title,
     private store: Store,
     private bc: UxgBreadcrumbsService
@@ -31,22 +36,13 @@ export class PositionComponent implements OnInit, OnDestroy {
     this.route.params.subscribe(() => this.getData());
   }
 
-  ngOnInit() {
-    this.getData();
-  }
-
   getData() {
     this.requestId = this.route.snapshot.paramMap.get('id');
-    this.positionId = this.route.snapshot.paramMap.get('position-id');
-    this.position$ = this.requestService.getRequestPosition(this.requestId, this.positionId)
-      .pipe(tap(position => {
-        this.setPageInfo(position);
-        this.updateAvailableStatuses(position);
-      }));
-    this.store.dispatch([
-      new RequestActions.Refresh(this.requestId),
-      new RequestActions.RefreshPositions(this.requestId),
-    ]);
+    this.positionId = this.route.snapshot.paramMap.get('positionId');
+    this.position$ = this.positionService.info(this.requestId, this.positionId).pipe(tap(position => {
+      this.setPageInfo(position);
+      this.updateAvailableStatuses(position);
+    }));
   }
 
   updateData(position: RequestPosition) {
@@ -85,15 +81,16 @@ export class PositionComponent implements OnInit, OnDestroy {
   }
 
   uploadDocuments({files, position}: {files: File[], position: RequestPosition}) {
-    this.requestService.uploadDocuments(position, files)
-      .subscribe((documents: RequestDocument[]) => {
-        position.documents.push(...documents);
-        this.position$ = of(position);
-      });
+    this.position$ = of(position);
+    this.positionService.uploadDocuments(position, files).pipe(
+      switchMap(() => this.positionService.documents(position.id)),
+      tap(docs => this.documentsSubject$.next(docs))
+    ).subscribe();
   }
+
   sendOnApprove = (position: RequestPosition): Observable<RequestPosition> => this.store
     .dispatch(new RequestActions.Publish(this.requestId, false, [position.id])).pipe(
-      switchMap(() => this.requestService.getRequestPosition(this.requestId, position.id))
+      switchMap(() => this.positionService.info(this.requestId, position.id))
     )
 
   ngOnDestroy() {

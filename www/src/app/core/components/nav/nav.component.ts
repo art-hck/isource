@@ -97,7 +97,15 @@ export class NavComponent implements OnInit, OnDestroy {
       return this.user.getUserInfo()?.contragent.shortName;
     }
 
+    if (this.user.isCustomerApprover()) {
+      return 'Согласующий';
+    }
+
     if (this.user.isBackOffice()) {
+      if (this.user.isBackofficeObserver()) {
+        return 'Наблюдатель БО';
+      }
+
       return 'Бэк-офис';
     }
 

@@ -27,6 +27,8 @@ export class WelcomeComponent implements OnInit {
       } else if (this.user.isBackOffice()) {
         const url = this.featureService.authorize("backofficeDashboard") ? "/dashboard/backoffice" : "/agreements/backoffice";
         this.router.navigateByUrl(url);
+      } else if (this.user.isCustomerApprover()) {
+        this.router.navigateByUrl('/requests/approver');
       }
     });
   }

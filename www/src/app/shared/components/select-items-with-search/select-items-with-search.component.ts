@@ -20,8 +20,10 @@ export class SelectItemsWithSearchComponent implements ControlValueAccessor, OnC
   @Input() filterFn: (q, item) => boolean;
   @Input() disabledFn: (item) => boolean;
   @Input() liveUpdate = true;
+  @Input() customFilterForm: FormGroup;
   @ContentChild(TemplateRef) rowTplRef: TemplateRef<any>;
   @ContentChild('footerContentTpl') footerTplRef: TemplateRef<any>;
+  @ContentChild('customFilterFields') customFilterFieldsRef: TemplateRef<any>;
 
   public onTouched: (value) => void;
   public onChange: (value) => void;
@@ -59,6 +61,11 @@ export class SelectItemsWithSearchComponent implements ControlValueAccessor, OnC
       this.form.get('search').valueChanges.subscribe((value) => this.formItems?.controls
         .filter(c => !this.disabledFn || !this.disabledFn(c.get('item').value)) // не учитываем позиции, задизейбленые функцией
         .forEach(c => !this.filterFn(value, c.get('item').value) ? c.disable() : c.enable()));
+
+      // Обработка при изменениях кастомной формы, при её наличии
+      this.customFilterForm?.valueChanges.subscribe(() => this.formItems?.controls
+        .filter(c => !this.disabledFn || !this.disabledFn(c.get('item').value)) // не учитываем позиции, задизейбленые функцией
+        .forEach(c => !this.filterFn(this.form.get('search').value, c.get('item').value) ? c.disable() : c.enable()));
     }
   }
 

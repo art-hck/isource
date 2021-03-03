@@ -1,5 +1,9 @@
 @import "src/theme";
 
+.position-annotation {
+  margin-top: -24px;
+}
+
 .dashboard {
   margin-top: -17px;
   margin-bottom: 50px;
@@ -31,15 +35,7 @@
 
   .app-position-status-icon {
     margin-right: 7px;
-  }
-}
-
-.documents {
-  margin-top: 30px;
-
-  h4 {
-    font-weight: bold;
-    margin-bottom: 7px;
+    margin-left: -19px;
   }
 }
 
@@ -61,4 +57,12 @@
 
 ::ng-deep h3.sector-title {
   margin: 0 0 16px 0;
+}
+
+hr {
+  margin: 14px 0;
+}
+
+.approver {
+  background-color: uxg($theme, color-bg);
 }

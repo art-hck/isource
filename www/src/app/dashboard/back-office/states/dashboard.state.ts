@@ -6,12 +6,12 @@ import FetchTasks = DashboardActions.FetchTasks;
 import { patch } from "@ngxs/store/operators";
 import { tap } from "rxjs/operators";
 import { DashboardService } from "../services/dashboard.service";
-import { DashboardTasks } from "../models/dashboard-tasks";
-import { StatusesStatisticsInfo } from "../models/statuses-statistics";
+import { DashboardTasks } from "../../common/models/dashboard-tasks";
+import { StatusesStatisticsInfo } from "../../common/models/statuses-statistics";
 import FetchAgreements = DashboardActions.FetchAgreements;
 import FetchStatusesStatistics = DashboardActions.FetchStatusesStatistics;
 import FetchAvailableFilters = DashboardActions.FetchAvailableFilters ;
-import { DashboardAvailableFilters } from "../models/dashboard-available-filters";
+import { DashboardAvailableFilters } from "../../common/models/dashboard-available-filters";
 
 export interface DashboardStateModel {
   tasks: DashboardTasks;

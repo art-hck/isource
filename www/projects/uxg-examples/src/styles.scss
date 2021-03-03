@@ -1,4 +1,7 @@
-@import "dark-theme";
+@import "~flatpickr/dist/flatpickr.min.css";
+@import "light-theme";
+
+// @import "dark-theme";
 
 @include core($theme);
 

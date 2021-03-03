@@ -40,12 +40,10 @@ import { GridContragentFormComponent } from "./components/grid/grid-contragent-f
 import { FileComponent } from './components/file/file.component';
 import { ValidationDirective } from "./directives/validation.directive";
 import { GridCommonParametersComponent } from './components/grid/grid-common-parameters/grid-common-parameters.component';
-import { FilterSectionComponent } from "./components/filter/filter-section/filter-section.component";
-import { FilterComponent } from "./components/filter/filter.component";
-import { FilterCheckboxListComponent } from './components/filter/filter-checkbox-list/filter-checkbox-list.component';
 import { PriceInputFilterDirective } from "./directives/price-input-filter.directive";
-import { FilterButtonComponent } from './components/filter/filter-button/filter-button.component';
-import { FilterDirective } from './components/filter/filter.directive';
+import { SelectResponsibleFormComponent } from "./components/select-responsible-form/select-responsible-form.component";
+import { DigitalSignatureListComponent } from "../contract-sign/components/digital-signature-list/digital-signature-list.component";
+import { StarRatingComponent } from './components/star-rating/star-rating.component';
 
 @NgModule({
   imports: [
@@ -59,6 +57,7 @@ import { FilterDirective } from './components/filter/filter.directive';
     ToastListModule,
   ],
   declarations: [
+    DigitalSignatureListComponent,
     DocumentSimpleListComponent,
     DocumentUploadListComponent,
     DocumentIconComponent,
@@ -97,11 +96,8 @@ import { FilterDirective } from './components/filter/filter.directive';
     FileComponent,
     ValidationDirective,
     GridCommonParametersComponent,
-    FilterComponent,
-    FilterSectionComponent,
-    FilterCheckboxListComponent,
-    FilterButtonComponent,
-    FilterDirective,
+    SelectResponsibleFormComponent,
+    StarRatingComponent,
   ],
   exports: [
     CommonModule,
@@ -148,12 +144,10 @@ import { FilterDirective } from './components/filter/filter.directive';
     ProposalDetailComponent,
     FileComponent,
     ValidationDirective,
-    FilterComponent,
-    FilterSectionComponent,
-    FilterCheckboxListComponent,
-    FilterButtonComponent,
-    FilterDirective,
     OkpdSuggestionsDirective,
+    SelectResponsibleFormComponent,
+    DigitalSignatureListComponent,
+    StarRatingComponent,
   ]
 })
 export class SharedModule {

@@ -6,23 +6,29 @@ import moment from "moment";
 import { StateStatus } from "../../models/state-status";
 import { AppFile } from "../../../../shared/components/file/file";
 import { ToastActions } from "../../../../shared/actions/toast.actions";
-import { Store } from "@ngxs/store";
+import { Actions, ofActionCompleted, Select, Store } from "@ngxs/store";
 import { UserInfoService } from "../../../../user/service/user-info.service";
-import { ActivatedRoute, Router } from "@angular/router";
-import { Certificate, createDetachedSignature, getUserCertificates } from "crypto-pro";
+import { createDetachedSignature } from "crypto-pro";
 import { Uuid } from "../../../../cart/models/uuid";
-import { RequestDocument } from "../../models/request-document";
 import { UxgModalComponent } from "uxg";
-import { CertificateInfoModel } from "../../../../contract-sign/models/certificate-info.model";
+import { Observable, Subject } from "rxjs";
+import { ContractState } from "../../../customer/states/contract.state";
+import { takeUntil } from "rxjs/operators";
+import { ContractActions } from "../../../customer/actions/contract.actions";
+import SignDocument = ContractActions.SignDocument;
+import { FeatureService } from "../../../../core/services/feature.service";
+import { RequestDocument } from "../../models/request-document";
+import { DocumentsService } from "../../services/documents.service";
 
 @Component({
   selector: 'app-contract-list-item',
   templateUrl: './contract-list-item.component.html',
   styleUrls: ['./contract-list-item.component.scss']
 })
-export class ContractListItemComponent implements OnChanges {
+export class ContractListItemComponent implements OnInit, OnChanges {
   @ViewChild('signDocumentModal') signDocumentModal: UxgModalComponent;
   @ViewChild('certificatesListModal') certificatesListModal: UxgModalComponent;
+  @Select(ContractState.status) status$: Observable<StateStatus>;
 
   @Input() contract: Contract;
   @Input() status: StateStatus;
@@ -31,6 +37,7 @@ export class ContractListItemComponent implements OnChanges {
   @Output() send = new EventEmitter<{ comment?: string, files: File[] }>();
   @Output() rollback = new EventEmitter();
   @Output() approve = new EventEmitter();
+  @Output() confirmWithoutSigning = new EventEmitter();
   @Output() reject = new EventEmitter<{ comment?: string, files: File[] }>();
   @Output() download = new EventEmitter();
   @Output() sign = new EventEmitter();
@@ -39,22 +46,15 @@ export class ContractListItemComponent implements OnChanges {
   @Output() signDocument = new EventEmitter();
 
   readonly certForm: FormGroup = this.fb.group({
-    thumbprint: [null, Validators.required]
+    certificate: [null, Validators.required]
   });
-  certificates: {
-    data: any,
-    ownerInfo: any,
-    issuerInfo: any,
-    serialNumber: string,
-  }[];
-  certificateListError: string = null;
   contractId: Uuid;
-  documentsToSign: RequestDocument[];
-
+  signingStatus: boolean;
   folded: boolean;
   files: File[];
   historyFolded = true;
   historyFoldedLength = 3;
+  destroy$ = new Subject();
 
   readonly getCurrencySymbol = getCurrencySymbol;
   readonly form = this.fb.group({ comment: "", files: null });
@@ -70,8 +70,9 @@ export class ContractListItemComponent implements OnChanges {
   get canSend(): boolean { return this.send.observers.length && ['NEW', 'REJECTED'].includes(this.contract.status); }
   get canReject(): boolean { return this.reject.observers.length && ['ON_APPROVAL'].includes(this.contract.status); }
   get canApprove(): boolean { return this.approve.observers.length && ['ON_APPROVAL'].includes(this.contract.status); }
-  get canSign(): boolean { return this.sign.observers.length && ['APPROVED'].includes(this.contract.status); }
   get canDelete(): boolean { return this.delete.observers.length && ['NEW'].includes(this.contract.status); }
+  get approvedByCustomer(): boolean { return ['APPROVED'].includes(this.contract.status); }
+  get confirmedByCustomerNoSign(): boolean { return ['CONFIRMED_BY_CUSTOMER_WO_SIGN'].includes(this.contract.status); }
   get signedByCustomer(): boolean { return ['SIGNED_BY_CUSTOMER'].includes(this.contract.status); }
   get signedBySupplier(): boolean { return ['SIGNED_BY_SUPPLIER'].includes(this.contract.status); }
 
@@ -79,24 +80,36 @@ export class ContractListItemComponent implements OnChanges {
     private fb: FormBuilder,
     private store: Store,
     public user: UserInfoService,
+    private actions: Actions,
+    public featureService: FeatureService,
+    private documentsService: DocumentsService
   ) {}
+
+  ngOnInit() {
+    this.actions.pipe(
+      ofActionCompleted(SignDocument),
+      takeUntil(this.destroy$)
+    ).subscribe(({result}) => {
+      const e = result.error as any;
+
+      if (e) {
+        this.store.dispatch(new ToastActions.Error(e && e.error.detail));
+      } else {
+        this.certificatesListModal.close();
+        this.signingStatus = false;
+        this.store.dispatch(new ToastActions.Success(`Договор успешно подписан`));
+      }
+    });
+  }
 
   selectFiles(files: File[]) {
     this.files = files;
     this.form.get('files').setValue(this.files.map(f => new AppFile(f)).filter(({ valid }) => valid).map(({ file }) => file));
   }
 
-  openSignDocumentModal(contract, documents) {
-    this.contract = contract;
-    this.contractId = contract.id;
-    this.documentsToSign = documents;
-    this.signDocumentModal.open();
-  }
-
   openCertificatesListModal() {
     this.signDocumentModal.close();
     this.certificatesListModal.open();
-    this.getCertificatesList().then(r => {});
   }
 
   copyContractSignLink() {
@@ -134,90 +147,45 @@ export class ContractListItemComponent implements OnChanges {
     }
   }
 
-  async onSignDocument() {
+  onSignDocument() {
     if (this.certForm.valid) {
+      this.signingStatus = true;
+
       const requestId = this.contract.request.id;
-      const thumbprint = this.certForm.get('thumbprint').value;
-      const selectedCertificate = this.certificates.find(cert => cert.data.thumbprint === thumbprint);
+      const selectedCertificate = this.certForm.get('certificate').value;
       const documentSignatures = [];
 
-      let docsSigned = 0;
+      const docToSign = this.contract.currentDocument;
 
-      this.contract.documents.forEach(document => {
-        createDetachedSignature(thumbprint, document.hash).then(response => {
-          documentSignatures.push({
-            id: document.id,
-            signature: response
-          });
-
-          docsSigned++;
-
-          if (docsSigned === this.contract.documents.length) {
-            const data = {
-              certNumber: selectedCertificate.serialNumber,
-              certOwnerName: selectedCertificate.ownerInfo['Владелец'],
-              certIssuerName: selectedCertificate.issuerInfo['Компания'],
-              documentSignatures
-            };
-
-            this.signDocument.emit({data, requestId});
-          }
+      createDetachedSignature(selectedCertificate.data.thumbprint, docToSign.hash).then(response => {
+        documentSignatures.push({
+          id: docToSign.id,
+          signature: response
         });
+
+        const data = {
+          certNumber: selectedCertificate.serialNumber,
+          certOwnerName: selectedCertificate.ownerInfo['Владелец'],
+          certIssuerName: selectedCertificate.issuerInfo['Компания'],
+          certValidFrom: moment(selectedCertificate.data.validFrom).format('YYYY-MM-DD'),
+          certValidTill: moment(selectedCertificate.data.validTo).format('YYYY-MM-DD'),
+          documentSignatures
+        };
+
+        this.signDocument.emit({data, requestId});
       });
     }
-  }
-
-  private async getCertificatesList() {
-    this.certificates = [];
-    this.certificateListError = null;
-
-    try {
-      await getUserCertificates().then(response => {
-        response.forEach(cert => {
-          this.certificates.push(this.prepareDataForSubjectOrIssue(cert));
-        });
-      });
-    } catch (error) {
-      this.certificateListError = error.message;
-    }
-  }
-
-  // todo Перенести в общий компонент
-  prepareDataForSubjectOrIssue(certificate: Certificate) {
-    const certInfo = {
-      data: {},
-      ownerInfo: {},
-      issuerInfo: {},
-      serialNumber: null
-    };
-
-    // Получаем серийный номер сертификата
-    certificate.getCadesProp("SerialNumber").then(r => {
-      certInfo['serialNumber'] = r;
-    });
-
-    // Получаем информацию о владельце
-    certificate.getOwnerInfo().then(r => {
-      r.map(data => {
-        certInfo['ownerInfo'][data.title] = data.description;
-      });
-    });
-
-    // Получаем информацию об издателе сертификата
-    certificate.getIssuerInfo().then(r => {
-      r.map(data => {
-        certInfo['issuerInfo'][data.title] = data.description;
-      });
-    });
-
-    // Сохраняем основную информацию о сертификате
-    certInfo['data'] = certificate;
-
-    return certInfo;
   }
 
   ngOnChanges() {
     this.form.get('files').setValidators(this.canSend ? Validators.required : null);
+  }
+
+  onDownloadDocumentWithSign(document: RequestDocument) {
+    if (!document.id) {
+      return;
+    }
+    this.documentsService.downloadFileWithSign(document);
   }
 }
 

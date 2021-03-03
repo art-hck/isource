@@ -1,4 +1,12 @@
-import { ChangeDetectionStrategy, Component, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  Inject,
+  OnDestroy,
+  OnInit,
+  ViewChild
+} from '@angular/core';
 import { Select, Store } from "@ngxs/store";
 import { Observable, Subject } from "rxjs";
 import { scan, switchMap, takeUntil, tap, throttleTime } from "rxjs/operators";
@@ -19,6 +27,7 @@ import { saveAs } from 'file-saver/src/FileSaver';
 import Fetch = RequestListActions.Fetch;
 import FetchAvailableFilters = RequestListActions.FetchAvailableFilters;
 import { RequestService } from "../../services/request.service";
+import { Page } from "../../../../core/models/page";
 
 @Component({
   templateUrl: './request-list.component.html',
@@ -34,12 +43,14 @@ export class RequestListComponent implements OnInit, OnDestroy {
   @Select(RequestListState.totalCount) totalCount$: Observable<number>;
   @Select(RequestListState.status) status$: Observable<StateStatus>;
 
+  downloadRequestsList: RequestsList[];
   readonly pageSize = this.appConfig.paginator.pageSize;
   readonly fetchFilters$ = new Subject<{page?: number, filters?: RequestsListFilter, sort?: RequestsListSort}>();
   readonly destroy$ = new Subject();
   readonly form = this.fb.group({
     requestNameOrNumber: '',
     positionStatuses: [[]],
+    onlyWithoutResponsibleUser: false,
     onlyOpenTasks: false,
     customers: [[]]
   });
@@ -49,6 +60,7 @@ export class RequestListComponent implements OnInit, OnDestroy {
     private router: Router,
     private route: ActivatedRoute,
     private fb: FormBuilder,
+    private cd: ChangeDetectorRef,
     public store: Store,
     public requestService: RequestService
   ) {}
@@ -78,9 +90,24 @@ export class RequestListComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  downloadRequests() {
-    this.requestService.downloadRequests()
+  downloadRequests(requestIds) {
+    this.requestService.downloadRequests(requestIds)
       .subscribe(data => saveAs(data, `Registry.xlsx`));
+  }
+
+  getDownloadRequestsList(): Observable<Page<RequestsList>> {
+    return this.requestService.getRequests(0, 500, {requestListStatusesFilter: []}, {});
+  }
+
+  onOpenDownloadRequestsListModal() {
+    if (!this.downloadRequestsList) {
+      this.getDownloadRequestsList()
+        .pipe(takeUntil(this.destroy$))
+        .subscribe(data => {
+          this.downloadRequestsList = data.entities;
+          this.cd.detectChanges();
+        });
+    }
   }
 
 }

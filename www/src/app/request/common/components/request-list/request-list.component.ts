@@ -1,6 +1,16 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+  ViewChild
+} from '@angular/core';
 import { RequestStatusCount } from "../../models/requests-list/request-status-count";
-import { UxgTabTitleComponent } from "uxg";
+import { UxgModalComponent, UxgTabTitleComponent } from "uxg";
 import { RequestsListFilter } from "../../models/requests-list/requests-list-filter";
 import { RequestStatus } from "../../enum/request-status";
 import { FeatureService } from "../../../../core/services/feature.service";
@@ -13,15 +23,16 @@ import { WsTypes } from "../../../../websocket/enum/ws-types";
 import { WebsocketService } from "../../../../websocket/services/websocket.service";
 import { BehaviorSubject, Observable, Subject } from "rxjs";
 import { RequestsListSort } from "../../models/requests-list/requests-list-sort";
-import { FormGroup } from "@angular/forms";
+import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { AvailableFilters } from "../../models/requests-list/available-filters";
 import { PositionStatus } from "../../enum/position-status";
 import { PositionStatusesLabels } from "../../dictionaries/position-statuses-labels";
 import { PositionStatusesFrequent } from "../../dictionaries/position-statuses-frequent";
 import { Uuid } from "../../../../cart/models/uuid";
-import { FilterCheckboxList } from "../../../../shared/components/filter/filter-checkbox-item";
+import { UxgFilterCheckboxList } from "uxg";
 import { searchContragents, searchUsers } from "../../../../shared/helpers/search";
 import moment from "moment";
+import { SelectItemsWithSearchComponent } from "../../../../shared/components/select-items-with-search/select-items-with-search.component";
 
 @Component({
   selector: 'app-request-list',
@@ -30,6 +41,8 @@ import moment from "moment";
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RequestListComponent implements OnInit, OnDestroy {
+  @ViewChild('downloadRequestsModal') downloadRequestsModal: UxgModalComponent;
+  @ViewChild('requestsSelectList') requestsSelectList: SelectItemsWithSearchComponent;
   @ViewChild('allProgressTab') allProgressTab: UxgTabTitleComponent;
   @ViewChild('inProgressTab') inProgressTabElRef: UxgTabTitleComponent;
   @ViewChild('newTab') newTabElRef: UxgTabTitleComponent;
@@ -46,17 +59,28 @@ export class RequestListComponent implements OnInit, OnDestroy {
   @Input() availableFilters$: Observable<AvailableFilters>;
   @Input() filters: {page?: number, filters?: RequestsListFilter};
   @Input() form: FormGroup;
+  @Input() downloadRequestsList: RequestsList[];
   @Output() filter = new EventEmitter<{ page?: number, filters?: RequestsListFilter, sort?: RequestsListSort }>();
   @Output() addRequest = new EventEmitter();
   @Output() refresh = new EventEmitter();
-  @Output() downloadRequests = new EventEmitter();
+  @Output() downloadRequests = new EventEmitter<{ requestIds: Uuid[] }>();
+  @Output() openDownloadRequestsListModal = new EventEmitter();
+
+  requestsForm = new FormGroup({
+    requestIds: new FormControl([], Validators.required),
+  });
+
+  customFilterForm = new FormGroup({
+    createdDateFrom: new FormControl(null),
+    createdDateTo: new FormControl(null),
+  });
 
   sortDirection: string = null;
   sortingColumn: string;
 
   hideNeedUpdate = true;
-  customers$: Observable<FilterCheckboxList<Uuid>>;
-  users$: Observable<FilterCheckboxList<Uuid>>;
+  customers$: Observable<UxgFilterCheckboxList<Uuid>>;
+  users$: Observable<UxgFilterCheckboxList<Uuid>>;
   positionStatuses$: Observable<{ value: PositionStatus, item: AvailableFilters["positionStatuses"][number] }[]>;
   readonly pages$ = this.route.queryParams.pipe(map(params => +params["page"]));
   readonly destroy$ = new Subject();
@@ -100,7 +124,6 @@ export class RequestListComponent implements OnInit, OnDestroy {
     this.positionStatuses$ = this.availableFilters$?.pipe(map(f => f?.positionStatuses.map(
       status => ({ value: status.status, item: status, hideFolded: PositionStatusesFrequent.indexOf(status.status) < 0 })
     )));
-
   }
 
   ngOnDestroy() {
@@ -235,4 +258,52 @@ export class RequestListComponent implements OnInit, OnDestroy {
   canCreateRequest(): boolean {
     return this.feature.authorize('createRequest') && !!this.user.getContragentId();
   }
+
+  onDownloadRequests() {
+    const requestIds = this.requestsForm.get('requestIds').value.map(request => request.request.id);
+
+    if (requestIds.length) {
+      this.downloadRequests.emit(requestIds);
+    }
+  }
+
+  resetSelectedRequests() {
+    this.requestsForm.reset();
+    this.customFilterForm.reset();
+
+    this.requestsSelectList.form.get('search').reset("");
+    this.requestsSelectList.formItems?.controls.map(control => control.get("checked").setValue(false));
+  }
+
+  filterRequests(q: string, request: RequestsList): boolean {
+    const createdDateFrom = this.customFilterForm.get('createdDateFrom').value;
+    const createdDateTo = this.customFilterForm.get('createdDateTo').value;
+    const publishedDate = moment(request.request.publishedDate);
+
+    let isBetween = true;
+
+    if (moment(createdDateFrom, "DD.MM.YYYY").isValid() || moment(createdDateTo, "DD.MM.YYYY").isValid()) {
+      const startDate = moment(createdDateFrom, "DD.MM.YYYY").isValid() ? moment(createdDateFrom, "DD.MM.YYYY") : moment('01.01.1970');
+      const endDate = moment(createdDateTo, "DD.MM.YYYY").isValid() ? moment(createdDateTo, "DD.MM.YYYY") : moment();
+
+      isBetween = publishedDate.isBetween(startDate, endDate);
+    }
+
+    return isBetween && request.request.name.toLowerCase().indexOf(q.toLowerCase()) >= 0;
+  }
+
+  toRequestItem(request: any): RequestsList {
+    return request as RequestsList;
+  }
+
+  limitedRange(date: Date): boolean {
+    return moment().diff(moment(date), 'days') > 100;
+  }
+
+  openDownloadRequestsModal() {
+    this.downloadRequestsModal.open();
+    this.openDownloadRequestsListModal.emit();
+  }
+
+  trackByRequestId = (request: RequestsList) => request.request.id;
 }

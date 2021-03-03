@@ -12,7 +12,8 @@
       (addGroup)="store.dispatch(refreshPositions(requestId))"
       (changeStatus)="store.dispatch([refreshPositions(requestId), refresh(requestId)])"
       (saveRequestName)="store.dispatch(saveRequestName($event))"
-      (addResponsible)="store.dispatch(refreshPositions(requestId))"
+      (addResponsiblePositions)="store.dispatch(changeResponsibleUserPositions(requestId, $event.user.id, $event.positions))"
+      (addResponsibleRequest)="store.dispatch(changeResponsibleUser(requestId, $event.id))"
       (uploadFromTemplate)="store.dispatch(uploadFromTemplate($event))"
       (attachDocuments)="store.dispatch(attachDocuments($event))"
     ></app-request>

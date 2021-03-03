@@ -27,7 +27,7 @@ export class UxgPaginationComponent implements OnInit, OnChanges {
     this.data$ = combineLatest([this.pages$.pipe(tap(c => this.change.emit(c || 1))), this.change$]).pipe(
       map(([current]) => {
         current = current || 1;
-        const fullPages = (new Array(Math.ceil(this.total / this.pageSize))).fill(null).map((v, i) => i + 1);
+        const fullPages = (new Array(Math.ceil(this.total / this.pageSize))).fill(null).map((_, i) => i + 1);
         const leftSiblingLength = Math.min(current - 1, this.siblingLimit);
         const rightSiblingLength = Math.min(fullPages.length - current, this.siblingLimit);
         const firstItem = (current - 1) * this.pageSize + 1;

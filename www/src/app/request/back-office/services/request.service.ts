@@ -8,9 +8,7 @@ import { RequestPositionList } from "../../common/models/request-position-list";
 import { RequestGroup } from "../../common/models/request-group";
 import { Request } from "../../common/models/request";
 import { PositionStatus } from "../../common/enum/position-status";
-import { User } from "../../../user/models/user";
 import { UserInfoService } from "../../../user/service/user-info.service";
-import { RequestDocument } from "../../common/models/request-document";
 import { FormDataService } from "../../../shared/services/form-data.service";
 import { Page } from "../../../core/models/page";
 import { RequestsList } from "../../common/models/requests-list/requests-list";
@@ -48,11 +46,6 @@ export class RequestService {
     );
   }
 
-  getRequestPosition(requestId: Uuid, positionId: Uuid): Observable<RequestPosition> {
-    const url = `requests/backoffice/${requestId}/positions/${positionId}/info`;
-    return this.api.get<RequestPosition>(url);
-  }
-
   requestStatusCount() {
     const url = `requests/backoffice/counts-on-different-statuses`;
     return this.api.get<RequestStatusCount>(url);
@@ -80,23 +73,14 @@ export class RequestService {
     });
   }
 
-  // Функция не подсвечивается, но она на самом деле используется
-  uploadDocuments(requestPosition: RequestPosition, files: File[]): Observable<RequestDocument[]> {
-    const formData = new FormData();
-    files.forEach(file => {
-      formData.append('files[]', file, file.name);
-    });
-
-    return this.api.post<RequestDocument[]>(
-      `requests/backoffice/${requestPosition.request.id}/positions/${requestPosition.id}/documents/upload`,
-      formData
-    );
+  changeResponsibleUser(id: Uuid, user: Uuid) {
+    const url = `requests/backoffice/${id}/change-responsible-user`;
+    return this.api.post(url, { user });
   }
 
-  setResponsibleUser(id: Uuid, user: User, positions: RequestPosition[]) {
-    const url = `requests/backoffice/${id}/change-responsible-user`;
-    const body = {user: user.id, positions: positions.map(position => position.id)};
-    return this.api.post(url, body);
+  changeResponsibleUserPositions(id: Uuid, user: Uuid, positions: Uuid[]) {
+    const url = `requests/backoffice/${id}/positions/change-responsible-user`;
+    return this.api.post(url, { user, positions });
   }
 
   addPositionsFromExcel(requestId: Uuid, files: File[]): Observable<any> {
@@ -129,9 +113,9 @@ export class RequestService {
     return this.api.post(url, {hideContragent: value});
   }
 
-  downloadRequests() {
+  downloadRequests(requestIds) {
     const url = `requests/backoffice/download`;
-    return this.api.post(url, {}, { responseType: 'blob' });
+    return this.api.post(url, { requestIds }, { responseType: 'blob' });
   }
 }
 

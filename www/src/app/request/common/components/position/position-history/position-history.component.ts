@@ -121,7 +121,6 @@ export class PositionHistoryComponent implements OnInit, OnChanges {
       activityItem.data.oldStatus : activityItem.status;
     const activityType = activityItem.type || '';
 
-    console.log('position-current-status-' + positionStatus + ' activity-type-' + activityType);
     return 'position-current-status-' + positionStatus + ' activity-type-' + activityType;
   }
 
@@ -130,7 +129,6 @@ export class PositionHistoryComponent implements OnInit, OnChanges {
       activityItem.data.newStatus : activityItem.status;
     const activityType = activityItem.type || '';
 
-    console.log('position-new-status-' + positionStatus + ' activity-type-' + activityType);
     return 'position-new-status-' + positionStatus + ' activity-type-' + activityType;
   }
 

@@ -16,12 +16,15 @@ export class UserInfo {
   isSupplier: boolean;
   isAdmin: boolean;
   isCustomerBuyer: boolean;
+  isCustomerApprover: boolean;
   isBackofficeBuyer: boolean;
   isSeniorBackoffice: boolean;
+  isBackofficeObserver: boolean;
   isSystemAdmin: boolean;
   isContragentCreator: boolean;
   permissions: Permission[];
   groups: UsersGroup[];
+
 }
 
 

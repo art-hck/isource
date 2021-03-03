@@ -22,9 +22,6 @@ $font_size_basic: 14px;
 
 
 @import "~nouislider/distribute/nouislider.min.css";
-@import "~leaflet/dist/leaflet.css";
-@import "~leaflet.markercluster/dist/MarkerCluster.css";
-@import "~leaflet.markercluster/dist/MarkerCluster.Default.css";
 @import "~flatpickr/dist/flatpickr.min.css";
 
 @import "src/theme";
@@ -55,6 +52,11 @@ body {
   *:focus {
     outline: 0;
   }
+}
+
+// Стиль скрывает слой с модалкой плагина КриптоПро, которая появляется, если не установлен плагин в браузере
+#cadesplugin_ovr {
+  display: none !important;
 }
 
 ::-ms-clear {

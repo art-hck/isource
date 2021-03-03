@@ -28,42 +28,31 @@
   </div>
 </div>
 
-<!--Мои задачи-->
-<ng-container *ngIf="view === 'tasks' && (tasks$ | async) as tasks">
-  <div class="stat-block" [ngClass]="{'no-tasks': tasks.length === 0}">
-    <app-tasks-bar
-      [totalCounter]="tasksTotalCount$ | async"
-      [tasksBar]="tasksBar$ | async">
-    </app-tasks-bar>
-  </div>
-  <ng-container *ngIf="tasks.length !== 0">
-    <app-agreements
-      [agreements]="tasks"
-      [dashboardView]="true">
-    </app-agreements>
-  </ng-container>
-</ng-container>
+<app-dashboard-agreements
+  [agreements]="agreements$ | async"
+  [tasks]="tasks$ | async"
+  [tasksTotalCount]="tasksTotalCount$ | async"
+  [agreementsTotalCount]="agreementsTotalCount$ | async"
+  [agreementsBar]="agreementsBar$ | async"
+  [tasksBar]="tasksBar$ | async"
+  [view]="view"
+  >
+</app-dashboard-agreements>
 
-<!--Согласования заказчика-->
-<ng-container *ngIf="view === 'agreements' && (agreements$ | async) as agreements">
-  <div class="stat-block" [ngClass]="{'no-tasks': agreements.length === 0}">
-    <app-tasks-bar
-      [totalCounter]="agreementsTotalCount$ | async"
-      [tasksBar]="agreementsBar$ | async"
-      [isTasks]="false"></app-tasks-bar>
-  </div>
-  <app-agreements
-    [agreements]="agreements"
-    [dashboardView]="true"
-    [agreementsView]="true">
-  </app-agreements>
-</ng-container>
 <br><br>
 
 <div class="app-row">
   <div class="app-col">
     <h2>Статистика по статусам и деньгам</h2>
 
-    <app-dashboard-statistics></app-dashboard-statistics>
+    <app-dashboard-statistics
+      #dashboardStatisticsComponent
+      [statusesStatistics]="statusesStatistics$ | async"
+      [filterRequestList]="filterRequestList$ | async"
+      [filterCustomerList]="filterCustomerList$ | async"
+      [filterResponsibleUsersList]="filterResponsibleUsersList$ | async"
+      (submitFilter)="submitFilter()"
+      (resetFilter)="resetFilter()"
+    ></app-dashboard-statistics>
   </div>
 </div>

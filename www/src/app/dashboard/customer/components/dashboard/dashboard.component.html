@@ -1,37 +1,34 @@
-<ng-container *ngIf="user.getContragentId()">
-  <div class="app-row">
-    <div class="app-col">
-      <ng-container *ngTemplateOutlet="agreements; context: {$implicit: agreements$ | async}"></ng-container>
-      <ng-template #agreements let-agreements>
-        <div class="app-row app-align-items-center">
-          <h2 class="app-col">Согласования</h2>
-          <div><a routerLink="/agreements/customer"><b>Все согласования ({{ agreements?.totalCount }})</b></a></div>
-        </div>
-        <app-agreements [agreements]="agreements?.entities">
-        </app-agreements>
-      </ng-template>
+<h2>Согласования по статусам</h2>
+<div class="app-row app-align-items-center">
+  <div class="app-col"></div>
+  <div class="app-col-auto">
+      <a routerLink="/agreements/customer"><b>Все согласования ({{agreementsTotalCount$ | async}})</b></a>
     </div>
   </div>
-  <br/>
-  <br/>
-  <div class="app-row"><br/>
-    <div class="app-col">
-      <ng-container *ngTemplateOutlet="notifications; context: {$implicit: notifications$ | async}"></ng-container>
-      <ng-template #notifications let-notifications>
-        <div class="app-row app-align-items-center">
-          <h2 class="app-col">Последние уведомления</h2>
-          <div><a routerLink="/notifications"><b>Все уведомления</b></a></div>
-        </div>
-        <app-dashboard-notification [notifications]="notifications?.entities" [total]="notifications?.totalCount">
-        </app-dashboard-notification>
-      </ng-template>
-    </div>
-    <div class="app-col app-row flex-column">
-      <h2>Статистика</h2>
-      <app-dashboard-statistic class="app-col app-row flex-column"></app-dashboard-statistic>
-    </div>
+<app-dashboard-agreements
+  [agreements]="agreements$ | async"
+  [agreementsTotalCount]="agreementsTotalCount$ | async"
+  [agreementsBar]="agreementsBar$ | async"
+  [view]="view"
+  (sendRating)="sendRating($event.requestId, $event.positionId, $event.rating)">
+</app-dashboard-agreements>
+
+<br><br>
+
+<div class="app-row">
+  <div class="app-col">
+    <h2>Статистика по статусам и деньгам</h2>
+
+    <app-dashboard-statistics
+      #dashboardStatisticsComponent
+      [statusesStatistics]="statusesStatistics$ | async"
+      [filterRequestList]="filterRequestList$ | async"
+      [filterApplicantsList]="filterApplicantsList$ | async"
+      (submitFilter)="submitFilter()"
+      (resetFilter)="resetFilter()"
+    ></app-dashboard-statistics>
   </div>
-</ng-container>
+</div>
 
 <div class="app-card" style="background: none" *ngIf="!user.getContragentId()">
   <div class="app-row app-align-items-center">

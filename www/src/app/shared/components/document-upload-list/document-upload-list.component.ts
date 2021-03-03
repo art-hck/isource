@@ -1,6 +1,6 @@
-import { Component, ElementRef, EventEmitter, Inject, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { AppFile } from "../file/file";
-import { APP_CONFIG, GpnmarketConfigInterface } from "../../../core/config/gpnmarket-config.interface";
+import { AppConfig } from "../../../config/app.config";
 
 /**
  * Компонент для отображения и выбора файлов для последующей загрузки на сервер
@@ -16,6 +16,7 @@ export class DocumentUploadListComponent implements OnInit {
 
   @Input() documents: File[] = [];
   @Input() uploadLabel = 'Выбрать документ';
+  @Input() hideUploadedListTitle = false;
   @Input() dragAndDropAvailable = false;
   @Input() uploadAvailable = true;
   @Input() removable = true;

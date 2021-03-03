@@ -60,6 +60,8 @@ export class UxgDropdownInputComponent implements OnInit, AfterViewInit, OnDestr
   get isDirectionUp() {
     if (this.itemsWrapper) {
       return this.direction === "up" || this.windowHeight < this.coords.bottom + this.itemsWrapper.offsetHeight;
+    } else {
+      return false;
     }
   }
 
@@ -170,7 +172,7 @@ export class UxgDropdownInputComponent implements OnInit, AfterViewInit, OnDestr
       takeUntil(this.destroy$)
     ).subscribe(() => this.items.forEach(({blur}) => blur()));
 
-    this.focus.pipe(takeUntil(this.destroy$)).subscribe(value => this.toggle(this.items.length > 0));
+    this.focus.pipe(takeUntil(this.destroy$)).subscribe(() => this.toggle(this.items.length > 0));
   }
 
   toggle(state: boolean) {
@@ -214,6 +216,8 @@ export class UxgDropdownInputComponent implements OnInit, AfterViewInit, OnDestr
   validate(control: AbstractControl): ValidationErrors | null {
     if (this.strictMode !== false && this.isNotFromList && control.value) {
       return {"notFromList": true};
+    } else {
+      return null;
     }
   }
 

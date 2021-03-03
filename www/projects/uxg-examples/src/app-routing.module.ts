@@ -1,3 +1,5 @@
+import { UxgExampleDatepickerComponent } from './uxg-example-datepicker/uxg-example-datepicker';
+import { UxgExampleNavigationComponent } from './uxg-example-navigation/uxg-example-navigation.component';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { UxgExampleTypographyComponent } from "./uxg-example-typography/uxg-example-typography.component";
@@ -56,6 +58,16 @@ const routes: Routes = [
     path: "icon",
     component: UxgExampleIconsComponent,
     data: { title: 'Icons' }
+  },
+  {
+    path: "navigation",
+    component: UxgExampleNavigationComponent,
+    data: { title: 'Navigation' }
+  },
+  {
+    path: "datepicker",
+    component: UxgExampleDatepickerComponent,
+    data: { title: 'Datepicker' }
   }
 ];
 
