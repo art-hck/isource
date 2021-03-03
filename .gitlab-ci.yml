@@ -41,17 +41,17 @@ build preprod:
   only:
     - /^release-.*$/i
   
-prepare images:
-  stage: images
-  tags:
-    - gpn-preprod-front
-  script:
-    - prepare-configs-for-angular
-    - docker-compose -f dc-build-images.yml build
-    - login-to-registry
-    - docker-compose -f dc-build-images.yml push
-  only:
-    - /^release-.*$/i
+#prepare images:
+#  stage: images
+#  tags:
+#    - gpn-preprod-front
+#  script:
+#    - prepare-configs-for-angular
+#    - docker-compose -f dc-build-images.yml build
+#    - login-to-registry
+#    - docker-compose -f dc-build-images.yml push
+#  only:
+#    - /^release-.*$/i
 
 build study:
   stage: build
