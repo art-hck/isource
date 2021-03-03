@@ -20,8 +20,10 @@ import { UxgPopoverComponent } from "uxg";
 import { AgreementActionFilters } from "../../../../agreements/back-office/dictionaries/agreement-action-label";
 import FetchTasks = DashboardActions.FetchTasks;
 import FetchAgreements = DashboardActions.FetchAgreements;
+import FetchProcedures = DashboardActions.FetchProcedures;
 import FetchStatusesStatistics = DashboardActions.FetchStatusesStatistics;
 import FetchAvailableFilters = DashboardActions.FetchAvailableFilters;
+import { Procedure } from "../../../../request/back-office/models/procedure";
 
 @Component({
   selector: 'app-dashboard',
@@ -34,8 +36,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   @Select(DashboardState.agreements) agreements$: Observable<Agreement[]>;
   @Select(DashboardState.tasks) tasks$: Observable<Agreement[]>;
+  @Select(DashboardState.procedures) procedures$: Observable<Procedure[]>;
   @Select(DashboardState.status) status$: Observable<StateStatus>;
   @Select(DashboardState.tasksTotalCount) tasksTotalCount$: Observable<number>;
+  @Select(DashboardState.proceduresTotalCount) proceduresTotalCount$: Observable<number>;
   @Select(DashboardState.agreementsTotalCount) agreementsTotalCount$: Observable<number>;
   @Select(DashboardState.agreementsBar) agreementsBar$: Observable<DashboardTaskItem[]>;
   @Select(DashboardState.tasksBar) tasksBar$: Observable<DashboardTaskItem[]>;
@@ -57,7 +61,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.switchView(this.view);
 
     this.route.params.pipe(
-      tap(() => this.store.dispatch([new FetchStatusesStatistics({}), new FetchAvailableFilters({})])),
+      tap(() => this.store.dispatch([new FetchStatusesStatistics({}), new FetchAvailableFilters({}), new FetchProcedures()])),
       withLatestFrom(this.statusesStatistics$),
       takeUntil(this.destroy$)
     ).subscribe();

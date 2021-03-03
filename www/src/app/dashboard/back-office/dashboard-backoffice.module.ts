@@ -10,10 +10,12 @@ import { ReactiveFormsModule } from "@angular/forms";
 import { DashboardComponent } from "./components/dashboard/dashboard.component";
 import { DashboardCommonModule } from "../common/dashboard-common.module";
 import { PluralizePipe } from "../../shared/pipes/pluralize-pipe";
+import { ProceduresListComponent } from "./components/dashboard/procedures-list/procedures-list.component";
 
 @NgModule({
   declarations: [
-    DashboardComponent
+    DashboardComponent,
+    ProceduresListComponent
   ],
   imports: [
     AgreementsCommonModule,

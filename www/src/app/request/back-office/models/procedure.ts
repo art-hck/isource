@@ -19,6 +19,8 @@ export class Procedure {
   datePublished: string;
   lotId: number;
   offersImported: boolean;
+  sumWithoutVat: number;
+  vatPercent: number;
   isRetrade: boolean;
   canRetrade: boolean;
   positions: {

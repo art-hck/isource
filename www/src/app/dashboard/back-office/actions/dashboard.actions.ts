@@ -9,6 +9,11 @@ export namespace DashboardActions {
     constructor() {}
   }
 
+  export class FetchProcedures {
+    static readonly type = '[Dashboard Backoffice] FetchProcedures';
+    constructor() {}
+  }
+
   export class FetchStatusesStatistics {
     static readonly type = '[Dashboard Backoffice] FetchStatusesStatistics';
 
