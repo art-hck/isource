@@ -19,14 +19,14 @@
         <!-- Создать процедуру  -->
         <uxg-popover #procedurePopover [openOnHover]="true" class="popover-item">
           <button uxgButton secondary iconText
-                  [disabled]="!availablePositions?.length"
-                  (click)="procedureModalPayload = {action: 'create'}"
+                  [disabled]="!allowCreate"
+                  (click)="procedureModalPayload = {action: 'create'}; filterAvailablePositions.emit();"
                   *ngIf="featureService.authorize('createProcedure')">
             <uxg-icon shape="app-plus"></uxg-icon>
             <span>{{sourceLabel[source]}} из процедуры</span>
           </button>
 
-          <ng-container *ngIf="!availablePositions?.length">
+          <ng-container *ngIf="!allowCreate">
             <div *uxgPopoverContent (click)="procedurePopover.hide()">
               <div>Нет доступных для выбора позиций {{sourceLabel[source]}}</div>
               <div>Создание процедуры недоступно.</div>
@@ -37,14 +37,14 @@
         <!-- Новая группа  -->
         <uxg-popover #groupFormPopover [openOnHover]="true" class="popover-item">
           <button uxgButton secondary iconText
-                  [disabled]="!availablePositions?.length"
-                  (click)="editedGroup = null; groupFormModal.open()"
+                  [disabled]="!allowCreate"
+                  (click)="openForm()"
                   *ngIf="featureService.authorize('createProposalsGroup')">
             <uxg-icon shape="app-plus"></uxg-icon>
             <span>Новое {{sourceLabel[source]}}</span>
           </button>
 
-          <ng-container *ngIf="!availablePositions?.length">
+          <ng-container *ngIf="!allowCreate">
             <div *uxgPopoverContent (click)="groupFormPopover.hide()">
               <div>Нет доступных для выбора позиций {{sourceLabel[source]}}</div>
               <div>Создание {{sourceLabel[source]}} недоступно.</div>
@@ -55,14 +55,14 @@
         <!-- Из шаблона  -->
         <uxg-popover #templateFormPopup [openOnHover]="true" class="popover-item">
           <button uxgButton primary iconText
-                  [disabled]="!availablePositions?.length"
+                  [disabled]="!allowCreate"
                   (click)="formTemplate.reset(); uploadTemplateModal.open();"
                   *ngIf="featureService.authorize('createProposalsFromTemplate')">
             <uxg-icon shape="app-plus"></uxg-icon>
             <span>{{sourceLabel[source]}} из шаблона</span>
           </button>
 
-          <ng-container *ngIf="!availablePositions?.length">
+          <ng-container *ngIf="!allowCreate">
             <div *uxgPopoverContent (click)="templateFormPopup.hide()">
               <div>Нет доступных для выбора позиций {{sourceLabel[source]}}</div>
               <div>Создание {{sourceLabel[source]}} из шаблона недоступно.</div>
@@ -79,7 +79,7 @@
     <app-proposal-group
       *ngFor="let group of groups"
       [group]="group"
-      (edit)="editedGroup = group; groupFormModal.open()"
+      (edit)="openForm(group)"
     ></app-proposal-group>
   </div>
 
@@ -124,6 +124,7 @@
     [requestId]="request.id"
     [sourceLabel]="sourceLabel[source]"
     (create)="createGroup.emit($event)"
+    (filterAvailablePositions)="filterAvailablePositions.emit($event)"
   ></app-common-proposal-group-form>
 </uxg-modal>
 
@@ -165,18 +166,17 @@
   <h2 *ngSwitchCase="'create'">Создание новой процедуры</h2>
   <h2 *ngSwitchCase="'bargain'">Уторговывание процедуры №{{procedureModalPayload?.procedure.procedureId}}</h2>
   <h2 *ngSwitchCase="'prolong'">Продление процедуры №{{procedureModalPayload?.procedure.procedureId}}</h2>
-  <ng-container *ngIf="availablePositions">
-    <app-request-procedure-form
-      *ngIf="procedureModalPayload"
-      [request]="request"
-      [positions]="availablePositions"
-      [action]="procedureModalPayload.action"
-      [procedure]="procedureModalPayload.procedure"
-      [procedureSource]="source"
-      [contragents]="contragentsWithTp"
-      (positionsSelected)="procedurePositionsSelected.emit($event)"
-      (complete)="newProcedure.emit(); procedureModalPayload = null"
-      (cancel)="procedureModalPayload = null"
-    ></app-request-procedure-form>
-  </ng-container>
+  <app-request-procedure-form
+    *ngIf="procedureModalPayload"
+    [request]="request"
+    [positions]="availablePositions"
+    [action]="procedureModalPayload.action"
+    [procedure]="procedureModalPayload.procedure"
+    [procedureSource]="source"
+    [contragents]="contragentsWithTp"
+    (positionsSelected)="procedurePositionsSelected.emit($event)"
+    (filterPositions)="filterAvailablePositions.emit($event)"
+    (complete)="newProcedure.emit(); procedureModalPayload = null"
+    (cancel)="procedureModalPayload = null"
+  ></app-request-procedure-form>
 </uxg-modal>

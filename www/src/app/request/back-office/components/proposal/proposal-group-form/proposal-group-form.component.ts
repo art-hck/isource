@@ -16,6 +16,7 @@ export class ProposalGroupFormComponent implements OnChanges, OnDestroy {
   @ViewChild('createGroup') createGroup: UxgModalComponent;
   @Output() complete = new EventEmitter();
   @Output() create = new EventEmitter<{ name: string, id?: Uuid, requestPositions: Uuid[] }>();
+  @Output() filterAvailablePositions = new EventEmitter();
   @Input() availablePositions: RequestPosition[];
   @Input() requestId: Uuid;
   @Input() group: ProposalGroup;

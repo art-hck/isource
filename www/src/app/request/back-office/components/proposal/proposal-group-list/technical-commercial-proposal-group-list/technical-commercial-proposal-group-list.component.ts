@@ -32,6 +32,7 @@ export class TechnicalCommercialProposalGroupListComponent implements OnInit, On
   @ViewChild('uploadTemplateModal') uploadTemplateModal: UxgModalComponent;
   @Select(RequestState.request) request$: Observable<Request>;
   @Select(TechnicalCommercialProposalState.availablePositions) availablePositions$: Observable<RequestPosition[]>;
+  @Select(TechnicalCommercialProposalState.allowCreate) allowCreate$: Observable<boolean>;
   requestId: Uuid;
   destroy$ = new Subject();
 
@@ -69,6 +70,7 @@ export class TechnicalCommercialProposalGroupListComponent implements OnInit, On
   );
 
   readonly updateProcedures = (request: Request) => [new RefreshProcedures(request.id), new FetchAvailablePositions(request.id)];
+  readonly fetchAvailablePositions = (request: Request, search?: string) => new FetchAvailablePositions(request.id, null, search);
   readonly downloadTemplate = (request: Request) => new DownloadTemplate(request.id);
   readonly uploadTemplate = (groupName: string, files: File[]) => this.store.dispatch(
     new UploadTemplate(this.requestId, files, null, groupName)

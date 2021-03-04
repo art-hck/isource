@@ -24,11 +24,13 @@ import { ContragentShortInfo } from "../../../../../contragent/models/contragent
 })
 export class ProposalGroupListComponent {
   @ViewChild('uploadTemplateModal') uploadTemplateModal: UxgModalComponent;
+  @ViewChild('groupFormModal') groupFormModal: UxgModalComponent;
   @Input() request: Request;
   @Input() availablePositions: RequestPosition[];
   @Input() groups: ProposalGroup[];
   @Input() source = ProposalSource.COMMERCIAL_PROPOSAL;
   @Input() contragentsWithTp: ContragentShortInfo[];
+  @Input() allowCreate: boolean;
 
   @Output() createGroup = new EventEmitter<{ name: string, requestPositions: Uuid[] }>();
   @Output() filter = new EventEmitter<ProposalGroupFilter>();
@@ -36,6 +38,7 @@ export class ProposalGroupListComponent {
   @Output() uploadTemplate = new EventEmitter<{ files: File[], groupName: string}>();
   @Output() downloadTemplate = new EventEmitter();
   @Output() procedurePositionsSelected = new EventEmitter<Uuid[]>();
+  @Output() filterAvailablePositions = new EventEmitter();
 
   requestId: Uuid;
   procedureModalPayload: ProcedureAction & { procedure?: Procedure };
@@ -72,6 +75,12 @@ export class ProposalGroupListComponent {
       this.uploadTemplateModal.close();
       this.uploadTemplate.emit(this.formTemplate.value);
     }
+  }
+
+  openForm(editedGroup?: ProposalGroup) {
+    this.editedGroup = editedGroup;
+    this.groupFormModal.open();
+    this.filterAvailablePositions.emit();
   }
 
   trackById = (i, { id }: CommercialProposal | Procedure) => id;

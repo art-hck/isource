@@ -33,6 +33,7 @@ export class CommercialProposalGroupListComponent implements OnInit, OnDestroy {
   @ViewChild('uploadTemplateModal') uploadTemplateModal: UxgModalComponent;
   @Select(RequestState.request) request$: Observable<Request>;
   @Select(CommercialProposalState.availablePositions) availablePositions$: Observable<RequestPosition[]>;
+  @Select(CommercialProposalState.allowCreate) allowCreate$: Observable<boolean>;
   requestId: Uuid;
   destroy$ = new Subject();
 
@@ -75,6 +76,7 @@ export class CommercialProposalGroupListComponent implements OnInit, OnDestroy {
   );
 
   readonly updateProcedures = (request: Request) => [new RefreshProcedures(request.id), new FetchAvailablePositions(request.id)];
+  readonly fetchAvailablePositions = (request: Request, search?: string) => new FetchAvailablePositions(request.id, null, search);
   readonly downloadTemplate = (request: Request) => new DownloadTemplate(request.id);
   readonly uploadTemplate = (groupName: string, files: File[]) => this.store.dispatch(
     new UploadTemplate(this.requestId, files, null, groupName)

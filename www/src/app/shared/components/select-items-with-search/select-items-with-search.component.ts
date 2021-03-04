@@ -1,7 +1,8 @@
-import { AfterContentInit, Component, ContentChild, forwardRef, Input, OnChanges, OnDestroy, TemplateRef } from '@angular/core';
+import { AfterContentInit, Component, ContentChild, EventEmitter, forwardRef, Input, OnChanges, OnDestroy, Output, TemplateRef } from '@angular/core';
 import { AbstractControl, ControlValueAccessor, FormArray, FormBuilder, FormControl, FormGroup, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { CustomValidators } from "../../forms/custom.validators";
 import { Subscription } from "rxjs";
+import { debounceTime } from "rxjs/operators";
 
 @Component({
   selector: 'select-items-with-search',
@@ -21,6 +22,7 @@ export class SelectItemsWithSearchComponent implements ControlValueAccessor, OnC
   @Input() disabledFn: (item) => boolean;
   @Input() liveUpdate = true;
   @Input() customFilterForm: FormGroup;
+  @Output() filter = new EventEmitter();
   @ContentChild(TemplateRef) rowTplRef: TemplateRef<any>;
   @ContentChild('footerContentTpl') footerTplRef: TemplateRef<any>;
   @ContentChild('customFilterFields') customFilterFieldsRef: TemplateRef<any>;
@@ -53,7 +55,7 @@ export class SelectItemsWithSearchComponent implements ControlValueAccessor, OnC
 
     if (this.liveUpdate) {
       this.subscription.add(
-        this.form.valueChanges.subscribe(() => this.submit())
+        this.formItems.valueChanges.subscribe(() => this.submit())
       );
     }
 
@@ -66,6 +68,8 @@ export class SelectItemsWithSearchComponent implements ControlValueAccessor, OnC
       this.customFilterForm?.valueChanges.subscribe(() => this.formItems?.controls
         .filter(c => !this.disabledFn || !this.disabledFn(c.get('item').value)) // не учитываем позиции, задизейбленые функцией
         .forEach(c => !this.filterFn(this.form.get('search').value, c.get('item').value) ? c.disable() : c.enable()));
+    } else {
+      this.form.get('search').valueChanges.pipe(debounceTime(300)).subscribe((value) => this.filter.emit(value));
     }
   }
 
@@ -74,7 +78,14 @@ export class SelectItemsWithSearchComponent implements ControlValueAccessor, OnC
   }
 
   setFormItems() {
-    this.formItems?.clear();
+    if (this.filter.observers.length) {
+      this.formItems?.controls.forEach(c => {
+        c.disable();
+        c.get('hidden').setValue(true);
+      });
+    } else {
+      this.formItems?.clear();
+    }
 
     this.items
       ?.filter(() => this.form)
@@ -85,13 +96,16 @@ export class SelectItemsWithSearchComponent implements ControlValueAccessor, OnC
 
         if (formItem) {
           formItem.get('item').setValue(item);
+          formItem.get('hidden').setValue(false);
         } else {
           formItem = this.fb.group({
             checked: !!this.value?.find(_item => this.trackBy(_item) === this.trackBy(item)),
+            hidden: false,
             item: item
           });
 
-          this.formItems.push(formItem);
+          this.formItems.controls.push(formItem);
+          this.formItems['_registerControl'](formItem);
         }
         if (this.disabledFn && this.disabledFn(item)) {
           formItem.disable();

@@ -32,6 +32,7 @@ export interface TechnicalCommercialProposalStateModel {
   procedures: Procedure[];
   positions: RequestPosition[];
   availablePositions: RequestPosition[];
+  allowCreate?: boolean;
 }
 
 type Model = TechnicalCommercialProposalStateModel;
@@ -39,7 +40,7 @@ type Context = StateContext<Model>;
 
 @State<Model>({
   name: 'BackofficeTechnicalCommercialProposals',
-  defaults: { proposals: null, availablePositions: null, positions: null, procedures: null, status: "pristine" }
+  defaults: { proposals: null, availablePositions: null, allowCreate: false, positions: null, procedures: null, status: "pristine" }
 })
 @Injectable()
 export class TechnicalCommercialProposalState {
@@ -48,6 +49,7 @@ export class TechnicalCommercialProposalState {
   }
 
   @Selector() static proposals({ proposals }: Model) { return proposals; }
+  @Selector() static allowCreate({ allowCreate }: Model) { return allowCreate; }
   @Selector() static availablePositions({ availablePositions }: Model) { return availablePositions; }
   @Selector() static status({ status }: Model) { return status; }
   @Selector() static procedures({ procedures }: Model) { return procedures; }
@@ -80,12 +82,13 @@ export class TechnicalCommercialProposalState {
     );
   }
 
-  @Action(FetchAvailablePositions)
-  fetchAvailablePositions({ setState }: Context, { requestId, groupId }: FetchAvailablePositions) {
+  @Action(FetchAvailablePositions, { cancelUncompleted: true })
+  fetchAvailablePositions({ setState }: Context, { requestId, groupId, search }: FetchAvailablePositions) {
     setState(patch({ availablePositions: null }));
 
-    return this.rest.availablePositions(requestId, groupId).pipe(
-      tap(availablePositions => setState(patch({ availablePositions })))
+    return this.rest.availablePositions(requestId, groupId, search).pipe(
+      tap(availablePositions => setState(patch({ availablePositions }))),
+      tap(p => {if (!search) { setState(patch({ allowCreate: p.length > 0 })); }}),
     );
   }
 
