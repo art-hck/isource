@@ -104,7 +104,8 @@ export class SelectItemsWithSearchComponent implements ControlValueAccessor, OnC
             item: item
           });
 
-          this.formItems.push(formItem);
+          this.formItems.controls.push(formItem);
+          this.formItems['_registerControl'](formItem);
         }
         if (this.disabledFn && this.disabledFn(item)) {
           formItem.disable();
