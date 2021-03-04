@@ -32,9 +32,9 @@ export class CommercialProposalsService {
     return this.api.post<CommonProposalItem[]>(url, this.formDataService.toFormData({ items }));
   }
 
-  availablePositions(requestId: Uuid, groupId?: Uuid) {
+  availablePositions(requestId: Uuid, groupId?: Uuid, name?: string) {
     const url = `requests/backoffice/${ requestId }/commercial-proposals/available-request-positions`;
-    return this.api.post<RequestPosition[]>(url, { requestCommercialProposalGroupId: groupId });
+    return this.api.post<RequestPosition[]>(url, { requestCommercialProposalGroupId: groupId, name });
   }
 
   publish(groupId: Uuid, positionIds: Uuid[]) {

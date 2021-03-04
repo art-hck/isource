@@ -60,6 +60,7 @@ export class ContractListComponent implements OnInit, OnDestroy {
   readonly download = (contract: Contract) => new Download(contract);
   readonly delete = (request: Request, contract: Contract) => new Delete(request.id, contract);
   readonly filter = (request: Request, value: ContractFilter<Uuid>) => new Filter(request.id, value);
+  readonly fetchSuppliers = (request: Request, search: string) => new FetchSuppliers(request.id, search);
 
   constructor(
     public store: Store,

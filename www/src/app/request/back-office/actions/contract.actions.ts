@@ -28,7 +28,7 @@ export namespace ContractActions {
   export class FetchSuppliers {
     static readonly type = '[Contract Backoffice] FetchSuppliers';
 
-    constructor(public requestId: Uuid) {}
+    constructor(public requestId: Uuid, public search?: string) {}
   }
 
   // Добавить договор

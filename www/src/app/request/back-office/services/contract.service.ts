@@ -30,9 +30,9 @@ export class ContractService {
     return this.api.post<Contract>(url, body);
   }
 
-  suppliers(requestId): Observable<ContragentWithPositions[]> {
+  suppliers(requestId, positionName?: string): Observable<ContragentWithPositions[]> {
     const url = `requests/backoffice/contracts/suppliers`;
-    return this.api.post<ContragentWithPositions[]>(url, { requestId });
+    return this.api.post<ContragentWithPositions[]>(url, { requestId, positionName });
   }
 
   sendForApproval(contractId: Uuid) {
