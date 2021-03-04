@@ -1,0 +1,75 @@
+<!-- Мои процедуры -->
+<ng-container *ngIf="procedures; else loading">
+  <ng-container *ngIf="procedures.length > 0; else emptyProceduresList">
+    <div class="app-table procedures-list-header app-no-border">
+      <div class="app-row app-uppercase app-ghost-color app-bold">
+        <small class="app-col-1 app-ghost-color number"><b>№</b></small>
+        <small class="app-col-3 app-ghost-color name"><b>Наименование процедуры</b></small>
+        <small class="app-col-2 app-ghost-color date"><b>Приём заяв. до</b></small>
+        <small class="app-col-2 app-ghost-color sum"><b>Сумма без НДС</b></small>
+        <small class="app-col-2 app-ghost-color sum-with-vat"><b>Сумма</b></small>
+        <small class="app-col-auto app-ghost-color status"><b>Статус</b></small>
+      </div>
+    </div>
+
+    <div class="app-table procedures-list">
+      <div class="app-row app-align-items-center" *ngFor="let procedure of procedures">
+
+        <div class="app-col-1 number">
+          {{ procedure.procedureId }}
+        </div>
+
+        <div class="app-col-3 app-bold app-ellipsis name" [title]="procedure.procedureTitle">
+          {{ procedure.procedureTitle }}
+        </div>
+
+        <div class="app-col-2 date">
+          {{ procedure.dateEndRegistration | date: "dd.MM.yyyy, HH:mm" }}
+        </div>
+
+        <div class="app-col-2 sum">
+          {{ procedure.sumWithoutVat | number: "1.0-2" }} <span class="app-ghost-color">{{ getCurrencySymbol('RUB', 'narrow') }}</span>
+        </div>
+
+        <div class="app-col-2 sum-with-vat">
+          {{ procedure.sumWithoutVat + (procedure.sumWithoutVat * (procedure.vatPercent / 100)) | number: "1.0-2" }} <span class="app-ghost-color">{{ getCurrencySymbol('RUB', 'narrow') }}</span>
+        </div>
+
+        <div class="app-col-auto status app-ellipsis" [ngSwitch]="getStatusLabel(procedure)">
+          <ng-container *ngSwitchCase="'PROCEDURE_ACTIVE'">
+            <span class="app-ghost-color pr-20">
+              <uxg-icon shape="app-waiting"></uxg-icon>
+              <b>Идет процедура</b>
+            </span>
+          </ng-container>
+
+          <ng-container *ngSwitchCase="'PROCEDURE_FINISHED'">
+            <span class="app-success-color pr-20">
+              <uxg-icon shape="app-check"></uxg-icon> 
+              <b>Завершена</b>
+            </span>
+          </ng-container>
+
+          <ng-container *ngSwitchCase="'WAITING_OFFERS_IMPORT'">
+            <span class="app-ghost-color pr-20">
+              <uxg-icon shape="app-waiting"></uxg-icon> 
+              <b>Ожидание выгрузки результатов</b>
+            </span>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-template #emptyProceduresList>
+    <span class="empty-list">Список процедур пуст</span>
+  </ng-template>
+</ng-container>
+
+<ng-template #loading>
+  <div class="app-card">
+    <div class="text-center">
+      <span class="spinner spinner-md"></span>
+    </div>
+  </div>
+</ng-template>

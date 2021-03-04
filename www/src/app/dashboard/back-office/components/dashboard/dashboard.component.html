@@ -41,6 +41,23 @@
 
 <br><br>
 
+<div class="app-row app-align-items-center">
+  <div class="app-col">
+    <h2>Процедуры</h2>
+  </div>
+
+  <div class="app-col-auto" *ngIf="(procedures$ | async)?.length">
+    <a routerLink="/procedures"><b>Все процедуры ({{ proceduresTotalCount$ | async}})</b></a>
+  </div>
+</div>
+
+<app-procedures-list
+  [procedures]="procedures$ | async"
+  [proceduresTotalCount]="proceduresTotalCount$ | async"
+></app-procedures-list>
+
+<br><br><br>
+
 <div class="app-row">
   <div class="app-col">
     <h2>Статистика по статусам и деньгам</h2>

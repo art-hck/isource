@@ -9,12 +9,15 @@ import { DashboardService } from "../services/dashboard.service";
 import { DashboardTasks } from "../../common/models/dashboard-tasks";
 import { StatusesStatisticsInfo } from "../../common/models/statuses-statistics";
 import FetchAgreements = DashboardActions.FetchAgreements;
+import FetchProcedures = DashboardActions.FetchProcedures;
 import FetchStatusesStatistics = DashboardActions.FetchStatusesStatistics;
 import FetchAvailableFilters = DashboardActions.FetchAvailableFilters ;
 import { DashboardAvailableFilters } from "../../common/models/dashboard-available-filters";
+import { DashboardProcedures } from "../../common/models/dashboard-procedures";
 
 export interface DashboardStateModel {
   tasks: DashboardTasks;
+  procedures: DashboardProcedures;
   agreements: DashboardTasks;
   statusesStatistics: StatusesStatisticsInfo;
   availableFilters: DashboardAvailableFilters;
@@ -26,7 +29,7 @@ type Context = StateContext<Model>;
 
 @State<Model>({
   name: 'BackofficeDashboard',
-  defaults: { tasks: null, agreements: null, statusesStatistics: null, availableFilters: null, status: "pristine" }
+  defaults: { tasks: null, procedures: null, agreements: null, statusesStatistics: null, availableFilters: null, status: "pristine" }
 })
 @Injectable()
 export class DashboardState {
@@ -39,6 +42,9 @@ export class DashboardState {
   static tasks({ tasks }: Model) { return tasks.entities; }
 
   @Selector()
+  static procedures({ procedures }: Model) { return procedures.procedures; }
+
+  @Selector()
   static tasksBar({ tasks }: Model) { return tasks.dashboard; }
 
   @Selector()
@@ -46,6 +52,9 @@ export class DashboardState {
 
   @Selector()
   static tasksTotalCount({ tasks }: Model) { return tasks.totalCount; }
+
+  @Selector()
+  static proceduresTotalCount({ procedures }: Model) { return procedures.totalCount; }
 
   @Selector()
   static agreementsTotalCount({ agreements }: Model) { return agreements.totalCount; }
@@ -76,6 +85,13 @@ export class DashboardState {
     setState(patch({ status: "fetching" as StateStatus }));
     return this.rest.getAgreements().pipe(
       tap(agreements => setState(patch({ agreements, status: "received" as StateStatus }))),
+    );
+  }
+
+  @Action(FetchProcedures) fetchProcedures({setState}: Context) {
+    setState(patch({ status: "fetching" as StateStatus }));
+    return this.rest.getProcedures().pipe(
+      tap(procedures => setState(patch({ procedures, status: "received" as StateStatus }))),
     );
   }
 

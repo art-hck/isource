@@ -1,0 +1,9 @@
+.procedures-list-header, .procedures-list {
+  & .sum, & .sum-with-vat {
+    max-width: 110px;
+  }
+
+  & .status {
+    min-width: 260px;
+  }
+}

@@ -3,6 +3,7 @@ import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { DashboardAvailableFilters } from "../../common/models/dashboard-available-filters";
 import { DashboardTasks } from "../../common/models/dashboard-tasks";
+import { DashboardProcedures } from "../../common/models/dashboard-procedures";
 
 @Injectable()
 export class DashboardService {
@@ -18,6 +19,11 @@ export class DashboardService {
   getAgreements() {
     const url = `requests/backoffice/tasks/agreements`;
     return this.api.post<DashboardTasks>(url, {});
+  }
+
+  getProcedures(): Observable<DashboardProcedures>  {
+    const url = `requests/backoffice/procedures`;
+    return this.api.post<DashboardProcedures>(url, {});
   }
 
   getStatusesStatistics(filters = null): Observable<any> {
