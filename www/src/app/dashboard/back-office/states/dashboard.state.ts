@@ -88,9 +88,9 @@ export class DashboardState {
     );
   }
 
-  @Action(FetchProcedures) fetchProcedures({setState}: Context) {
+  @Action(FetchProcedures) fetchProcedures({setState}: Context, { filters }: FetchStatusesStatistics) {
     setState(patch({ status: "fetching" as StateStatus }));
-    return this.rest.getProcedures().pipe(
+    return this.rest.getProcedures(filters).pipe(
       tap(procedures => setState(patch({ procedures, status: "received" as StateStatus }))),
     );
   }

@@ -13,6 +13,7 @@ import { TechnicalCommercialProposalGroupListComponent } from "./components/prop
 import { ContractListComponent } from "./components/contract-list/contract-list.component";
 import { CommercialProposalGroupListComponent } from "./components/proposal/proposal-group-list/commercial-proposal-group-list/commercial-proposal-group-list.component";
 import { AppAuthGuard } from "../../auth/app-auth.guard";
+import { ProceduresListViewComponent } from "./components/procedure/procedures-list-view/procedures-list-view.component";
 
 const routes: Routes = [
   {
@@ -20,6 +21,12 @@ const routes: Routes = [
     component: RequestListComponent,
     canActivate: [CanActivateFeatureGuard],
     data: { title: "Заявки", feature: "backofficeRequest" }
+  },
+  {
+    path: 'procedures',
+    component: ProceduresListViewComponent,
+    canActivate: [CanActivateFeatureGuard],
+    data: { title: "Созданные процедуры", feature: "proceduresList" }
   },
   {
     path: ':id',
@@ -79,7 +86,7 @@ const routes: Routes = [
         component: PositionComponent
       }
     ]
-  },
+  }
 ];
 
 @NgModule({
