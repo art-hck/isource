@@ -39,7 +39,6 @@ export class ProcedureFormComponent implements OnInit, OnChanges, OnDestroy {
   @Input() action: ProcedureAction["action"] = "create";
   @Input() procedureSource: ProposalSource = ProposalSource.COMMERCIAL_PROPOSAL;
   @Input() groupId: Uuid;
-  @Input() selectAllEnabled = false;
   @Output() complete = new EventEmitter();
   @Output() cancel = new EventEmitter();
   @Output() positionsSelected = new EventEmitter<Uuid[]>();
