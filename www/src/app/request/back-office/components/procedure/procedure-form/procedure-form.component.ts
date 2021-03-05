@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { UxgWizzard, UxgWizzardBuilder, UxgWizzardStep } from "uxg";
 import { CustomValidators } from "../../../../../shared/forms/custom.validators";
@@ -28,7 +28,8 @@ import { Okpd2Service } from "../../../../../shared/services/okpd2.service";
 @Component({
   selector: 'app-request-procedure-form',
   templateUrl: './procedure-form.component.html',
-  styleUrls: ['./procedure-form.component.scss']
+  styleUrls: ['./procedure-form.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProcedureFormComponent implements OnInit, OnChanges, OnDestroy {
   @Input() procedure: Partial<Procedure>;
@@ -80,9 +81,9 @@ export class ProcedureFormComponent implements OnInit, OnChanges, OnDestroy {
 
   ngOnInit() {
     this.wizzard = this.wb.create({
-      positions: { label: "Выбор позиций", disabled: this.action !== "create", validator: () => this.form.get('positions').valid },
+      positions: { label: "Выбор позиций", disabled: this.action !== "create", validator: () => !this.form.get('positions').invalid },
       general: ["Общие сведения", () => this.form.get('general').valid && (!!this.contragents || this.form.get('privateAccessContragents').valid)],
-      contragents: { label: "Участники", hidden: true, validator: () => this.form.get('privateAccessContragents').valid },
+      contragents: { label: "Участники", hidden: true, validator: () => !this.form.get('privateAccessContragents').invalid },
       properties: { label: "Параметры", disabled: this.action === 'prolong' },
       documents: ["Документы", () => this.form.valid],
     });
@@ -101,13 +102,26 @@ export class ProcedureFormComponent implements OnInit, OnChanges, OnDestroy {
         publicAccess: [true, Validators.required],
         okpd2: ["", Validators.required],
         prolongateEndRegistration: this.defaultProcedureValue("prolongateEndRegistration", 0), // Продление времени приема заявок на участие (минут)
+        useAllPositions: false
       }),
       properties: null,
       privateAccessContragents: [ this.defaultProcedureValue("privateAccessContragents", []) ],
       documents: this.fb.group({
         procedureDocuments: [ this.defaultProcedureValue("procedureDocuments", []) ], // Документы, относящиеся к позицям
         procedureUploadDocuments: [ this.defaultProcedureValue("procedureUploadDocuments", [])] // Загруженные документы
-      })
+      }),
+    });
+
+    this.form.get('general.useAllPositions').valueChanges.subscribe(useAllPositions => {
+      const c = this.form.get('positions');
+      if (useAllPositions) {
+        c.setValidators(null);
+        c.disable();
+      } else {
+        c.setValidators([Validators.minLength(1), Validators.required]);
+        c.enable();
+      }
+      c.updateValueAndValidity({onlySelf: true, emitEvent: false});
     });
 
     this.form.get('properties').patchValue(this.procedure ?? null);
@@ -205,7 +219,7 @@ export class ProcedureFormComponent implements OnInit, OnChanges, OnDestroy {
       procedureUploadDocuments: this.form.get("documents.procedureUploadDocuments").value,
       dateEndRegistration: moment(this.form.get('general.dateEndRegistration').value, "DD.MM.YYYY HH:mm").toISOString(),
       dateSummingUp: moment(this.form.get('general.dateSummingUp').value, "DD.MM.YYYY HH:mm").toISOString(),
-      source: this.procedureSource
+      source: this.procedureSource,
     };
 
     delete body['timeEndRegistration'];

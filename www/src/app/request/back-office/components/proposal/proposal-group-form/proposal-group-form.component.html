@@ -45,7 +45,9 @@
   </select-items-with-search>
   <br/>
   <div class="app-row app-justify-content-end">
-    <div class="app-row app-col app-col-auto app-align-items-center">
+    <div class="app-row app-col app-align-items-center">
+      <uxg-switcher formControlName="useAllPositions" label="Добавить все позиции" labelAlign="right"></uxg-switcher>
+      <div class="app-col"></div>
       <ng-container *ngIf="form.get('requestPositions') as c">
         <div class="app-bold app-error-color" *ngIf="c.invalid && c.touched && c.dirty">Пожалуйста выберите позиции для предложения</div>
       </ng-container>

@@ -70,10 +70,10 @@ export class ContractState {
   }
 
   @Action(Create)
-  addContract({ setState, dispatch }: Context, { requestId, contragentId, positions }: Create) {
+  addContract({ setState, dispatch }: Context, { requestId, contragentId, positions, useAllPositions }: Create) {
     setState(patch<Model>({ status: "updating" }));
 
-    return this.rest.create(requestId, contragentId, positions).pipe(
+    return this.rest.create(requestId, contragentId, positions, useAllPositions).pipe(
       tap(contract => setState(patch<Model>({ contracts: insertItem(contract), status: "received" }))),
       tap(() => dispatch([
         new FetchSuppliers(requestId),

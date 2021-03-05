@@ -35,7 +35,7 @@ export namespace ContractActions {
   export class Create {
     static readonly type = '[Contract Backoffice] Create';
 
-    constructor(public requestId: Uuid, public contragentId: Uuid, public positions: RequestPosition[]) {}
+    constructor(public requestId: Uuid, public contragentId: Uuid, public positions: RequestPosition[], public useAllPositions?: boolean) {}
   }
 
   // Отправить на согласование

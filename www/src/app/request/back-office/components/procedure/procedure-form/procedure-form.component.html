@@ -282,7 +282,11 @@
 
   <br/>
   <div class="app-row app-justify-content-end">
-    <div class="app-row app-col app-col-auto app-align-items-center">
+    <div class="app-row app-col app-align-items-center">
+      <ng-container *uxgWizzardStep="'positions'" formGroupName="general">
+        <uxg-switcher formControlName="useAllPositions" label="Добавить все позиции" labelAlign="right"></uxg-switcher>
+        <div class="app-col"></div>
+      </ng-container>
       <span *ngIf="isLoading" class="spinner spinner-inline"></span>
       <button uxgWizzardButton="cancel" type="button" uxgButton secondary lg>Отмена</button>
       <button uxgWizzardButton="prev" type="button" uxgButton secondary lg>Назад</button>

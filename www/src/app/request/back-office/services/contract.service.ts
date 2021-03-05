@@ -24,9 +24,9 @@ export class ContractService {
     return this.api.post<ContractFilter>(url, { requestId });
   }
 
-  create(requestId: Uuid, supplierId: Uuid, positions: RequestPosition[]): Observable<Contract> {
+  create(requestId: Uuid, supplierId: Uuid, positions?: RequestPosition[], useAllPositions?: boolean): Observable<Contract> {
     const url = `requests/backoffice/contracts/create`;
-    const body: ContractCreate = { supplierId, requestId, positions: positions.map(position => position.id) };
+    const body: ContractCreate = { supplierId, requestId, positions: positions?.map(position => position.id), useAllPositions };
     return this.api.post<Contract>(url, body);
   }
 

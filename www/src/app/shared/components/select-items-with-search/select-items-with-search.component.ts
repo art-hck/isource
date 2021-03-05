@@ -31,6 +31,7 @@ export class SelectItemsWithSearchComponent implements ControlValueAccessor, OnC
   public onChange: (value) => void;
   public form: FormGroup;
   public value;
+  public disabled: boolean;
   private subscription = new Subscription();
 
   get formItems() {
@@ -132,4 +133,5 @@ export class SelectItemsWithSearchComponent implements ControlValueAccessor, OnC
   registerOnTouched = (fn: any): void => this.onTouched = fn;
   writeValue = (value): void => this.value = value;
   ngOnDestroy = () => this.subscription.unsubscribe();
+  setDisabledState = (disabled: boolean) => this.disabled = disabled;
 }

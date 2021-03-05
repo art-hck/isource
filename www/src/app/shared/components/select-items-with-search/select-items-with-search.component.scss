@@ -13,6 +13,11 @@ hr {
   }
 }
 
+.disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
 form {
   display: flex;
   flex-direction: column;

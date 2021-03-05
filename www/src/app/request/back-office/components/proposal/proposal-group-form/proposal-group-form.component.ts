@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { RequestPosition } from "../../../../common/models/request-position";
 import { UxgModalComponent } from "uxg";
 import { Subject } from "rxjs";
@@ -12,7 +12,7 @@ import { searchPosition } from "../../../../../shared/helpers/search";
   templateUrl: './proposal-group-form.component.html',
   styleUrls: ['./proposal-group-form.component.scss']
 })
-export class ProposalGroupFormComponent implements OnChanges, OnDestroy {
+export class ProposalGroupFormComponent implements OnChanges, OnDestroy, OnInit {
   @ViewChild('createGroup') createGroup: UxgModalComponent;
   @Output() complete = new EventEmitter();
   @Output() create = new EventEmitter<{ name: string, id?: Uuid, requestPositions: Uuid[] }>();
@@ -28,10 +28,24 @@ export class ProposalGroupFormComponent implements OnChanges, OnDestroy {
 
   readonly form = this.fb.group({
     name: [null, Validators.required],
-    requestPositions: [null, [Validators.minLength(1), Validators.required]]
+    requestPositions: [null, [Validators.minLength(1), Validators.required]],
+    useAllPositions: false
   });
 
   constructor(private fb: FormBuilder) {}
+
+  ngOnInit() {
+    this.form.get('useAllPositions').valueChanges.subscribe(useAllPositions => {
+      const c = this.form.get('requestPositions');
+      if (useAllPositions) {
+        c.setValidators(null);
+        c.disable();
+      } else {
+        c.setValidators([Validators.minLength(1), Validators.required]);
+        c.enable();
+      }
+    });
+  }
 
   ngOnChanges() {
     this.form.patchValue(this.group ?? {});
@@ -47,7 +61,7 @@ export class ProposalGroupFormComponent implements OnChanges, OnDestroy {
     this.create.emit({
       ...this.form.value,
       id: this.group?.id,
-      requestPositions: this.form.value.requestPositions.map(({ id }) => id)
+      requestPositions: this.form.value.requestPositions?.map(({ id }) => id)
     });
 
     this.complete.emit();

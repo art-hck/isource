@@ -55,6 +55,8 @@
   <br/>
   <br/>
   <div class="app-row app-justify-content-end app-align-items-center">
+    <uxg-switcher formControlName="useAllPositions" label="Добавить все позиции" labelAlign="right"></uxg-switcher>
+    <div class="app-col"></div>
     <button uxgButton secondary lg (click)="close.emit()">Отмена</button>
     <button uxgButton primary lg [disabled]="form.invalid">Добавить</button>
   </div>

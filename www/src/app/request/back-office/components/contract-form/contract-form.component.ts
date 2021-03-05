@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, EventEmitter, Input, OnInit, OnChanges, Output } from '@angular/core';
 import { ContragentWithPositions } from "../../../common/models/contragentWithPositions";
 import { Request } from "../../../common/models/request";
 import { FormBuilder, Validators } from "@angular/forms";
@@ -14,13 +14,17 @@ import Create = ContractActions.Create;
   templateUrl: './contract-form.component.html',
   styleUrls: ['./contract-form.component.scss']
 })
-export class ContractFormComponent implements AfterViewInit, OnChanges {
+export class ContractFormComponent implements AfterViewInit, OnInit, OnChanges {
   @Input() suppliers: ContragentWithPositions[] = [];
   @Input() request: Request;
   @Output() close = new EventEmitter<void>();
   @Output() filterPositions = new EventEmitter();
 
-  readonly form = this.fb.group({ contragentId: null, positions: [[], Validators.required] });
+  readonly form = this.fb.group({
+    contragentId: null,
+    positions: [null, [Validators.minLength(1), Validators.required]],
+    useAllPositions: false
+  });
   readonly destroy$ = new Subject();
   readonly positions$: Observable<RequestPosition[]> = this.form.get('contragentId').valueChanges.pipe(
     map(contragentId => this.suppliers?.find(({ supplier }) => supplier.id === contragentId).positions),
@@ -32,6 +36,19 @@ export class ContractFormComponent implements AfterViewInit, OnChanges {
     this.form.get('contragentId').updateValueAndValidity();
   }
 
+  ngOnInit() {
+    this.form.get('useAllPositions').valueChanges.subscribe(useAllPositions => {
+      const c = this.form.get('positions');
+      if (useAllPositions) {
+        c.setValidators(null);
+        c.disable();
+      } else {
+        c.setValidators([Validators.minLength(1), Validators.required]);
+        c.enable();
+      }
+    });
+  }
+
   ngAfterViewInit() {
     if (this.suppliers) {
       this.form.get('contragentId').setValue(this.suppliers[0]?.supplier.id);
@@ -40,8 +57,8 @@ export class ContractFormComponent implements AfterViewInit, OnChanges {
   }
 
   public submit(): void {
-    const { contragentId, positions } = this.form.value;
-    this.store.dispatch(new Create(this.request.id, contragentId, positions)).pipe(takeUntil(this.destroy$));
+    const { contragentId, positions, useAllPositions } = this.form.value;
+    this.store.dispatch(new Create(this.request.id, contragentId, positions, useAllPositions)).pipe(takeUntil(this.destroy$));
     this.close.emit();
   }
 
