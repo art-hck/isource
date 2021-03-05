@@ -4,4 +4,5 @@ export class ContractCreate {
   supplierId: Uuid;
   requestId: Uuid;
   positions: Uuid[];
+  useAllPositions?: boolean;
 }
