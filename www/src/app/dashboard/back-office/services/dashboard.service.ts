@@ -21,9 +21,9 @@ export class DashboardService {
     return this.api.post<DashboardTasks>(url, {});
   }
 
-  getProcedures(): Observable<DashboardProcedures>  {
+  getProcedures(filters): Observable<DashboardProcedures>  {
     const url = `requests/backoffice/procedures`;
-    return this.api.post<DashboardProcedures>(url, {});
+    return this.api.post<DashboardProcedures>(url, filters);
   }
 
   getStatusesStatistics(filters = null): Observable<any> {

@@ -11,7 +11,7 @@ export namespace DashboardActions {
 
   export class FetchProcedures {
     static readonly type = '[Dashboard Backoffice] FetchProcedures';
-    constructor() {}
+    constructor(public filters: any) {}
   }
 
   export class FetchStatusesStatistics {

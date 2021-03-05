@@ -8,13 +8,7 @@ const routes: Routes = [
     path: '',
     component: BackofficeDashboardComponent,
     canActivate: [CanActivateFeatureGuard],
-    data: { title: "Главная", hideTitle: true, feature: "backofficeDashboard" }
-  },
-  {
-    path: '/procedures',
-    component: BackofficeDashboardComponent,
-    canActivate: [CanActivateFeatureGuard],
-    data: { title: "Процедуры", hideTitle: true, feature: "backofficeProceduresList" }
+    data: { title: "Главная", hideTitle: true, feature: "backofficeDashboard" },
   }
 ];
 
