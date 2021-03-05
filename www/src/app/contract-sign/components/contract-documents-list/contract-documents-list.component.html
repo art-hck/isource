@@ -12,12 +12,4 @@
       </div>
     </div>
   </li>
-
-  <ng-container *ngIf="limit > 0 && limit < contract.documents.length">
-    <div class="more" (click)="showAll = !showAll">
-      <uxg-icon shape="app-chevron" [attr.dir]="showAll ? 'up' : 'down'"></uxg-icon>
-      <span *ngIf="!showAll"> Еще {{ contract.documents.length - limit | pluralize: "документ" : "документа" : "документов" }}</span>
-      <span *ngIf="showAll"> Скрыть</span>
-    </div>
-  </ng-container>
 </ul>

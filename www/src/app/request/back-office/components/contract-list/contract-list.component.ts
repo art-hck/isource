@@ -32,7 +32,8 @@ import { FeatureService } from "../../../../core/services/feature.service";
 
 @Component({
   selector: 'app-contract-list',
-  templateUrl: './contract-list.component.html'
+  templateUrl: './contract-list.component.html',
+  styleUrls: ['./contract-list.component.scss'],
 })
 export class ContractListComponent implements OnInit, OnDestroy {
   @Select(RequestState.request) request$: Observable<Request>;

@@ -1,8 +1,8 @@
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
-import { Select, Store } from "@ngxs/store";
+import { Actions, ofActionCompleted, Select, Store } from "@ngxs/store";
 import { Agreement } from "../../../../agreements/common/models/Agreement";
 import { StateStatus } from "../../../../request/common/models/state-status";
-import { BehaviorSubject, Observable, Subject } from "rxjs";
+import { Observable, Subject } from "rxjs";
 import { DashboardTaskItem } from "../../../common/models/dashboard-task-item";
 import { AgreementsService } from "../../../../agreements/customer/services/agreements.service";
 import { NotificationService } from "../../../../notification/services/notification.service";
@@ -43,7 +43,6 @@ export class DashboardComponent implements OnInit {
   @Select(DashboardState.filterRequestList) filterRequestList$: Observable<DashboardAvailableFiltersRequestItem[]>;
   @Select(DashboardState.filterApplicantsList) filterApplicantsList$: Observable<DashboardAvailableFiltersApplicantItem[]>;
 
-  readonly refresh$ = new BehaviorSubject('');
   destroy$ = new Subject();
 
   constructor(
@@ -53,6 +52,7 @@ export class DashboardComponent implements OnInit {
     private notificationService: NotificationService,
     private route: ActivatedRoute,
     private cd: ChangeDetectorRef,
+    private actions: Actions
   ) {}
 
   ngOnInit() {
@@ -65,6 +65,15 @@ export class DashboardComponent implements OnInit {
       withLatestFrom(this.statusesStatistics$),
       takeUntil(this.destroy$)
     ).subscribe();
+
+    this.actions.pipe(
+      ofActionCompleted(Rate),
+      takeUntil(this.destroy$)
+    ).subscribe(() => {
+      this.store.dispatch(new Fetch()).subscribe(() => {
+        this.cd.detectChanges();
+      });
+    });
   }
 
   submitFilter() {
@@ -113,9 +122,9 @@ export class DashboardComponent implements OnInit {
     this.store.dispatch(new FetchStatusesStatistics({}));
   }
 
-  sendRating(requestId: Uuid, positionId: Uuid, rating: number) {
-    this.store.dispatch(new Rate(requestId, positionId, rating)).subscribe(
-      () => this.refresh$.next('')
-    );
+  sendRating(requestId: Uuid, positionId: Uuid, rating: number): void {
+    this.store.dispatch(new Rate(requestId, positionId, rating)).subscribe(() => {
+      this.cd.detectChanges();
+    });
   }
 }

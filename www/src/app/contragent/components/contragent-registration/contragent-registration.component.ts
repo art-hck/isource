@@ -18,7 +18,6 @@ import { ContragentInfo } from "../../models/contragent-info";
 import { UxgBreadcrumbsService } from "uxg";
 import { Store } from "@ngxs/store";
 import { User } from "../../../user/models/user";
-import { TextMaskConfig } from "angular2-text-mask/src/angular2TextMask";
 import { ContragentRoleLabels } from "../../dictionaries/currency-labels";
 import { ContragentRole } from "../../enum/contragent-role";
 import { UsersGroup } from "../../../core/models/users-group";
@@ -47,12 +46,6 @@ export class ContragentRegistrationComponent implements OnInit {
 
   readonly role = ContragentRole;
   readonly roleLabel = ContragentRoleLabels;
-  readonly phoneMask: TextMaskConfig = {
-    mask: value => ['+', '7', ' ', /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/],
-    guide: false,
-    keepCharPositions: false,
-    showMask: true
-  };
 
   get isEditing(): boolean {
     return !!this.contragentId;
@@ -141,8 +134,11 @@ export class ContragentRegistrationComponent implements OnInit {
 
     if (this.isEditing) {
       this.getContragentInfo();
-      this.form.get('contragent').get('ogrn').disable();
-      this.form.get('contragent').get('inn').disable();
+
+      this.contragent$.subscribe(contragentInfo => {
+        if (contragentInfo.ogrn) { this.form.get('contragent').get('ogrn').disable(); }
+        if (contragentInfo.inn) { this.form.get('contragent').get('inn').disable(); }
+      });
     } else {
       this.groups$.subscribe(groups => {
         this.form.get('contragent').get('usersGroup').setValue(groups[0]);

@@ -89,7 +89,7 @@ export class CustomValidators {
 
   static phone(control: FormControl): any {
     const value = control.value || '';
-    const valid = String(value).trim().match(/^\+?7?[ ]?\d{10}$/);
+    const valid = String(value).match(/^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}$/);
     return valid ? null : {invalid_phone: true};
   }
 

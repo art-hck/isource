@@ -56,7 +56,7 @@ export class PositionComponent implements OnInit {
   }
 
   rejectPositions(positionIds: Uuid[]) {
-    this.positionService.changePositionsStatus(positionIds, PositionStatus.CANCELED, 'customer').pipe(tap(() => {
+    this.positionService.changePositionsStatus(positionIds, PositionStatus.CANCELED, ['customer']).pipe(tap(() => {
       this.store.dispatch(new ToastActions.Success('Позиция отклонена'));
       this.position$ = this.positionService.info(this.requestId, this.positionId);
     })).subscribe();

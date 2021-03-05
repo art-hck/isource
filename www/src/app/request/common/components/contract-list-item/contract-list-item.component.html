@@ -104,7 +104,7 @@
               {{ document.comments }}
             </div>
             <div class="app-col-1 app-ellipsis">
-              <button uxgButton link lg icon *ngIf="document.documentSignatures.length"
+              <button uxgButton link lg icon *ngIf="document.hasSignedStorageFile"
                       (click)="onDownloadDocumentWithSign(document)"
                       type="button" class="btn-download"
                       title="Скачать печатную форму документа с подписями">

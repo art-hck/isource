@@ -1,6 +1,6 @@
 <ng-container *ngIf="(contractSignInfo$ | async) as contractSignInfo; else loader">
   <div class="app-section">
-    <span class="app-ghost-color">Запрос подписания копманией:</span> {{ contractSignInfo?.customer.shortName }}
+    <span class="app-ghost-color">Запрос подписания компанией:</span> {{ contractSignInfo?.customer.shortName }}
     <span class="app-ghost-color"> | </span>
     <span class="app-ghost-color">Подписант:</span> {{ signerName }}
   </div>
@@ -19,7 +19,8 @@
           }}</h2>
 
         <app-contract-documents-list
-          [contract]="contract">
+          [contract]="contract"
+          [onlyCurrentDocument]="true">
         </app-contract-documents-list>
 
         <div class="app-section">
