@@ -23,6 +23,7 @@ export interface IFeatureList {
   addContragentToUser;
   employees;
   contractGeneration;
+  proceduresList;
   createProcedure;
   prolongProcedure;
   retradeProcedure;
@@ -101,6 +102,7 @@ export const FeatureList: { [key in keyof IFeatureList]: Feature } = {
   addContragentToUser: { roles: [UserRole.ADMIN, UserRole.BACKOFFICE_BUYER, UserRole.SENIOR_BACKOFFICE] },
   employees: { roles: [UserRole.SENIOR_BACKOFFICE, UserRole.BACKOFFICE_OBSERVER] },
   contractGeneration: { roles: [UserRole.BACKOFFICE] },
+  proceduresList: { roles: [UserRole.BACKOFFICE_BUYER, UserRole.SENIOR_BACKOFFICE, UserRole.BACKOFFICE_OBSERVER] },
   createProcedure: { roles: [UserRole.BACKOFFICE_BUYER, UserRole.SENIOR_BACKOFFICE] },
   prolongProcedure: { roles: [UserRole.BACKOFFICE_BUYER, UserRole.SENIOR_BACKOFFICE] },
   retradeProcedure: { roles: [UserRole.BACKOFFICE_BUYER, UserRole.SENIOR_BACKOFFICE] },

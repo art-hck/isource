@@ -32,6 +32,9 @@ import { ProceduresListComponent } from "./components/dashboard/procedures-list/
     DashboardService,
     PluralizePipe
   ],
+  exports: [
+    ProceduresListComponent
+  ]
 })
 export class DashboardBackofficeModule {
 }

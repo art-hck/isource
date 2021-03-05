@@ -23,7 +23,7 @@ export class ValidationDirective implements OnInit, OnDestroy {
             markAsDirty(c.controls);
           } else {
             c.markAsDirty();
-            c.updateValueAndValidity();
+            c.updateValueAndValidity({ onlySelf: true });
           }
         });
       })(this.ngForm.control.controls);

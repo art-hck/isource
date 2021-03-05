@@ -49,6 +49,8 @@ import { CommercialProposalGroupService } from "./services/commercial-proposal-g
 import { CommercialProposalsDeprecatedService } from "./services/commercial-proposals-deprecated.service";
 import { PluralizePipe } from "../../shared/pipes/pluralize-pipe";
 import { BytesToSizePipe } from "../../shared/pipes/bytes-to-size-pipe";
+import { ProceduresListViewComponent } from "./components/procedure/procedures-list-view/procedures-list-view.component";
+import { DashboardBackofficeModule } from "../../dashboard/back-office/dashboard-backoffice.module";
 
 @NgModule({
   declarations: [
@@ -75,6 +77,7 @@ import { BytesToSizePipe } from "../../shared/pipes/bytes-to-size-pipe";
     ProcedureComponent,
     ProcedureGridComponent,
     ProcedureViewComponent,
+    ProceduresListViewComponent,
     TechnicalCommercialProposalGroupListComponent,
     ContractFormComponent,
     ContractListComponent,
@@ -90,13 +93,14 @@ import { BytesToSizePipe } from "../../shared/pipes/bytes-to-size-pipe";
       CommercialProposalState,
       ContractState
     ]),
-    RequestCommonModule
+    RequestCommonModule,
+    DashboardBackofficeModule
   ],
   exports: [
     ProcedureFormComponent,
     ProcedureProlongateComponent,
     ProposalComponent
-    ],
+  ],
   providers: [
     DesignDocumentationService,
     CommercialProposalsService,

@@ -61,7 +61,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.switchView(this.view);
 
     this.route.params.pipe(
-      tap(() => this.store.dispatch([new FetchStatusesStatistics({}), new FetchAvailableFilters({}), new FetchProcedures()])),
+      tap(() => this.store.dispatch([
+        new FetchStatusesStatistics({}),
+        new FetchAvailableFilters({}),
+        new FetchProcedures({ startFrom: 0, pageSize: 5, filters: {} })
+      ])),
       withLatestFrom(this.statusesStatistics$),
       takeUntil(this.destroy$)
     ).subscribe();

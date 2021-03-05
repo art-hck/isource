@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, EventEmitter, Input, OnInit, OnChanges, Output } from '@angular/core';
 import { ContragentWithPositions } from "../../../common/models/contragentWithPositions";
 import { Request } from "../../../common/models/request";
 import { FormBuilder, Validators } from "@angular/forms";
@@ -14,10 +14,11 @@ import Create = ContractActions.Create;
   templateUrl: './contract-form.component.html',
   styleUrls: ['./contract-form.component.scss']
 })
-export class ContractFormComponent implements AfterViewInit, OnInit {
+export class ContractFormComponent implements AfterViewInit, OnInit, OnChanges {
   @Input() suppliers: ContragentWithPositions[] = [];
   @Input() request: Request;
   @Output() close = new EventEmitter<void>();
+  @Output() filterPositions = new EventEmitter();
 
   readonly form = this.fb.group({
     contragentId: null,
@@ -26,10 +27,14 @@ export class ContractFormComponent implements AfterViewInit, OnInit {
   });
   readonly destroy$ = new Subject();
   readonly positions$: Observable<RequestPosition[]> = this.form.get('contragentId').valueChanges.pipe(
-    map(contragentId => this.suppliers.find(({ supplier }) => supplier.id === contragentId).positions),
+    map(contragentId => this.suppliers?.find(({ supplier }) => supplier.id === contragentId).positions),
   );
 
   constructor(public store: Store, private fb: FormBuilder, private cd: ChangeDetectorRef) {}
+
+  ngOnChanges() {
+    this.form.get('contragentId').updateValueAndValidity();
+  }
 
   ngOnInit() {
     this.form.get('useAllPositions').valueChanges.subscribe(useAllPositions => {
@@ -57,6 +62,5 @@ export class ContractFormComponent implements AfterViewInit, OnInit {
     this.close.emit();
   }
 
-  filterPositions = (q: string, position: RequestPosition): boolean => position.name.toLowerCase().indexOf(q.toLowerCase()) >= 0;
   trackById = (item: RequestPosition) => item.id;
 }

@@ -42,6 +42,7 @@ export class ProcedureFormComponent implements OnInit, OnChanges, OnDestroy {
   @Output() complete = new EventEmitter();
   @Output() cancel = new EventEmitter();
   @Output() positionsSelected = new EventEmitter<Uuid[]>();
+  @Output() filterPositions = new EventEmitter();
   selectedPositions: RequestPosition[] = [];
   form: FormGroup;
   allContragents$: Observable<ContragentList[]>;
@@ -261,10 +262,6 @@ export class ProcedureFormComponent implements OnInit, OnChanges, OnDestroy {
       case stepInfo.disabled: return 'app-lock';
       case stepInfo.completed: return 'app-check';
     }
-  }
-
-  filterPositions(q: string, position: RequestPosition): boolean {
-    return position.name.toLowerCase().indexOf(q.toLowerCase()) >= 0;
   }
 
   isStatusInvalid(status: PositionStatus) {

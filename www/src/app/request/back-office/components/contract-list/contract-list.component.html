@@ -69,7 +69,11 @@
     <uxg-modal #contractFormModal size="l">
       <ng-container *ngIf="contractFormModal.state">
         <h2 class="modal-title"><b>Добавить новый договор</b></h2>
-        <app-contract-form [request]="request" [suppliers]="suppliers$ | async" (close)="contractFormModal.close()">
+        <app-contract-form
+          [request]="request"
+          [suppliers]="suppliers$ | async"
+          (close)="contractFormModal.close()"
+          (filterPositions)="store.dispatch(fetchSuppliers(request, $event))">
         </app-contract-form>
       </ng-container>
     </uxg-modal>

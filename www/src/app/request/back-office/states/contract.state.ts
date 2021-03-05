@@ -27,6 +27,7 @@ export interface ContractStateModel {
   contracts: Contract[];
   availibleFilters?: ContractFilter;
   status: StateStatus;
+  allowCreate: boolean;
 }
 
 type Model = ContractStateModel;
@@ -34,7 +35,7 @@ type Context = StateContext<Model>;
 
 @State<Model>({
   name: 'BackofficeContract',
-  defaults: { suppliers: null, contracts: null, availibleFilters: {}, status: "pristine" }
+  defaults: { suppliers: null, contracts: null, allowCreate: false, availibleFilters: {}, status: "pristine" }
 })
 @Injectable()
 export class ContractState {
@@ -58,10 +59,14 @@ export class ContractState {
     return this.rest.availableFilters(requestId).pipe(tap(availibleFilters => setState(patch<Model>({ availibleFilters }))));
   }
 
-  @Action(FetchSuppliers)
-  fetchSuppliers({ setState, dispatch }: Context, { requestId }: FetchSuppliers) {
+  @Action(FetchSuppliers, { cancelUncompleted: true })
+  fetchSuppliers({ setState, dispatch }: Context, { requestId, search }: FetchSuppliers) {
     setState(patch({ suppliers: null }));
-    return this.rest.suppliers(requestId).pipe(tap(suppliers => setState(patch({ suppliers }))));
+
+    return this.rest.suppliers(requestId, search).pipe(
+      tap(suppliers => setState(patch({ suppliers }))),
+      tap(p => {if (!search) { setState(patch({ allowCreate: p.length > 0 })); }}),
+    );
   }
 
   @Action(Create)

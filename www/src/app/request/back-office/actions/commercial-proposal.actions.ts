@@ -12,7 +12,7 @@ export namespace CommercialProposalsActions {
   export class FetchAvailablePositions {
     static readonly type = '[Commercial Proposals Backoffice] FetchAvailablePositions';
 
-    constructor(public requestId: Uuid, public groupId?: Uuid) {}
+    constructor(public requestId: Uuid, public groupId?: Uuid, public search?: string) {}
   }
 
   // Получить процедуры

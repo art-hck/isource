@@ -10,7 +10,7 @@
     class="select-list select-list-positions"
     formControlName="requestPositions"
     placeholder="Наименование позиции или группы"
-    [filterFn]="searchPosition"
+    (filter)="filterAvailablePositions.emit($event)"
     [trackBy]="trackById"
     [items]="mergeWithExistPositions"
   >

@@ -11,11 +11,10 @@
     <br/>
     <br/>
     <select-items-with-search
-      *ngIf="positions else loading"
       class="select-list select-list-positions"
       formControlName="positions"
       placeholder="Наименование позиции или группы"
-      [filterFn]="filterPositions"
+      (filter)="filterPositions.emit($event)"
       [disabledFn]="disabledPositions"
       [trackBy]="trackById"
       [items]="positions">

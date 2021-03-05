@@ -7,7 +7,7 @@
       <div class="app-col-auto app-grow-0">
         <small><span class="app-secondary-color">Выбрано: </span><b>{{ checkedFormItems.length }}</b></small>
       </div>
-      <ng-container *ngIf="filterFn">
+      <ng-container *ngIf="filterFn || filter.observers.length">
         <div class="app-col">
           <div class="app-row app-align-items-center app-justify-content-end">
             <ng-container *ngTemplateOutlet="customFilterFieldsRef"></ng-container>
@@ -31,7 +31,7 @@
 
       <ng-template #list>
         <ng-container *ngFor="let formGroup of formItems?.controls; index as i">
-          <ng-container *ngIf="!filterFn || filterFn(form.get('search').value, formGroup.get('item').value)">
+          <ng-container *ngIf="!formGroup.get('hidden').value && (!filterFn || filterFn(form.get('search').value, formGroup.get('item').value))">
             <ng-container *ngTemplateOutlet="rowTplRef; context:{formGroup: formGroup, item: formGroup.get('item').value}">
             </ng-container>
           </ng-container>
