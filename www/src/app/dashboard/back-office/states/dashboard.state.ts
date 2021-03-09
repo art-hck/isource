@@ -14,6 +14,8 @@ import FetchStatusesStatistics = DashboardActions.FetchStatusesStatistics;
 import FetchAvailableFilters = DashboardActions.FetchAvailableFilters ;
 import { DashboardAvailableFilters } from "../../common/models/dashboard-available-filters";
 import { DashboardProcedures } from "../../common/models/dashboard-procedures";
+import FetchProceduresAvailableFilters = DashboardActions.FetchProceduresAvailableFilters;
+import { ProceduresAvailableFilters } from "../../../request/back-office/models/procedures-available-filters";
 
 export interface DashboardStateModel {
   tasks: DashboardTasks;
@@ -21,6 +23,7 @@ export interface DashboardStateModel {
   agreements: DashboardTasks;
   statusesStatistics: StatusesStatisticsInfo;
   availableFilters: DashboardAvailableFilters;
+  proceduresAvailableFilters: ProceduresAvailableFilters;
   status: StateStatus;
 }
 
@@ -29,7 +32,15 @@ type Context = StateContext<Model>;
 
 @State<Model>({
   name: 'BackofficeDashboard',
-  defaults: { tasks: null, procedures: null, agreements: null, statusesStatistics: null, availableFilters: null, status: "pristine" }
+  defaults: {
+    tasks: null,
+    procedures: null,
+    agreements: null,
+    statusesStatistics: null,
+    availableFilters: null,
+    proceduresAvailableFilters: null,
+    status: "pristine"
+  }
 })
 @Injectable()
 export class DashboardState {
@@ -72,6 +83,18 @@ export class DashboardState {
   static filterResponsibleUsersList({ availableFilters }: Model) { return availableFilters.responsibleUsers; }
 
   @Selector()
+  static proceduresAvailableFilters({ proceduresAvailableFilters }: Model) { return proceduresAvailableFilters; }
+
+  @Selector()
+  static proceduresFilterAvailableOkpd2List({ proceduresAvailableFilters }: Model) { return proceduresAvailableFilters.okpd2; }
+
+  @Selector()
+  static proceduresFilterAvailableStatusesList({ proceduresAvailableFilters }: Model) { return proceduresAvailableFilters.status; }
+
+  @Selector()
+  static proceduresFilterAvailableContragentList({ proceduresAvailableFilters }: Model) { return proceduresAvailableFilters.contragents; }
+
+  @Selector()
   static status({ status }: Model) { return status; }
 
   @Action(FetchTasks) fetchTasks({setState}: Context) {
@@ -88,7 +111,7 @@ export class DashboardState {
     );
   }
 
-  @Action(FetchProcedures) fetchProcedures({setState}: Context, { filters }: FetchStatusesStatistics) {
+  @Action(FetchProcedures) fetchProcedures({setState}: Context, { filters }: FetchProcedures) {
     setState(patch({ status: "fetching" as StateStatus }));
     return this.rest.getProcedures(filters).pipe(
       tap(procedures => setState(patch({ procedures, status: "received" as StateStatus }))),
@@ -108,6 +131,15 @@ export class DashboardState {
 
     return this.rest.getDashboardAvailableFilters(filters).pipe(tap(availableFilters => {
       setState(patch<Model>({ availableFilters, status: "received" }));
+    }));
+  }
+
+  @Action(FetchProceduresAvailableFilters)
+  fetchProceduresAvailableFilters({ setState, dispatch }: Context, { filters }: FetchProceduresAvailableFilters) {
+    setState(patch<Model>({ status: 'fetching' }));
+
+    return this.rest.getDashboardProceduresAvailableFilters(filters).pipe(tap(proceduresAvailableFilters => {
+      setState(patch<Model>({ proceduresAvailableFilters, status: "received" }));
     }));
   }
 }
