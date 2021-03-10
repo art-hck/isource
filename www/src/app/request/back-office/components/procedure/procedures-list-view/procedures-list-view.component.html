@@ -14,7 +14,7 @@
         [procedures]="procedures$ | async"
       ></app-procedures-list>
       <br>
-      <app-pagination [total]="proceduresTotalCount$ | async" [pageSize]="2" [pages$]="pages$" (change)="fetchFilters$.next({page: $event})"></app-pagination>
+      <app-pagination [total]="proceduresTotalCount$ | async" [pageSize]="pageSize" [pages$]="pages$" (change)="fetchFilters$.next({page: $event})"></app-pagination>
     </div>
 
     <uxg-filter [formGroup]="filterForm" (filter)="fetchFilters$.next({filters: $event})">
