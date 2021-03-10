@@ -61,4 +61,5 @@ export class RequestPosition extends RequestPositionList {
   availableEditFields?: string[];
   mtrPositionId?: Uuid;
   beforeNormalizedName: string;
+  inQueue: boolean;
 }

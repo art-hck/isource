@@ -224,8 +224,8 @@ export class RequestComponent implements OnInit, AfterViewInit, OnChanges {
     }
   }
 
-  isNotActualOrOnApprove(position: RequestPosition): boolean {
-    return position.status === PositionStatus.CANCELED || position.status === PositionStatus.NOT_RELEVANT ||
+  isPositionDisabled(position: RequestPosition): boolean {
+    return position.inQueue || position.status === PositionStatus.CANCELED || position.status === PositionStatus.NOT_RELEVANT ||
       (position.status === PositionStatus.PROOF_OF_NEED && this.user.isCustomer());
   }
 
@@ -325,7 +325,7 @@ export class RequestComponent implements OnInit, AfterViewInit, OnChanges {
 
     if (position) {
       formGroup.addControl("position", this.fb.control(position));
-      if (this.asPosition(position) && this.isNotActualOrOnApprove(this.asPosition(position))) {
+      if (this.asPosition(position) && this.isPositionDisabled(this.asPosition(position))) {
         formGroup.get("checked").disable();
       }
     }
