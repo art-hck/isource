@@ -9,7 +9,7 @@ export function searchContragents<T extends ContragentInfo | ContragentList | Co
 }
 
 export function searchContragent(q: string, contragent: ContragentInfo | ContragentList | ContragentShortInfo): boolean {
-  return contragent.shortName.toLowerCase().indexOf(q.toLowerCase()) > -1 || contragent.inn.indexOf(q) > -1;
+  return contragent.shortName.toLowerCase().indexOf(q.toLowerCase()) > -1 || contragent.inn.indexOf(q) > -1 || contragent.kpp.indexOf(q) > -1;
 }
 
 export function searchUsers(q: string, users: User[]) {

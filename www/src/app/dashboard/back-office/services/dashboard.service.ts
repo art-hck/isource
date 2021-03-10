@@ -4,6 +4,7 @@ import { Observable } from "rxjs";
 import { DashboardAvailableFilters } from "../../common/models/dashboard-available-filters";
 import { DashboardTasks } from "../../common/models/dashboard-tasks";
 import { DashboardProcedures } from "../../common/models/dashboard-procedures";
+import { ProceduresAvailableFilters } from "../../../request/back-office/models/procedures-available-filters";
 
 @Injectable()
 export class DashboardService {
@@ -36,5 +37,11 @@ export class DashboardService {
     const url = `requests/backoffice/dashboard/available-filters`;
 
     return this.api.post<DashboardAvailableFilters>(url, { filters });
+  }
+
+  getDashboardProceduresAvailableFilters(filters = null) {
+    const url = `requests/backoffice/procedures/available-filters`;
+
+    return this.api.post<ProceduresAvailableFilters>(url, { filters });
   }
 }

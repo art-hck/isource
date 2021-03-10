@@ -4,6 +4,7 @@ import { Store } from "@ngxs/store";
 import { Subject } from "rxjs";
 import { Procedure } from "../../../../../request/back-office/models/procedure";
 import moment from "moment";
+import { StateStatus } from "../../../../../request/common/models/state-status";
 
 @Component({
   selector: 'app-procedures-list',
@@ -13,6 +14,7 @@ import moment from "moment";
 export class ProceduresListComponent implements OnInit, OnDestroy {
   @Input() procedures: Procedure[];
   @Input() proceduresTotalCount: number;
+  @Input() status: StateStatus;
   getCurrencySymbol = getCurrencySymbol;
 
   destroy$ = new Subject();
