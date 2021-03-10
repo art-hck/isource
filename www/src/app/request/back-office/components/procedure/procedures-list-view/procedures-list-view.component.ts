@@ -48,8 +48,7 @@ export class ProceduresListViewComponent implements OnDestroy, OnInit {
     dateSummingUpTo: null,
   });
 
-  readonly pageSize = 2;
-  // readonly pageSize = this.appConfig.paginator.pageSize;
+  readonly pageSize = this.appConfig.paginator.pageSize;
   readonly pages$ = this.route.queryParams.pipe(map(params => +params["page"]));
   readonly fetchFilters$ = new Subject<{ page?: number, pageSize?: number, filters?: ProceduresFilter }>();
   readonly destroy$ = new Subject();
