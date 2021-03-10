@@ -1,3 +1,5 @@
+import { ProceduresFilter } from "../../../request/back-office/models/procedures-filter";
+
 export namespace DashboardActions {
   export class FetchTasks {
     static readonly type = '[Dashboard Backoffice] FetchTasks';
@@ -29,6 +31,6 @@ export namespace DashboardActions {
   export class FetchProceduresAvailableFilters {
     static readonly type = '[Dashboard Backoffice] FetchProceduresAvailableFilters';
 
-    constructor(public filters: any) {}
+    constructor(public filters: { startFrom?: number, pageSize?: number, filters?: ProceduresFilter }) {}
   }
 }
