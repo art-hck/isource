@@ -79,9 +79,10 @@ export class PositionComponent implements OnDestroy {
   changeStatus(data: {status, position}) {
     data.position.statusLabel = data.status.label;
     data.position.status = data.status.value;
+    data.position.inQueue = true;
 
     this.requestService.changeStatus(this.requestId, data.position.id, data.position.status).subscribe(
-      (response: any) => {
+      response => {
         data.position.availableStatuses = response.availableStatuses;
         this.updateAvailableStatuses(data.position);
 

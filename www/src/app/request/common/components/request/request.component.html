@@ -347,7 +347,7 @@
                [href]="getPositionUrl(position)"
                (click)="navigateToPosition(position, $event)"
                class="app-row app-link-no-color"
-               [ngClass]="{'canceled' : position.status === 'NOT_RELEVANT' || position.status === 'CANCELED'}">
+               [ngClass]="{'disabled' : position.inQueue || position.status === 'NOT_RELEVANT' || position.status === 'CANCELED'}">
               <div *ngTemplateOutlet="positionItem; context: { position: position, formGroup: formGroup }"></div>
             </a>
           </ng-container>
@@ -397,7 +397,10 @@
 
     <ng-container *ngIf="!user.isCustomerApprover(); else positionSumm">
       <div class="app-col item-status app-ellipsis">
-        <app-position-status [label]="PositionStatusesLabels[position.status]" [status]="position.status">
+        <app-position-status *ngIf="!position.inQueue" [label]="PositionStatusesLabels[position.status]" [status]="position.status">
+        </app-position-status>
+        <!-- Если позиция находится в очереди на смену статуса, показываем информацию об этом -->
+        <app-position-status *ngIf="position.inQueue" label="В обработке" [status]="PositionStatus.NOT_RELEVANT">
         </app-position-status>
       </div>
 
